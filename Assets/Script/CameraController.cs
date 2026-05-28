@@ -18,8 +18,8 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     private float _minPitch;
 
-    private float mouseX;
-    private float mouseY;
+    private float _mouseX;
+    private float _mouseY;
     private Vector2 _mouseDelta;
     private void Awake()
     {
@@ -28,10 +28,10 @@ public class CameraController : MonoBehaviour
     }
     void LateUpdate()
     {
-        mouseX += _mouseDelta.x * _sensity * Time.deltaTime;
-        mouseY += _mouseDelta.y * _sensity * Time.deltaTime;
-        mouseY = Mathf.Clamp(mouseY, _minPitch, _maxPitch);
-        Quaternion targetRot = Quaternion.Euler(mouseY, mouseX, 0f);
+        _mouseX += _mouseDelta.x * _sensity * Time.deltaTime;
+        _mouseY += _mouseDelta.y * _sensity * Time.deltaTime;
+        _mouseY = Mathf.Clamp(_mouseY, _minPitch, _maxPitch);
+        Quaternion targetRot = Quaternion.Euler(_mouseY, _mouseX, 0f);
         Vector3 targetCenter = _player.position + _armOffset;
         Vector3 targetPos = targetCenter + (targetRot * (Vector3.back * _distance));
         transform.position = targetPos;

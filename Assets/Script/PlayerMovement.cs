@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,28 +6,23 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
     private float _moveSpeed = 10f;
-    private Vector3 moveDir;
-    public void OnMove(InputAction.CallbackContext context)
+    private Vector3 _moveDir;
+    private Camera _camera;
+
+    private void Awake()
     {
-        if(context.started)
-        {
-            return;
-        }
-        Vector2 normalizedDir = context.ReadValue<Vector2>();
-        moveDir = new Vector3(normalizedDir.x, 0f, normalizedDir.y);
+        _camera = Camera.main;
     }
-    public void OnClick(InputAction.CallbackContext context)
-    {
-        if(context.canceled)
-        {
-            Debug.Log("Mouse Click");
-        }
-    }
+
     void Update()
     {
-        if (moveDir.sqrMagnitude > 0)
+        if (_moveDir.sqrMagnitude > 0)
         {
-            Vector3 translation = _moveSpeed * Time.deltaTime * moveDir;
+            Vector3 xDir = _camera.transform.right * _moveDir.x;
+            Vector3 zDir = _camera.transform.forward * _moveDir.z;
+            Vector3 dir = (xDir + zDir).normalized;
+            dir.y = 0f;
+            Vector3 translation = _moveSpeed * Time.deltaTime * dir;
             transform.Translate(translation, Space.World);
         }
         /*
@@ -62,5 +58,20 @@ public class PlayerMovement : MonoBehaviour
         }
         */
     }
-
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        if(context.started)
+        {
+            return;
+        }
+        Vector2 normalizedDir = context.ReadValue<Vector2>();
+        _moveDir = new Vector3(normalizedDir.x, 0f, normalizedDir.y);
+    }
+    public void OnClick(InputAction.CallbackContext context)
+    {
+        if(context.canceled)
+        {
+            Debug.Log("Mouse Click");
+        }
+    }
 }

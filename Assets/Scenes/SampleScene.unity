@@ -176,7 +176,7 @@ MonoBehaviour:
   _worldOffset: {x: 0, y: 1.5, z: 0}
   _scaleOffset: {x: 0, y: 0, z: 0}
   _maxDistance: 100
-  _scaleMax: 1.5
+  _scaleMax: 1.6
   _scaleMin: 1
 --- !u!114 &66287703
 MonoBehaviour:
@@ -499,10 +499,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 330585546}
+  - component: {fileID: 330585548}
   - component: {fileID: 330585545}
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
-  - component: {fileID: 330585548}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -643,7 +643,7 @@ MonoBehaviour:
   _player: {fileID: 830949975}
   _armOffset: {x: 0, y: 3, z: 0}
   _distance: 10
-  _sensity: 5
+  _sensity: 20
   _maxPitch: 85
   _minPitch: -5
 --- !u!1 &410087039
@@ -936,6 +936,18 @@ MonoBehaviour:
       - m_Target: {fileID: 830949971}
         m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
         m_MethodName: OnMove
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 830949979}
+        m_TargetAssemblyTypeName: PlayerRotation, Assembly-CSharp
+        m_MethodName: OnRotation
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
