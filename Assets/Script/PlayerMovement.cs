@@ -1,14 +1,25 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
+    private Rigidbody _rigidBody;
+    [SerializeField]
+    private GravityControl _gravityControl;
+    [SerializeField]
     private float _moveSpeed = 10f;
+    [SerializeField]
+    private float _jumpForce = 10f;
+    [SerializeField]
+    private int _jumpMaxCount = 1;
+
+    private int _jumpCurCount = 0;
+    private Vector3 _jumpVector = Vector3.zero;
     private Vector3 _moveDir;
     private Camera _camera;
-
     private void Awake()
     {
         _camera = Camera.main;
@@ -22,41 +33,14 @@ public class PlayerMovement : MonoBehaviour
             Vector3 zDir = _camera.transform.forward * _moveDir.z;
             Vector3 dir = (xDir + zDir).normalized;
             dir.y = 0f;
-            Vector3 translation = _moveSpeed * Time.deltaTime * dir;
-            transform.Translate(translation, Space.World);
+            Vector3 translation = _moveSpeed * dir;
+            _rigidBody.linearVelocity = translation;
         }
-        /*
-        if(Keyboard.current is not null)
-        {
 
-            float xMove = 0;
-            float zMove = 0;
-            if(Keyboard.current.aKey.isPressed)
-            {
-                xMove = -1f;
-            }
-            if(Keyboard.current.dKey.isPressed)
-            {
-                xMove = 1f;
-            }
-            if(Keyboard.current.wKey.isPressed)
-            {
-                zMove = 1f;
-            }
-            if(Keyboard.current.sKey.isPressed)
-            {
-                zMove = -1f;
-            }
-            Vector3 dir = new Vector3(xMove, 0f, zMove);
-            dir.Normalize();
-            if (dir.magnitude > 0)
-            {
-                Vector3 translation = _moveSpeed * Time.deltaTime * dir;
-                transform.Translate(translation, Space.World);
-            }
-                
+        if (_gravityControl.IsGrounded)
+        {
+            _jumpCurCount = 0;
         }
-        */
     }
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -67,6 +51,19 @@ public class PlayerMovement : MonoBehaviour
         Vector2 normalizedDir = context.ReadValue<Vector2>();
         _moveDir = new Vector3(normalizedDir.x, 0f, normalizedDir.y);
     }
+
+    public void OnJump(InputAction.CallbackContext context)
+    {
+        if(context.performed)
+        {
+            if(_jumpCurCount < _jumpMaxCount)
+            {
+                ++_jumpCurCount;
+                _gravityControl.AddResistanceForce(_jumpForce);
+            }
+        }
+    }
+
     public void OnClick(InputAction.CallbackContext context)
     {
         if(context.canceled)
@@ -74,4 +71,5 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log("Mouse Click");
         }
     }
+
 }

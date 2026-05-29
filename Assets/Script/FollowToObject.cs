@@ -34,7 +34,7 @@ public class FollowToObject : MonoBehaviour
             return;
         _rectTransform.anchoredPosition = new Vector2(targetViewPortPos.x * _canvasRectTransform.rect.width, targetViewPortPos.y
             * _canvasRectTransform.rect.height);
-        
+
         Vector3 dir = (Camera.main.transform.position - _targetObject.transform.position);
         float distance = dir.sqrMagnitude;
         float scale = distance / _maxDistance;

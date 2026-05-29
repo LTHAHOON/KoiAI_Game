@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 66287703}
   - component: {fileID: 66287702}
   m_Layer: 5
-  m_Name: RawImage
+  m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -372,7 +372,9 @@ GameObject:
   - component: {fileID: 240217613}
   - component: {fileID: 240217612}
   - component: {fileID: 240217611}
+  - component: {fileID: 240217615}
   - component: {fileID: 240217610}
+  - component: {fileID: 240217614}
   - component: {fileID: 240217609}
   m_Layer: 0
   m_Name: Monster
@@ -444,6 +446,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: c465ee74ae10c6148bb16eaefc2828c1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -490,6 +493,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &240217614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 240217608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff9f21166bd495d49ba6b08905e53d99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConstantAcceleration
+  _distance: 100
+  _groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _gravity: -9.81
+  _threshold: 10
+--- !u!54 &240217615
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 240217608}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 116
+  m_CollisionDetection: 0
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -714,7 +762,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 1
+  m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -785,11 +833,11 @@ GameObject:
   - component: {fileID: 830949974}
   - component: {fileID: 830949973}
   - component: {fileID: 830949972}
-  - component: {fileID: 830949971}
+  - component: {fileID: 830949980}
   - component: {fileID: 830949976}
-  - component: {fileID: 830949977}
-  - component: {fileID: 830949978}
+  - component: {fileID: 830949971}
   - component: {fileID: 830949979}
+  - component: {fileID: 830949981}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -809,7 +857,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40d318a4f61cc344bb74eadc35f9633a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
+  _rigidBody: {fileID: 830949980}
+  _gravityControl: {fileID: 830949981}
   _moveSpeed: 10
+  _jumpForce: 25
+  _jumpMaxCount: 2
 --- !u!136 &830949972
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -859,6 +911,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: ec14a75290c973d469306cc3793309dc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -933,9 +986,9 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 830949971}
-        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
-        m_MethodName: OnMove
+      - m_Target: {fileID: 830949979}
+        m_TargetAssemblyTypeName: PlayerRotation, Assembly-CSharp
+        m_MethodName: OnRotation
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -945,9 +998,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 830949979}
-        m_TargetAssemblyTypeName: PlayerRotation, Assembly-CSharp
-        m_MethodName: OnRotation
+      - m_Target: {fileID: 830949971}
+        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
+        m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1035,39 +1088,27 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: ae9d37bf-0e25-42d5-9d11-a8d7856e7421
     m_ActionName: 'Player/Click[/Mouse/leftButton]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 830949971}
+        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
+        m_MethodName: OnJump
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 558e7aa8-20a3-42d2-8ae5-51bb8ad9b628
+    m_ActionName: 'Player/Jump[/Keyboard/space]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 330585545}
---- !u!114 &830949977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 830949970}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae0bb93cd885d564da4735649ba0198d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MatrixTest
---- !u!114 &830949978
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 830949970}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 634342ce38d16bd45a295d0e356e13cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::QuaternionInputGizmoPractice
-  rotationSpeed: 10
-  targetMoveSpeed: 68.47
-  targetDistance: 4
-  targetRange: 50
 --- !u!114 &830949979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1080,9 +1121,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7a9c1566f0444947b40cf09b2fd9b92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerRotation
-  _targetMoveSpeed: 10
   _lookSpeed: 10
-  _targetDistance: 5
+--- !u!54 &830949980
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 830949970}
+  serializedVersion: 5
+  m_Mass: 50
+  m_LinearDamping: 10
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
+--- !u!114 &830949981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 830949970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff9f21166bd495d49ba6b08905e53d99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConstantAcceleration
+  _distance: 100
+  _groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _gravity: -9.81
+  _threshold: 0.5
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1107,7 +1191,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 832575517}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
   m_Name: 
@@ -1256,9 +1340,9 @@ GameObject:
   - component: {fileID: 917677670}
   - component: {fileID: 917677669}
   - component: {fileID: 917677668}
-  m_Layer: 0
-  m_Name: Plane
-  m_TagString: Untagged
+  m_Layer: 6
+  m_Name: Ground
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
