@@ -16,16 +16,16 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private int _jumpMaxCount = 1;
 
-    private int _jumpCurCount = 0;
-    private Vector3 _jumpVector = Vector3.zero;
+    private int _jumpCurCount = 1;
     private Vector3 _moveDir;
     private Camera _camera;
+    private Vector3 _translation = Vector3.zero;
     private void Awake()
     {
         _camera = Camera.main;
     }
 
-    void Update()
+    private void Update()
     {
         if (_moveDir.sqrMagnitude > 0)
         {
@@ -33,15 +33,23 @@ public class PlayerMovement : MonoBehaviour
             Vector3 zDir = _camera.transform.forward * _moveDir.z;
             Vector3 dir = (xDir + zDir).normalized;
             dir.y = 0f;
-            Vector3 translation = _moveSpeed * dir;
-            _rigidBody.linearVelocity = translation;
+            _translation = _moveSpeed * dir;
         }
 
         if (_gravityControl.IsGrounded)
         {
-            _jumpCurCount = 0;
+            _jumpCurCount = 1;
         }
     }
+    
+    private void FixedUpdate()
+    {
+        if (_moveDir.sqrMagnitude > 0)
+        {
+            _rigidBody.linearVelocity = _translation;
+        }
+    }
+    
     public void OnMove(InputAction.CallbackContext context)
     {
         if(context.started)

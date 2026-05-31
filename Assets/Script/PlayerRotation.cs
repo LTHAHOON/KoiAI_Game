@@ -5,9 +5,10 @@ using UnityEngine.InputSystem;
 public class PlayerRotation : MonoBehaviour
 {
     [SerializeField]
+    private SurfaceAngleFinder _surfaceAngleFinder;
+    [SerializeField]
     private float _lookSpeed = 10f;
     private Vector2 _input = Vector2.zero;
-    
     private Camera _camera;
     private void Awake()
     {
@@ -18,9 +19,9 @@ public class PlayerRotation : MonoBehaviour
     {
         if(_input == Vector2.zero)
             return;
-        float angle = GetAngleWithAtan(_input);
-
-        Quaternion quat = Quaternion.Euler(0f, angle, 0f);
+        _surfaceAngleFinder.TrySurfaceAngleUsingRaycast(out Vector3 angleVec, transform, 100f);
+        float angleY = GetAngleWithAtan(_input);
+        Quaternion quat = Quaternion.Euler(angleVec.x, angleY, angleVec.z);
         transform.rotation = Quaternion.Slerp(transform.rotation, quat, Time.deltaTime * _lookSpeed);
 
     }
@@ -41,18 +42,14 @@ public class PlayerRotation : MonoBehaviour
         Vector3 dir = (xDir + zDir).normalized;
         dir.y = 0f;
 
-
         float dot = Vector3.Dot(transform.forward, dir);
-        dot = Mathf.Clamp(dot, -1f, 1f);
         float angle = Mathf.Acos(dot) * Mathf.Rad2Deg;
-        Vector3 cross = Vector3.Cross(transform.forward, dir);
-        if(cross.z < 0f)
-        {
+        float crossY = Vector3.Cross(transform.forward, dir).y;
+        //0~180도를 -180~180도로 확장
+        if(crossY < 0f)
             angle = -angle;
-        }
-
-        Debug.Log(angle);
-        return angle;
+        
+        return angle + transform.eulerAngles.y;
     }
 
     public void OnRotation(InputAction.CallbackContext context)
@@ -67,6 +64,5 @@ public class PlayerRotation : MonoBehaviour
         {
             _input = Vector3.zero;
         }
-            
     }
 }
