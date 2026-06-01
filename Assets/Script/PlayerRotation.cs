@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 public class PlayerRotation : MonoBehaviour
 {
     [SerializeField]
+    private float _surfaceCheckDistance = 3f;
+    [SerializeField]
     private SurfaceAngleFinder _surfaceAngleFinder;
     [SerializeField]
     private float _lookSpeed = 10f;
@@ -19,7 +21,7 @@ public class PlayerRotation : MonoBehaviour
     {
         if(_input == Vector2.zero)
             return;
-        _surfaceAngleFinder.TrySurfaceAngleUsingRaycast(out Vector3 angleVec, transform, 100f);
+        _surfaceAngleFinder.TrySurfaceAngleUsingRaycast(out Vector3 angleVec, transform, _surfaceCheckDistance);
         float angleY = GetAngleWithAtan(_input);
         Quaternion quat = Quaternion.Euler(angleVec.x, angleY, angleVec.z);
         transform.rotation = Quaternion.Slerp(transform.rotation, quat, Time.deltaTime * _lookSpeed);

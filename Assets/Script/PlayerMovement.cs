@@ -67,7 +67,7 @@ public class PlayerMovement : MonoBehaviour
             if(_jumpCurCount < _jumpMaxCount)
             {
                 ++_jumpCurCount;
-                _gravityControl.AddResistanceForce(_jumpForce);
+                _gravityControl.AddForceUp(_jumpForce);
             }
         }
     }

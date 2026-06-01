@@ -5,7 +5,6 @@ using UnityEngine.UIElements;
 using static UnityEditor.PlayerSettings;
 
 
-[RequireComponent(typeof(Collider))]
 public class GravityControl : MonoBehaviour
 {
     [SerializeField]
@@ -76,9 +75,9 @@ public class GravityControl : MonoBehaviour
         _curSpeed = _initialVelocity + gravity * _curTime;
     }
     
-    public void AddResistanceForce(float resistance)
+    public void AddForceUp(float force)
     {
-        _initialVelocity = resistance;
+        _initialVelocity = force;
         _startTime = Time.time;
         _startY = transform.position.y;
         _groundCheckDist = 0f;

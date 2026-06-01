@@ -2,7 +2,7 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class FollowToObject : MonoBehaviour
+public class UIFollowToObject : MonoBehaviour
 {
     [SerializeField]
     RectTransform _canvasRectTransform;

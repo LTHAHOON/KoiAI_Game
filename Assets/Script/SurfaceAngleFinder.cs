@@ -9,11 +9,15 @@ public class SurfaceAngleFinder : MonoBehaviour
         angleVec = new Vector3(0f, 0f, 0f);
         if (bGet)
         {
+            
             Vector3 localNormal = rayTransform.InverseTransformDirection(hit.normal);
+            
             float angleX = Mathf.Atan2(localNormal.z, localNormal.y) * Mathf.Rad2Deg;
             float angleZ = -Mathf.Atan2(localNormal.x, localNormal.y) * Mathf.Rad2Deg;
             angleVec.x = angleX;
             angleVec.z = angleZ;
+            //Quaternion quat = Quaternion.FromToRotation(rayTransform.up, localNormal);
+           // angleVec = quat.eulerAngles;
         }
         return bGet;
     }

@@ -33,7 +33,7 @@ public class CameraController : MonoBehaviour
         _mouseY = Mathf.Clamp(_mouseY, _minPitch, _maxPitch);
         Quaternion targetRot = Quaternion.Euler(_mouseY, _mouseX, 0f);
         Vector3 targetCenter = _player.position + _armOffset;
-        Vector3 targetPos = targetCenter + (targetRot * (Vector3.back * _distance));
+        Vector3 targetPos = targetCenter + ((targetRot * Vector3.back) * _distance);
         transform.position = targetPos;
 
         Quaternion lookQuat = Quaternion.LookRotation(targetCenter - transform.position);
