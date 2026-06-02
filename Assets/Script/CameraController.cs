@@ -23,8 +23,8 @@ public class CameraController : MonoBehaviour
     private Vector2 _mouseDelta;
     private void Awake()
     {
-        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
     void LateUpdate()
     {

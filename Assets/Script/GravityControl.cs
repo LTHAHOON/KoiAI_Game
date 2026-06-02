@@ -8,6 +8,8 @@ using static UnityEditor.PlayerSettings;
 public class GravityControl : MonoBehaviour
 {
     [SerializeField]
+    private Transform _feetPoint;
+    [SerializeField]
     private float _groundCheckDistance = 1.2f;
     [SerializeField]
     private LayerMask _groundLayerMask;
@@ -15,7 +17,9 @@ public class GravityControl : MonoBehaviour
     private float _gravity = -9.81f;
     [SerializeField] 
     private float _gravityThresold = 10f;
-    
+    [SerializeField]
+    private float _offsetY = 2f;
+
     private float _groundCheckDist;
     private float _curTime;
     private float _startTime;
@@ -23,34 +27,38 @@ public class GravityControl : MonoBehaviour
     private float _startY = 0f;
     private bool _isGrounded = false;
     private float _initialVelocity = 0f;
-    private float gravity;
+    private float _curGravity = 0f;
     private void Awake()
     {
         Init();
     }
+    private void Update()
+    {
+        Debug.DrawRay(_feetPoint.position, Vector3.down * _groundCheckDistance, Color.red, 0.1f);
+    }
 
     private void FixedUpdate()
     {
-        if (IsGround())
+        if (IsGround(out Vector3 hitPoint))
         {
-            if (!_isGrounded)
+            if (_curGravity < _gravity)
             {
                 Init();
             }
-            _initialVelocity = 0f;
+            Vector3 pos = transform.position;
+            pos.y = hitPoint.y + _offsetY;
+            transform.position = pos;
             _startY = transform.position.y;
-            _isGrounded = true;
             _startTime = Time.time;
             return;
         }
-
-        _isGrounded = false;
         GravityProcess();
     }
 
     private void Init()
     {
-        gravity = _gravity;
+        _curGravity = _gravity;
+        _initialVelocity = 0f;
         _curSpeed = 0f;
         _curTime = 0f;
         _groundCheckDist = _groundCheckDistance;
@@ -59,20 +67,17 @@ public class GravityControl : MonoBehaviour
     }
     private void GravityProcess()
     {
-        if (_curSpeed < 0)
-        {
-            gravity -= Time.deltaTime * _gravityThresold;
-        }
-        else if(_curSpeed > 0)
-        {
-            _groundCheckDist = _groundCheckDistance;
-        }
         _curTime = Time.time - _startTime;
         Vector3 pos = transform.position;
-        float avgSpeed = (gravity * 0.5f * _curTime * _curTime) + _initialVelocity * _curTime;
+        float avgSpeed = (_curGravity * 0.5f * _curTime * _curTime) + _initialVelocity * _curTime;
         pos.y =  avgSpeed + _startY;
         transform.position = pos;
-        _curSpeed = _initialVelocity + gravity * _curTime;
+        _curSpeed = _initialVelocity + _curGravity * _curTime;
+        if (_curSpeed < 0)
+        {
+            _curGravity -= Time.deltaTime * _gravityThresold;
+            _groundCheckDist = _groundCheckDistance;
+        }
     }
     
     public void AddForceUp(float force)
@@ -83,10 +88,13 @@ public class GravityControl : MonoBehaviour
         _groundCheckDist = 0f;
     }
 
-    private bool IsGround()
+    private bool IsGround(out Vector3 hitPoint)
     {
-        return Physics.Raycast(transform.position, transform.up * -1, _groundCheckDist);
+        _isGrounded=  Physics.Raycast(_feetPoint.position, Vector3.down, out RaycastHit hit, _groundCheckDist);
+        hitPoint = hit.point;
+        return _isGrounded;
     }
-    
+
+
     public bool IsGrounded => _isGrounded;
 }
