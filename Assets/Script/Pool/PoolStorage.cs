@@ -22,7 +22,7 @@ public struct PoolStorageData
 public class PoolStorage : MonoBehaviour
 {
     [SerializeField]
-    private List<PoolStorageData> _poolStorageProperties;
+    private List<PoolStorageData> _poolStorageDatas;
     private static Dictionary<int, PoolStorageData> _dicStorageDatas;
     private void Awake()
     {
@@ -36,9 +36,9 @@ public class PoolStorage : MonoBehaviour
     private void Init()
     {
         _dicStorageDatas = new();
-        for (int i = 0; i < _poolStorageProperties.Count; i++)
+        for (int i = 0; i < _poolStorageDatas.Count; i++)
         {
-            PoolStorageData storageData = _poolStorageProperties[i];
+            PoolStorageData storageData = _poolStorageDatas[i];
             int enumID = (int)storageData.PoolName;
             Transform storage = storageData.Storage;
             _dicStorageDatas.TryAdd(enumID, storageData);

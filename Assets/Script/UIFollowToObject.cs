@@ -5,7 +5,7 @@ using UnityEngine;
 public class UIFollowToObject : MonoBehaviour
 {
     [SerializeField]
-    RectTransform _canvasRectTransform;
+    RectTransform _parentRectTransform;
     [SerializeField]
     private GameObject _targetObject;
     [SerializeField]
@@ -36,8 +36,8 @@ public class UIFollowToObject : MonoBehaviour
         Vector3 targetViewPortPos = _camera.WorldToViewportPoint(targetWorldPos) + _viewPortOffset;
         if (targetViewPortPos.z <= 0)
             return;
-        _rectTransform.anchoredPosition = new Vector2(targetViewPortPos.x * _canvasRectTransform.rect.width, targetViewPortPos.y
-            * _canvasRectTransform.rect.height);
+        _rectTransform.anchoredPosition = new Vector2(targetViewPortPos.x * _parentRectTransform.rect.width, targetViewPortPos.y
+            * _parentRectTransform.rect.height);
 
         Vector3 dir = (_camera.transform.position - _targetObject.transform.position);
         float distance = dir.sqrMagnitude;
