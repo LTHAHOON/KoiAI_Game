@@ -21,48 +21,63 @@ public class InventorySystem : MonoBehaviour
         public readonly Transform SlotParent => _slotParent;
         public readonly SlotData SlotData => _slotData;
 
-        public void Init(Dictionary<int, Transform> dicSlotParent)
+        public void Init(Dictionary<int, Queue<Transform>> dicSlotTransform)
         {
             if (!_slotData || !_slotParent)
                 return;
+            if (!dicSlotTransform.ContainsKey((int)_slotData.SlotCategory))
+            {
+                dicSlotTransform[(int)_slotData.SlotCategory] = new Queue<Transform>();
+            }
             for (int i = 0; i < _slotData.SlotCount; i++)
             {
-                Instantiate(_slotData.SlotPrefab, _slotParent);
+                GameObject slot = Instantiate(_slotData.SlotPrefab, _slotParent);
+                dicSlotTransform[(int)_slotData.SlotCategory].Enqueue(slot.transform);
             }
-            dicSlotParent.Add((int)_slotData.SlotCategory, _slotParent);
         }
     }
 
     [SerializeField]
     private InventorySlot[] _inventorySlots;
     [SerializeField]
-    private Image _itemImagePrefab;
-    private readonly Dictionary<int, Transform> _dicSlotParent = new();
-    private readonly Dictionary<ulong, GameObject> _dicEquippedItem = new();
+    private Renderer _itemUIRendererPrefab;
+    [SerializeField] 
+    private string _itemTextureProperty = "_Item_Tex";
+    
+    private int _itemTexturePropertyID;
+    private readonly Dictionary<int, Queue<Transform>> _dicSlotTransform = new();
+    private readonly Dictionary<ulong, ItemBase> _dicEquippedItem = new();
     private void Awake()
     {
+        _itemTexturePropertyID = Shader.PropertyToID(_itemTextureProperty);
         for (int i = 0; i < _inventorySlots.Length; i++)
         {
-            _inventorySlots[i].Init(_dicSlotParent);
+            _inventorySlots[i].Init(_dicSlotTransform);
         }
     }
 
-    private bool TryGetSlotParent(out Transform parent, ItemCategory category)
+    private bool TryGetSlotTransform(out Transform parent, ItemCategory category)
     {
-        if (_dicSlotParent == null)
-        {
-            parent = default;
+        parent = null;
+        if (_dicSlotTransform == null)
             return false;
+
+        bool bGet = _dicSlotTransform.TryGetValue((int)category, out Queue<Transform> slotQueue);
+        if (slotQueue != null && slotQueue.Count > 0)
+        {
+            parent = slotQueue.Dequeue();
         }
-        bool bGet = _dicSlotParent.TryGetValue((int)category, out parent);
         return bGet;
     }
-
-    public void PushItem<T>(IItem<T> item) where T : MonoBehaviour, IItem<MonoBehaviour>
+    
+    public void PushItem(ItemBase item)
     {
-        if (!TryGetSlotParent(out Transform parent, item.Category))
+        if (!TryGetSlotTransform(out Transform parent, item.Category))
             return;
-         Image newItemImage = Instantiate(_itemImagePrefab, parent);
-        newItemImage.sprite = item.Texture;
+        Renderer newItemUIRenderer = Instantiate(_itemUIRendererPrefab, parent);
+        ItemData itemData = item.GetItemData();
+        MPBSystem.ChangeMaterialProperty(newItemUIRenderer, _itemTexturePropertyID, itemData.ItemTex);
+        
+        _dicEquippedItem.Add(itemData.ItemId, item);
     }
 }

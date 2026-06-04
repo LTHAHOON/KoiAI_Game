@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class FireCannonController : Weapon<FireCannonController>
+public class FireCannonController : WeaponItemBase
 {
     [SerializeField]
     private FireCannonData _fireCannonData;
@@ -29,8 +29,14 @@ public class FireCannonController : Weapon<FireCannonController>
     private bool _hasHit;
     private Vector2 _aim;
     private Pool<BulletData> _pool;
+    
+    public override ItemData GetItemData()
+    {
+        return _fireCannonData;
+    }
 
-    public override FireCannonController Controller => this;
+
+
 
     private void Start()
     {
