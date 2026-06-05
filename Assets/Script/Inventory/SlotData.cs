@@ -3,17 +3,17 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "new SlotData", menuName = "SlotData")]
 public class SlotData : ScriptableObject
 {
-    [Header("Slot Category")]
+    [Header("Slot Type")]
     [SerializeField]
-    private ItemCategory _slotCategory;
+    private SlotType _slotType;
     [Header("Slot_Prefab")]
     [SerializeField]
-    private GameObject _slotPrefab;
+    private Slot _slotPrefab;
     [Header("Slot Count")]
     [SerializeField]
     private int _slotCount = 5;
 
-    public ItemCategory SlotCategory => _slotCategory;
+    public SlotType SlotType => _slotType;
     public int SlotCount => _slotCount;
-    public GameObject SlotPrefab => _slotPrefab;
+    public Slot SlotPrefab => _slotPrefab;
 }

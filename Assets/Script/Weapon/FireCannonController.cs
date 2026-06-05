@@ -4,11 +4,9 @@ using UnityEngine.InputSystem;
 public class FireCannonController : WeaponItemBase
 {
     [SerializeField]
-    private FireCannonData _fireCannonData;
+    private CannonData _fireCannonData;
     [SerializeField]
     private Transform _fireCannonPoint;
-    [SerializeField]
-    private GameObject _projectilePrefab;
     [SerializeField]
     private float _aimSensitity = 10f;
     [SerializeField]
@@ -28,23 +26,39 @@ public class FireCannonController : WeaponItemBase
     private Vector3 _lastPredictedPoint;
     private bool _hasHit;
     private Vector2 _aim;
-    private Pool<BulletData> _pool;
-    
+    private Pool<Projectile> _pool;
+    private CannonBallData _cannonBallData;
+    private int _curProjectileCount = 0;
     public override ItemData GetItemData()
     {
         return _fireCannonData;
     }
-
-
-
-
-    private void Start()
+    public override void Init(PlayerController itemOwner)
     {
+        SetItemOwner(itemOwner);
+        PlayerInputAction playerIA = itemOwner.PlayerIA;
+        playerIA.Player.Fire.performed += OnFire;
+        playerIA.Player.ProjectileAiming.performed += ProjectileAiming;
+        playerIA.Player.ProjectileAiming.canceled += ProjectileAiming;
         EntityId entityID = GetEntityId();
-        BulletData bulletData = _projectilePrefab.GetComponent<BulletData>();
+        _cannonBallData = _fireCannonData.CannonBallData;
+        _curProjectileCount = _cannonBallData.BaseCount;
+        Projectile bulletPrefab = _cannonBallData.Prefab;
         ulong id = EntityId.ToULong(entityID);
-        PoolManager.Instance.AddPool<BulletData>(id, bulletData, _fireCannonData.BulletPoolSize, PoolName.Bullet);
-        PoolManager.Instance.TryGetPool<BulletData>(id, out _pool);
+        PoolManager.Instance.AddPool<Projectile>(id, bulletPrefab, _cannonBallData.BulletPoolSize, PoolName.Bullet);
+        PoolManager.Instance.TryGetPool<Projectile>(id, out _pool);
+
+        var playerFeature = (PlayerEquipment)itemOwner.GetPlayerFeatureWithProperty(PlayerFeature.PlayerFeatureProperty.Equipment);
+        if(playerFeature)
+        {
+            Transform parent = playerFeature.GetItemParent(bulletPrefab.Category);
+            itemOwner.MyInventorySystem.CreateAndPushItem(itemOwner, parent, bulletPrefab);
+        }
+    }
+
+    public void LoadProjectile()
+    {
+
     }
 
     private void Update()
@@ -73,15 +87,16 @@ public class FireCannonController : WeaponItemBase
         return worldDirection * _launchSpeed;
     }
 
-    public void FireProjectile(InputAction.CallbackContext context)
+    public void OnFire(InputAction.CallbackContext context)
     {
         if(context.performed)
         {
-            if (!_projectilePrefab)
+            if (_pool == null || _cannonBallData == null)
                 return;
-            if (_pool == null)
+            if (_curProjectileCount <= 0)
                 return;
-            BulletData bulletData = _pool.Pop();
+            --_curProjectileCount;
+            Projectile bulletData = _pool.Pop();
             bulletData.TrailRenderer.Clear();
             bulletData.TrailRenderer.enabled = false;
             Rigidbody bulletRigid = bulletData.Rigidbody;
@@ -95,7 +110,7 @@ public class FireCannonController : WeaponItemBase
                 bulletRigid.useGravity = true;
                 bulletRigid.linearVelocity = GetLaunchVelocity();
             }
-            PoolManager.Instance.ReturnDelay(_pool, bulletData, _fireCannonData.BulletLifeTime);
+            PoolManager.Instance.ReturnDelay(_pool, bulletData, _cannonBallData.BulletLifeTime);
         }
     }
 
@@ -143,4 +158,6 @@ public class FireCannonController : WeaponItemBase
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(_hitPoint, 0.08f);
     }
+
+
 }

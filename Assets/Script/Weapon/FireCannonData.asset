@@ -15,9 +15,6 @@ MonoBehaviour:
   _itemTex: {fileID: 2800000, guid: ef4653662b04be5449b407162f48cded, type: 3}
   _itemName: FireCannon
   _itemId: 1234
+  _type: 1
   _weaponDamage: 0
-  _prefabBulletData: {fileID: 670553775311318068, guid: 3f5b1c34671533549bedf701bae1389a, type: 3}
-  _bulletPoolSize:
-    _initPoolSize: 10
-    _maxPoolSize: 15
-  _bulletLifeTime: 3
+  _cannonBallData: {fileID: 11400000, guid: dff2d08bfa5dcf94db37f26aa54413e5, type: 2}

@@ -3,7 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : PlayerFeature
 {
     [SerializeField]
     private Rigidbody _rigidBody;
@@ -20,12 +20,15 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 _moveDir;
     private Camera _camera;
     private Vector3 _translation = Vector3.zero;
-    private void Awake()
+    public override void Init(PlayerInputAction playerIA)
     {
         _camera = Camera.main;
+        playerIA.Player.Move.started += OnMove;
+        playerIA.Player.Move.performed += OnMove;
+        playerIA.Player.Move.canceled += OnMove;
+        playerIA.Player.Jump.performed += OnJump;
     }
-
-    private void Update()
+    public override void UpdateFeature()
     {
         if (_moveDir.sqrMagnitude > 0)
         {
@@ -79,5 +82,4 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log("Mouse Click");
         }
     }
-
 }

@@ -1,8 +1,9 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerRotation : MonoBehaviour
+public class PlayerRotation : PlayerFeature
 {
     [SerializeField]
     private float _surfaceCheckDistance = 3f;
@@ -12,12 +13,15 @@ public class PlayerRotation : MonoBehaviour
     private float _lookSpeed = 10f;
     private Vector2 _input = Vector2.zero;
     private Camera _camera;
-    private void Awake()
+    public override void Init(PlayerInputAction playerIA)
     {
         _camera = Camera.main;
+        playerIA.Player.Move.started += OnRotation;
+        playerIA.Player.Move.performed += OnRotation;
+        playerIA.Player.Move.canceled += OnRotation;
     }
 
-    void Update()
+    public override void UpdateFeature()
     {
         if(_input == Vector2.zero)
             return;

@@ -47,7 +47,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileGizmoPreview
   _fireCannonData: {fileID: 11400000, guid: 9294b86170ea2b044b95cf093762506f, type: 2}
   _fireCannonPoint: {fileID: 4513076664153389365}
-  _projectilePrefab: {fileID: 601774910944409318, guid: 3f5b1c34671533549bedf701bae1389a, type: 3}
   _aimSensitity: 10
   _launchSpeed: 22
   _pitchAngle: 20
@@ -80,7 +79,7 @@ Transform:
   m_GameObject: {fileID: 6593316417525605884}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.000000059604645, y: -0.17600012, z: 0.51}
+  m_LocalPosition: {x: 0, y: 0, z: 0.26}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

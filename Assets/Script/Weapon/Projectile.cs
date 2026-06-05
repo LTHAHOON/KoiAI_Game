@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BulletData : MonoBehaviour
+public class Projectile : ResourceItemBase
 {
     [SerializeField]
     private Rigidbody _rigid;
@@ -9,4 +9,9 @@ public class BulletData : MonoBehaviour
 
     public Rigidbody Rigidbody => _rigid;
     public TrailRenderer TrailRenderer => _trailRenderer;
+
+    public override ItemData GetItemData()
+    {
+        throw new System.NotImplementedException();
+    }
 }

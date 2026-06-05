@@ -50,11 +50,11 @@ Material:
     m_Ints: []
     m_Floats:
     - _BG_Alpha: 0.5
-    - _OutlineThickness: 0.0348
+    - _OutlineThickness: 0.035
     m_Colors:
     - White: {r: 1, g: 1, b: 1, a: 1}
     - _BG_Color: {r: 0, g: 0, b: 0, a: 1}
-    - _Outline_Color: {r: 1.6243906, g: 3.2667649, b: 12.125731, a: 1}
+    - _Outline_Color: {r: 2.71698, g: 22.736198, b: 64, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &917798276366636230
