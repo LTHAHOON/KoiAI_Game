@@ -86,32 +86,31 @@ public class InventorySystem : MonoBehaviour
     }
     
     //생성하고 아이템 넣기
-    public ItemBase CreateAndPushItem(PlayerController itemOwner, Transform itemParent, ItemBase item)
+    public Slot CreateAndPushItem(PlayerController itemOwner, Transform itemParent, ItemData itemData)
     {
-        ItemData itemData = item.GetItemData();
         if (!TryGetSlot(out Slot slot, itemData.Type))
             return null;
 
-        ItemBase newItem = Instantiate(item, itemParent);
+        ItemBase newItem = Instantiate(itemData.ItemPrefab, itemParent);
         newItem.Init(itemOwner);    
         Renderer newItemUIRenderer = Instantiate(_itemUIRendererPrefab, slot.transform);
         //아이템 텍스처 넣기
         MPBSystem.ChangeMaterialProperty(newItemUIRenderer, _itemTexturePropertyID, itemData.ItemTex);
         
-        PushItem(newItem, newItemUIRenderer, slot);
-        return newItem;
+        PushItem(newItem, itemData,newItemUIRenderer, slot);
+        return slot;
 
     }
- 
-    public void PushItem(ItemBase item, Renderer itemUI, Slot slot)
+    
+    public void PushItem(ItemBase newItem, ItemData itemData, Renderer itemUI, Slot slot)
     {
         //Slot이 비어있지 않을 경우
         if (_pushedSlotSet.Contains(slot))
             return;
-
-        ItemData itemData = item.GetItemData();
-        slot.PushItem(item, itemUI);
+        
+        slot.PushItem(newItem, itemUI);
         _pushedSlotSet.Add(slot);
-        _dicPushedItem.Add(itemData.ItemId, item);
+        _dicPushedItem.Add(itemData.ItemId, newItem);
     }
+    
 }

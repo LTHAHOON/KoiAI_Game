@@ -1,10 +1,11 @@
+using System.Text;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class FireCannonController : WeaponItemBase
+public class CannonController : WeaponBase
 {
     [SerializeField]
-    private CannonData _fireCannonData;
+    private CannonData _cannonData;
     [SerializeField]
     private Transform _fireCannonPoint;
     [SerializeField]
@@ -28,11 +29,10 @@ public class FireCannonController : WeaponItemBase
     private Vector2 _aim;
     private Pool<Projectile> _pool;
     private CannonBallData _cannonBallData;
+    private Slot _cannonSlot;
     private int _curProjectileCount = 0;
-    public override ItemData GetItemData()
-    {
-        return _fireCannonData;
-    }
+    private int _maxProjectileCount = 0;
+    private readonly StringBuilder _sb = new();
     public override void Init(PlayerController itemOwner)
     {
         SetItemOwner(itemOwner);
@@ -41,24 +41,36 @@ public class FireCannonController : WeaponItemBase
         playerIA.Player.ProjectileAiming.performed += ProjectileAiming;
         playerIA.Player.ProjectileAiming.canceled += ProjectileAiming;
         EntityId entityID = GetEntityId();
-        _cannonBallData = _fireCannonData.CannonBallData;
+        _cannonBallData = _cannonData.CannonBallData;
         _curProjectileCount = _cannonBallData.BaseCount;
-        Projectile bulletPrefab = _cannonBallData.Prefab;
+        _maxProjectileCount = _cannonBallData.MaxCount;
+        Projectile projectilePrefab = (Projectile)_cannonBallData.ItemPrefab;
         ulong id = EntityId.ToULong(entityID);
-        PoolManager.Instance.AddPool<Projectile>(id, bulletPrefab, _cannonBallData.BulletPoolSize, PoolName.Bullet);
+        PoolManager.Instance.AddPool<Projectile>(id, projectilePrefab, _cannonBallData.BulletPoolSize, PoolName.Bullet);
         PoolManager.Instance.TryGetPool<Projectile>(id, out _pool);
 
         var playerFeature = (PlayerEquipment)itemOwner.GetPlayerFeatureWithProperty(PlayerFeature.PlayerFeatureProperty.Equipment);
         if(playerFeature)
         {
-            Transform parent = playerFeature.GetItemParent(bulletPrefab.Category);
-            itemOwner.MyInventorySystem.CreateAndPushItem(itemOwner, parent, bulletPrefab);
+            _cannonSlot = playerFeature.AddItemInSlot(_cannonBallData);
+            LoadProjectile(_curProjectileCount);
         }
     }
 
-    public void LoadProjectile()
+    private void LoadProjectile(int curProjectileCount)
     {
-
+        if (!_cannonSlot)
+            return;
+        if (curProjectileCount <= 0)
+        {
+            _sb.Append("");
+        }
+        else
+        {
+            _sb.Append(curProjectileCount);
+        }
+        _cannonSlot.SetItemCountText(_sb);
+        _sb.Clear();    
     }
 
     private void Update()
@@ -96,6 +108,7 @@ public class FireCannonController : WeaponItemBase
             if (_curProjectileCount <= 0)
                 return;
             --_curProjectileCount;
+            LoadProjectile(_curProjectileCount);
             Projectile bulletData = _pool.Pop();
             bulletData.TrailRenderer.Clear();
             bulletData.TrailRenderer.enabled = false;

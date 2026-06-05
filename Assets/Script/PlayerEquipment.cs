@@ -22,7 +22,9 @@ public class PlayerEquipment : PlayerFeature
     [SerializeField]
     private InventorySystem _inventorySystem;
     [SerializeField] 
-    private List<ItemBase>  _equipDatas;
+    private List<ItemData>  _equipDatas;
+    [SerializeField] 
+    private List<ItemData>  _notEquipDatas;
     [Header("장비 저장 위치")]
     [SerializeField]
     private PlayerEquipmentPoint[] _itemParentPoints;
@@ -37,14 +39,31 @@ public class PlayerEquipment : PlayerFeature
         {
             _dicItemParentPoint.TryAdd(_itemParentPoints[i].Category, _itemParentPoints[i].Point);
         }
-        for (int i = 0; i < _equipDatas.Count; i++)
+        int equipDataCount = _equipDatas.Count;
+        int notEquipDataCount = _notEquipDatas.Count;
+        for (int i = 0; i < equipDataCount; i++)
         {
-            Transform parent = _dicItemParentPoint[_equipDatas[i].Category];
+            Transform parent = _dicItemParentPoint[_equipDatas[i].ItemPrefab.Category];
             _inventorySystem.CreateAndPushItem(Owner, parent, _equipDatas[i]);
+        }
+
+
+        for (int i = 0; i < notEquipDataCount; i++)
+        {
+            Transform parent = _dicItemParentPoint[_notEquipDatas[i].ItemPrefab.Category];
+            _inventorySystem.CreateAndPushItem(Owner, parent, _notEquipDatas[i]);
         }
     }
     public override void UpdateFeature() { }
 
+    public Slot AddItemInSlot(ItemData itemData)
+    {
+        if (_notEquipDatas.Contains(itemData))
+            return null; 
+        _notEquipDatas.Add(itemData);
+        return _inventorySystem.CreateAndPushItem(Owner, GetItemParent(itemData.ItemPrefab.Category), itemData);
+    }
+    
     public Transform GetItemParent(ItemCategory category)
     {
         if(_dicItemParentPoint.TryGetValue(category, out Transform parent))

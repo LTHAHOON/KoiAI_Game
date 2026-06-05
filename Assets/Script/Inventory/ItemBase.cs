@@ -5,7 +5,6 @@ public abstract class ItemBase: MonoBehaviour
 {
     private PlayerController _itemOwner;
     public abstract ItemCategory Category { get; }
-    public abstract ItemData GetItemData();
 
     public virtual void Init(PlayerController itemOwner)
     {
@@ -18,12 +17,12 @@ public abstract class ItemBase: MonoBehaviour
 
     public PlayerController ItemOwner => _itemOwner;
 }
-public abstract class WeaponItemBase : ItemBase
+public abstract class WeaponBase : ItemBase
 {
     public abstract override void Init(PlayerController itemOwner);
     public override ItemCategory Category => ItemCategory.Weapon;
 }
-public abstract class ResourceItemBase : ItemBase
+public abstract class ResourceBase : ItemBase
 {
     public override ItemCategory Category => ItemCategory.Resource;
 }

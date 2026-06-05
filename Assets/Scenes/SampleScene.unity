@@ -2643,7 +2643,6 @@ Transform:
   - {fileID: 919952771}
   - {fileID: 80836653}
   - {fileID: 330585546}
-  - {fileID: 2116610958}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1916615424
@@ -3129,7 +3128,7 @@ Transform:
   - {fileID: 29003290}
   - {fileID: 1090267185}
   - {fileID: 1959309442}
-  m_Father: {fileID: 1793819142}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2116610959
 MonoBehaviour:
@@ -3149,7 +3148,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   _gravity: -50
-  _gravityThresold: 10
+  _gravityThresold: 20
   _offsetY: 2
 --- !u!114 &2116610960
 MonoBehaviour:
@@ -3207,8 +3206,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   _rigidBody: {fileID: 2116610965}
   _gravityControl: {fileID: 2116610959}
-  _moveSpeed: 10
-  _jumpForce: 20
+  _moveSpeed: 15
+  _jumpForce: 30
   _jumpMaxCount: 2
 --- !u!114 &2116610964
 MonoBehaviour:
@@ -3387,9 +3386,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.7
-  m_Height: 3
+  m_Height: 3.5
   m_Direction: 1
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Center: {x: 0, y: 0.35, z: 0}
 --- !u!114 &2116610967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3404,7 +3403,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerEquipment
   _inventorySystem: {fileID: 203856415}
   _equipDatas:
-  - {fileID: 6473127510279200606, guid: 57be7ef47c393e3429865b8e2fc3d641, type: 3}
+  - {fileID: 11400000, guid: 9294b86170ea2b044b95cf093762506f, type: 2}
+  _notEquipDatas: []
   _itemParentPoints:
   - _category: 1
     _point: {fileID: 797103056}
@@ -3426,11 +3426,13 @@ MonoBehaviour:
   - {fileID: 2116610963}
   - {fileID: 2116610962}
   - {fileID: 2116610967}
+  _myInventorySystem: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1793819142}
+  - {fileID: 2116610958}
   - {fileID: 240217613}
   - {fileID: 145351490}
   - {fileID: 211602313}

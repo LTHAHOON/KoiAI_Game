@@ -39,13 +39,13 @@ public class PlayerController : MonoBehaviour
     {
         for (int i = 0; i < _playerFeatures.Count; i++)
         {
-            _playerFeatures[i].Owner = this;
-            _playerFeatures[i].Init(_playerInputAction);
             PlayerFeatureProperty featureProperty = _playerFeatures[i].FeatureProperty;
             if (featureProperty != PlayerFeatureProperty.None)
             {
                 _dicPlayerFeatures.Add((int)featureProperty, _playerFeatures[i]);
             }
+            _playerFeatures[i].Owner = this;
+            _playerFeatures[i].Init(_playerInputAction);
         }
     }
 
@@ -67,6 +67,6 @@ public class PlayerController : MonoBehaviour
         return playerFeature;
     }
 
-    public InventorySystem MyInventorySystem => _myInventorySystem
+    public InventorySystem MyInventorySystem => _myInventorySystem;
     public PlayerInputAction PlayerIA=> _playerInputAction;
 }

@@ -25,7 +25,7 @@ public class Slot : MonoBehaviour
         _itemUI = itemUI;
         _itemUI.transform.SetParent(_itemDataParent);
     }
-
+    
     public void SetItemCountText(string number)
     {
         _itemCountText.text = number;
@@ -35,4 +35,13 @@ public class Slot : MonoBehaviour
     {
         _itemCountText.text = sb.ToString();
     }
+
+    public ItemBase GetItem()
+    {
+        if(IsEmpty())
+            return null;
+        return _item;
+    }
+    public bool IsEmpty() => _item == null;
+    
 }

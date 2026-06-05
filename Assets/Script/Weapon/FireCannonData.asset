@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 762f90e7d34ad06489423432746c2fc7, type: 3}
   m_Name: FireCannonData
   m_EditorClassIdentifier: Assembly-CSharp::FireGunData
+  _itemPrefab: {fileID: 6473127510279200606, guid: 57be7ef47c393e3429865b8e2fc3d641, type: 3}
   _itemTex: {fileID: 2800000, guid: ef4653662b04be5449b407162f48cded, type: 3}
   _itemName: FireCannon
   _itemId: 1234

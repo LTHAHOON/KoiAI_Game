@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f830a05244ca28449e0243835515141, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileGizmoPreview
-  _fireCannonData: {fileID: 11400000, guid: 9294b86170ea2b044b95cf093762506f, type: 2}
+  _cannonData: {fileID: 11400000, guid: 9294b86170ea2b044b95cf093762506f, type: 2}
   _fireCannonPoint: {fileID: 4513076664153389365}
   _aimSensitity: 10
   _launchSpeed: 22
