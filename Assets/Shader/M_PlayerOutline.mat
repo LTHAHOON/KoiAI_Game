@@ -48,7 +48,11 @@ Material:
     - _Cull: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 0
-    - _OutlineWidth: 0.07
+    - _MaxDistance: 100
+    - _MaxOutlineWidth: 3
+    - _MinDistance: 100
+    - _OutlineTreshold: 1
+    - _OutlineWidth: 0.5
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
