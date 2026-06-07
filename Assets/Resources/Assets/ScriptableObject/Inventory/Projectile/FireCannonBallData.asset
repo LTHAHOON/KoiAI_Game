@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 863c6abaa0ac3434fbe1237ccbd11bc6, type: 3}
+  m_Name: FireCannonBallData
+  m_EditorClassIdentifier: Assembly-CSharp::CannonBallData
+  _itemPrefab: {fileID: 670553775311318068, guid: 3f5b1c34671533549bedf701bae1389a, type: 3}
+  _itemTex: {fileID: 2800000, guid: 3b698669bd7d03249b8381d9fda781b2, type: 3}
+  _itemName: Fire Cannon Ball
+  _itemId: 12345
+  _type: 0
+  _projectileMaxCount: 20
+  _projectileDamage: 10
+  _bulletPoolSize:
+    _initPoolSize: 10
+    _maxPoolSize: 15
+  _bulletLifeTime: 3
