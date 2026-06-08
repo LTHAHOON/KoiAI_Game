@@ -19,3 +19,9 @@ MonoBehaviour:
   _type: 1
   _weaponDamage: 0
   _cannonBallData: {fileID: 11400000, guid: dff2d08bfa5dcf94db37f26aa54413e5, type: 2}
+  _aimSensitity: 10
+  _launchSpeed: 12
+  _loadTime: 1
+  _linearDamping: 0
+  _maxPitchAngle: 90
+  _minPitchAngle: 0

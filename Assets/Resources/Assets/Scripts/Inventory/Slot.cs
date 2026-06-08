@@ -9,6 +9,7 @@ public enum ItemSlotType
     NotEquipped,
     Equipped,
 }
+[RequireComponent(typeof(RectTransform))]
 public class Slot : MonoBehaviour
 {
     [SerializeField]
@@ -18,6 +19,34 @@ public class Slot : MonoBehaviour
 
     private ItemBase _item;
     private Renderer _itemUI;
+    private int _slotIndex;
+    private RectTransform _rectTransform;
+    private bool _isSelected = false;
+    private void Awake()
+    {
+        _rectTransform = GetComponent<RectTransform>();
+    }
+
+    public void Init(int slotIndex, ItemSlotType itemSlotType, StringBuilder sb)
+    {
+        _slotIndex = slotIndex;
+        if (itemSlotType == ItemSlotType.Equipped)
+        {
+            sb.Append(slotIndex + 1);
+            SetItemCountText(sb);
+        }
+    }
+    public void Select(RectTransform selectedOutlineRect)
+    {
+        if (!_rectTransform || !selectedOutlineRect)
+            return;
+        selectedOutlineRect.anchoredPosition = _rectTransform.anchoredPosition;
+        _isSelected = true;
+    }
+    public void DeSelect()
+    {
+        _isSelected = false;
+    }
     public void PushItem(ItemBase item, Renderer itemUI)
     {
         _item = item;
@@ -34,10 +63,6 @@ public class Slot : MonoBehaviour
         }
     }
     
-    public void SetItemCountText(string number)
-    {
-        _itemCountText.text = number;
-    }
 
     public void SetItemCountText(StringBuilder sb)
     {
@@ -50,6 +75,16 @@ public class Slot : MonoBehaviour
             return null;
         return _item;
     }
-    public bool IsEmpty() => _item == null;
     
+    ///<summary>
+    ///슬롯 인덱스가 같은 경우 True 아닐 경우 False
+    ///</summary>
+    public bool CompareIndex(int index) => _slotIndex == index;
+
+    ///<summary>
+    ///슬롯에 아이템이 없을 경우 True 아닐 경우 False
+    ///</summary>
+    public bool IsEmpty() => _item == null;
+    public bool IsSelected() => _isSelected;
+    public int SlotIndex => _slotIndex;
 }

@@ -154,6 +154,24 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""SelectItem_NotEquip"",
+                    ""type"": ""Button"",
+                    ""id"": ""82e6b530-7c64-4d50-91fd-9358679363bd"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""SelectItem_Equip"",
+                    ""type"": ""Value"",
+                    ""id"": ""0c443907-fe92-4c51-b62c-9be644641fdb"",
+                    ""expectedControlType"": ""Integer"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -313,17 +331,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""3e5f5442-8668-4b27-a940-df99bad7e831"",
-                    ""path"": ""<Joystick>/{Hatswitch}"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Joystick"",
-                    ""action"": ""Look"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""143bb1cd-cc10-4eca-a2f0-a3664166fe91"",
                     ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
@@ -389,39 +396,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""2D Vector"",
-                    ""id"": ""e95c05a5-4a55-432f-b172-affb8468bfef"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ProjectileAiming"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""Left"",
-                    ""id"": ""20123275-7885-43da-9d47-2f9bd30db231"",
-                    ""path"": ""<Keyboard>/q"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ProjectileAiming"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""Right"",
-                    ""id"": ""d2ea2ac3-b786-4746-a04f-a25400cf4205"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ProjectileAiming"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": """",
                     ""id"": ""43938d3e-6532-413a-bf73-2c62485771cb"",
                     ""path"": ""<Keyboard>/r"",
@@ -440,6 +414,149 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""FireLoad"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b6a9f268-95a0-4cf3-b390-9a6af92215d0"",
+                    ""path"": ""<Pointer>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ProjectileAiming"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""551c0b5c-d744-48a3-af07-41d67f07d00e"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectItem_NotEquip"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Positive"",
+                    ""id"": ""f3d7c93a-6e77-420e-beb9-8b5bdd681139"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectItem_NotEquip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Negative"",
+                    ""id"": ""43ada0e0-ea05-4466-a4f6-cf55e3ecfd4c"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectItem_NotEquip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e2131c9e-3576-4926-a6e6-14ead4478c23"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale"",
+                    ""groups"": """",
+                    ""action"": ""SelectItem_Equip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6fe3ea56-2edc-4e23-a973-2bf0a573054f"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=2)"",
+                    ""groups"": """",
+                    ""action"": ""SelectItem_Equip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e95292e5-7c21-4bfd-9d9f-0d00a655e617"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=3)"",
+                    ""groups"": """",
+                    ""action"": ""SelectItem_Equip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""17061457-f193-4830-901d-f52ae65235d5"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=4)"",
+                    ""groups"": """",
+                    ""action"": ""SelectItem_Equip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""96cd2e23-502e-4dbc-ac44-e1e7a09faef4"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=5)"",
+                    ""groups"": """",
+                    ""action"": ""SelectItem_Equip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""784c21d2-d7c3-40c3-9f99-a8078bdcf7ab"",
+                    ""path"": ""<Keyboard>/6"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=6)"",
+                    ""groups"": """",
+                    ""action"": ""SelectItem_Equip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""79d984e9-cd26-47a9-9406-fc5c79ce6e31"",
+                    ""path"": ""<Keyboard>/7"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=7)"",
+                    ""groups"": """",
+                    ""action"": ""SelectItem_Equip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""19e09323-24ec-47fa-8999-a2c489903fb7"",
+                    ""path"": ""<Keyboard>/8"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=8)"",
+                    ""groups"": """",
+                    ""action"": ""SelectItem_Equip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cae4a907-da0d-4350-b144-cdbefdbcddf7"",
+                    ""path"": ""<Keyboard>/9"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=9)"",
+                    ""groups"": """",
+                    ""action"": ""SelectItem_Equip"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1034,6 +1151,8 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         m_Player_FireLoad = m_Player.FindAction("FireLoad", throwIfNotFound: true);
         m_Player_Click = m_Player.FindAction("Click", throwIfNotFound: true);
         m_Player_ProjectileAiming = m_Player.FindAction("ProjectileAiming", throwIfNotFound: true);
+        m_Player_SelectItem_NotEquip = m_Player.FindAction("SelectItem_NotEquip", throwIfNotFound: true);
+        m_Player_SelectItem_Equip = m_Player.FindAction("SelectItem_Equip", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1134,6 +1253,8 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_FireLoad;
     private readonly InputAction m_Player_Click;
     private readonly InputAction m_Player_ProjectileAiming;
+    private readonly InputAction m_Player_SelectItem_NotEquip;
+    private readonly InputAction m_Player_SelectItem_Equip;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1173,6 +1294,14 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/ProjectileAiming".
         /// </summary>
         public InputAction @ProjectileAiming => m_Wrapper.m_Player_ProjectileAiming;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/SelectItem_NotEquip".
+        /// </summary>
+        public InputAction @SelectItem_NotEquip => m_Wrapper.m_Player_SelectItem_NotEquip;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/SelectItem_Equip".
+        /// </summary>
+        public InputAction @SelectItem_Equip => m_Wrapper.m_Player_SelectItem_Equip;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1220,6 +1349,12 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @ProjectileAiming.started += instance.OnProjectileAiming;
             @ProjectileAiming.performed += instance.OnProjectileAiming;
             @ProjectileAiming.canceled += instance.OnProjectileAiming;
+            @SelectItem_NotEquip.started += instance.OnSelectItem_NotEquip;
+            @SelectItem_NotEquip.performed += instance.OnSelectItem_NotEquip;
+            @SelectItem_NotEquip.canceled += instance.OnSelectItem_NotEquip;
+            @SelectItem_Equip.started += instance.OnSelectItem_Equip;
+            @SelectItem_Equip.performed += instance.OnSelectItem_Equip;
+            @SelectItem_Equip.canceled += instance.OnSelectItem_Equip;
         }
 
         /// <summary>
@@ -1252,6 +1387,12 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @ProjectileAiming.started -= instance.OnProjectileAiming;
             @ProjectileAiming.performed -= instance.OnProjectileAiming;
             @ProjectileAiming.canceled -= instance.OnProjectileAiming;
+            @SelectItem_NotEquip.started -= instance.OnSelectItem_NotEquip;
+            @SelectItem_NotEquip.performed -= instance.OnSelectItem_NotEquip;
+            @SelectItem_NotEquip.canceled -= instance.OnSelectItem_NotEquip;
+            @SelectItem_Equip.started -= instance.OnSelectItem_Equip;
+            @SelectItem_Equip.performed -= instance.OnSelectItem_Equip;
+            @SelectItem_Equip.canceled -= instance.OnSelectItem_Equip;
         }
 
         /// <summary>
@@ -1601,6 +1742,20 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnProjectileAiming(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SelectItem_NotEquip" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSelectItem_NotEquip(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SelectItem_Equip" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSelectItem_Equip(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

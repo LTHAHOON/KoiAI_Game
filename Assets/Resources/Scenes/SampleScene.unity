@@ -674,10 +674,13 @@ MonoBehaviour:
   _inventorySlots:
   - _slotParent: {fileID: 1748644960}
     _slotData: {fileID: 11400000, guid: 7b266204aad8fca4f83c5793a8ebff62, type: 2}
+    _isUseSelectedOutline: 1
   - _slotParent: {fileID: 1052814956}
     _slotData: {fileID: 11400000, guid: ea761fe3bd6867840aaae4de838af260, type: 2}
+    _isUseSelectedOutline: 1
   _itemUIRendererPrefab: {fileID: 5342991994054191538, guid: 81dd912f02a7d6e408e9e2ed115fd0d1, type: 3}
   _itemTextureProperty: _Item_Tex
+  _selectedOutlinePrefab: {fileID: 8640778001768627064, guid: 58505e84701ef3f44a99b1132c8d39e1, type: 3}
 --- !u!1 &211602312
 GameObject:
   m_ObjectHideFlags: 0
@@ -880,6 +883,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 302235594}
+  - component: {fileID: 302235595}
   m_Layer: 5
   m_Name: Weapon_Info
   m_TagString: Untagged
@@ -909,6 +913,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &302235595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302235593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 780687acdc355e744906cf9813f05cc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponInfoControl
+  _curCountText: {fileID: 0}
+  _remainingCountText: {fileID: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -1137,7 +1155,7 @@ Light:
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
-  m_ColorTemperature: 5000
+  m_ColorTemperature: 5500
   m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
@@ -1925,12 +1943,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 995704083}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.31, y: 0.55, z: 3.01}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 7.73857, y: 1.55, z: 4.43857}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1117535538}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1004190198
 GameObject:
@@ -2021,6 +2039,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1052814956}
   - component: {fileID: 1052814957}
+  - component: {fileID: 1052814958}
   m_Layer: 5
   m_Name: Resource_Slots
   m_TagString: Untagged
@@ -2071,6 +2090,19 @@ MonoBehaviour:
   m_Spacing: {x: 20, y: 20}
   m_Constraint: 1
   m_ConstraintCount: 10
+--- !u!114 &1052814958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1052814955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ToggleGroup
+  m_AllowSwitchOff: 0
 --- !u!1 &1090267184
 GameObject:
   m_ObjectHideFlags: 0
@@ -2101,6 +2133,41 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2116610958}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1117535537
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1117535538}
+  m_Layer: 0
+  m_Name: GraphGizmosTest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1117535538
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1117535537}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.42857, y: -1, z: -1.42857}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 995704085}
+  - {fileID: 1467350579}
+  - {fileID: 1436183248}
+  - {fileID: 1464662464}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1140771814
 GameObject:
@@ -2350,12 +2417,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1436183246}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13.22, y: -1, z: 0.77}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 14.64857, y: 0, z: 2.19857}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1117535538}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1464662462
 GameObject:
@@ -2404,12 +2471,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1464662462}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.73, y: -1, z: -43.17}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 12.158569, y: 0, z: -41.74143}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1117535538}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1467350577
 GameObject:
@@ -2451,12 +2518,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1467350577}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.04, y: 2.09, z: 3.39246}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 13.46857, y: 3.09, z: 4.82103}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1117535538}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1502046939 stripped
 GameObject:
@@ -2545,7 +2612,7 @@ GameObject:
   - component: {fileID: 1620534616}
   - component: {fileID: 1620534615}
   m_Layer: 5
-  m_Name: MaxCount_Projectile_Text
+  m_Name: RemainingCount_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2792,6 +2859,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1748644960}
   - component: {fileID: 1748644961}
+  - component: {fileID: 1748644962}
   m_Layer: 5
   m_Name: Weapon_Slots
   m_TagString: Untagged
@@ -2842,6 +2910,19 @@ MonoBehaviour:
   m_Spacing: {x: 50, y: 30}
   m_Constraint: 2
   m_ConstraintCount: 6
+--- !u!114 &1748644962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1748644959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ToggleGroup
+  m_AllowSwitchOff: 0
 --- !u!1 &1757105300
 GameObject:
   m_ObjectHideFlags: 0
@@ -3839,6 +3920,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerEquipment
   _inventorySystem: {fileID: 203856415}
+  _weaponInfoControl: {fileID: 0}
   _equipDatas:
   - {fileID: 11400000, guid: 9294b86170ea2b044b95cf093762506f, type: 2}
   _notEquipDatas: []
@@ -3875,7 +3957,7 @@ GameObject:
   - component: {fileID: 2130804732}
   - component: {fileID: 2130804731}
   m_Layer: 5
-  m_Name: CurCount_Projectile_Text
+  m_Name: CurCount_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4012,8 +4094,5 @@ SceneRoots:
   - {fileID: 1540684723}
   - {fileID: 410087041}
   - {fileID: 832575519}
-  - {fileID: 995704085}
-  - {fileID: 1467350579}
-  - {fileID: 1436183248}
-  - {fileID: 1464662464}
   - {fileID: 56211644}
+  - {fileID: 1117535538}

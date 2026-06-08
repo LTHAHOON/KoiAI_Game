@@ -25,24 +25,35 @@ public class CannonController : WeaponBase
     private Pool<Projectile> _pool;
     private CannonBallData _cannonBallData;
     private Slot _cannonSlot;
-    private int _curProjectileCount = 0;
-    private int _maxProjectileCount = 0;
+    private int _curCount = 0;
+    private int _curLoadCount;
+    private int _remainingCount = 0;
+    private int _remainingLoadCount = 0;
+
     private float _curLoadTime = 0f;
     private bool _isFireLoading = false;
     private readonly StringBuilder _sb = new();
-    
+    private PlayerEquipment _equipmentFeature;
     private void Update()
     {
-        _pitchAngle += _aim.x * Time.deltaTime;
-        _pitchAngle -= _aim.y * Time.deltaTime;
-
+        _pitchAngle += _aim.y * Time.deltaTime * 10f;
+        _pitchAngle = Mathf.Clamp(_pitchAngle, _cannonData.MinPitchAngle, _cannonData.MaxPitchAngle);
         if (_isFireLoading)
         {
             _curLoadTime += Time.deltaTime;
-            _curProjectileCount = Mathf.RoundToInt(_curLoadTime / _cannonData.LoadTime * _maxProjectileCount);
+            _curLoadCount = _curCount + Mathf.RoundToInt(_curLoadTime / _cannonData.LoadTime * _remainingCount);
+            _remainingLoadCount = _remainingCount + Mathf.Clamp(_remainingCount - _curCount, 0, _remainingCount);
+            _equipmentFeature.SetWeaponInfo(_curLoadCount, _remainingLoadCount);
+            RefreshProjectile(_curLoadCount);
             if (_curLoadTime >= _cannonData.LoadTime)
             {
-                _curProjectileCount = _maxProjectileCount;
+                _equipmentFeature.SetWeaponInfo(_curLoadCount, _remainingLoadCount);
+                RefreshProjectile(_curCount);
+                RemoveProjectileData();
+                _curLoadCount = 0;
+                _remainingLoadCount = 0;
+                _curCount = _remainingCount;
+                _remainingCount = 0;
                 _curLoadTime = 0f;
                 _isFireLoading = false;
             }
@@ -63,13 +74,13 @@ public class CannonController : WeaponBase
         
         #region Projectile Connect
         _cannonBallData = _cannonData.CannonBallData;
-        _curProjectileCount = 0;
-        _maxProjectileCount = _cannonBallData.Count;
-        var playerFeature = (PlayerEquipment)itemOwner.GetPlayerFeatureWithProperty(PlayerFeature.PlayerFeatureProperty.Equipment);
-        if(playerFeature)
+        _curCount = 0;
+        _remainingCount = _cannonBallData.Count;
+        _equipmentFeature = (PlayerEquipment)itemOwner.GetPlayerFeatureWithProperty(PlayerFeature.PlayerFeatureProperty.Equipment);
+        if(_equipmentFeature)
         {
-            _cannonSlot = playerFeature.AddItemInSlot(_cannonBallData);
-            RefreshProjectileCount(_cannonBallData.Count);
+            _cannonSlot = _equipmentFeature.AddItemInSlot(_cannonBallData);
+            RefreshProjectile(_cannonBallData.Count);
         }
         #endregion
         
@@ -83,11 +94,11 @@ public class CannonController : WeaponBase
         
     }
 
-    private void RefreshProjectileCount(int curProjectileCount)
+    private void RefreshProjectile(int curProjectileCount)
     {
         if (!_cannonSlot)
             return;
-        //탄이 없을 경우 탄 연결 해제(탄 삭제)
+        //탄이 없을 경우 숫자 X
         if (curProjectileCount <= 0)
         {
             _sb.Append("");
@@ -105,11 +116,12 @@ public class CannonController : WeaponBase
     
     private void RemoveProjectileData()
     {
-        var playerFeature = (PlayerEquipment)ItemOwner.GetPlayerFeatureWithProperty(PlayerFeature.PlayerFeatureProperty.Equipment);
-        playerFeature?.RemoveItemInSlot(_cannonSlot, _cannonBallData);
+        if (!_equipmentFeature)
+            return;
+        _equipmentFeature.RemoveItemInSlot(_cannonSlot, _cannonBallData);
         _cannonSlot = null;
-        _curProjectileCount = 0;
-        _maxProjectileCount = 0;
+        _curCount = 0;
+        _remainingCount = 0;
     }
         
 
@@ -139,11 +151,6 @@ public class CannonController : WeaponBase
     {
         if (context.performed)
         {
-            if (_cannonSlot == null)
-            {
-                //CannonBall 찾기
-                return;
-            }
             _isFireLoading = true;
         }
     }
@@ -156,11 +163,15 @@ public class CannonController : WeaponBase
                 return;
             if (_isFireLoading)
             {
+                _curCount = _curLoadCount;
+                _remainingCount = _remainingLoadCount;
                 _curLoadTime = 0f;
+                _curLoadCount = 0;
                 _isFireLoading = false;
+                return;
             }
-            --_curProjectileCount;
-            RefreshProjectileCount(_curProjectileCount);
+            --_curCount;
+            RefreshProjectile(_curCount);
             Projectile bulletData = _pool.Pop();
             bulletData.TrailRenderer.Clear();
             bulletData.TrailRenderer.enabled = false;
@@ -176,10 +187,9 @@ public class CannonController : WeaponBase
                 bulletRigid.linearVelocity = GetLaunchVelocity();
             }
             PoolManager.Instance.ReturnDelay(_pool, bulletData, _cannonBallData.BulletLifeTime);
-            if (_curProjectileCount <= 0)
+            if (_curCount <= 0)
             {
-                RefreshProjectileCount(_curProjectileCount);
-                RemoveProjectileData();
+                RefreshProjectile(_curCount);
             }
         }
     }
@@ -188,7 +198,7 @@ public class CannonController : WeaponBase
     private void OnDrawGizmos()
     {
         #region Gizmos
-        Vector3 position = transform.position;
+        Vector3 position = _fireCannonPoint.position;
         Vector3 velocity = GetLaunchVelocity();
 
         _hasHit = false;
@@ -234,7 +244,6 @@ public class CannonController : WeaponBase
         #endregion
     }
     
-    private bool HasNotCannonBall() => _pool == null || _cannonBallData == null || _cannonSlot == null 
-                                       || _cannonData == null || _curProjectileCount <= 0;
+    private bool HasNotCannonBall() => _pool == null || _cannonBallData == null || _curCount <= 0;
 
 }
