@@ -172,6 +172,15 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""UseItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""17d33e41-fce3-4801-bcea-9f4c0ef9b6fc"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -557,6 +566,17 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""processors"": ""Scale(factor=9)"",
                     ""groups"": """",
                     ""action"": ""SelectItem_Equip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""306e89b9-fe7e-4646-906b-aabc0eb9b248"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1153,6 +1173,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         m_Player_ProjectileAiming = m_Player.FindAction("ProjectileAiming", throwIfNotFound: true);
         m_Player_SelectItem_NotEquip = m_Player.FindAction("SelectItem_NotEquip", throwIfNotFound: true);
         m_Player_SelectItem_Equip = m_Player.FindAction("SelectItem_Equip", throwIfNotFound: true);
+        m_Player_UseItem = m_Player.FindAction("UseItem", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1255,6 +1276,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ProjectileAiming;
     private readonly InputAction m_Player_SelectItem_NotEquip;
     private readonly InputAction m_Player_SelectItem_Equip;
+    private readonly InputAction m_Player_UseItem;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1302,6 +1324,10 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/SelectItem_Equip".
         /// </summary>
         public InputAction @SelectItem_Equip => m_Wrapper.m_Player_SelectItem_Equip;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/UseItem".
+        /// </summary>
+        public InputAction @UseItem => m_Wrapper.m_Player_UseItem;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1355,6 +1381,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @SelectItem_Equip.started += instance.OnSelectItem_Equip;
             @SelectItem_Equip.performed += instance.OnSelectItem_Equip;
             @SelectItem_Equip.canceled += instance.OnSelectItem_Equip;
+            @UseItem.started += instance.OnUseItem;
+            @UseItem.performed += instance.OnUseItem;
+            @UseItem.canceled += instance.OnUseItem;
         }
 
         /// <summary>
@@ -1393,6 +1422,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @SelectItem_Equip.started -= instance.OnSelectItem_Equip;
             @SelectItem_Equip.performed -= instance.OnSelectItem_Equip;
             @SelectItem_Equip.canceled -= instance.OnSelectItem_Equip;
+            @UseItem.started -= instance.OnUseItem;
+            @UseItem.performed -= instance.OnUseItem;
+            @UseItem.canceled -= instance.OnUseItem;
         }
 
         /// <summary>
@@ -1756,6 +1788,13 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSelectItem_Equip(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "UseItem" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnUseItem(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

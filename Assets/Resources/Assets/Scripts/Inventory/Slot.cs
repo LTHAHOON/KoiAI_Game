@@ -15,10 +15,9 @@ public class Slot : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _itemCountText;
     [SerializeField]
-    private Transform _itemDataParent;
+    private RectTransform _itemDataParent;
 
     private ItemBase _item;
-    private Renderer _itemUI;
     private int _slotIndex;
     private RectTransform _rectTransform;
     private bool _isSelected = false;
@@ -47,19 +46,29 @@ public class Slot : MonoBehaviour
     {
         _isSelected = false;
     }
-    public void PushItem(ItemBase item, Renderer itemUI)
+    public void PushItem(ItemBase item)
     {
+        Renderer itemUI = item.GetItemUI();
+        itemUI.transform.SetParent(_itemDataParent);
+        itemUI.transform.localPosition = Vector3.zero;
         _item = item;
-        _itemUI = itemUI;
-        _itemUI.transform.SetParent(_itemDataParent);
     }
     
-    public void ClearSlot()
+    public void ClearSlot(bool bDestroy)
     {
-        Destroy(_itemUI.gameObject);
-        if (_item != null && _item.gameObject.scene.IsValid() && _item.gameObject.scene.isLoaded)
+        if(bDestroy)
         {
-            Destroy(_item.gameObject);
+            if (_item != null && _item.gameObject.scene.IsValid() && _item.gameObject.scene.isLoaded)
+            {
+               // Destroy(_item.GetItemUI());
+                Destroy(_item.gameObject);
+            }
+        }
+        else
+        {
+         //   var itemUI = _item.GetItemUI();
+         //   Destroy(itemUI);
+            _item = null;
         }
     }
     

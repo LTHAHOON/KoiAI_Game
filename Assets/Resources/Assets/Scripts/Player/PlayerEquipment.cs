@@ -26,10 +26,10 @@ public class PlayerEquipment : PlayerFeature
     private InventorySystem _inventorySystem;
     [SerializeField]
     private WeaponInfoControl _weaponInfoControl;
-    [Header("장착 가능한 아이템 (무기/갑옷/..)")]
+    [Header("장착된 아이템")]
     [SerializeField] 
     private List<ItemData>  _equipDatas;
-    [Header("장착 불가능 아이템 (총알/아티팩트/..)")]
+    [Header("장착되지 않은 아이템 ")]
     [SerializeField] 
     private List<ItemData>  _notEquipDatas;
     [Header("장비 저장 위치")]
@@ -55,18 +55,19 @@ public class PlayerEquipment : PlayerFeature
         for (int i = 0; i < equipDataCount; i++)
         {
             Transform parent = _dicItemParentPoint[_equipDatas[i].ItemPrefab.Category];
-            _inventorySystem.CreateAndPushItem(Owner, parent, _equipDatas[i]);
+            _inventorySystem.CreateAndPushItem(Owner, parent,ItemSlotType.Equipped ,_equipDatas[i]);
         }
 
         for (int i = 0; i < notEquipDataCount; i++)
         {
             Transform parent = _dicItemParentPoint[_notEquipDatas[i].ItemPrefab.Category];
-            _inventorySystem.CreateAndPushItem(Owner, parent, _notEquipDatas[i]);
+            _inventorySystem.CreateAndPushItem(Owner, parent, ItemSlotType.NotEquipped, _notEquipDatas[i]);
         }
         #endregion
 
         playerIA.Player.SelectItem_Equip.performed += OnSelectEquipItem;
         playerIA.Player.SelectItem_NotEquip.performed += OnSelectNotEquipItem;
+        playerIA.Player.UseItem.performed += OnUseItem;
         if(_inventorySystem.TryGetInventorySlot(ItemSlotType.NotEquipped, out var inventorySlot))
         {
             _maxSelectNotEquipIndex = inventorySlot.SlotData.SlotCount;
@@ -75,9 +76,9 @@ public class PlayerEquipment : PlayerFeature
 
     public override void UpdateFeature() { }
 
-    private List<ItemData> GetItemList(ItemData itemData)
+    private List<ItemData> GetItemList(ItemSlotType itemSlotType)
     {
-        switch (itemData.Type)
+        switch (itemSlotType)
         {
             case ItemSlotType.Equipped:
             {
@@ -90,6 +91,42 @@ public class PlayerEquipment : PlayerFeature
             default:
                 return null;
         }
+    }
+
+    private void OnUseItem(InputAction.CallbackContext context)
+    {
+        if(context.performed)
+        {
+            Slot selectedSlot = GetSelectedSlot(ItemSlotType.NotEquipped);
+            if (!selectedSlot)
+                return;
+            ItemBase item = selectedSlot.GetItem();
+            if (item != null)
+            {
+                item.UseItem();
+            }
+        }
+    }
+
+    public void SetItemCountOfNotEquipped(ItemBase item, int count)
+    {
+        if(item.GetCurrentSlotType() != ItemSlotType.NotEquipped)
+        {
+            Slot slot = _inventorySystem.GetSlotWithItem(item);
+            _sb.Append(count);
+            slot.SetItemCountText(_sb);
+            _sb.Clear();
+        }
+    }
+
+    public void EquipItem(ItemBase item)
+    {
+        if(!_notEquipDatas.Contains(item.GetItemData()))
+        {
+            return;
+        }
+        _notEquipDatas.Remove(item.GetItemData());
+        _equipDatas.Add(item.GetItemData());
     }
 
     private int _curSelectNotEquipIndex = 0;
@@ -127,28 +164,36 @@ public class PlayerEquipment : PlayerFeature
         }
     }
 
-    public Slot AddItemInSlot(ItemData itemData)
+    public void PushItemInSlot(ItemBase item, ItemSlotType slotTypeToPush)
+    {
+        Slot curSlot = _inventorySystem.GetSlotWithItem(item);
+        if (curSlot == null)
+            return;
+        _inventorySystem.PushItem(curSlot, slotTypeToPush);
+    }
+
+    public void CreateAndPushItemInSlot(ItemSlotType itemSlotType, ItemData itemData)
     {
         if (itemData == null)
-            return null;
-        var itemList = GetItemList(itemData);
+            return;
+        var itemList = GetItemList(itemSlotType);
         if(itemList == null)
-            return null;
+            return;
         
         itemList.Add(itemData);
         Transform itemParent = GetItemParent(itemData.ItemPrefab.Category);
-        return _inventorySystem.CreateAndPushItem(Owner, itemParent, itemData);
+        _inventorySystem.CreateAndPushItem(Owner, itemParent, itemSlotType, itemData);
     }
     
-    public void RemoveItemInSlot(Slot targetSlot, ItemData itemData)
+    public void RemoveItemInSlot(ItemBase item, ItemSlotType itemSlotType)
     {
-        if (itemData == null)
-            return;
-        var itemDatas = GetItemList(itemData);
-        if(itemDatas == null)
+        Slot slot = _inventorySystem.GetSlotWithItem(item);
+        var itemDatas = GetItemList(itemSlotType);
+        ItemData itemData = item.GetItemData();
+        if(itemDatas == null || itemData == null || slot == null)
             return;
         itemDatas.Remove(itemData);
-        _inventorySystem.RemoveItem(targetSlot, itemData.Type);
+        _inventorySystem.RemoveItem(slot, itemSlotType);
     }
 
     public void SetWeaponInfo(int curCount, int remainingCount)

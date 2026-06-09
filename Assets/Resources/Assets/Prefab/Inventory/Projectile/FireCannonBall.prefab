@@ -273,6 +273,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f0d5b2ede7798544b1a43d8240afb8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BulletData
-  _bulletData: {fileID: 11400000, guid: dff2d08bfa5dcf94db37f26aa54413e5, type: 2}
+  _cannonBallData: {fileID: 11400000, guid: dff2d08bfa5dcf94db37f26aa54413e5, type: 2}
   _rigid: {fileID: 2928449014478874148}
   _trailRenderer: {fileID: 6931901721508168739}

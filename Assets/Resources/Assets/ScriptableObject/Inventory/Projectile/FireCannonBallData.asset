@@ -17,7 +17,8 @@ MonoBehaviour:
   _itemName: Fire Cannon Ball
   _itemId: 12345
   _type: 0
-  _projectileMaxCount: 20
+  _isCreatableObj: 0
+  _projectileCount: 20
   _projectileDamage: 10
   _bulletPoolSize:
     _initPoolSize: 10

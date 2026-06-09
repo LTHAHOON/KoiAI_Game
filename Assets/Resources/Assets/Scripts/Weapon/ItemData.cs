@@ -2,21 +2,43 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum WeaponType
+{
+    Cannon,
+    Gun,
+    Sword,
+    
+}
+
+public enum ProjectileType
+{
+    CannonBall,
+    Bullet,
+}
+
 public class WeaponData : ItemData
 {
     [SerializeField]
+    private WeaponType _weaponType;
+    [SerializeField]
     private float _weaponDamage;
+
+    public WeaponType WeaponType => _weaponType;
+    public float WeaponDamage => _weaponDamage;
 }
 
 public class ProjectileData : ItemData
 {
     [SerializeField]
-    private int _projectileMaxCount;
+    private ProjectileType _projectileType;
+    [SerializeField]
+    private int _projectileCount;
     [SerializeField]
     private float _projectileDamage;
 
+    public ProjectileType ProjectileType => _projectileType;
     public float Damage => _projectileDamage;
-    public int Count => _projectileMaxCount;
+    public int ProjectileCount => _projectileCount;
 }
 
 public abstract class ItemData : ScriptableObject
@@ -29,12 +51,11 @@ public abstract class ItemData : ScriptableObject
     private string _itemName;
     [SerializeField]
     private ulong _itemId;
-    //장착 가능한지 구분하기 위한 타입
     [SerializeField]
-    private ItemSlotType _type;
+    private bool _isCreatableObj = false;
 
+    public bool IsCreatableObj => _isCreatableObj;
     public ItemBase ItemPrefab => _itemPrefab;
-    public ItemSlotType Type => _type;
     public Texture2D ItemTex => _itemTex;
     public string ItemName => _itemName;
     public ulong ItemId => _itemId;

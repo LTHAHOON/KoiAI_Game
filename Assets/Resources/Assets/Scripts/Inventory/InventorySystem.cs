@@ -1,3 +1,4 @@
+using NUnit.Framework.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,6 +6,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using static InventorySystem;
+using static UnityEditor.Progress;
 
 public enum ItemCategory
 {
@@ -15,7 +17,7 @@ public enum ItemCategory
 public class InventorySystem : MonoBehaviour
 {
     [Serializable]
-    public struct InventorySlot
+    public class InventorySlot
     {
         [SerializeField]
         private Transform _slotParent;
@@ -28,7 +30,9 @@ public class InventorySystem : MonoBehaviour
         private RectTransform _selectedOutlineRect;
         private List<Slot> _slotList;
         private Slot _selectedSlot;
-        public void Init(InventorySystem caller,StringBuilder sb, GameObject selectedOutlinePrefab)
+
+        #region 인벤토리 슬롯 관리 함수
+        public void Init(MonoBehaviour caller, StringBuilder sb, GameObject selectedOutlinePrefab)
         {
             #region  슬롯 데이터 및 슬롯 선택 아웃라인 세팅
             if (!_slotData || !_slotParent)
@@ -50,7 +54,7 @@ public class InventorySystem : MonoBehaviour
                 if(i == 0)
                 {
                     //LayerOut 설정 프레임 문제로 코루틴으로 호출
-                    slot.StartCoroutine(IESelectSlot(slot));
+                    caller.StartCoroutine(IESelectSlot(slot));
                 }    
             }
 
@@ -73,12 +77,12 @@ public class InventorySystem : MonoBehaviour
             #endregion
         }
 
-        public readonly void DeSelectSlot(Slot slot)
+        public void DeSelectSlot(Slot slot)
         {
             slot.DeSelect();
         }
 
-        public readonly Slot GetEmptySlotFirst()
+        public Slot GetEmptySlotFirst()
         {
             #region 비어있는 슬롯들에서 제일 첫번째 슬롯 가져오기
             if (_slotList == null)
@@ -93,10 +97,33 @@ public class InventorySystem : MonoBehaviour
             return null;
             #endregion
         }
-        public readonly Slot SelectedSlot => _selectedSlot;
-        public readonly List<Slot> SlotList => _slotList;
-        public readonly Transform SlotParent => _slotParent;
-        public readonly SlotData SlotData => _slotData;
+
+        public Slot GetSlot(ItemBase item)
+        {
+            #region 해당 아이템의 슬롯 가져오기
+            for (int i = 0; i < _slotList.Count; i++)
+            {
+                ItemBase itemToCompare = _slotList[i].GetItem();
+                if(!itemToCompare)
+                {
+                    continue;
+                }
+                if (itemToCompare == item)
+                {
+                    return _slotList[i];
+                }
+            }
+            return null;
+            #endregion
+        }
+        #endregion
+
+        #region 반환형 프로퍼티
+        public Slot SelectedSlot => _selectedSlot;
+        public List<Slot> SlotList => _slotList;
+        public Transform SlotParent => _slotParent;
+        public SlotData SlotData => _slotData;
+        #endregion
     }
 
     [SerializeField]
@@ -110,7 +137,7 @@ public class InventorySystem : MonoBehaviour
 
     private int _itemTexturePropertyID;
     private readonly Dictionary<int, InventorySlot> _dicInventorySlot = new();
-    private readonly Dictionary<ulong, ItemBase> _dicPushedItem = new();
+    private readonly Dictionary<int, List<ItemBase>> _dicPushedItem = new();
     private readonly HashSet<Slot> _pushedSlotSet = new();
     private readonly StringBuilder _stringBuilder = new();
     private void Awake()
@@ -119,14 +146,27 @@ public class InventorySystem : MonoBehaviour
         for (int i = 0; i < _inventorySlots.Length; i++)
         {
             InventorySlot inventorySlot = _inventorySlots[i];
-            inventorySlot.Init(this,_stringBuilder, _selectedOutlinePrefab);
-            _dicInventorySlot.Add((int)inventorySlot.SlotData.ItemSlotType, inventorySlot);
+            ItemSlotType itemSlotType = _inventorySlots[i].SlotData.ItemSlotType;
+            _dicPushedItem.Add((int)itemSlotType, new List<ItemBase>());
+            _dicInventorySlot.TryAdd((int)itemSlotType, inventorySlot);
+            _dicInventorySlot[(int)itemSlotType].Init(this, _stringBuilder, _selectedOutlinePrefab);
         }
     }
 
     public bool TryGetInventorySlot(ItemSlotType itemSlotType, out InventorySlot inventorySlot)
     {
         return _dicInventorySlot.TryGetValue((int)itemSlotType, out inventorySlot);
+    }
+
+    public Slot GetSlotWithItem(ItemBase item)
+    {
+        ItemSlotType slotType = item.GetCurrentSlotType();
+        if (!TryGetInventorySlot(slotType, out var inventorySlot))
+        {
+            return null;
+        }
+        Slot slot = inventorySlot.GetSlot(item);
+        return slot;
     }
 
     private bool TryGetEmptySlotFirst(out Slot slot, ItemSlotType itemSlotType)
@@ -212,6 +252,9 @@ public class InventorySystem : MonoBehaviour
         return -1;
     }
 
+    /// <summary>
+    /// 해당 슬롯에 있는 아이템 삭제하기
+    /// </summary>
     public void RemoveItem(Slot targetSlot, ItemSlotType itemSlotType)
     {
         //Slot이 비어있을 경우
@@ -219,44 +262,92 @@ public class InventorySystem : MonoBehaviour
             return;
         if (!_dicInventorySlot.ContainsKey((int)itemSlotType))
             return;
+        ItemBase item = targetSlot.GetItem();
         _pushedSlotSet.Remove(targetSlot);
-        targetSlot.ClearSlot();
+        _dicPushedItem[(int)itemSlotType].Remove(item);
+        targetSlot.ClearSlot(true);
     }
-    
-    //생성하고 아이템 넣기
-    public Slot CreateAndPushItem(PlayerController itemOwner, Transform itemParent, ItemData itemData)
+
+    /// <summary>
+    /// 아이템 생성하고 넣기(새로 아이템 생성)
+    /// </summary>
+    public void CreateAndPushItem(PlayerController itemOwner, Transform itemParent, ItemSlotType itemSlotType, ItemData itemData)
     {
-        if (!TryGetEmptySlotFirst(out Slot slot, itemData.Type))
-            return null;
-        ItemBase newItem;
-        if (itemData.Type == ItemSlotType.Equipped)
+        if (!_dicPushedItem.ContainsKey((int)itemSlotType))
+            return;
+        if (!TryGetEmptySlotFirst(out Slot newSlot, itemSlotType))
+            return;
+
+        Renderer itemUI = CreateItemUI(newSlot, itemData.ItemTex);
+        ItemBase newItem = CreateItem(itemOwner, itemParent, itemUI, itemSlotType, itemData);
+        if(newItem == null)
         {
-            newItem   = Instantiate(itemData.ItemPrefab, itemParent);
+            return;
         }
-        else
+
+        newSlot.PushItem(newItem);
+        _pushedSlotSet.Add(newSlot);
+        _dicPushedItem[(int)itemSlotType].Add(newItem);
+    }
+
+    /// <summary>
+    /// 아이템 UI 생성
+    /// </summary>
+    private Renderer CreateItemUI(Slot targetSlot, Texture2D texture)
+    {
+        Renderer newItemUIRenderer = Instantiate(_itemUIRendererPrefab, targetSlot.transform);
+        //아이템 텍스처 넣기
+        MPBSystem.ChangeMaterialProperty(newItemUIRenderer, _itemTexturePropertyID, texture);
+        return newItemUIRenderer;
+    }
+
+    /// <summary>
+    /// 아이템 생성(슬롯에 아이템이 없는 상태)
+    /// </summary>
+    private ItemBase CreateItem(PlayerController itemOwner, Transform itemParent, Renderer itemUI, ItemSlotType itemSlotType, ItemData itemData)
+    {
+        ItemBase newItem;
+        if (!itemData.IsCreatableObj)
         {
             newItem = itemData.ItemPrefab;
         }
-        newItem.Init(itemOwner);    
-        Renderer newItemUIRenderer = Instantiate(_itemUIRendererPrefab, slot.transform);
-        //아이템 텍스처 넣기
-        MPBSystem.ChangeMaterialProperty(newItemUIRenderer, _itemTexturePropertyID, itemData.ItemTex);
-        
-        PushItem(newItem, itemData,newItemUIRenderer, slot);
-        return slot;
-
+        else
+        {
+            newItem = Instantiate(itemData.ItemPrefab, itemParent); 
+        }
+        newItem.Init(itemOwner, itemUI, itemSlotType);
+        return newItem;
     }
-    
-    //아이템 넣기(이미 생성된 상태)
-    public void PushItem(ItemBase newItem, ItemData itemData, Renderer itemUI, Slot targetSlot)
+
+    /// <summary>
+    /// 아이템 넣기(슬롯에 아이템이 있는 상태)
+    /// </summary>
+    public void PushItem(Slot curSlot, ItemSlotType slotTypeToPush, Slot slotToPush = null)
     {
-        //Slot이 비어있지 않을 경우
-        if (_pushedSlotSet.Contains(targetSlot))
+        if (!_dicPushedItem.ContainsKey((int)slotTypeToPush))
             return;
+        if (slotToPush == null)
+        {
+            if (!TryGetEmptySlotFirst(out Slot slot, slotTypeToPush))
+                return;
+            slotToPush = slot;
+        }
+        else
+        {
+            //넣을 위치의 Slot에 아이템이 있을 경우
+            if (_pushedSlotSet.Contains(slotToPush))
+                return;
+        }
         
-        targetSlot.PushItem(newItem, itemUI);
-        _pushedSlotSet.Add(targetSlot);
-        _dicPushedItem.Add(itemData.ItemId, newItem);
+        ItemBase item =  curSlot.GetItem();
+        ItemSlotType curSlotType = item.GetCurrentSlotType();
+        slotToPush.PushItem(item);
+        curSlot.ClearSlot(false);
+        _pushedSlotSet.Remove(curSlot);
+        _pushedSlotSet.Add(slotToPush);
+        _dicPushedItem[(int)curSlotType].Remove(item);
+        _dicPushedItem[(int)slotTypeToPush].Add(item);
+        item.SetCurrentSlotType(slotTypeToPush);
     }
     
 }
