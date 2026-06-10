@@ -3,9 +3,12 @@ using UnityEngine;
 
 public class SurfaceAngleFinder : MonoBehaviour
 {
-    public bool TrySurfaceAngleUsingRaycast(out Vector3 angleVec,Transform rayTransform ,float maxDistance, int layerMask)
+    [SerializeField]
+    private float _surfaceCheckDistance = 3f;
+    
+    public bool TrySurfaceAngleUsingRaycast(out Vector3 angleVec,Transform rayTransform, int layerMask)
     {
-        bool bGet = Physics.Raycast(rayTransform.position, rayTransform.up * -1,out RaycastHit hit, maxDistance, layerMask);
+        bool bGet = Physics.Raycast(rayTransform.position, rayTransform.up * -1,out RaycastHit hit, _surfaceCheckDistance, layerMask);
         angleVec = new Vector3(0f, 0f, 0f);
         if (bGet)
         {
@@ -22,9 +25,9 @@ public class SurfaceAngleFinder : MonoBehaviour
         return bGet;
     }
     
-    public bool TrySurfaceAngleUsingRaycast(out Vector3 angleVec,Transform rayTransform ,float maxDistance)
+    public bool TrySurfaceAngleUsingRaycast(out Vector3 angleVec,Transform rayTransform)
     {
-        return TrySurfaceAngleUsingRaycast(out angleVec, rayTransform, maxDistance, Physics.AllLayers);
+        return TrySurfaceAngleUsingRaycast(out angleVec, rayTransform, Physics.AllLayers);
     }
     
 }

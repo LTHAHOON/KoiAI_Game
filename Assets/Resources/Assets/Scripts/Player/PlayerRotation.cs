@@ -3,36 +3,37 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(SurfaceAngleFinder))]
 public class PlayerRotation : PlayerFeature
 {
     [SerializeField]
-    private float _surfaceCheckDistance = 3f;
-    [SerializeField]
-    private SurfaceAngleFinder _surfaceAngleFinder;
-    [SerializeField]
     private float _lookSpeed = 10f;
 
-    private Vector2 _input = Vector2.zero;
+    private SurfaceAngleFinder _surfaceAngleFinder;
     private Camera _camera;
+    private Vector2 _input = Vector2.zero;
     private Vector3 _targetAngle = Vector3.zero;
+    
     public override void Init(PlayerInputAction playerIA)
     {
         _camera = Camera.main;
+        _surfaceAngleFinder = GetComponent<SurfaceAngleFinder>();
         playerIA.Player.Move.started += OnRotation;
         playerIA.Player.Move.performed += OnRotation;
         playerIA.Player.Move.canceled += OnRotation;
     }
+    
     public override void UpdateFeature()
     {
-        if (_input == Vector2.zero)
+        if (!IsValid())
             return;
-        _surfaceAngleFinder.TrySurfaceAngleUsingRaycast(out _targetAngle, transform, _surfaceCheckDistance);
+        _surfaceAngleFinder.TrySurfaceAngleUsingRaycast(out _targetAngle, transform);
         _targetAngle.y = GetAngleWithAtan(_input);
     }
 
     public void FixedUpdate()
     {
-        if (_input == Vector2.zero)
+        if (!IsValid())
             return;
         Quaternion quat = Quaternion.Euler(_targetAngle.x, _targetAngle.y, _targetAngle.z);
         transform.rotation = Quaternion.Slerp(transform.rotation, quat, Time.deltaTime * _lookSpeed);
@@ -50,7 +51,7 @@ public class PlayerRotation : PlayerFeature
     }
     private float GetAngleWithDot(Vector2 input)
     {
-        #region 내적을 이용한 경사면 각도 구하기
+        #region 내적을 이용하여 카메라 중심으로 Y 회전값 구하기
         Vector3 xDir = _camera.transform.right * input.x;
         Vector3 zDir = _camera.transform.forward * input.y;
         Vector3 dir = (xDir + zDir).normalized;
@@ -80,4 +81,6 @@ public class PlayerRotation : PlayerFeature
             _input = Vector3.zero;
         }
     }
+
+    private bool IsValid() => _input != Vector2.zero && _camera && _surfaceAngleFinder;
 }

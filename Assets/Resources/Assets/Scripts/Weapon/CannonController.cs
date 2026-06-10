@@ -22,14 +22,15 @@ public class CannonController : WeaponBase
     private Vector3 _lastPredictedPoint;
     private Vector2 _aim;
     private Pool<CannonBall> _pool;
+    
     private int _curBallCount = 0;
     private int _curBallLoadCount;
     private int _remainingBallCount = 0;
     private int _remainingBallLoadCount = 0;
-
     private float _curLoadTime = 0f;
     private float _targetLoadTime = 0f;
     private bool _isFireLoading = false;
+
     private PlayerEquipment _equipmentFeature;
     private CannonSkin _cannonSkin;
     private void Update()
@@ -50,7 +51,7 @@ public class CannonController : WeaponBase
             _curBallLoadCount = _curBallCount + count;
             _remainingBallLoadCount = Mathf.Clamp(_remainingBallCount - count, 0, _remainingBallCount);
             _equipmentFeature.SetWeaponInfo(_curBallLoadCount, _remainingBallLoadCount);
-            if (_curLoadTime >= _cannonData.LoadTime || _curBallLoadCount >= _cannonData.LoadMaxCount)
+            if (_curLoadTime >= _targetLoadTime || _curBallLoadCount >= _cannonData.LoadMaxCount)
             {
                 _equipmentFeature.SetWeaponInfo(_curBallLoadCount, _remainingBallLoadCount);
                 _curBallCount = _curBallLoadCount;
@@ -204,14 +205,15 @@ public class CannonController : WeaponBase
         if(_isFireLoading)
         {
             return;
-        }    
+        }  
+        //탄이 꽉 차있거나 남은 탄이 없을 경우 리턴
+        if (_curBallCount >= _cannonData.LoadMaxCount || _remainingBallCount <= 0)
+        {
+            return;
+        }
         if (context.performed)
         {
-            if (_curBallCount >= _cannonData.LoadMaxCount)
-            {
-                return;
-            }
-            _targetLoadTime = _cannonData.LoadTime;
+            _targetLoadTime = _cannonData.LoadTime * _remainingBallCount / _cannonData.LoadMaxCount;
             _isFireLoading = true;
         }
     }
@@ -303,11 +305,6 @@ public class CannonController : WeaponBase
 
             Gizmos.color = Color.cyan;
             _lastPredictedPoint = position;
-        }
-
-        if (!_hasHit)
-        {
-            return;
         }
     }
 
