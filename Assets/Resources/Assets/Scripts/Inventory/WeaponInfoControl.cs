@@ -9,6 +9,12 @@ public class WeaponInfoControl : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _remainingCountText;
 
+    private void Awake()
+    {
+        _curCountText.text = "0";
+        _remainingCountText.text = "0";
+    }
+
     public void SetCurCountText(StringBuilder sb)
     {
         _curCountText.SetText(sb);

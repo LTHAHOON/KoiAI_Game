@@ -16,12 +16,14 @@ MonoBehaviour:
   _itemTex: {fileID: 2800000, guid: ef4653662b04be5449b407162f48cded, type: 3}
   _itemName: FireCannon
   _itemId: 1234
-  _type: 0
   _isCreatableObj: 1
+  _weaponType: 0
   _weaponDamage: 0
+  _cannonSkinData: {fileID: 4560183316618955753, guid: 9994a75873b2cce44a2e36f1a1598ece, type: 3}
   _cannonBallData: {fileID: 11400000, guid: dff2d08bfa5dcf94db37f26aa54413e5, type: 2}
+  _loadMaxCount: 20
   _aimSensitity: 10
-  _launchSpeed: 12
+  _launchSpeed: 20
   _loadTime: 1
   _linearDamping: 0
   _maxPitchAngle: 90

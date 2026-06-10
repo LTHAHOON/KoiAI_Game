@@ -4,15 +4,12 @@ public class CannonBall : ResourceBase
 {
     [SerializeField]
     private CannonBallData _cannonBallData;
-    [SerializeField]
-    private Rigidbody _rigid;
-    [SerializeField]
-    private TrailRenderer _trailRenderer;
+
     
     private PlayerEquipment _equipmentFeature;
-    public Rigidbody Rigidbody => _rigid;
-    public TrailRenderer TrailRenderer => _trailRenderer;
-
+    public Rigidbody Rigidbody => _cannonBallSkin.Rigidbody;
+    public TrailRenderer TrailRenderer => _cannonBallSkin.TrailRenderer;
+    private CannonBallSkin _cannonBallSkin;
     public override ItemData GetItemData()
     {
         return _cannonBallData;
@@ -25,6 +22,11 @@ public class CannonBall : ResourceBase
         _equipmentFeature = (PlayerEquipment)ItemOwner.GetPlayerFeatureWithProperty(PlayerFeature.PlayerFeatureProperty.Equipment);
         #endregion
         _equipmentFeature.SetItemCountOfNotEquipped(this, _cannonBallData.ProjectileCount);
+    }
+
+    public void ChangeSkin()
+    {
+        _cannonBallSkin = Instantiate(_cannonBallData.SkinData, transform);
     }
 
     public override void UseItem()
@@ -46,9 +48,11 @@ public class CannonBall : ResourceBase
             {
                 cannonController.OnLoadCannonBall(_cannonBallData);
                 ItemSlotType curSlotType = GetCurrentSlotType();
-                _equipmentFeature.RemoveItemInSlot(this, curSlotType);
+                _equipmentFeature.RemoveItemInSlot(this);
             }
         }
 
     }
+
+    public bool IsEmptySkin() => _cannonBallSkin == null;
 }

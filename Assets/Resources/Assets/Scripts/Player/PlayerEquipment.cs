@@ -155,12 +155,19 @@ public class PlayerEquipment : PlayerFeature
         if (context.performed)
         {
             float value = context.ReadValue<float>();
-            int index = Mathf.RoundToInt(value - 1);
-            if (index < 0)
+            int curSelectedIndex = Mathf.RoundToInt(value - 1);
+            if (curSelectedIndex < 0)
                 return;
             int prevSelectedIndex = _inventorySystem.FindSelectedIndex(ItemSlotType.Equipped);
             _inventorySystem.DeSelectItemSlot(ItemSlotType.Equipped, prevSelectedIndex);
-            _inventorySystem.SelectItemSlot(ItemSlotType.Equipped, index);
+            _inventorySystem.SelectItemSlot(ItemSlotType.Equipped, curSelectedIndex);
+
+            _inventorySystem.TryGetInventorySlot(ItemSlotType.Equipped, out var inventorySlot);
+            Slot slot = _inventorySystem.FindSlotWithIndex(inventorySlot, curSelectedIndex);
+            if (slot.IsEmpty())
+            {
+                SetWeaponInfo(0, 0);
+            }
         }
     }
 
@@ -185,9 +192,11 @@ public class PlayerEquipment : PlayerFeature
         _inventorySystem.CreateAndPushItem(Owner, itemParent, itemSlotType, itemData);
     }
     
-    public void RemoveItemInSlot(ItemBase item, ItemSlotType itemSlotType)
+    public void RemoveItemInSlot(ItemBase item)
     {
         Slot slot = _inventorySystem.GetSlotWithItem(item);
+        ItemSlotType itemSlotType = item.GetCurrentSlotType();
+
         var itemDatas = GetItemList(itemSlotType);
         ItemData itemData = item.GetItemData();
         if(itemDatas == null || itemData == null || slot == null)
@@ -225,5 +234,18 @@ public class PlayerEquipment : PlayerFeature
             return parent;
         }
         return null;
+    }
+
+    public bool IsExistSameID(ItemBase item, ItemSlotType slotTypeToFind)
+    {
+        var itemList =  GetItemList(slotTypeToFind);
+        for (int i = 0; i < itemList.Count; i++)
+        {
+            if (itemList[i].ItemId == item.GetItemData().ItemId)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

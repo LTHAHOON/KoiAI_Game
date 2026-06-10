@@ -4,10 +4,13 @@ using UnityEngine;
 public class CannonBallData : ProjectileData
 {
     [SerializeField]
-    private PoolSize _bulletPoolSize;
+    private CannonBallSkin _cannonBallSkinData;
     [SerializeField]
-    private float _bulletLifeTime;
+    private PoolSize _cannonBallPoolSize;
+    [SerializeField]
+    private float _cannonBallLifeTime;
 
-    public PoolSize BulletPoolSize => _bulletPoolSize;
-    public float BulletLifeTime => _bulletLifeTime;
+    public CannonBallSkin SkinData => _cannonBallSkinData;
+    public PoolSize CannonBallPoolSize => _cannonBallPoolSize;
+    public float CannonBallLifeTime => _cannonBallLifeTime;
 }

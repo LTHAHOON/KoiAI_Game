@@ -89,5 +89,10 @@ public class Pool<T> : IPool where T : Object
         SetActive(true, obj);
         return obj;
     }
+
+    public T[] GetAllInstanceWithoutPop()
+    {
+        return _poolStacks.ToArray();
+    }
 }
 

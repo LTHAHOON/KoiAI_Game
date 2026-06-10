@@ -1,4 +1,5 @@
 using Mono.Cecil;
+using UnityEditor.Networking.PlayerConnection;
 using UnityEngine;
 
 public abstract class ItemBase: MonoBehaviour
@@ -22,7 +23,11 @@ public abstract class ItemBase: MonoBehaviour
     {
         _currentSlotType = curSlotType;
     }
-
+    public void SetItemActive(bool active)
+    {
+        enabled = active;
+        gameObject.SetActive(active);
+    }
     public bool TryGetItemChildClass<T>(out T item) where T : ItemBase
     {
         if(this is T itemClass)
@@ -42,6 +47,9 @@ public abstract class ItemBase: MonoBehaviour
 }
 public abstract class WeaponBase : ItemBase
 {
+    protected abstract void ConnectPlayerIA(PlayerInputAction playerIA);
+    protected abstract void DisConnectPlayerIA(PlayerInputAction playerIA);
+
     public override ItemCategory Category => ItemCategory.Weapon;
 }
 public abstract class ResourceBase : ItemBase

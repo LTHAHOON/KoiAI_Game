@@ -51,11 +51,15 @@ public class InventorySystem : MonoBehaviour
                 slot.Init(i, itemSlotType, sb);
                 _slotList.Add(slot);
                 sb.Clear();
-                if(i == 0)
+                if (i == 0)
                 {
                     //LayerOut 설정 프레임 문제로 코루틴으로 호출
                     caller.StartCoroutine(IESelectSlot(slot));
-                }    
+                }
+                else
+                {
+                    //DeSelectSlot(slot);
+                }
             }
 
             #endregion
@@ -262,6 +266,7 @@ public class InventorySystem : MonoBehaviour
             return;
         if (!_dicInventorySlot.ContainsKey((int)itemSlotType))
             return;
+
         ItemBase item = targetSlot.GetItem();
         _pushedSlotSet.Remove(targetSlot);
         _dicPushedItem[(int)itemSlotType].Remove(item);
@@ -307,13 +312,11 @@ public class InventorySystem : MonoBehaviour
     private ItemBase CreateItem(PlayerController itemOwner, Transform itemParent, Renderer itemUI, ItemSlotType itemSlotType, ItemData itemData)
     {
         ItemBase newItem;
+        newItem = Instantiate(itemData.ItemPrefab, itemParent);
+
         if (!itemData.IsCreatableObj)
         {
-            newItem = itemData.ItemPrefab;
-        }
-        else
-        {
-            newItem = Instantiate(itemData.ItemPrefab, itemParent); 
+            newItem.gameObject.SetActive(false);
         }
         newItem.Init(itemOwner, itemUI, itemSlotType);
         return newItem;

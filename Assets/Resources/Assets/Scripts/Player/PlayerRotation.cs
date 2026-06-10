@@ -11,8 +11,10 @@ public class PlayerRotation : PlayerFeature
     private SurfaceAngleFinder _surfaceAngleFinder;
     [SerializeField]
     private float _lookSpeed = 10f;
+
     private Vector2 _input = Vector2.zero;
     private Camera _camera;
+    private Vector3 _targetAngle = Vector3.zero;
     public override void Init(PlayerInputAction playerIA)
     {
         _camera = Camera.main;
@@ -20,14 +22,19 @@ public class PlayerRotation : PlayerFeature
         playerIA.Player.Move.performed += OnRotation;
         playerIA.Player.Move.canceled += OnRotation;
     }
-
     public override void UpdateFeature()
     {
-        if(_input == Vector2.zero)
+        if (_input == Vector2.zero)
             return;
-        _surfaceAngleFinder.TrySurfaceAngleUsingRaycast(out Vector3 angleVec, transform, _surfaceCheckDistance);
-        float angleY = GetAngleWithAtan(_input);
-        Quaternion quat = Quaternion.Euler(angleVec.x, angleY, angleVec.z);
+        _surfaceAngleFinder.TrySurfaceAngleUsingRaycast(out _targetAngle, transform, _surfaceCheckDistance);
+        _targetAngle.y = GetAngleWithAtan(_input);
+    }
+
+    public void FixedUpdate()
+    {
+        if (_input == Vector2.zero)
+            return;
+        Quaternion quat = Quaternion.Euler(_targetAngle.x, _targetAngle.y, _targetAngle.z);
         transform.rotation = Quaternion.Slerp(transform.rotation, quat, Time.deltaTime * _lookSpeed);
 
     }
@@ -43,6 +50,7 @@ public class PlayerRotation : PlayerFeature
     }
     private float GetAngleWithDot(Vector2 input)
     {
+        #region 내적을 이용한 경사면 각도 구하기
         Vector3 xDir = _camera.transform.right * input.x;
         Vector3 zDir = _camera.transform.forward * input.y;
         Vector3 dir = (xDir + zDir).normalized;
@@ -56,6 +64,7 @@ public class PlayerRotation : PlayerFeature
             angle = -angle;
         
         return angle + transform.eulerAngles.y;
+        #endregion
     }
 
     public void OnRotation(InputAction.CallbackContext context)

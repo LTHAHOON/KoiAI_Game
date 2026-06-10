@@ -4,7 +4,11 @@ using UnityEngine;
 public class CannonData : WeaponData
 {
     [SerializeField]
+    private CannonSkin _cannonSkinData;
+    [SerializeField]
     private CannonBallData _cannonBallData;
+    [SerializeField]
+    private int _loadMaxCount = 20;
     [SerializeField]
     private float _aimSensitity = 10f;
     [SerializeField]
@@ -18,6 +22,8 @@ public class CannonData : WeaponData
     [SerializeField]
     private float _minPitchAngle = 0f;
 
+    public CannonSkin SkinData => _cannonSkinData;
+    public int LoadMaxCount => _loadMaxCount;
     public float AimSensitity => _aimSensitity;
     public float LaunchSpeed => _launchSpeed;
     public float LinearDamping => _linearDamping;
