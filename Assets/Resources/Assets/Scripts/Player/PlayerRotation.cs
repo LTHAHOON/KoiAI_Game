@@ -28,7 +28,8 @@ public class PlayerRotation : PlayerFeature
     {
         if (!IsValid())
             return;
-        _surfaceAngleFinder.TryGetSurfaceAngle3D(out _targetAngle, transform);
+        Vector3 localForward = transform.InverseTransformDirection(transform.forward);
+        _surfaceAngleFinder.TryGetLocalSurfaceAngle(out _targetAngle, transform);
         _targetAngle.y = GetAngleWithAtan(_input);
     }
 

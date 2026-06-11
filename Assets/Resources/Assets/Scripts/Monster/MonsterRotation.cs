@@ -29,7 +29,9 @@ public class MonsterRotation : MonsterFeature
         {
             return;
         }
-        _surfaceAngleFinder.TryGetSurfaceAngle3D(out _targetAngle, transform);
+
+        Vector3 localForward = transform.InverseTransformDirection(transform.forward);
+        _surfaceAngleFinder.TryGetLocalSurfaceAngle(out _targetAngle, transform);
         bool isFindPlayer = _monsterSight.IsFindTarget();
         if (isFindPlayer)
         {
@@ -38,10 +40,7 @@ public class MonsterRotation : MonsterFeature
             float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
             _targetAngle.y = angle;
         }
-        else
-        {
-            _targetAngle.y = transform.eulerAngles.y;
-        }
+
         Quaternion quat = Quaternion.Euler(_targetAngle.x, _targetAngle.y, _targetAngle.z);
         transform.rotation = Quaternion.Slerp(transform.rotation, quat, Time.deltaTime * _lookSpeed);
     }

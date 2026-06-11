@@ -77,8 +77,8 @@ public class CannonController : WeaponControllerBase
             //발사체 스킨 생성
             cannonBalls[i].ChangeSkin();
         }
-        _aimObj = Instantiate(_cannonData.AimPrefab, transform);
-        _surfaceAngleFinder = new();
+        _aimObj = Instantiate(_cannonData.AimPrefab);
+        _surfaceAngleFinder = new(5);
     }
 
     public override bool Activate()
@@ -208,8 +208,10 @@ public class CannonController : WeaponControllerBase
 
             _lastPredictedPoint = position;
         }
-        _surfaceAngleFinder.TryGetSurfaceAngle2D(out Vector3 angleVec, _aimObj.transform);
-        _aimObj.transform.rotation = Quaternion.Euler(angleVec);    
+        //해당 Aim오브젝트는 Local, World 축 차이가 없기 때문에 world기준으로 구하기
+        _surfaceAngleFinder.TryGetWorldSurfaceAngle(out Vector3 angleVec, _aimObj.transform);
+        Quaternion aimRotation = Quaternion.Euler(angleVec);
+        _aimObj.transform.eulerAngles =angleVec;
         _aimObj.transform.position = _hitPoint;
     }
 

@@ -22,7 +22,7 @@ MonoBehaviour:
   _layerMaskForAim:
     serializedVersion: 2
     m_Bits: 64
-  _aimPrefab: {fileID: 5942420406418880129, guid: d54589f5a1e8c734cab932cc6fda2691, type: 3}
+  _aimPrefab: {fileID: 5087932097866214088, guid: d54589f5a1e8c734cab932cc6fda2691, type: 3}
   _cannonSkinData: {fileID: 4560183316618955753, guid: 9994a75873b2cce44a2e36f1a1598ece, type: 3}
   _cannonBallData: {fileID: 11400000, guid: dff2d08bfa5dcf94db37f26aa54413e5, type: 2}
   _loadMaxCount: 20
