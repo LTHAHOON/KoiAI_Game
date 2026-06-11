@@ -1,13 +1,8 @@
-using System.Collections;
-using System.Text;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CannonController : WeaponBase
+public class CannonController : WeaponControllerBase
 {
-    [SerializeField]
-    private CannonData _cannonData;
     [SerializeField]
     private float _pitchAngle = 35f;
     [SerializeField]
@@ -16,13 +11,17 @@ public class CannonController : WeaponBase
     private int _maxSteps = 40;
     [SerializeField]
     private float _timeStep = 0.08f;
-    
+    [SerializeField]
+    private CannonData _cannonData;
+
+    private SurfaceAngleFinder _surfaceAngleFinder;
+    private GameObject _aimObj;
+    private CannonSkin _cannonSkin;
+    private Pool<CannonBallItem> _pool;
     private Vector3 _hitPoint;
     private bool _hasHit;
     private Vector3 _lastPredictedPoint;
-    private Vector2 _aim;
-    private Pool<CannonBall> _pool;
-    
+
     private int _curBallCount = 0;
     private int _curBallLoadCount;
     private int _remainingBallCount = 0;
@@ -31,146 +30,134 @@ public class CannonController : WeaponBase
     private float _targetLoadTime = 0f;
     private bool _isFireLoading = false;
 
-    private PlayerEquipment _equipmentFeature;
-    private CannonSkin _cannonSkin;
     private void Update()
     {
-        if(!_cannonSkin)
+        if (!_cannonSkin)
         {
             return;
         }
-
-        _pitchAngle += _aim.y * Time.deltaTime * 10f;
-        _pitchAngle = Mathf.Clamp(_pitchAngle, _cannonData.MinPitchAngle, _cannonData.MaxPitchAngle);
-        
         if (_isFireLoading)
         {
             #region 발사체 장전 로직
+            if(_targetLoadTime <= 0f)
+            {
+                _curBallLoadCount = 0;
+                _remainingBallLoadCount = 0;
+                _isFireLoading = false;
+                return;
+            }
             _curLoadTime += Time.deltaTime;
             int count = Mathf.RoundToInt(_curLoadTime / _targetLoadTime * _remainingBallCount);
             _curBallLoadCount = _curBallCount + count;
             _remainingBallLoadCount = Mathf.Clamp(_remainingBallCount - count, 0, _remainingBallCount);
-            _equipmentFeature.SetWeaponInfo(_curBallLoadCount, _remainingBallLoadCount);
+
             if (_curLoadTime >= _targetLoadTime || _curBallLoadCount >= _cannonData.LoadMaxCount)
             {
-                _equipmentFeature.SetWeaponInfo(_curBallLoadCount, _remainingBallLoadCount);
                 _curBallCount = _curBallLoadCount;
                 _remainingBallCount = _remainingBallLoadCount;
-                _curBallLoadCount = 0;
-                _remainingBallLoadCount = 0;
-                _targetLoadTime = 0f;
                 _curLoadTime = 0f;
-                _isFireLoading = false;
+                _targetLoadTime = 0f;
             }
             #endregion
         }
+        ShowAiming();
     }
 
-    private void OnEnable()
+    public override void Init()
     {
-        var curSlotType = GetCurrentSlotType();
-        if (curSlotType == ItemSlotType.Equipped)
+        CannonBallData cannonBallData = _cannonData.CannonBallData;
+        EntityId entityID = GetEntityId();
+        CannonBallItem projectilePrefab = (CannonBallItem)cannonBallData.ItemPrefab;
+        ulong id = EntityId.ToULong(entityID);
+        PoolManager.Instance.AddPool<CannonBallItem>(id, projectilePrefab, cannonBallData.CannonBallPoolSize, PoolName.Bullet);
+        PoolManager.Instance.TryGetPool<CannonBallItem>(id, out _pool);
+        CannonBallItem[] cannonBalls = _pool.GetAllInstanceWithoutPop();
+        for (int i = 0; i < cannonBalls.Length; i++)
         {
-            _equipmentFeature.SetWeaponInfo(_curBallCount, _remainingBallCount);
+            //발사체 스킨 생성
+            cannonBalls[i].ChangeSkin();
         }
+        _aimObj = Instantiate(_cannonData.AimPrefab, transform);
+        _surfaceAngleFinder = new();
     }
 
-    private void OnDestroy()
+    public override bool Activate()
     {
-        var curSlotType = GetCurrentSlotType();
-        if (curSlotType == ItemSlotType.Equipped)
+        if (_isFireLoading)
         {
-            PlayerInputAction playerIA = ItemOwner.PlayerIA;
-            DisConnectPlayerIA(ItemOwner.PlayerIA);
+            #region 장전 중일 경우 장전된 만큼 설정하고 초기화하고 True 리턴하기
+            _curLoadTime = 0f;
+            _targetLoadTime = 0;
+            _curBallCount = _curBallLoadCount;
+            _remainingBallCount = _remainingBallLoadCount;
+            _curBallLoadCount = 0;
+            _remainingBallLoadCount = 0;
+            _isFireLoading = false;
+            return true;
+            #endregion
         }
+        if (HasNotCannonBall())
+        {
+            return false;
+        }
+
+        --_curBallCount;
+        CannonBallItem bulletData = _pool.Pop();
+        if (bulletData.IsEmptySkin())
+        {
+            bulletData.ChangeSkin();
+        }
+        bulletData.TrailRenderer.Clear();
+        bulletData.TrailRenderer.enabled = false;
+        Rigidbody bulletRigid = bulletData.Rigidbody;
+        bulletRigid.transform.position = _cannonSkin.FirePoint.position;
+        bulletRigid.transform.rotation = Quaternion.identity;
+        bulletData.TrailRenderer.enabled = true;
+
+        if (bulletRigid != null)
+        {
+            bulletRigid.linearDamping = _cannonData.LinearDamping;
+            bulletRigid.useGravity = true;
+            bulletRigid.linearVelocity = GetLaunchVelocity();
+        }
+        PoolManager.Instance.ReturnDelay(_pool, bulletData, _cannonData.CannonBallData.CannonBallLifeTime);
+        return true;
+    }
+    public override void SetAim(Vector3 aim)
+    {
+        _pitchAngle += -aim.y * Time.deltaTime * 10f;
+        _pitchAngle = Mathf.Clamp(_pitchAngle, _cannonData.MinPitchAngle, _cannonData.MaxPitchAngle);
     }
 
-    /// <summary>
-    /// 아이템 초기화(본체를 생성하기 전 세팅)
-    /// </summary>
-    public override void Init(PlayerController itemOwner, Renderer itemUI ,ItemSlotType curSlotType)
+    public void OnLoadCannonBall(CannonBallData cannonBallData)
     {
-        base.Init(itemOwner, itemUI, curSlotType);
-        #region PlayerEquipment 참조
-        _equipmentFeature = (PlayerEquipment)ItemOwner.GetPlayerFeatureWithProperty(PlayerFeature.PlayerFeatureProperty.Equipment);
-        #endregion
+        if (_curBallCount >= _cannonData.LoadMaxCount)
+        {
+            _remainingBallCount += cannonBallData.ProjectileCount;
+            return;
+        }
+        _targetLoadTime += _cannonData.LoadTime;
+        _remainingBallCount += cannonBallData.ProjectileCount;
+        _isFireLoading = true;
     }
 
-    public override ItemData GetItemData()
+    public void OnReLoadCannonBall()
     {
-        return _cannonData;
-    }
-
-    public CannonData GetCannonData()
-    {
-        return _cannonData;
-    }
-
-    public override void UseItem()
-    {
-        if (!_equipmentFeature)
+        //중복 장전 차단
+        if (_isFireLoading)
         {
             return;
         }
-        //장착된 무기들중 같은 무기가 있는지 한번더 체크(있으면 장착하지 않고 파기)
-        bool bExistSameItem = _equipmentFeature.IsExistSameID(this, ItemSlotType.Equipped);
-        #region playerIA Setting
-        if(!bExistSameItem)
+        //탄이 꽉 차있거나 남은 탄이 없을 경우 리턴
+        if (_curBallCount >= _cannonData.LoadMaxCount || _remainingBallCount <= 0)
         {
-            ConnectPlayerIA(ItemOwner.PlayerIA);
+            return;
         }
-        #endregion
-
-        #region 해당 아이템 장착
-        if (!bExistSameItem)
-        {
-            ChangeSkin();
-            _equipmentFeature.PushItemInSlot(this, ItemSlotType.Equipped);
-            _equipmentFeature.EquipItem(this);
-        }
-        #endregion
-
-        #region 발사체 Item 하나 생성
-        if (_equipmentFeature)
-        {
-            _equipmentFeature.CreateAndPushItemInSlot(ItemSlotType.NotEquipped, _cannonData.CannonBallData);
-        }
-        #endregion
-
-        #region Projectile Pooling
-        if (!bExistSameItem)
-        {
-            CannonBallData cannonBallData = _cannonData.CannonBallData;
-            EntityId entityID = GetEntityId();
-            CannonBall projectilePrefab = (CannonBall)cannonBallData.ItemPrefab;
-            ulong id = EntityId.ToULong(entityID);
-            PoolManager.Instance.AddPool<CannonBall>(id, projectilePrefab, cannonBallData.CannonBallPoolSize, PoolName.Bullet);
-            PoolManager.Instance.TryGetPool<CannonBall>(id, out _pool);
-            var cannonBalls = _pool.GetAllInstanceWithoutPop();
-            for (int i = 0; i < cannonBalls.Length; i++)
-            {
-                //발사체 스킨 생성
-                cannonBalls[i].ChangeSkin();
-            }
-        }
-        #endregion
-
-        if(bExistSameItem)
-        {
-            _equipmentFeature.RemoveItemInSlot(this);
-        }
+        _targetLoadTime = _cannonData.LoadTime * _remainingBallCount / _cannonData.LoadMaxCount;
+        _isFireLoading = true;
     }
 
-    public void ChangeSkin()
-    {
-        if (_cannonSkin)
-        {
-            Destroy(_cannonSkin);
-        }
-        _cannonSkin = Instantiate(_cannonData.SkinData, transform);
-    }
-
-    private Vector3 GetLaunchVelocity()
+    public Vector3 GetLaunchVelocity()
     {
         if (!_cannonSkin)
             return Vector3.zero;
@@ -180,106 +167,21 @@ public class CannonController : WeaponBase
         return worldDirection * _cannonData.LaunchSpeed;
     }
 
-    /// <summary>
-    /// 발사체 장전
-    /// </summary>
-    public void OnLoadCannonBall(CannonBallData cannonBallData)
+    public override void ChangeSkin()
     {
-        if(_curBallCount >= _cannonData.LoadMaxCount)
+        if (_cannonSkin)
         {
-            _remainingBallCount += cannonBallData.ProjectileCount;
-            _equipmentFeature.SetWeaponInfo(_curBallCount, _remainingBallCount);
-            return;
+            Destroy(_cannonSkin);
         }
-        _targetLoadTime += _cannonData.LoadTime;
-        _remainingBallCount += cannonBallData.ProjectileCount;
-        _isFireLoading = true;
+        _cannonSkin = Instantiate(_cannonData.SkinData, transform);
     }
 
-    /// <summary>
-    /// 발사체 재장전
-    /// </summary>
-    private void OnReLoadCannonBall(InputAction.CallbackContext context)
-    {
-        //중복 장전 차단
-        if(_isFireLoading)
-        {
-            return;
-        }  
-        //탄이 꽉 차있거나 남은 탄이 없을 경우 리턴
-        if (_curBallCount >= _cannonData.LoadMaxCount || _remainingBallCount <= 0)
-        {
-            return;
-        }
-        if (context.performed)
-        {
-            _targetLoadTime = _cannonData.LoadTime * _remainingBallCount / _cannonData.LoadMaxCount;
-            _isFireLoading = true;
-        }
-    }
-
-    public void OnProjectileAiming(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            _aim = context.ReadValue<Vector2>() * _cannonData.AimSensitity;
-        }
-        if (context.canceled)
-        {
-            _aim = Vector3.zero;
-        }
-    }
-
-    public void OnFire(InputAction.CallbackContext context)
-    {
-        if(gameObject.activeSelf == false || !_cannonSkin)
-        {
-            return;
-        }
-        if(context.performed)
-        {
-            if (_isFireLoading)
-            {
-                #region 장전 중일 경우 장전된 만큼 설정하고 초기화하고 리턴하기
-                _equipmentFeature.SetWeaponInfo(_curBallLoadCount, _remainingBallLoadCount);
-                _curLoadTime = 0f;
-                _targetLoadTime = 0;
-                _curBallCount = _curBallLoadCount;
-                _remainingBallCount = _remainingBallLoadCount;
-                _curBallLoadCount = 0;
-                _remainingBallLoadCount = 0;
-                _isFireLoading = false;
-                return;
-                #endregion
-            }
-            if (HasNotCannonBall())
-                return;
-            --_curBallCount;
-            _equipmentFeature.SetWeaponInfo(_curBallCount, _remainingBallCount);
-            CannonBall bulletData = _pool.Pop();
-            if(bulletData.IsEmptySkin())
-            {
-                bulletData.ChangeSkin();
-            }
-            bulletData.TrailRenderer.Clear();
-            bulletData.TrailRenderer.enabled = false;
-            Rigidbody bulletRigid = bulletData.Rigidbody;
-            bulletRigid.transform.position = _cannonSkin.FirePoint.position;
-            bulletRigid.transform.rotation = Quaternion.identity;
-            bulletData.TrailRenderer.enabled = true;
-
-            if (bulletRigid != null)
-            {
-                bulletRigid.linearDamping = _cannonData.LinearDamping;
-                bulletRigid.useGravity = true;
-                bulletRigid.linearVelocity = GetLaunchVelocity();
-            }
-            PoolManager.Instance.ReturnDelay(_pool, bulletData, _cannonData.CannonBallData.CannonBallLifeTime);
-        }
-    }
-    
     public void ShowAiming()
     {
+        if(!_aimObj)
+        {
+            return;
+        }
         Vector3 position = _cannonSkin.FirePoint.position;
         Vector3 velocity = GetLaunchVelocity();
 
@@ -296,85 +198,28 @@ public class CannonController : WeaponBase
             Vector3 move = position - previousPosition;
             float distance = move.magnitude;
 
-            if (Physics.Raycast(previousPosition, move.normalized, out RaycastHit hit, distance))
+            if (Physics.Raycast(previousPosition, move.normalized, out RaycastHit hit, distance, _cannonData.LayerMaskForAim))
             {
                 _hasHit = true;
                 _hitPoint = hit.point;
+                _hitPoint.y += 0.3f;
                 break;
             }
 
-            Gizmos.color = Color.cyan;
             _lastPredictedPoint = position;
         }
+        _surfaceAngleFinder.TryGetSurfaceAngle2D(out Vector3 angleVec, _aimObj.transform);
+        _aimObj.transform.rotation = Quaternion.Euler(angleVec);    
+        _aimObj.transform.position = _hitPoint;
     }
 
-    private void OnDrawGizmos()
-    {
-        #region Gizmos
-        if (!_cannonSkin)
-            return;
-        Vector3 position = _cannonSkin.FirePoint.position;
-        Vector3 velocity = GetLaunchVelocity();
-
-        _hasHit = false;
-        _lastPredictedPoint = position;
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(position, 0.15f);
-
-        
-        for (int i = 0; i < _maxSteps; i++)
-        {
-            Vector3 previousPosition = position;
-            velocity *= 1f - _cannonData.LinearDamping * _timeStep;
-            velocity += Physics.gravity * _timeStep;
-            position += velocity * _timeStep;
-
-            Vector3 move = position - previousPosition;
-            float distance = move.magnitude;
-
-            if(Physics.Raycast(previousPosition, move.normalized, out RaycastHit hit, distance))
-            {
-                _hasHit = true;
-                _hitPoint = hit.point;
-                Gizmos.color = Color.red;
-                Gizmos.DrawLine(previousPosition, hit.point);
-                Gizmos.DrawWireSphere(hit.point, 0.25f);
-                break;
-            }
-
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawLine(previousPosition, hit.point);
-            Gizmos.DrawWireSphere(position, 0.05f);
-            _lastPredictedPoint = position;
-        }
-
-        if(!_hasHit)
-        {
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawWireSphere(_lastPredictedPoint, 0.25f);
-            return;
-        }
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(_hitPoint, 0.08f);
-        #endregion
-    }
-
-    protected override void ConnectPlayerIA(PlayerInputAction playerIA)
-    {
-        playerIA.Player.Fire.performed += OnFire;
-        playerIA.Player.FireLoad.performed += OnReLoadCannonBall;
-        playerIA.Player.ProjectileAiming.performed += OnProjectileAiming;
-        playerIA.Player.ProjectileAiming.canceled += OnProjectileAiming;
-    }
-
-    protected override void DisConnectPlayerIA(PlayerInputAction playerIA)
-    {
-        playerIA.Player.Fire.performed -= OnFire;
-        playerIA.Player.FireLoad.performed -= OnReLoadCannonBall;
-        playerIA.Player.ProjectileAiming.performed -= OnProjectileAiming;
-        playerIA.Player.ProjectileAiming.canceled -= OnProjectileAiming;
-    }
+    public bool IsFireLoading() => _isFireLoading;
 
     private bool HasNotCannonBall() => _pool == null || _curBallCount <= 0;
-
+    public CannonData CannonData => _cannonData;
+    public CannonSkin CannonSkin => _cannonSkin;
+    public int CurBallCount => _curBallCount;
+    public int RemainingBallCount => _remainingBallCount;
+    public int CurBallLoadCount => _curBallLoadCount;
+    public int RemainingBallLoadCount => _remainingBallLoadCount;
 }

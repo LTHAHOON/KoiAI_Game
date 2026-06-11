@@ -3,11 +3,12 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(SurfaceAngleFinder))]
 public class PlayerRotation : PlayerFeature
 {
     [SerializeField]
     private float _lookSpeed = 10f;
+    [SerializeField]
+    private float _surfaceCheckDistance = 3f;
 
     private SurfaceAngleFinder _surfaceAngleFinder;
     private Camera _camera;
@@ -17,7 +18,7 @@ public class PlayerRotation : PlayerFeature
     public override void Init(PlayerInputAction playerIA)
     {
         _camera = Camera.main;
-        _surfaceAngleFinder = GetComponent<SurfaceAngleFinder>();
+        _surfaceAngleFinder = new(_surfaceCheckDistance);
         playerIA.Player.Move.started += OnRotation;
         playerIA.Player.Move.performed += OnRotation;
         playerIA.Player.Move.canceled += OnRotation;
@@ -27,7 +28,7 @@ public class PlayerRotation : PlayerFeature
     {
         if (!IsValid())
             return;
-        _surfaceAngleFinder.TrySurfaceAngleUsingRaycast(out _targetAngle, transform);
+        _surfaceAngleFinder.TryGetSurfaceAngle3D(out _targetAngle, transform);
         _targetAngle.y = GetAngleWithAtan(_input);
     }
 
@@ -82,5 +83,5 @@ public class PlayerRotation : PlayerFeature
         }
     }
 
-    private bool IsValid() => _input != Vector2.zero && _camera && _surfaceAngleFinder;
+    private bool IsValid() => _input != Vector2.zero && _camera && _surfaceAngleFinder != null;
 }

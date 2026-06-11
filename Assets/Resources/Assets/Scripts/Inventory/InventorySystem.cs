@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.UI;
 using static InventorySystem;
@@ -293,6 +294,7 @@ public class InventorySystem : MonoBehaviour
         newSlot.PushItem(newItem);
         _pushedSlotSet.Add(newSlot);
         _dicPushedItem[(int)itemSlotType].Add(newItem);
+        newItem.SetItemCountInSlot();
     }
 
     /// <summary>
@@ -314,6 +316,7 @@ public class InventorySystem : MonoBehaviour
         ItemBase newItem;
         newItem = Instantiate(itemData.ItemPrefab, itemParent);
 
+        //형태가 보여져야 할 아이템이 아닐 경우
         if (!itemData.IsCreatableObj)
         {
             newItem.gameObject.SetActive(false);
@@ -344,13 +347,18 @@ public class InventorySystem : MonoBehaviour
         
         ItemBase item =  curSlot.GetItem();
         ItemSlotType curSlotType = item.GetCurrentSlotType();
+
         slotToPush.PushItem(item);
         curSlot.ClearSlot(false);
+
         _pushedSlotSet.Remove(curSlot);
         _pushedSlotSet.Add(slotToPush);
+
         _dicPushedItem[(int)curSlotType].Remove(item);
         _dicPushedItem[(int)slotTypeToPush].Add(item);
+
         item.SetCurrentSlotType(slotTypeToPush);
+        item.SetItemCountInSlot();
     }
     
 }

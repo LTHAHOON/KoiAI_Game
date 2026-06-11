@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 762f90e7d34ad06489423432746c2fc7, type: 3}
-  m_Name: FireCannonData
+  m_Name: MonsterCannonData
   m_EditorClassIdentifier: Assembly-CSharp::FireGunData
   _itemPrefab: {fileID: 6473127510279200606, guid: 57be7ef47c393e3429865b8e2fc3d641, type: 3}
   _itemTex: {fileID: 2800000, guid: ef4653662b04be5449b407162f48cded, type: 3}
@@ -22,11 +22,11 @@ MonoBehaviour:
   _layerMaskForAim:
     serializedVersion: 2
     m_Bits: 64
-  _aimPrefab: {fileID: 5942420406418880129, guid: d54589f5a1e8c734cab932cc6fda2691, type: 3}
+  _aimPrefab: {fileID: 0}
   _cannonSkinData: {fileID: 4560183316618955753, guid: 9994a75873b2cce44a2e36f1a1598ece, type: 3}
   _cannonBallData: {fileID: 11400000, guid: dff2d08bfa5dcf94db37f26aa54413e5, type: 2}
   _loadMaxCount: 20
-  _aimSensitity: 3
+  _aimSensitity: 10
   _launchSpeed: 20
   _loadTime: 1
   _linearDamping: 0

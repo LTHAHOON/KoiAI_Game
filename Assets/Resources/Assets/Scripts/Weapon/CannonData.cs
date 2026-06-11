@@ -4,6 +4,10 @@ using UnityEngine;
 public class CannonData : WeaponData
 {
     [SerializeField]
+    private LayerMask _layerMaskForAim;
+    [SerializeField]
+    private GameObject _aimPrefab;
+    [SerializeField]
     private CannonSkin _cannonSkinData;
     [SerializeField]
     private CannonBallData _cannonBallData;
@@ -22,6 +26,8 @@ public class CannonData : WeaponData
     [SerializeField]
     private float _minPitchAngle = 0f;
 
+    public LayerMask LayerMaskForAim => _layerMaskForAim;
+    public GameObject AimPrefab => _aimPrefab;
     public CannonSkin SkinData => _cannonSkinData;
     public int LoadMaxCount => _loadMaxCount;
     public float AimSensitity => _aimSensitity;

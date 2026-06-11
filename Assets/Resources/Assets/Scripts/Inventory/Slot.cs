@@ -55,6 +55,7 @@ public class Slot : MonoBehaviour
 
     public void PushItem(ItemBase item)
     {
+        item.SetItemCountInSlot();
         Renderer itemUI = item.GetItemUI();
         itemUI.transform.SetParent(_itemDataParent);
         itemUI.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
@@ -72,7 +73,8 @@ public class Slot : MonoBehaviour
 
     public void ClearSlot(bool bDestroy)
     {
-        if(bDestroy)
+        _itemCountText.text = "";
+        if (bDestroy)
         {
             if (_item != null && _item.gameObject.scene.IsValid() && _item.gameObject.scene.isLoaded)
             {

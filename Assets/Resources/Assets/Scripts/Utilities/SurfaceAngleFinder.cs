@@ -1,15 +1,20 @@
 using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public class SurfaceAngleFinder : MonoBehaviour
+public class SurfaceAngleFinder
 {
-    [SerializeField]
     private float _surfaceCheckDistance = 3f;
     
-    public bool TrySurfaceAngleUsingRaycast(out Vector3 angleVec,Transform rayTransform, int layerMask)
+    public SurfaceAngleFinder(float surfaceCheckDistance = 3f)
+    {
+        _surfaceCheckDistance = surfaceCheckDistance;
+    }
+
+    public bool TryGetSurfaceAngle3D(out Vector3 angleVec,Transform rayTransform, int layerMask)
     {
         bool bGet = Physics.Raycast(rayTransform.position, rayTransform.up * -1,out RaycastHit hit, _surfaceCheckDistance, layerMask);
-        angleVec = new Vector3(0f, 0f, 0f);
+        angleVec = Vector3.zero;
         if (bGet)
         {
             
@@ -24,10 +29,26 @@ public class SurfaceAngleFinder : MonoBehaviour
         }
         return bGet;
     }
-    
-    public bool TrySurfaceAngleUsingRaycast(out Vector3 angleVec,Transform rayTransform)
+    public bool TryGetSurfaceAngle2D(out Vector3 angleVec, Transform rayTransform, int layerMask)
     {
-        return TrySurfaceAngleUsingRaycast(out angleVec, rayTransform, Physics.AllLayers);
+        bool bGet = Physics.Raycast(rayTransform.position, rayTransform.up * -1, out RaycastHit hit, _surfaceCheckDistance, layerMask);
+        angleVec = Vector3.zero;
+        if (bGet)
+        {
+            Quaternion quat = Quaternion.FromToRotation(rayTransform.up,hit.normal ) * rayTransform.rotation;
+             angleVec = quat.eulerAngles;
+        }
+        return bGet;
+    }
+
+    public bool TryGetSurfaceAngle2D(out Vector3 angleVec, Transform rayTransform)
+    {
+        return TryGetSurfaceAngle2D(out angleVec, rayTransform, Physics.AllLayers);
+    }
+
+    public bool TryGetSurfaceAngle3D(out Vector3 angleVec,Transform rayTransform)
+    {
+        return TryGetSurfaceAngle3D(out angleVec, rayTransform, Physics.AllLayers);
     }
     
 }

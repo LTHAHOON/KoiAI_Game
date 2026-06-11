@@ -2,29 +2,38 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(MonsterSight))]
-[RequireComponent(typeof(SurfaceAngleFinder))]
-public class MonsterRotation : MonoBehaviour
+public class MonsterRotation : MonsterFeature
 {
     [SerializeField]
     private float _lookSpeed = 10f;
-    
+    [SerializeField]
+    private float _surfaceCheckDistance = 3f;
+
     private SurfaceAngleFinder _surfaceAngleFinder;
     private MonsterSight _monsterSight;
     private Vector3 _targetAngle = Vector3.zero;
-
-    private void Awake()
+    public override MonsterState State => MonsterState.Detection;
+    public override void Init()
     {
         _monsterSight = GetComponent<MonsterSight>();
-        _surfaceAngleFinder = GetComponent<SurfaceAngleFinder>();
+        _surfaceAngleFinder = new(_surfaceCheckDistance);
     }
-    
-    private void Update()
+
+    public override void EnterFeature()
     {
-        _surfaceAngleFinder.TrySurfaceAngleUsingRaycast(out _targetAngle, transform);
-        bool isFindPlayer = _monsterSight.IsFindPlayer();
+    }
+
+    public override void UpdateFeature()
+    {
+        if(!_monsterSight || _surfaceAngleFinder == null)
+        {
+            return;
+        }
+        _surfaceAngleFinder.TryGetSurfaceAngle3D(out _targetAngle, transform);
+        bool isFindPlayer = _monsterSight.IsFindTarget();
         if (isFindPlayer)
         {
-            GameObject target = _monsterSight.GetPlayerToFind();
+            GameObject target = _monsterSight.GetTargetToFind();
             Vector3 dir = target.transform.position - transform.position;
             float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
             _targetAngle.y = angle;
@@ -34,6 +43,18 @@ public class MonsterRotation : MonoBehaviour
             _targetAngle.y = transform.eulerAngles.y;
         }
         Quaternion quat = Quaternion.Euler(_targetAngle.x, _targetAngle.y, _targetAngle.z);
-        transform.rotation = Quaternion.Slerp(transform.rotation, quat, Time.deltaTime * _lookSpeed);    
+        transform.rotation = Quaternion.Slerp(transform.rotation, quat, Time.deltaTime * _lookSpeed);
+    }
+
+    public override void ExitFeature()
+    {
+    }
+
+
+  
+    
+    private void Update()
+    {
+ 
     }
 }

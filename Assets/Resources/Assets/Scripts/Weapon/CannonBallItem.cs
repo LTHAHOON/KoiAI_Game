@@ -1,14 +1,11 @@
 using UnityEngine;
 
-public class CannonBall : ResourceBase
+public class CannonBallItem : ResourceBase
 {
     [SerializeField]
     private CannonBallData _cannonBallData;
 
-    
     private PlayerEquipment _equipmentFeature;
-    public Rigidbody Rigidbody => _cannonBallSkin.Rigidbody;
-    public TrailRenderer TrailRenderer => _cannonBallSkin.TrailRenderer;
     private CannonBallSkin _cannonBallSkin;
     public override ItemData GetItemData()
     {
@@ -21,7 +18,12 @@ public class CannonBall : ResourceBase
         #region PlayerEquipment 참조
         _equipmentFeature = (PlayerEquipment)ItemOwner.GetPlayerFeatureWithProperty(PlayerFeature.PlayerFeatureProperty.Equipment);
         #endregion
-        _equipmentFeature.SetItemCountOfNotEquipped(this, _cannonBallData.ProjectileCount);
+
+    }
+
+    public override void SetItemCountInSlot()
+    {
+        _equipmentFeature.SetItemCount(this, _cannonBallData.ProjectileCount);
     }
 
     public void ChangeSkin()
@@ -39,14 +41,14 @@ public class CannonBall : ResourceBase
         Slot weaponSlot = _equipmentFeature.GetSelectedSlot(ItemSlotType.Equipped);
         //해당 슬롯에 있는 아이템(무기) 가져오기
         ItemBase weaponItem = weaponSlot.GetItem();
-        if (weaponItem.TryGetItemChildClass<CannonController>(out CannonController cannonController))
+        if (weaponItem.TryGetItemChildClass<CannonItem>(out CannonItem cannonItem))
         {
-            CannonData cannonData = cannonController.GetCannonData();
+            CannonData cannonData = cannonItem.GetCannonData();
             //ID와 타입이 같은 지 체크
             if(cannonData.CannonBallData.ProjectileType == _cannonBallData.ProjectileType
                 && cannonData.CannonBallData.ItemId == _cannonBallData.ItemId)
             {
-                cannonController.OnLoadCannonBall(_cannonBallData);
+                cannonItem.OnLoadCannonBall(_cannonBallData);
                 ItemSlotType curSlotType = GetCurrentSlotType();
                 _equipmentFeature.RemoveItemInSlot(this);
             }
@@ -55,4 +57,7 @@ public class CannonBall : ResourceBase
     }
 
     public bool IsEmptySkin() => _cannonBallSkin == null;
+
+    public Rigidbody Rigidbody => _cannonBallSkin.Rigidbody;
+    public TrailRenderer TrailRenderer => _cannonBallSkin.TrailRenderer;
 }

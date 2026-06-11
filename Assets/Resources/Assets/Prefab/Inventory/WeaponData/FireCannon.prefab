@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2111439805306787017}
   - component: {fileID: 6473127510279200606}
+  - component: {fileID: 7729829564457764788}
   m_Layer: 3
   m_Name: FireCannon
   m_TagString: Untagged
@@ -44,8 +45,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f830a05244ca28449e0243835515141, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileGizmoPreview
-  _cannonData: {fileID: 11400000, guid: 9294b86170ea2b044b95cf093762506f, type: 2}
-  _pitchAngle: 20
+--- !u!114 &7729829564457764788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 771969856200161223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97b01fe300304244cbb9410ddcae83fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CannonController
+  _pitchAngle: 35
   _yawAngle: 0
   _maxSteps: 40
   _timeStep: 0.08
+  _cannonData: {fileID: 11400000, guid: 9294b86170ea2b044b95cf093762506f, type: 2}

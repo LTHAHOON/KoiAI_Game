@@ -731,9 +731,10 @@ GameObject:
   - component: {fileID: 240217611}
   - component: {fileID: 240217615}
   - component: {fileID: 240217610}
+  - component: {fileID: 240217618}
+  - component: {fileID: 240217619}
   - component: {fileID: 240217616}
   - component: {fileID: 240217609}
-  - component: {fileID: 240217617}
   m_Layer: 7
   m_Name: MonsterMachine
   m_TagString: Untagged
@@ -753,9 +754,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c795822b74ae8354b86e54016b2db520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterSight
-  _player: {fileID: 2116610957}
+  _bUseGizmos: 1
+  _detectionDistance: 10
+  _detectMaxCount: 1
   _sightAngle: 50
   _sightDelayTime: 0.5
+  _targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!136 &240217610
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -894,7 +900,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterRotation
   _lookSpeed: 5
---- !u!114 &240217617
+  _surfaceCheckDistance: 3
+--- !u!114 &240217618
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -903,10 +910,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 240217608}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 806744d3e9a6ce24fa5c16884f9aa8c1, type: 3}
+  m_Script: {fileID: 11500000, guid: a4fec9d96c7bf6945a3cb286ef3bfb9f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SurfaceAngleFinder
-  _surfaceCheckDistance: 3
+  m_EditorClassIdentifier: Assembly-CSharp::MonsterAI
+  _allMonsterFeatures:
+  - {fileID: 240217616}
+  - {fileID: 240217609}
+  - {fileID: 240217619}
+  _startMonsterState: 0
+--- !u!114 &240217619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 240217608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96175b9c3228a4542a30026b23b50ad8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MonsterAttack
+  _weaponController:
+  - {fileID: 2137558062}
 --- !u!1 &302235593
 GameObject:
   m_ObjectHideFlags: 0
@@ -3912,7 +3937,6 @@ GameObject:
   - component: {fileID: 2116610967}
   - component: {fileID: 2116610963}
   - component: {fileID: 2116610962}
-  - component: {fileID: 2116610961}
   - component: {fileID: 2116610960}
   - component: {fileID: 2116610959}
   m_Layer: 3
@@ -3976,19 +4000,6 @@ MonoBehaviour:
   _other: {fileID: 240217613}
   _myRadius: {x: 0.8, y: 1.2}
   _otherRadius: {x: 0.8, y: 1.2}
---- !u!114 &2116610961
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2116610957}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 806744d3e9a6ce24fa5c16884f9aa8c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SurfaceAngleFinder
-  _surfaceCheckDistance: 3
 --- !u!114 &2116610962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4002,6 +4013,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerRotation
   _lookSpeed: 10
+  _surfaceCheckDistance: 3
 --- !u!114 &2116610963
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4403,9 +4415,10 @@ GameObject:
   - component: {fileID: 2137558058}
   - component: {fileID: 2137558061}
   - component: {fileID: 2137558060}
+  - component: {fileID: 2137558062}
   - component: {fileID: 2137558059}
   m_Layer: 7
-  m_Name: Cannon
+  m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4474,8 +4487,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4a47c1a198ddad94ea6834ed2b834ad0, type: 2}
   - {fileID: 2100000, guid: c465ee74ae10c6148bb16eaefc2828c1, type: 2}
+  - {fileID: 2100000, guid: 1b2fc7d74fbbfaa479435413f491eb17, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4507,6 +4520,23 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2137558057}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2137558062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2137558057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97b01fe300304244cbb9410ddcae83fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CannonController
+  _pitchAngle: 35
+  _yawAngle: 0
+  _maxSteps: 40
+  _timeStep: 0.08
+  _cannonData: {fileID: 11400000, guid: ff32f5b807c55d543a6e32347e0e90bd, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

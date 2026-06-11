@@ -15,10 +15,15 @@ public abstract class ItemBase: MonoBehaviour
         SetCurrentSlotType(curSlotType);
         SetItemOwner(itemOwner);
     }
+
+    public virtual void SetItemCountInSlot() { }
+
     protected void SetItemOwner(PlayerController itemOwner)
     {
         _itemOwner = itemOwner;
     }
+
+
     public void SetCurrentSlotType(ItemSlotType curSlotType)
     {
         _currentSlotType = curSlotType;
@@ -38,11 +43,11 @@ public abstract class ItemBase: MonoBehaviour
         item = null;
         return false;
     }
+    public abstract void UseItem();
+    public abstract ItemData GetItemData();
 
     public Renderer GetItemUI() => _itemUI;
     public ItemSlotType GetCurrentSlotType() => _currentSlotType;
-    public abstract void UseItem();
-    public abstract ItemData GetItemData();
     public PlayerController ItemOwner => _itemOwner;
 }
 public abstract class WeaponBase : ItemBase

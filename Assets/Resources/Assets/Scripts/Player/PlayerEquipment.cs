@@ -108,11 +108,15 @@ public class PlayerEquipment : PlayerFeature
         }
     }
 
-    public void SetItemCountOfNotEquipped(ItemBase item, int count)
+    public void SetItemCount(ItemBase item, int count)
     {
-        if(item.GetCurrentSlotType() != ItemSlotType.NotEquipped)
+        if(!item)
         {
-            Slot slot = _inventorySystem.GetSlotWithItem(item);
+            return;
+        }
+        Slot slot = _inventorySystem.GetSlotWithItem(item);
+        if (slot)
+        {
             _sb.Append(count);
             slot.SetItemCountText(_sb);
             _sb.Clear();
@@ -179,17 +183,17 @@ public class PlayerEquipment : PlayerFeature
         _inventorySystem.PushItem(curSlot, slotTypeToPush);
     }
 
-    public void CreateAndPushItemInSlot(ItemSlotType itemSlotType, ItemData itemData)
+    public void CreateAndPushItemInSlot(ItemSlotType slotTypeToPush, ItemData itemData)
     {
         if (itemData == null)
             return;
-        var itemList = GetItemList(itemSlotType);
+        var itemList = GetItemList(slotTypeToPush);
         if(itemList == null)
             return;
         
         itemList.Add(itemData);
         Transform itemParent = GetItemParent(itemData.ItemPrefab.Category);
-        _inventorySystem.CreateAndPushItem(Owner, itemParent, itemSlotType, itemData);
+        _inventorySystem.CreateAndPushItem(Owner, itemParent, slotTypeToPush, itemData);
     }
     
     public void RemoveItemInSlot(ItemBase item)
