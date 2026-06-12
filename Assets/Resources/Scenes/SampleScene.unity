@@ -718,6 +718,37 @@ Transform:
   - {fileID: 917677671}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &226216926
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 226216927}
+  m_Layer: 7
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &226216927
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 226216926}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: -1, w: 0}
+  m_LocalPosition: {x: 0, y: 1.25, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2137558058}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -180}
 --- !u!1 &240217608
 GameObject:
   m_ObjectHideFlags: 0
@@ -757,7 +788,7 @@ MonoBehaviour:
   _bUseGizmos: 1
   _detectionDistance: 35
   _detectMaxCount: 1
-  _sightAngle: 65
+  _sightAngle: 360
   _sightDelayTime: 0.5
   _targetLayerMask:
     serializedVersion: 2
@@ -901,7 +932,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MonsterRotation
   _lookSpeed: 10
   _surfaceCheckDistance: 3
-  _detectDistanceToFeature: 15
+  _detectDistanceToFeature: 20
 --- !u!114 &240217618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -935,7 +966,7 @@ MonoBehaviour:
   _randomWeaponContorllers:
   - _chanceValue: 100
     _activateTarget: {fileID: 2137558062}
-  _detectDistanceToFeature: 15
+  _detectDistanceToFeature: 20
   _attackDelayTime: 1
 --- !u!1 &302235593
 GameObject:
@@ -4421,6 +4452,7 @@ GameObject:
   - component: {fileID: 2137558061}
   - component: {fileID: 2137558060}
   - component: {fileID: 2137558062}
+  - component: {fileID: 2137558063}
   - component: {fileID: 2137558059}
   m_Layer: 7
   m_Name: MonsterWeapon
@@ -4441,7 +4473,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 1.25, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 226216927}
   m_Father: {fileID: 240217613}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2137558059
@@ -4537,11 +4570,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97b01fe300304244cbb9410ddcae83fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CannonController
+  _isSkinPrefab: 0
+  _skin: {fileID: 2137558063}
   _pitchAngle: 35
   _yawAngle: 0
   _maxSteps: 40
   _timeStep: 0.08
   _cannonData: {fileID: 11400000, guid: ff32f5b807c55d543a6e32347e0e90bd, type: 2}
+--- !u!114 &2137558063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2137558057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6ada30d199ee4c4598633f417279083, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CannonSkin
+  _skinPrefab: {fileID: 2137558057}
+  _firePoint: {fileID: 226216927}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

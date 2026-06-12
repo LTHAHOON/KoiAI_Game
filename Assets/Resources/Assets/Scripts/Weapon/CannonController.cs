@@ -19,7 +19,7 @@ public class CannonController : WeaponControllerBase
     private CannonSkin _cannonSkin;
     private Pool<CannonBallItem> _pool;
     private Vector3 _hitPoint;
-
+    
     private int _curBallCount = 0;
     private int _curBallLoadCount;
     private int _remainingBallCount = 0;
@@ -82,6 +82,7 @@ public class CannonController : WeaponControllerBase
         _cannonAim = Instantiate(_cannonData.AimPrefab, transform);
         _cannonAim.gameObject.SetActive(false);
         _surfaceAngleFinder = new(5);
+        InitSkin();
     }
 
     public override bool Activate()
@@ -99,12 +100,16 @@ public class CannonController : WeaponControllerBase
             return true;
             #endregion
         }
-        if (HasNotCannonBall())
+        if (HasNotCannonBall() && !_cannonData.IsInfiniteLoad)
         {
             return false;
         }
 
-        --_curBallCount;
+        if (!_cannonData.IsInfiniteLoad)
+        {
+            --_curBallCount;
+        }
+
         CannonBallItem bulletData = _pool.Pop();
         if (bulletData.IsEmptySkin())
         {
@@ -126,7 +131,7 @@ public class CannonController : WeaponControllerBase
         PoolManager.Instance.ReturnDelay(_pool, bulletData, _cannonData.CannonBallData.CannonBallLifeTime);
         return true;
     }
-    public override void SetAim(Vector3 aim)
+    public override void SetAim(Vector2 aim)
     {
         _yawAngle += aim.x * Time.deltaTime * 10f;
         _yawAngle = Mathf.Clamp(_yawAngle, _cannonData.MinYawAngle, _cannonData.MaxYawAngle);
@@ -134,15 +139,15 @@ public class CannonController : WeaponControllerBase
         _pitchAngle = Mathf.Clamp(_pitchAngle, _cannonData.MinPitchAngle, _cannonData.MaxPitchAngle);
     }
 
-    public void StartAiming()
+    public override void StartAiming(float startPitchAngle, float startYawAngle)
     {
         _isAiming = true;
-        _pitchAngle = (_cannonData.MinPitchAngle + _cannonData.MaxPitchAngle) / 2;
-        _yawAngle = (_cannonData.MinYawAngle + _cannonData.MaxYawAngle) / 2;
+        _pitchAngle = startPitchAngle;
+        _yawAngle = startYawAngle;
         _cannonAim.gameObject.SetActive(true);
     }
 
-    public void EndAiming()
+    public override void EndAiming()
     {
         _isAiming = false;
         _cannonAim.gameObject.SetActive(false);
@@ -176,14 +181,35 @@ public class CannonController : WeaponControllerBase
         _isFireLoading = true;
     }
 
-    public Vector3 GetLaunchVelocity()
+    private Vector3 GetLaunchVelocity()
     {
         if (!_cannonSkin)
             return Vector3.zero;
         Quaternion rotation = Quaternion.Euler(-_pitchAngle, _yawAngle, 0f);
-        Vector3 localDir = rotation * Vector3.forward;
+        Vector3 localDir = rotation *Vector3.forward;
         Vector3 worldDirection = _cannonSkin.FirePoint.TransformDirection(localDir);
         return worldDirection * _cannonData.LaunchSpeed;
+    }
+
+    protected override void InitSkin()
+    {
+        if (_cannonSkin)
+        {
+            Destroy(_cannonSkin);
+        }
+        Skin skin = GetSkin();
+        if (skin is CannonSkin cannonSkin)
+        {
+            if (IsSkinPrefab())
+            {
+                _cannonSkin = Instantiate(cannonSkin, transform);
+            }
+            else
+            {
+                _cannonSkin = cannonSkin;
+            }
+        }
+
     }
 
     public override void ChangeSkin()
@@ -192,9 +218,18 @@ public class CannonController : WeaponControllerBase
         {
             Destroy(_cannonSkin);
         }
-        _cannonSkin = Instantiate(_cannonData.SkinData, transform);
-    }
 
+        Skin skinPrefab = GetSkin();
+        if (skinPrefab != null)
+        {
+            if (skinPrefab is CannonSkin cannonSkinPrefab)
+            {
+                 _cannonSkin = Instantiate(cannonSkinPrefab, transform);
+            }
+        }
+    }
+    
+    
     private void ShowAiming()
     {
         if(!_cannonAim)
@@ -203,8 +238,7 @@ public class CannonController : WeaponControllerBase
         }
         Vector3 position = _cannonSkin.FirePoint.position;
         Vector3 velocity = GetLaunchVelocity();
-
-        Vector3 lastPredictedPoint = position;
+        
         _cannonAim.InitLine(_maxSteps);
         for (int i = 0; i < _maxSteps; i++)
         {
@@ -212,7 +246,6 @@ public class CannonController : WeaponControllerBase
             velocity *= 1f - _cannonData.LinearDamping * _timeStep;
             velocity += Physics.gravity * _timeStep;
             position += velocity * _timeStep;
-
             Vector3 move = position - previousPosition;
             float distance = move.magnitude;
 
@@ -224,7 +257,6 @@ public class CannonController : WeaponControllerBase
                 break;
             }
             _cannonAim.SetLinePosition(i, position);
-            lastPredictedPoint = position;
         }
         //해당 Aim오브젝트는 Local, World 축 차이가 없기 때문에 world기준으로 구하기
         _surfaceAngleFinder.TryGetWorldSurfaceAngle(out Vector3 angleVec, _cannonAim.transform);

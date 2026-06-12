@@ -8,9 +8,9 @@ public class CannonData : WeaponData
     [SerializeField]
     private CannonAim _cannonAimPrefab;
     [SerializeField]
-    private CannonSkin _cannonSkinData;
-    [SerializeField]
     private CannonBallData _cannonBallData;
+    [SerializeField]
+    private bool _isInfiniteLoad = false;
     [SerializeField]
     private int _loadMaxCount = 20;
     [SerializeField]
@@ -30,11 +30,11 @@ public class CannonData : WeaponData
     [SerializeField]
     private float _minYawAngle = -90f;
 
+    public bool IsInfiniteLoad => _isInfiniteLoad;
     public float MaxYawAngle => _maxYawAngle;
     public float MinYawAngle => _minYawAngle;
     public LayerMask LayerMaskForAim => _layerMaskForAim;
     public CannonAim AimPrefab => _cannonAimPrefab;
-    public CannonSkin SkinData => _cannonSkinData;
     public int LoadMaxCount => _loadMaxCount;
     public float AimSensitity => _aimSensitity;
     public float LaunchSpeed => _launchSpeed;

@@ -10,7 +10,6 @@ public class CannonItem : WeaponBase
     private CannonController _cannonControl;
     private PlayerEquipment _equipmentFeature;
     private PlayerRotation _rotationFeature;
-    private CannonSkin _cannonSkin;
     private CannonData _cannonData;
     private Vector2 _aim;
 
@@ -22,7 +21,7 @@ public class CannonItem : WeaponBase
 
     private void Update()
     {
-        if(!_cannonControl || !_cannonData || !_cannonSkin)
+        if(!_cannonControl || !_cannonData)
         {
             return;
         }
@@ -100,8 +99,6 @@ public class CannonItem : WeaponBase
         #region 해당 아이템 장착
         if (!bExistSameItem)
         {
-            _cannonControl.ChangeSkin();
-            _cannonSkin = _cannonControl.CannonSkin;
             _equipmentFeature.PushItemInSlot(this, ItemSlotType.Equipped);
             _equipmentFeature.EquipItem(this);
         }
@@ -131,7 +128,9 @@ public class CannonItem : WeaponBase
     {
         if(context.performed)
         {
-            _cannonControl.StartAiming();
+            float pitchAngle = (_cannonData.MinPitchAngle + _cannonData.MaxPitchAngle) / 2;
+            float yawAngle = (_cannonData.MinYawAngle + _cannonData.MaxYawAngle) / 2;
+            _cannonControl.StartAiming(pitchAngle, yawAngle);
             _rotationFeature.DisConnectPlayerIA();
             _rotationFeature.SetInput(new(0, 1));
         }
@@ -161,7 +160,7 @@ public class CannonItem : WeaponBase
 
     public void OnFire(InputAction.CallbackContext context)
     {
-        if(!_cannonControl.IsAiming() || gameObject.activeSelf == false || !_cannonSkin)
+        if(!_cannonControl.IsAiming() || gameObject.activeSelf == false)
         {
             return;
         }

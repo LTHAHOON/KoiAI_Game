@@ -23,8 +23,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   _cannonAimPrefab: {fileID: 4487254017076381408, guid: 08319588698ca8948878531f3bfb15d7, type: 3}
-  _cannonSkinData: {fileID: 4560183316618955753, guid: 9994a75873b2cce44a2e36f1a1598ece, type: 3}
   _cannonBallData: {fileID: 11400000, guid: dff2d08bfa5dcf94db37f26aa54413e5, type: 2}
+  _isInfiniteLoad: 1
   _loadMaxCount: 20
   _aimSensitity: 10
   _launchSpeed: 20

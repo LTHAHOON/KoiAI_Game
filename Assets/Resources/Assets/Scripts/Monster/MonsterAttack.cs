@@ -43,15 +43,13 @@ public class MonsterAttack : MonsterFeature
             Owner.ChangeFeature(this);
             return;
         }
-        else
+        Vector3 dir = _target.transform.position - transform.position;
+        if (dir.sqrMagnitude >= _detectDistanceToFeature * _detectDistanceToFeature)
         {
-            Vector3 dir = _target.transform.position - transform.position;
-            if (dir.sqrMagnitude >= _detectDistanceToFeature * _detectDistanceToFeature)
-            {
-                Owner.ChangeFeature(this);
-                return;
-            }
+            Owner.ChangeFeature(this);
+            return;
         }
+        
         if(_curAttackTime < _attackDelayTime )
         {
             _curAttackTime += Time.deltaTime;
@@ -59,8 +57,9 @@ public class MonsterAttack : MonsterFeature
         }
         _curAttackTime = 0f;
         WeaponControllerBase weaponController = ActivateRandom.GetRandomActivateTarget(_randomWeaponContorllers);
-        Debug.Log("공격");
+        weaponController.StartAiming(-90, 0);
         weaponController.Activate();
+        weaponController.EndAiming();
     }
 
     public override void ExitFeature()

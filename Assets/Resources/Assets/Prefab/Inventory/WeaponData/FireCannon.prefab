@@ -57,6 +57,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97b01fe300304244cbb9410ddcae83fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CannonController
+  _isSkinPrefab: 1
+  _skin: {fileID: 4560183316618955753, guid: 9994a75873b2cce44a2e36f1a1598ece, type: 3}
   _pitchAngle: 35
   _yawAngle: 0
   _maxSteps: 40

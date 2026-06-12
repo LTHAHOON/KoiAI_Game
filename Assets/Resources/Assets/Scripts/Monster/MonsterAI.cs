@@ -43,19 +43,11 @@ public class MonsterAI : MonoBehaviour
     private void Awake()
     {
         _dicFeatureHanlder = new();
-        for (int i = 0; i < _allFeaturesHandler.Length; i++)
-        {
-            EntityId featureID = _allFeaturesHandler[i].FromFeature.GetEntityId();
-            ulong instanceID = EntityId.ToULong(featureID);
-            _dicFeatureHanlder.Add(instanceID, _allFeaturesHandler[i]);
-            _allFeaturesHandler[i].FromFeature.Owner = this;
-            _allFeaturesHandler[i].FromFeature.Init();
-        }
-
     }
 
     private void Start()
     {
+        InitFeatures();
         if (_curMonsterFeature != null)
         {
             _curMonsterFeature.EnterFeature();
@@ -70,6 +62,18 @@ public class MonsterAI : MonoBehaviour
         }
     }
 
+    private void InitFeatures()
+    {
+        for (int i = 0; i < _allFeaturesHandler.Length; i++)
+        {
+            EntityId featureID = _allFeaturesHandler[i].FromFeature.GetEntityId();
+            ulong instanceID = EntityId.ToULong(featureID);
+            _dicFeatureHanlder.Add(instanceID, _allFeaturesHandler[i]);
+            _allFeaturesHandler[i].FromFeature.Owner = this;
+            _allFeaturesHandler[i].FromFeature.Init();
+        }
+    }
+    
     /// <summary>
     /// 변경 후 Feature 구하기
     /// </summary>

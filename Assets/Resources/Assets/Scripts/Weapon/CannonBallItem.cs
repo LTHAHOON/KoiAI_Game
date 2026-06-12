@@ -41,6 +41,10 @@ public class CannonBallItem : ResourceBase
         Slot weaponSlot = _equipmentFeature.GetSelectedSlot(ItemSlotType.Equipped);
         //해당 슬롯에 있는 아이템(무기) 가져오기
         ItemBase weaponItem = weaponSlot.GetItem();
+        if (weaponItem == null)
+        {
+            return;
+        }
         if (weaponItem.TryGetItemChildClass<CannonItem>(out CannonItem cannonItem))
         {
             CannonData cannonData = cannonItem.GetCannonData();
