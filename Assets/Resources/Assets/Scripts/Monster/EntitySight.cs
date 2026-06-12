@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MonsterSight : MonsterFeature
+public class EntitySight : MonoBehaviour
 {
     [SerializeField]
     private bool _bUseGizmos = false;
@@ -20,26 +20,30 @@ public class MonsterSight : MonsterFeature
     private GameObject _target;
     private Collider[] _targetColliders;
 
-    public override MonsterState State => MonsterState.Detection;
-    public override void Init()
+    private void Awake()
     {
         _targetColliders = new Collider[_detectMaxCount];
     }
-    public override void EnterFeature()
-    {
 
-    }
-    
-    public override void UpdateFeature()
+    public void Detect()
     {
-        if(_target == null)
+        Detect(_detectionDistance);
+    }    
+
+    public void Detect(float detectionDistance)
+    {
+        if(_targetColliders == null)
+        {
+            return;
+        }
+        if (_target == null)
         {
             int count = Physics.OverlapSphereNonAlloc(transform.position, _detectionDistance, _targetColliders, _targetLayerMask);
             if (count <= 0)
             {
                 return;
             }
-            _target = _targetColliders[_targetColliders.Length - 1].gameObject;
+            _target = _targetColliders[count - 1].gameObject;
         }
 
         float distance = (_target.transform.position - transform.position).sqrMagnitude;
@@ -62,10 +66,6 @@ public class MonsterSight : MonsterFeature
         _target = angle < _sightAngle ? _target : null;
         _curSightTime = 0;
        
-    }
-
-    public override void ExitFeature()
-    {
     }
 
     public GameObject GetTargetToFind()

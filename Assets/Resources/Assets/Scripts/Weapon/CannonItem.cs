@@ -9,6 +9,7 @@ public class CannonItem : WeaponBase
 {
     private CannonController _cannonControl;
     private PlayerEquipment _equipmentFeature;
+    private PlayerRotation _rotationFeature;
     private CannonSkin _cannonSkin;
     private CannonData _cannonData;
     private Vector2 _aim;
@@ -25,7 +26,10 @@ public class CannonItem : WeaponBase
         {
             return;
         }
-        _cannonControl.SetAim(_aim);
+        if(_cannonControl.IsAiming())
+        {
+            _cannonControl.SetAim(_aim);
+        }
 
         //장전 중일 경우 무기 정보(탄 갯수 Text) 설정
         if (_cannonControl.IsFireLoading())
@@ -66,6 +70,7 @@ public class CannonItem : WeaponBase
         #endregion
     }
 
+
     public override ItemData GetItemData()
     {
         return _cannonControl.CannonData;
@@ -87,6 +92,7 @@ public class CannonItem : WeaponBase
         #region playerIA Setting
         if(!bExistSameItem)
         {
+            _rotationFeature = (PlayerRotation)ItemOwner.GetPlayerFeatureWithProperty(PlayerFeature.PlayerFeatureProperty.Rotation);
             ConnectPlayerIA(ItemOwner.PlayerIA);
         }
         #endregion
@@ -121,21 +127,41 @@ public class CannonItem : WeaponBase
         }
     }
 
+    public void OnStartProjectileAiming(InputAction.CallbackContext context)
+    {
+        if(context.performed)
+        {
+            _cannonControl.StartAiming();
+            _rotationFeature.DisConnectPlayerIA();
+            _rotationFeature.SetInput(new(0, 1));
+        }
+        if(context.canceled)
+        {
+            _cannonControl.EndAiming();
+            _rotationFeature.ConnectPlayerIA();
+        }
+    }
+
     public void OnProjectileAiming(InputAction.CallbackContext context)
     {
+        if(!_cannonControl.IsAiming())
+        {
+            _aim = Vector2.zero;
+            return;
+        }
         if (context.performed)
         {
             _aim = context.ReadValue<Vector2>() * _cannonData.AimSensitity;
         }
-        if (context.canceled)
+        if(context.canceled)
         {
-            _aim = Vector3.zero;
+            _aim = Vector2.zero;
         }
     }
 
     public void OnFire(InputAction.CallbackContext context)
     {
-        if(gameObject.activeSelf == false || !_cannonSkin)
+        if(!_cannonControl.IsAiming() || gameObject.activeSelf == false || !_cannonSkin)
         {
             return;
         }
@@ -177,6 +203,8 @@ public class CannonItem : WeaponBase
         playerIA.Player.FireLoad.performed += OnReLoadCannonBall;
         playerIA.Player.ProjectileAiming.performed += OnProjectileAiming;
         playerIA.Player.ProjectileAiming.canceled += OnProjectileAiming;
+        playerIA.Player.StartProjectileAiming.performed += OnStartProjectileAiming;
+        playerIA.Player.StartProjectileAiming.canceled += OnStartProjectileAiming;
     }
 
     protected override void DisConnectPlayerIA(PlayerInputAction playerIA)
@@ -185,5 +213,7 @@ public class CannonItem : WeaponBase
         playerIA.Player.FireLoad.performed -= OnReLoadCannonBall;
         playerIA.Player.ProjectileAiming.performed -= OnProjectileAiming;
         playerIA.Player.ProjectileAiming.canceled -= OnProjectileAiming;
+        playerIA.Player.StartProjectileAiming.performed -= OnStartProjectileAiming;
+        playerIA.Player.StartProjectileAiming.canceled -= OnStartProjectileAiming;
     }
 }

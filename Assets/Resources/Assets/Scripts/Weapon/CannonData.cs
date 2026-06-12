@@ -6,7 +6,7 @@ public class CannonData : WeaponData
     [SerializeField]
     private LayerMask _layerMaskForAim;
     [SerializeField]
-    private GameObject _aimPrefab;
+    private CannonAim _cannonAimPrefab;
     [SerializeField]
     private CannonSkin _cannonSkinData;
     [SerializeField]
@@ -25,9 +25,15 @@ public class CannonData : WeaponData
     private float _maxPitchAngle = 90f;
     [SerializeField]
     private float _minPitchAngle = 0f;
+    [SerializeField]
+    private float _maxYawAngle = 90f;
+    [SerializeField]
+    private float _minYawAngle = -90f;
 
+    public float MaxYawAngle => _maxYawAngle;
+    public float MinYawAngle => _minYawAngle;
     public LayerMask LayerMaskForAim => _layerMaskForAim;
-    public GameObject AimPrefab => _aimPrefab;
+    public CannonAim AimPrefab => _cannonAimPrefab;
     public CannonSkin SkinData => _cannonSkinData;
     public int LoadMaxCount => _loadMaxCount;
     public float AimSensitity => _aimSensitity;

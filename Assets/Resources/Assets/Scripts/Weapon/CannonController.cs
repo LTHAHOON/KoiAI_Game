@@ -15,12 +15,10 @@ public class CannonController : WeaponControllerBase
     private CannonData _cannonData;
 
     private SurfaceAngleFinder _surfaceAngleFinder;
-    private GameObject _aimObj;
+    private CannonAim _cannonAim;
     private CannonSkin _cannonSkin;
     private Pool<CannonBallItem> _pool;
     private Vector3 _hitPoint;
-    private bool _hasHit;
-    private Vector3 _lastPredictedPoint;
 
     private int _curBallCount = 0;
     private int _curBallLoadCount;
@@ -29,6 +27,7 @@ public class CannonController : WeaponControllerBase
     private float _curLoadTime = 0f;
     private float _targetLoadTime = 0f;
     private bool _isFireLoading = false;
+    private bool _isAiming = false;
 
     private void Update()
     {
@@ -36,7 +35,7 @@ public class CannonController : WeaponControllerBase
         {
             return;
         }
-        if (_isFireLoading)
+        if (IsFireLoading())
         {
             #region 발사체 장전 로직
             if(_targetLoadTime <= 0f)
@@ -60,7 +59,10 @@ public class CannonController : WeaponControllerBase
             }
             #endregion
         }
-        ShowAiming();
+        if(IsAiming())
+        {
+            ShowAiming();
+        }
     }
 
     public override void Init()
@@ -69,7 +71,7 @@ public class CannonController : WeaponControllerBase
         EntityId entityID = GetEntityId();
         CannonBallItem projectilePrefab = (CannonBallItem)cannonBallData.ItemPrefab;
         ulong id = EntityId.ToULong(entityID);
-        PoolManager.Instance.AddPool<CannonBallItem>(id, projectilePrefab, cannonBallData.CannonBallPoolSize, PoolName.Bullet);
+        PoolManager.Instance.AddPool<CannonBallItem>(id, projectilePrefab, cannonBallData.CannonBallPoolSize, PoolName.Projectile);
         PoolManager.Instance.TryGetPool<CannonBallItem>(id, out _pool);
         CannonBallItem[] cannonBalls = _pool.GetAllInstanceWithoutPop();
         for (int i = 0; i < cannonBalls.Length; i++)
@@ -77,7 +79,8 @@ public class CannonController : WeaponControllerBase
             //발사체 스킨 생성
             cannonBalls[i].ChangeSkin();
         }
-        _aimObj = Instantiate(_cannonData.AimPrefab);
+        _cannonAim = Instantiate(_cannonData.AimPrefab, transform);
+        _cannonAim.gameObject.SetActive(false);
         _surfaceAngleFinder = new(5);
     }
 
@@ -125,8 +128,24 @@ public class CannonController : WeaponControllerBase
     }
     public override void SetAim(Vector3 aim)
     {
+        _yawAngle += aim.x * Time.deltaTime * 10f;
+        _yawAngle = Mathf.Clamp(_yawAngle, _cannonData.MinYawAngle, _cannonData.MaxYawAngle);
         _pitchAngle += -aim.y * Time.deltaTime * 10f;
         _pitchAngle = Mathf.Clamp(_pitchAngle, _cannonData.MinPitchAngle, _cannonData.MaxPitchAngle);
+    }
+
+    public void StartAiming()
+    {
+        _isAiming = true;
+        _pitchAngle = (_cannonData.MinPitchAngle + _cannonData.MaxPitchAngle) / 2;
+        _yawAngle = (_cannonData.MinYawAngle + _cannonData.MaxYawAngle) / 2;
+        _cannonAim.gameObject.SetActive(true);
+    }
+
+    public void EndAiming()
+    {
+        _isAiming = false;
+        _cannonAim.gameObject.SetActive(false);
     }
 
     public void OnLoadCannonBall(CannonBallData cannonBallData)
@@ -176,18 +195,17 @@ public class CannonController : WeaponControllerBase
         _cannonSkin = Instantiate(_cannonData.SkinData, transform);
     }
 
-    public void ShowAiming()
+    private void ShowAiming()
     {
-        if(!_aimObj)
+        if(!_cannonAim)
         {
             return;
         }
         Vector3 position = _cannonSkin.FirePoint.position;
         Vector3 velocity = GetLaunchVelocity();
 
-        _hasHit = false;
-        _lastPredictedPoint = position;
-
+        Vector3 lastPredictedPoint = position;
+        _cannonAim.InitLine(_maxSteps);
         for (int i = 0; i < _maxSteps; i++)
         {
             Vector3 previousPosition = position;
@@ -200,24 +218,24 @@ public class CannonController : WeaponControllerBase
 
             if (Physics.Raycast(previousPosition, move.normalized, out RaycastHit hit, distance, _cannonData.LayerMaskForAim))
             {
-                _hasHit = true;
                 _hitPoint = hit.point;
                 _hitPoint.y += 0.3f;
+                _cannonAim.ClearEmptyLine();
                 break;
             }
-
-            _lastPredictedPoint = position;
+            _cannonAim.SetLinePosition(i, position);
+            lastPredictedPoint = position;
         }
         //해당 Aim오브젝트는 Local, World 축 차이가 없기 때문에 world기준으로 구하기
-        _surfaceAngleFinder.TryGetWorldSurfaceAngle(out Vector3 angleVec, _aimObj.transform);
+        _surfaceAngleFinder.TryGetWorldSurfaceAngle(out Vector3 angleVec, _cannonAim.transform);
         Quaternion aimRotation = Quaternion.Euler(angleVec);
-        _aimObj.transform.eulerAngles =angleVec;
-        _aimObj.transform.position = _hitPoint;
+        _cannonAim.transform.eulerAngles =angleVec;
+        _cannonAim.transform.position = _hitPoint;
     }
 
     public bool IsFireLoading() => _isFireLoading;
-
     private bool HasNotCannonBall() => _pool == null || _curBallCount <= 0;
+    public bool IsAiming() => _isAiming;
     public CannonData CannonData => _cannonData;
     public CannonSkin CannonSkin => _cannonSkin;
     public int CurBallCount => _curBallCount;

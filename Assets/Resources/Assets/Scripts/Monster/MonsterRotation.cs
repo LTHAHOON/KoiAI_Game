@@ -1,46 +1,58 @@
 using System;
+using TMPro;
 using UnityEngine;
 
-[RequireComponent(typeof(MonsterSight))]
+[RequireComponent(typeof(EntitySight))]
 public class MonsterRotation : MonsterFeature
 {
     [SerializeField]
     private float _lookSpeed = 10f;
     [SerializeField]
     private float _surfaceCheckDistance = 3f;
+    [Header("Rotation 최소 거리")]
+    [Tooltip("Feature 변경할 탐색 거리")]
+    [SerializeField]
+    private float _detectDistanceToFeature;
 
     private SurfaceAngleFinder _surfaceAngleFinder;
-    private MonsterSight _monsterSight;
+    private EntitySight _entitySight;
     private Vector3 _targetAngle = Vector3.zero;
-    public override MonsterState State => MonsterState.Detection;
+
     public override void Init()
     {
-        _monsterSight = GetComponent<MonsterSight>();
+        _entitySight = GetComponent<EntitySight>();
         _surfaceAngleFinder = new(_surfaceCheckDistance);
     }
 
     public override void EnterFeature()
     {
+        if (!_entitySight || _surfaceAngleFinder == null)
+        {
+            Owner.ChangeFeature(this);
+        }
     }
 
     public override void UpdateFeature()
     {
-        if(!_monsterSight || _surfaceAngleFinder == null)
-        {
-            return;
-        }
-
-        Vector3 localForward = transform.InverseTransformDirection(transform.forward);
+        _entitySight.Detect();
         _surfaceAngleFinder.TryGetLocalSurfaceAngle(out _targetAngle, transform);
-        bool isFindPlayer = _monsterSight.IsFindTarget();
+        bool isFindPlayer = _entitySight.IsFindTarget();
         if (isFindPlayer)
         {
-            GameObject target = _monsterSight.GetTargetToFind();
+            GameObject target = _entitySight.GetTargetToFind();
             Vector3 dir = target.transform.position - transform.position;
             float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
             _targetAngle.y = angle;
+            if(dir.sqrMagnitude <= _detectDistanceToFeature * _detectDistanceToFeature)
+            {
+                Owner.ChangeFeature(this);
+                return;
+            }
         }
-
+        else
+        {
+            _targetAngle.y = transform.eulerAngles.y;
+        }
         Quaternion quat = Quaternion.Euler(_targetAngle.x, _targetAngle.y, _targetAngle.z);
         transform.rotation = Quaternion.Slerp(transform.rotation, quat, Time.deltaTime * _lookSpeed);
     }

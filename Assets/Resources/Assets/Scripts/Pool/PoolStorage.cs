@@ -5,7 +5,7 @@ using UnityEngine;
 
 public enum PoolName
 {
-    Bullet,
+    Projectile,
 }
 [Serializable]
 public struct PoolStorageData

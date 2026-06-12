@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 5158755000931906856}
   - component: {fileID: 1600617706689068852}
   - component: {fileID: 2281348930061415851}
-  - component: {fileID: 3443882271885104904}
   - component: {fileID: 6931901721508168739}
+  - component: {fileID: 3443882271885104904}
   - component: {fileID: 7735294924909024448}
   - component: {fileID: 2928449014478874148}
   m_Layer: 0
@@ -94,21 +94,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &3443882271885104904
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 601774910944409318}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1889f64ee22c8cd49960a5f350502267, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CannonBallSkin
-  _skinPrefab: {fileID: 601774910944409318}
-  _rigid: {fileID: 2928449014478874148}
-  _trailRenderer: {fileID: 6931901721508168739}
 --- !u!96 &6931901721508168739
 TrailRenderer:
   serializedVersion: 4
@@ -135,7 +120,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: b49298fa3710fa045ad79584440b232c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -189,8 +174,8 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0, g: 0.5882187, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
+      key0: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 1, g: 1, b: 1, a: 0}
       key2: {r: 0, g: 0.5882187, b: 1, a: 1}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -198,7 +183,7 @@ TrailRenderer:
       key6: {r: 0, g: 0, b: 0, a: 0}
       key7: {r: 0, g: 0, b: 0, a: 0}
       ctime0: 0
-      ctime1: 64764
+      ctime1: 65535
       ctime2: 64764
       ctime3: 0
       ctime4: 0
@@ -206,7 +191,7 @@ TrailRenderer:
       ctime6: 0
       ctime7: 0
       atime0: 0
-      atime1: 30069
+      atime1: 65150
       atime2: 65150
       atime3: 0
       atime4: 0
@@ -216,7 +201,7 @@ TrailRenderer:
       m_Mode: 0
       m_ColorSpace: 0
       m_NumColorKeys: 2
-      m_NumAlphaKeys: 3
+      m_NumAlphaKeys: 2
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
@@ -228,6 +213,21 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
+--- !u!114 &3443882271885104904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 601774910944409318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1889f64ee22c8cd49960a5f350502267, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CannonBallSkin
+  _skinPrefab: {fileID: 601774910944409318}
+  _rigid: {fileID: 2928449014478874148}
+  _trailRenderer: {fileID: 6931901721508168739}
 --- !u!135 &7735294924909024448
 SphereCollider:
   m_ObjectHideFlags: 0

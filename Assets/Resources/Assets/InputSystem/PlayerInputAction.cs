@@ -147,6 +147,15 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""StartProjectileAiming"",
+                    ""type"": ""Button"",
+                    ""id"": ""f10d0370-c79b-45cb-aa65-06f9367068f5"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""ProjectileAiming"",
                     ""type"": ""Value"",
                     ""id"": ""15508699-889e-4a0e-9ebd-b0f5800ea52b"",
@@ -577,6 +586,17 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""UseItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9612b73d-7fd1-4a07-9ccb-bf7d89a4dd02"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StartProjectileAiming"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1170,6 +1190,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_FireLoad = m_Player.FindAction("FireLoad", throwIfNotFound: true);
         m_Player_Click = m_Player.FindAction("Click", throwIfNotFound: true);
+        m_Player_StartProjectileAiming = m_Player.FindAction("StartProjectileAiming", throwIfNotFound: true);
         m_Player_ProjectileAiming = m_Player.FindAction("ProjectileAiming", throwIfNotFound: true);
         m_Player_SelectItem_NotEquip = m_Player.FindAction("SelectItem_NotEquip", throwIfNotFound: true);
         m_Player_SelectItem_Equip = m_Player.FindAction("SelectItem_Equip", throwIfNotFound: true);
@@ -1273,6 +1294,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_FireLoad;
     private readonly InputAction m_Player_Click;
+    private readonly InputAction m_Player_StartProjectileAiming;
     private readonly InputAction m_Player_ProjectileAiming;
     private readonly InputAction m_Player_SelectItem_NotEquip;
     private readonly InputAction m_Player_SelectItem_Equip;
@@ -1312,6 +1334,10 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Click".
         /// </summary>
         public InputAction @Click => m_Wrapper.m_Player_Click;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/StartProjectileAiming".
+        /// </summary>
+        public InputAction @StartProjectileAiming => m_Wrapper.m_Player_StartProjectileAiming;
         /// <summary>
         /// Provides access to the underlying input action "Player/ProjectileAiming".
         /// </summary>
@@ -1372,6 +1398,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Click.started += instance.OnClick;
             @Click.performed += instance.OnClick;
             @Click.canceled += instance.OnClick;
+            @StartProjectileAiming.started += instance.OnStartProjectileAiming;
+            @StartProjectileAiming.performed += instance.OnStartProjectileAiming;
+            @StartProjectileAiming.canceled += instance.OnStartProjectileAiming;
             @ProjectileAiming.started += instance.OnProjectileAiming;
             @ProjectileAiming.performed += instance.OnProjectileAiming;
             @ProjectileAiming.canceled += instance.OnProjectileAiming;
@@ -1413,6 +1442,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Click.started -= instance.OnClick;
             @Click.performed -= instance.OnClick;
             @Click.canceled -= instance.OnClick;
+            @StartProjectileAiming.started -= instance.OnStartProjectileAiming;
+            @StartProjectileAiming.performed -= instance.OnStartProjectileAiming;
+            @StartProjectileAiming.canceled -= instance.OnStartProjectileAiming;
             @ProjectileAiming.started -= instance.OnProjectileAiming;
             @ProjectileAiming.performed -= instance.OnProjectileAiming;
             @ProjectileAiming.canceled -= instance.OnProjectileAiming;
@@ -1767,6 +1799,13 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnClick(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "StartProjectileAiming" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnStartProjectileAiming(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "ProjectileAiming" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

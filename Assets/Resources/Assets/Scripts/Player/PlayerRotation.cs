@@ -10,6 +10,7 @@ public class PlayerRotation : PlayerFeature
     [SerializeField]
     private float _surfaceCheckDistance = 3f;
 
+    public override PlayerFeatureProperty FeatureProperty => PlayerFeatureProperty.Rotation;
     private SurfaceAngleFinder _surfaceAngleFinder;
     private Camera _camera;
     private Vector2 _input = Vector2.zero;
@@ -76,13 +77,33 @@ public class PlayerRotation : PlayerFeature
             return;
         if (context.performed)
         {
-            _input = context.ReadValue<Vector2>();
+            SetInput(context.ReadValue<Vector2>());
         }
         if(context.canceled)
         {
-            _input = Vector3.zero;
+            SetInput(Vector2.zero);
         }
     }
 
+    public void SetInput(Vector2 input)
+    {
+        _input = input;
+    }
+
+    public void ConnectPlayerIA()
+    {
+        PlayerInputAction playerIA = Owner.PlayerIA;
+        playerIA.Player.Move.started += OnRotation;
+        playerIA.Player.Move.performed += OnRotation;
+        playerIA.Player.Move.canceled += OnRotation;
+    }
+
+    public void DisConnectPlayerIA()
+    {
+        PlayerInputAction playerIA = Owner.PlayerIA;
+        playerIA.Player.Move.started -= OnRotation;
+        playerIA.Player.Move.performed -= OnRotation;
+        playerIA.Player.Move.canceled -= OnRotation;
+    }
     private bool IsValid() => _input != Vector2.zero && _camera && _surfaceAngleFinder != null;
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Properties;
 using UnityEngine;
@@ -5,11 +6,23 @@ using UnityEngine;
 public abstract class MonsterFeature : MonoBehaviour
 {
     public MonsterAI Owner { get; set; }
-    public abstract MonsterState State { get; }
     public virtual void Init() { }
     public abstract void EnterFeature();
     public abstract void UpdateFeature();
     public abstract void ExitFeature();
+}
+
+[Serializable]
+public struct MonsterFeatureHandler
+{
+    [Header("변경 전 Feature")]
+    [SerializeField]
+    private MonsterFeature _fromFeature;
+    [Header("변경 후 Feature")]
+    [SerializeField]
+    private MonsterFeature _toFeature;
+    public readonly MonsterFeature ToFeature => _fromFeature;
+    public readonly MonsterFeature FromFeature => _toFeature;
 }
 
 public enum MonsterState
@@ -21,88 +34,73 @@ public enum MonsterState
 public class MonsterAI : MonoBehaviour
 {
     [SerializeField]
-    private MonsterFeature[] _allMonsterFeatures;
+    private MonsterFeatureHandler[] _allFeaturesHandler;
     [SerializeField]
-    private MonsterState _startMonsterState;
+    private MonsterFeature _curMonsterFeature;
 
-    private List<MonsterFeature> _curMonsterFeatures;
+    private Dictionary<ulong, MonsterFeatureHandler> _dicFeatureHanlder;
 
     private void Awake()
     {
-        for (int i = 0; i < _allMonsterFeatures.Length; i++)
+        _dicFeatureHanlder = new();
+        for (int i = 0; i < _allFeaturesHandler.Length; i++)
         {
-            _allMonsterFeatures[i].Owner = this;
-            _allMonsterFeatures[i].Init();
+            EntityId featureID = _allFeaturesHandler[i].FromFeature.GetEntityId();
+            ulong instanceID = EntityId.ToULong(featureID);
+            _dicFeatureHanlder.Add(instanceID, _allFeaturesHandler[i]);
+            _allFeaturesHandler[i].FromFeature.Owner = this;
+            _allFeaturesHandler[i].FromFeature.Init();
         }
+
     }
 
     private void Start()
     {
-        _curMonsterFeatures = FindFeatures(_startMonsterState);
-        if(_curMonsterFeatures != null)
+        if (_curMonsterFeature != null)
         {
-            EnterCurrentFeatures();
+            _curMonsterFeature.EnterFeature();
         }
     }
 
     private void Update()
     {
-        if (_curMonsterFeatures != null)
+        if (_curMonsterFeature != null)
         {
-            UpdateCurrentFeatures();
+            _curMonsterFeature.UpdateFeature();
         }
     }
 
-    public void EnterCurrentFeatures()
+    /// <summary>
+    /// 변경 후 Feature 구하기
+    /// </summary>
+    private bool TryGetToFeature(MonsterFeature fromFeature, out MonsterFeature toFeature)
     {
-        for (int i = 0; i < _curMonsterFeatures.Count; i++)
+        EntityId featureID = fromFeature.GetEntityId();
+        ulong instanceID = EntityId.ToULong(featureID);
+        if(_dicFeatureHanlder.TryGetValue(instanceID, out var featureHandler))
         {
-            _curMonsterFeatures[i].EnterFeature();
+            toFeature = featureHandler.ToFeature;
+            return true;
         }
+        toFeature = null;
+        return false;
+        
     }
 
-    public void UpdateCurrentFeatures()
+    /// <summary>
+    /// 변경 후 Feature로 바꾸기
+    /// </summary>
+    public void ChangeFeature(MonsterFeature callerFeature)
     {
-        for (int i = 0; i < _curMonsterFeatures.Count; i++)
+        if (callerFeature != null)
         {
-            _curMonsterFeatures[i].UpdateFeature();
-        }
-    }
-
-    public void ExitCurrentFeatures()
-    {
-        for (int i = 0; i < _curMonsterFeatures.Count; i++)
-        {
-            _curMonsterFeatures[i].ExitFeature();
-        }
-    }
-
-
-    private List<MonsterFeature> FindFeatures(MonsterState targetState)
-    {
-        List<MonsterFeature> monsterFeatures = null;
-        for (int i = 0; i < _allMonsterFeatures.Length; i++)
-        {
-            if(_allMonsterFeatures[i].State == targetState)
+            bool bGet = TryGetToFeature(callerFeature, out MonsterFeature toFeature);
+            if(bGet)
             {
-                if(monsterFeatures == null)
-                {
-                    monsterFeatures = new();
-                }
-                monsterFeatures.Add(_allMonsterFeatures[i]);
+                callerFeature.ExitFeature();
+                _curMonsterFeature = toFeature;
+                _curMonsterFeature.EnterFeature();
             }
-        }
-        return monsterFeatures;
-    }
-
-    public void ChangeFeature(MonsterFeature callerFeature, MonsterState targetState)
-    {
-        var monsterFeatures = FindFeatures(targetState);
-
-        if (monsterFeatures != null)
-        {
-            ExitCurrentFeatures();
-            _curMonsterFeatures = monsterFeatures;
         }
     }
 }

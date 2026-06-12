@@ -61,6 +61,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "StartProjectileAiming",
+                    "type": "Button",
+                    "id": "f10d0370-c79b-45cb-aa65-06f9367068f5",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "ProjectileAiming",
                     "type": "Value",
                     "id": "15508699-889e-4a0e-9ebd-b0f5800ea52b",
@@ -491,6 +500,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "UseItem",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9612b73d-7fd1-4a07-9ccb-bf7d89a4dd02",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "StartProjectileAiming",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

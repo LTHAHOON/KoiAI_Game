@@ -9,6 +9,7 @@ public abstract class PlayerFeature : MonoBehaviour
     public enum PlayerFeatureProperty
     {
         None,
+        Rotation,
         Equipment,
     }
     public virtual PlayerFeatureProperty FeatureProperty => PlayerFeatureProperty.None;

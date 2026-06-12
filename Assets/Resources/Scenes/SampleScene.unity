@@ -732,11 +732,11 @@ GameObject:
   - component: {fileID: 240217615}
   - component: {fileID: 240217610}
   - component: {fileID: 240217618}
-  - component: {fileID: 240217619}
   - component: {fileID: 240217616}
+  - component: {fileID: 240217619}
   - component: {fileID: 240217609}
   m_Layer: 7
-  m_Name: MonsterMachine
+  m_Name: MonsterAI_Machine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -755,9 +755,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterSight
   _bUseGizmos: 1
-  _detectionDistance: 10
+  _detectionDistance: 35
   _detectMaxCount: 1
-  _sightAngle: 50
+  _sightAngle: 65
   _sightDelayTime: 0.5
   _targetLayerMask:
     serializedVersion: 2
@@ -899,8 +899,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bcca906980ccde40ab7ace2e79c62a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterRotation
-  _lookSpeed: 5
+  _lookSpeed: 10
   _surfaceCheckDistance: 3
+  _detectDistanceToFeature: 15
 --- !u!114 &240217618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -913,11 +914,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4fec9d96c7bf6945a3cb286ef3bfb9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterAI
-  _allMonsterFeatures:
-  - {fileID: 240217616}
-  - {fileID: 240217609}
-  - {fileID: 240217619}
-  _startMonsterState: 0
+  _allFeaturesHandler:
+  - _fromFeature: {fileID: 240217616}
+    _toFeature: {fileID: 240217619}
+  - _fromFeature: {fileID: 240217619}
+    _toFeature: {fileID: 240217616}
+  _curMonsterFeature: {fileID: 240217616}
 --- !u!114 &240217619
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -930,8 +932,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96175b9c3228a4542a30026b23b50ad8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterAttack
-  _weaponController:
-  - {fileID: 2137558062}
+  _randomWeaponContorllers:
+  - _chanceValue: 100
+    _activateTarget: {fileID: 2137558062}
+  _detectDistanceToFeature: 15
+  _attackDelayTime: 1
 --- !u!1 &302235593
 GameObject:
   m_ObjectHideFlags: 0
@@ -2689,7 +2694,7 @@ Transform:
   m_GameObject: {fileID: 1540684721}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14887, y: 0.12907, z: -0.47733}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3111,7 +3116,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1757105301}
   m_Layer: 0
-  m_Name: PoolStorage
+  m_Name: ProjectileStorage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3126,7 +3131,7 @@ Transform:
   m_GameObject: {fileID: 1757105300}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.14887, y: -0.12907, z: 0.47733}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4418,7 +4423,7 @@ GameObject:
   - component: {fileID: 2137558062}
   - component: {fileID: 2137558059}
   m_Layer: 7
-  m_Name: Weapon
+  m_Name: MonsterWeapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4544,10 +4549,10 @@ SceneRoots:
   - {fileID: 1793819142}
   - {fileID: 2116610958}
   - {fileID: 240217613}
-  - {fileID: 145351490}
   - {fileID: 211602313}
   - {fileID: 1540684723}
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 56211644}
   - {fileID: 1117535538}
+  - {fileID: 145351490}
