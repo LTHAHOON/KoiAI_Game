@@ -23,14 +23,14 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   _cannonAimPrefab: {fileID: 4487254017076381408, guid: 08319588698ca8948878531f3bfb15d7, type: 3}
-  _cannonBallData: {fileID: 11400000, guid: dff2d08bfa5dcf94db37f26aa54413e5, type: 2}
+  _cannonBallData: {fileID: 11400000, guid: 3419b40a6e0da2d4198eacf72d48e924, type: 2}
   _isInfiniteLoad: 1
   _loadMaxCount: 20
   _aimSensitity: 10
-  _launchSpeed: 20
+  _launchSpeed: 10
   _loadTime: 1
-  _linearDamping: 0
-  _maxPitchAngle: 45
-  _minPitchAngle: -10
+  _linearDamping: 0.8
+  _maxPitchAngle: 360
+  _minPitchAngle: -360
   _maxYawAngle: 180
   _minYawAngle: -180

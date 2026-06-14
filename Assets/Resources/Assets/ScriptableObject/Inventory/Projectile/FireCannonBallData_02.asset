@@ -20,8 +20,10 @@ MonoBehaviour:
   _projectileType: 0
   _projectileCount: 20
   _projectileDamage: 10
-  _cannonBallSkinData: {fileID: 3443882271885104904, guid: 3f5b1c34671533549bedf701bae1389a, type: 3}
+  cannonBallControllerData: {fileID: 3272699988307355371, guid: 3f5b1c34671533549bedf701bae1389a, type: 3}
   _cannonBallPoolSize:
     _initPoolSize: 10
     _maxPoolSize: 15
   _cannonBallLifeTime: 6
+  _maxOverlapCount: 2
+  _radiusExplosion: 5

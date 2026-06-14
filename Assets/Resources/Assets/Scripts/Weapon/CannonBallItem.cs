@@ -6,7 +6,7 @@ public class CannonBallItem : ResourceBase
     private CannonBallData _cannonBallData;
 
     private PlayerEquipment _equipmentFeature;
-    private CannonBallSkin _cannonBallSkin;
+    private CannonBallController _cannonBallController;
     public override ItemData GetItemData()
     {
         return _cannonBallData;
@@ -26,9 +26,10 @@ public class CannonBallItem : ResourceBase
         _equipmentFeature.SetItemCount(this, _cannonBallData.ProjectileCount);
     }
 
-    public void ChangeSkin()
+    public void SetupController(LayerMask targetLayerMask)
     {
-        _cannonBallSkin = Instantiate(_cannonBallData.SkinData, transform);
+        _cannonBallController = Instantiate(_cannonBallData.ControllerData, transform);
+        _cannonBallController.Init(_cannonBallData, targetLayerMask);
     }
 
     public override void UseItem()
@@ -60,8 +61,8 @@ public class CannonBallItem : ResourceBase
 
     }
 
-    public bool IsEmptySkin() => _cannonBallSkin == null;
+    public bool IsEmptySkin() => _cannonBallController == null;
 
-    public Rigidbody Rigidbody => _cannonBallSkin.Rigidbody;
-    public TrailRenderer TrailRenderer => _cannonBallSkin.TrailRenderer;
+    public Rigidbody Rigidbody => _cannonBallController.GetCannonBallSkin().Rigidbody;
+    public TrailRenderer TrailRenderer => _cannonBallController.GetCannonBallSkin().TrailRenderer;
 }

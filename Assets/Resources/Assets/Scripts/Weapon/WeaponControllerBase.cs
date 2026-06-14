@@ -22,16 +22,30 @@ public abstract class WeaponControllerBase : MonoBehaviour
     /// </summary>
     public abstract void SetAim(Vector2 aim);
     
+    
+    /// <summary>
+    /// 예외) Sword같은 경우 조준선(위치) 설정
+    /// </summary>
     public abstract void StartAiming(float startPitchAngle, float startYawAngle);
     public abstract void EndAiming();
 
     /// <summary>
-    /// 스킨 설정하는 함수
+    /// 스킨 초기 설정하는 함수
     /// </summary>
-
+    protected abstract void InitSkin();
+    
+    /// <summary>
+    /// 스킨 바꾸는 함수
+    /// </summary>
     public abstract void ChangeSkin();
 
-    protected abstract void InitSkin();
+    public virtual bool TryGetYawPitch(Vector3 hitPoint, out float yawDeg, out float pitchDeg)
+    {
+        yawDeg = 0f;
+        pitchDeg = 0f;
+        return true;
+    }
+
     protected bool IsSkinPrefab() => _isSkinPrefab;
     protected Skin GetSkin() => _skin;
 }

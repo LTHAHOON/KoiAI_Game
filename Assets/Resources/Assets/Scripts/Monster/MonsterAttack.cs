@@ -38,15 +38,18 @@ public class MonsterAttack : MonsterFeature
     public override void UpdateFeature()
     {
         _entitySight.Detect();
+        WeaponControllerBase weaponController = ActivateRandom.GetRandomActivateTarget(_randomWeaponContorllers);
         if (!_entitySight.IsFindTarget())
         {
             Owner.ChangeFeature(this);
+            weaponController.EndAiming();
             return;
         }
         Vector3 dir = _target.transform.position - transform.position;
         if (dir.sqrMagnitude >= _detectDistanceToFeature * _detectDistanceToFeature)
         {
             Owner.ChangeFeature(this);
+            weaponController.EndAiming();
             return;
         }
         
@@ -56,10 +59,10 @@ public class MonsterAttack : MonsterFeature
             return;
         }
         _curAttackTime = 0f;
-        WeaponControllerBase weaponController = ActivateRandom.GetRandomActivateTarget(_randomWeaponContorllers);
-        weaponController.StartAiming(-90, 0);
-        weaponController.Activate();
-        weaponController.EndAiming();
+        
+         weaponController.TryGetYawPitch(_target.transform.position,out float yaw, out float pitch);
+         weaponController.StartAiming(pitch, yaw);
+         weaponController.Activate();
     }
 
     public override void ExitFeature()

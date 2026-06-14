@@ -23,7 +23,9 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     private PlayerFeature[] _playerFeatures;
-
+    [SerializeField]
+    private LayerMask _targetLayerMask;
+    
     private readonly Dictionary<int, PlayerFeature> _dicPlayerFeatures = new();
     private PlayerInput _playerInput;
     private PlayerInputAction _playerInputAction;
@@ -68,4 +70,5 @@ public class PlayerController : MonoBehaviour
     }
 
     public PlayerInputAction PlayerIA=> _playerInputAction;
+    public LayerMask TargetLayerMask => _targetLayerMask;
 }

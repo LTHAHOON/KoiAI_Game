@@ -742,13 +742,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 226216926}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -1, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2137558058}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -180}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &240217608
 GameObject:
   m_ObjectHideFlags: 0
@@ -4208,6 +4208,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 17d33e41-fce3-4801-bcea-9f4c0ef9b6fc
     m_ActionName: 'Player/UseItem[/Keyboard/f]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f10d0370-c79b-45cb-aa65-06f9367068f5
+    m_ActionName: 'Player/StartProjectileAiming[/Mouse/rightButton]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -4303,6 +4307,9 @@ MonoBehaviour:
   - {fileID: 2116610963}
   - {fileID: 2116610962}
   - {fileID: 2116610967}
+  _targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &2130804729
 GameObject:
   m_ObjectHideFlags: 0
@@ -4574,9 +4581,12 @@ MonoBehaviour:
   _skin: {fileID: 2137558063}
   _pitchAngle: 35
   _yawAngle: 0
-  _maxSteps: 40
+  _maxSteps: 100
   _timeStep: 0.08
   _cannonData: {fileID: 11400000, guid: ff32f5b807c55d543a6e32347e0e90bd, type: 2}
+  _targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!114 &2137558063
 MonoBehaviour:
   m_ObjectHideFlags: 0

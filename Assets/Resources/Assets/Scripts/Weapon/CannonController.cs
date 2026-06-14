@@ -13,7 +13,9 @@ public class CannonController : WeaponControllerBase
     private float _timeStep = 0.08f;
     [SerializeField]
     private CannonData _cannonData;
-
+    [SerializeField] 
+    private LayerMask _targetLayerMask;
+    
     private SurfaceAngleFinder _surfaceAngleFinder;
     private CannonAim _cannonAim;
     private CannonSkin _cannonSkin;
@@ -77,7 +79,7 @@ public class CannonController : WeaponControllerBase
         for (int i = 0; i < cannonBalls.Length; i++)
         {
             //발사체 스킨 생성
-            cannonBalls[i].ChangeSkin();
+            cannonBalls[i].SetupController(_targetLayerMask);
         }
         _cannonAim = Instantiate(_cannonData.AimPrefab, transform);
         _cannonAim.gameObject.SetActive(false);
@@ -113,20 +115,19 @@ public class CannonController : WeaponControllerBase
         CannonBallItem bulletData = _pool.Pop();
         if (bulletData.IsEmptySkin())
         {
-            bulletData.ChangeSkin();
+            bulletData.SetupController(_targetLayerMask);
         }
         bulletData.TrailRenderer.Clear();
         bulletData.TrailRenderer.enabled = false;
         Rigidbody bulletRigid = bulletData.Rigidbody;
         bulletRigid.transform.position = _cannonSkin.FirePoint.position;
-        bulletRigid.transform.rotation = Quaternion.identity;
         bulletData.TrailRenderer.enabled = true;
 
         if (bulletRigid != null)
         {
             bulletRigid.linearDamping = _cannonData.LinearDamping;
             bulletRigid.useGravity = true;
-            bulletRigid.linearVelocity = GetLaunchVelocity();
+            bulletRigid.linearVelocity =GetLaunchVelocity();
         }
         PoolManager.Instance.ReturnDelay(_pool, bulletData, _cannonData.CannonBallData.CannonBallLifeTime);
         return true;
@@ -180,17 +181,7 @@ public class CannonController : WeaponControllerBase
         _targetLoadTime = _cannonData.LoadTime * _remainingBallCount / _cannonData.LoadMaxCount;
         _isFireLoading = true;
     }
-
-    private Vector3 GetLaunchVelocity()
-    {
-        if (!_cannonSkin)
-            return Vector3.zero;
-        Quaternion rotation = Quaternion.Euler(-_pitchAngle, _yawAngle, 0f);
-        Vector3 localDir = rotation *Vector3.forward;
-        Vector3 worldDirection = _cannonSkin.FirePoint.TransformDirection(localDir);
-        return worldDirection * _cannonData.LaunchSpeed;
-    }
-
+    
     protected override void InitSkin()
     {
         if (_cannonSkin)
@@ -228,8 +219,49 @@ public class CannonController : WeaponControllerBase
             }
         }
     }
+
+    /// <summary>
+    /// hitPoint로 향하는 Yaw, Pitch 구하는 함수
+    /// </summary>
+    public override bool TryGetYawPitch( Vector3 hitPoint, out float yawDeg, out float pitchDeg)
+    {
+        yawDeg = 0f;
+        pitchDeg = 0f;
+
+        var fp = _cannonSkin.FirePoint;
+        Vector3 toTarget = hitPoint - fp.position;
+        if (toTarget.sqrMagnitude < 0.0001f)
+        {
+            return false;
+        }
+
+        // 1) "바라보는 회전"을 계산 (대입 X)
+        Quaternion lookWorld = Quaternion.LookRotation(toTarget.normalized, Vector3.up);
+
+        // 2) fp 기준 로컬 회전으로 변환
+        Quaternion lookLocal = Quaternion.Inverse(fp.rotation) * lookWorld;
+
+        // 3) 로컬 yaw/pitch 추출
+        Vector3 e = lookLocal.eulerAngles;
+        pitchDeg = Mathf.Repeat(e.x + 180f, 360f) - 180f;
+        yawDeg   = Mathf.Repeat(e.y + 180f, 360f) - 180f;
+
+        pitchDeg = -pitchDeg;
+        return true;
+    }
     
-    
+    public Vector3 GetLaunchVelocity()
+    {
+        var fp = _cannonSkin.FirePoint;
+
+        // yaw/pitch는 fp 로컬 기준 회전 (원래 너가 쓰던 컨벤션 유지)
+        Quaternion localAim = Quaternion.Euler(_pitchAngle, _yawAngle, 0f);
+
+        // fp의 현재 회전을 기준으로 월드 방향 생성
+        Vector3 worldDir = fp.rotation * (localAim * Vector3.forward);
+
+        return worldDir.normalized * _cannonData.LaunchSpeed;
+    }
     private void ShowAiming()
     {
         if(!_cannonAim)
@@ -260,8 +292,7 @@ public class CannonController : WeaponControllerBase
         }
         //해당 Aim오브젝트는 Local, World 축 차이가 없기 때문에 world기준으로 구하기
         _surfaceAngleFinder.TryGetWorldSurfaceAngle(out Vector3 angleVec, _cannonAim.transform);
-        Quaternion aimRotation = Quaternion.Euler(angleVec);
-        _cannonAim.transform.eulerAngles =angleVec;
+        _cannonAim.transform.eulerAngles = angleVec;
         _cannonAim.transform.position = _hitPoint;
     }
 

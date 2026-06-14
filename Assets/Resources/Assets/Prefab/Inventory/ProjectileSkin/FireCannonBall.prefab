@@ -12,7 +12,9 @@ GameObject:
   - component: {fileID: 1600617706689068852}
   - component: {fileID: 2281348930061415851}
   - component: {fileID: 6931901721508168739}
+  - component: {fileID: 3272699988307355371}
   - component: {fileID: 3443882271885104904}
+  - component: {fileID: 2889997523806760705}
   - component: {fileID: 7735294924909024448}
   - component: {fileID: 2928449014478874148}
   m_Layer: 0
@@ -213,6 +215,20 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
+--- !u!114 &3272699988307355371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 601774910944409318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e758917f7898f9f44934a6c04cfdf5d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CannonBallController
+  cannonBallController: {fileID: 3443882271885104904}
+  _explosionTrigger: {fileID: 2889997523806760705}
 --- !u!114 &3443882271885104904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,6 +244,21 @@ MonoBehaviour:
   _skinPrefab: {fileID: 601774910944409318}
   _rigid: {fileID: 2928449014478874148}
   _trailRenderer: {fileID: 6931901721508168739}
+--- !u!114 &2889997523806760705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 601774910944409318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 287c81d2be638ae4aa2cf0512b6efd9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplosionTrigger
+  _targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!135 &7735294924909024448
 SphereCollider:
   m_ObjectHideFlags: 0

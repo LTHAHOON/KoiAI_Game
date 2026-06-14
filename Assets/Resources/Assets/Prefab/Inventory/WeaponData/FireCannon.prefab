@@ -64,3 +64,6 @@ MonoBehaviour:
   _maxSteps: 40
   _timeStep: 0.08
   _cannonData: {fileID: 11400000, guid: 9294b86170ea2b044b95cf093762506f, type: 2}
+  _targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
