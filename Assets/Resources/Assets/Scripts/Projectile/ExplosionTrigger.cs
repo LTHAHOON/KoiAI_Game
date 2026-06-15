@@ -3,19 +3,21 @@ using UnityEngine;
 
 public class ExplosionTrigger : MonoBehaviour
 {
-    private CannonBallData _cannonBallData;
     [SerializeField]
     private LayerMask _targetLayerMask;
-    
+
+    private CannonBallData _cannonBallData;
     private Collider[] _colliders;
+    private Action OnExplosion;
     
-    public void Init(CannonBallData cannonBallData, LayerMask targetLayerMask)
+    public void Init(CannonBallData cannonBallData, LayerMask targetLayerMask, Action explosionEvent)
     {
         _cannonBallData = cannonBallData;
         _targetLayerMask = targetLayerMask;
         _colliders = new Collider[_cannonBallData.MaxOverlapCount];
+        OnExplosion += explosionEvent;
     }
-       
+    
     public void OnTriggerEnter(Collider other)
     {
         if (_cannonBallData == null)
@@ -26,16 +28,11 @@ public class ExplosionTrigger : MonoBehaviour
         {
             _colliders = new Collider[_cannonBallData.MaxOverlapCount];
         }
-        if (other.CompareTag(GameTags.Ground))
+        int count = Physics.OverlapSphereNonAlloc(transform.position, _cannonBallData.RadiusExplosion, _colliders, _targetLayerMask);
+        for (int i = 0; i < count; i++)
         {
-            int count = Physics.OverlapSphereNonAlloc(transform.position,_cannonBallData.RadiusExplosion, _colliders, _targetLayerMask);
-            if (count > 0)
-            {
-                Debug.Log("데미지를 주었습니다.");
-                gameObject.SetActive(false);
-                enabled = false;
-            }
-
+            Debug.Log($"{_cannonBallData.Damage} 만큼 데미지를 주었습니다.");
+            OnExplosion?.Invoke();
         }
     }
 }

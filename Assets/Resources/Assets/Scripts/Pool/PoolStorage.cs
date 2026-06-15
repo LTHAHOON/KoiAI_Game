@@ -6,6 +6,7 @@ using UnityEngine;
 public enum PoolName
 {
     Projectile,
+    WayPoint,
 }
 [Serializable]
 public struct PoolStorageData

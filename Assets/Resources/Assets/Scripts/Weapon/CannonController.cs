@@ -75,7 +75,7 @@ public class CannonController : WeaponControllerBase
         ulong id = EntityId.ToULong(entityID);
         PoolManager.Instance.AddPool<CannonBallItem>(id, projectilePrefab, cannonBallData.CannonBallPoolSize, PoolName.Projectile);
         PoolManager.Instance.TryGetPool<CannonBallItem>(id, out _pool);
-        CannonBallItem[] cannonBalls = _pool.GetAllInstanceWithoutPop();
+        CannonBallItem[] cannonBalls = _pool.GetAllInstanceArray();
         for (int i = 0; i < cannonBalls.Length; i++)
         {
             //발사체 스킨 생성
@@ -113,22 +113,26 @@ public class CannonController : WeaponControllerBase
         }
 
         CannonBallItem bulletData = _pool.Pop();
-        if (bulletData.IsEmptySkin())
+        if(bulletData == null)
+        {
+            return false;
+        }
+        if (bulletData.IsEmptyController())
         {
             bulletData.SetupController(_targetLayerMask);
         }
         bulletData.TrailRenderer.Clear();
         bulletData.TrailRenderer.enabled = false;
-        Rigidbody bulletRigid = bulletData.Rigidbody;
-        bulletRigid.transform.position = _cannonSkin.FirePoint.position;
         bulletData.TrailRenderer.enabled = true;
-
-        if (bulletRigid != null)
+        Rigidbody bulletRigid = bulletData.Rigidbody;
+        if (bulletRigid == null)
         {
-            bulletRigid.linearDamping = _cannonData.LinearDamping;
-            bulletRigid.useGravity = true;
-            bulletRigid.linearVelocity =GetLaunchVelocity();
+            return false;
         }
+        bulletRigid.transform.position = _cannonSkin.FirePoint.position;
+        bulletRigid.linearDamping = _cannonData.LinearDamping;
+        bulletRigid.useGravity = true;
+        bulletRigid.linearVelocity = GetLaunchVelocity();
         PoolManager.Instance.ReturnDelay(_pool, bulletData, _cannonData.CannonBallData.CannonBallLifeTime);
         return true;
     }

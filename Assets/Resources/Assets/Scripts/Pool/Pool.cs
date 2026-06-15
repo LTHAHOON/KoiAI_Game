@@ -1,6 +1,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public interface IPool { }
@@ -90,9 +91,13 @@ public class Pool<T> : IPool where T : Object
         return obj;
     }
 
-    public T[] GetAllInstanceWithoutPop()
+    public T[] GetAllInstanceArray()
     {
         return _poolStacks.ToArray();
+    }
+    public List<T> GetAllInstanceList()
+    {
+        return _poolStacks.ToList();
     }
 }
 

@@ -61,7 +61,7 @@ public class CannonBallItem : ResourceBase
 
     }
 
-    public bool IsEmptySkin() => _cannonBallController == null;
+    public bool IsEmptyController() => _cannonBallController == null;
 
     public Rigidbody Rigidbody => _cannonBallController.GetCannonBallSkin().Rigidbody;
     public TrailRenderer TrailRenderer => _cannonBallController.GetCannonBallSkin().TrailRenderer;

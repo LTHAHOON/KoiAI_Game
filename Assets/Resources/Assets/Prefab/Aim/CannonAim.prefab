@@ -4988,7 +4988,7 @@ GameObject:
   - component: {fileID: 4028184421880232818}
   - component: {fileID: 4487254017076381408}
   m_Layer: 0
-  m_Name: CannonAim_01
+  m_Name: CannonAim
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

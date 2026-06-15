@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 7735294924909024448}
   - component: {fileID: 2928449014478874148}
   m_Layer: 0
-  m_Name: FireCannonBall
+  m_Name: MonsterCannonBall_Skin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -227,7 +227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e758917f7898f9f44934a6c04cfdf5d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CannonBallController
-  cannonBallController: {fileID: 3443882271885104904}
+  _cannonBallSkin: {fileID: 3443882271885104904}
   _explosionTrigger: {fileID: 2889997523806760705}
 --- !u!114 &3443882271885104904
 MonoBehaviour:

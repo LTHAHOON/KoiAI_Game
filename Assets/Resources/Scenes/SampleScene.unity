@@ -966,7 +966,7 @@ MonoBehaviour:
   _randomWeaponContorllers:
   - _chanceValue: 100
     _activateTarget: {fileID: 2137558062}
-  _detectDistanceToFeature: 20
+  _detectDistanceToFeature: 15
   _attackDelayTime: 1
 --- !u!1 &302235593
 GameObject:
@@ -2311,6 +2311,7 @@ GameObject:
   - component: {fileID: 1140771817}
   - component: {fileID: 1140771816}
   - component: {fileID: 1140771815}
+  - component: {fileID: 1140771819}
   m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
@@ -2411,6 +2412,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 211602313}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -11.21}
+--- !u!114 &1140771819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1140771814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b57ac5dc57128a941aeb0519514e4d5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AStarObstacle
+  _offset: {x: 0, y: 0, z: 0}
+  _scale: {x: 1, y: 1, z: 1}
 --- !u!1 &1180586427
 GameObject:
   m_ObjectHideFlags: 0
@@ -2476,6 +2491,57 @@ Transform:
   - {fileID: 949226771}
   m_Father: {fileID: 830949975}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1310844328
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1310844330}
+  - component: {fileID: 1310844331}
+  m_Layer: 0
+  m_Name: PlayerWayPointHandle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1310844330
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310844328}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 10.33009, y: -1, z: -19.36079}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1310844331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310844328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b9610f2c83f4284297695feb8dfee46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WayPointController
+  _wayPointPoolSize:
+    _initPoolSize: 50
+    _maxPoolSize: 1000
+  _gridWidth: 5000
+  _gridHeight: 5000
+  _wayPointPrefab: {fileID: 917003297929980540, guid: 2935be0787b5a0948b5b4ce6b2663229, type: 3}
+  _wayPointStep: 3
 --- !u!1 &1390322275
 GameObject:
   m_ObjectHideFlags: 0
@@ -2716,6 +2782,8 @@ MonoBehaviour:
   _poolStorageDatas:
   - poolName: 0
     _storage: {fileID: 1757105301}
+  - poolName: 1
+    _storage: {fileID: 1555549445}
 --- !u!4 &1540684723
 Transform:
   m_ObjectHideFlags: 0
@@ -2730,6 +2798,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1757105301}
+  - {fileID: 1555549445}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1543321187 stripped
@@ -2737,6 +2806,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8255745511311259246, guid: b9b992d7acb92e0489d3274f558f2dfd, type: 3}
   m_PrefabInstance: {fileID: 56211644}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1555549444
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1555549445}
+  m_Layer: 0
+  m_Name: WayPointStorage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1555549445
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1555549444}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1540684723}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1620534613
 GameObject:
   m_ObjectHideFlags: 0
@@ -3971,10 +4071,11 @@ GameObject:
   - component: {fileID: 2116610964}
   - component: {fileID: 2116610968}
   - component: {fileID: 2116610967}
+  - component: {fileID: 2116610969}
   - component: {fileID: 2116610963}
   - component: {fileID: 2116610962}
-  - component: {fileID: 2116610960}
   - component: {fileID: 2116610959}
+  - component: {fileID: 2116610960}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -4028,7 +4129,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2116610957}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 652c88d3251c3d543b5851244e13b98b, type: 3}
   m_Name: 
@@ -4212,6 +4313,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: f10d0370-c79b-45cb-aa65-06f9367068f5
     m_ActionName: 'Player/StartProjectileAiming[/Mouse/rightButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 33c14ad3-2a54-4c68-bd27-79bf5528d47e
+    m_ActionName: 'Player/SetVisibleWayPoint[/Keyboard/g]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -4307,9 +4412,25 @@ MonoBehaviour:
   - {fileID: 2116610963}
   - {fileID: 2116610962}
   - {fileID: 2116610967}
+  - {fileID: 2116610969}
   _targetLayerMask:
     serializedVersion: 2
     m_Bits: 128
+--- !u!114 &2116610969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2116610957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8543ec45a2bf354ab83644dba9b8bd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerWayPoint
+  _target: {fileID: 240217613}
+  _playerWayPointControl: {fileID: 1310844331}
+  _buildDelayTime: 0.2
 --- !u!1 &2130804729
 GameObject:
   m_ObjectHideFlags: 0
@@ -4606,6 +4727,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1793819142}
+  - {fileID: 1310844330}
   - {fileID: 2116610958}
   - {fileID: 240217613}
   - {fileID: 211602313}

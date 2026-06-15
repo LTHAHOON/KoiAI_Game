@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 863c6abaa0ac3434fbe1237ccbd11bc6, type: 3}
-  m_Name: FireCannonBallData_01
+  m_Name: MonsterCannonData
   m_EditorClassIdentifier: Assembly-CSharp::CannonBallData
-  _itemPrefab: {fileID: 7190139778985183213, guid: 466cf6a55e42d524c9c1b544f48b580d, type: 3}
+  _itemPrefab: {fileID: 7190139778985183213, guid: 79eb8f94f3504904c8efa1ae0e910d73, type: 3}
   _itemTex: {fileID: 2800000, guid: 3b698669bd7d03249b8381d9fda781b2, type: 3}
-  _itemName: Fire Cannon Ball
-  _itemId: 12345
+  _itemName: Monster Cannon Ball
+  _itemId: 8992
   _isCreatableObj: 0
   _projectileType: 0
   _projectileCount: 20
   _projectileDamage: 10
-  cannonBallControllerData: {fileID: 3272699988307355371, guid: 3f5b1c34671533549bedf701bae1389a, type: 3}
+  cannonBallControllerData: {fileID: 3272699988307355371, guid: 020177a36d5b3544e877d69ca45f9e99, type: 3}
   _cannonBallPoolSize:
     _initPoolSize: 10
     _maxPoolSize: 15
-  _cannonBallLifeTime: 6
+  _cannonBallLifeTime: 10
   _maxOverlapCount: 2
   _radiusExplosion: 5
