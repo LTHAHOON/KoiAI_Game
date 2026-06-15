@@ -24,7 +24,7 @@
 
 - **StateMachine과 Animator 흐름 구조(from To 구조)** 를 응용하여 MonsterAI를 구축하였고 PlayerController는 PlayerFeature를 기반으로 하는 자식 클래스들을 리스트에 넣어서 **마치 레고 조립처럼** 필요한 부분만 Update할 수 있게 구축하였습니다.
 
-- 풀링 기능같은 경우, **제네릭(T**)을 사용하여 GetComponent를 하지 않게 함으로써 최적화를 진행했었고 풀링 기능같은 경우 Queue보다 캐싱기능이 있는 Stack이 더 미세하게 빠르기 때문에 Stack을 사용하였습니다.
+- 풀링 기능같은 경우, **제네릭(T**)을 사용하여 GetComponent를 하지 않게 함으로써 최적화를 진행했었고 Queue보다 캐싱기능이 있는 Stack이 더 미세하게 빠르기 때문에 Stack을 사용하였습니다.
 
 - **ScriptableObject**를 활용해 슬롯 데이터와 아이템 데이터 등을 미리 저장해서 유지보수를 높였습니다.
 
