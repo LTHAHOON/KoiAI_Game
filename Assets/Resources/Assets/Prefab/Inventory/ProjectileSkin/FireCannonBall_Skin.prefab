@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 2889997523806760705}
   - component: {fileID: 7735294924909024448}
   - component: {fileID: 2928449014478874148}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FireCannonBall_Skin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -258,7 +258,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExplosionTrigger
   _targetLayerMask:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 128
 --- !u!135 &7735294924909024448
 SphereCollider:
   m_ObjectHideFlags: 0

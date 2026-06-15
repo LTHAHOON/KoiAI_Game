@@ -6,7 +6,6 @@ public class WayPointHandle : MonoBehaviour
 {
     [SerializeField]
     private PoolSize _wayPointPoolSize;
-
     [SerializeField]
     private int _gridWidth = 10000;
     [SerializeField]
@@ -18,6 +17,7 @@ public class WayPointHandle : MonoBehaviour
     private int _wayPointStep;
     
     private AStarLogic _aStartLogic;
+    private bool _isBuilding = false;
     private List<GameObject> _wayPointList;
     private Pool<GameObject> _pool;
     public void InitStartAndGoal(Vector3 start, Vector3 goal)
@@ -53,16 +53,21 @@ public class WayPointHandle : MonoBehaviour
             ClearWayPoint();
         }
     }
-
+    
     public void BuildWayPoint()
     {
-        ClearWayPoint();
-        if (_aStartLogic == null || _wayPointList == null || _pool == null)
+        if (_aStartLogic == null || _wayPointList == null || _pool == null || _isBuilding)
         {
             return;
         }
 
-        var paths = _aStartLogic.RebuildPath();
+        _isBuilding = true;
+        ClearWayPoint();
+        StartCoroutine(_aStartLogic.IERebuildPath(OnEndBuild));
+    }
+    
+    private void OnEndBuild(List<Vector2Int> paths)
+    {
         if(paths != null)
         {
             for (int i = 0; i < paths.Count; i += _wayPointStep + 1)
@@ -73,8 +78,12 @@ public class WayPointHandle : MonoBehaviour
 
             }
         }
+        else
+        {
+            ClearWayPoint();
+        }
     }
-
+    
     public void ClearWayPoint()
     {
         for (int i = 0; i < _wayPointList.Count; i++)
@@ -82,5 +91,8 @@ public class WayPointHandle : MonoBehaviour
             _pool.Return(_wayPointList[i]);
         }
         _wayPointList.Clear();
+        _isBuilding = false;
     }
+    
+    public bool IsBuilding => _isBuilding;
 }

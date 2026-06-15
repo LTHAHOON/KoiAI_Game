@@ -1316,8 +1316,9 @@ GameObject:
   - component: {fileID: 419325369}
   - component: {fileID: 419325368}
   - component: {fileID: 419325367}
+  - component: {fileID: 419325371}
   m_Layer: 6
-  m_Name: Cube (1)
+  m_Name: Obstacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1416,6 +1417,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 211602313}
   m_LocalEulerAnglesHint: {x: 0, y: -50.122, z: -11.21}
+--- !u!114 &419325371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 419325366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b57ac5dc57128a941aeb0519514e4d5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AStarObstacle
+  _offset: {x: 0, y: 0, z: 0}
+  _scale: {x: 1, y: 1, z: 1}
 --- !u!4 &439535349 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5362403743660722480, guid: 84c13a6f3a1c0794090ebc30e883e83d, type: 3}
@@ -2313,7 +2328,7 @@ GameObject:
   - component: {fileID: 1140771815}
   - component: {fileID: 1140771819}
   m_Layer: 6
-  m_Name: Cube
+  m_Name: Obstacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3063,8 +3078,9 @@ GameObject:
   - component: {fileID: 1693036871}
   - component: {fileID: 1693036870}
   - component: {fileID: 1693036869}
+  - component: {fileID: 1693036873}
   m_Layer: 6
-  m_Name: Cube (2)
+  m_Name: Obstacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3163,6 +3179,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 211602313}
   m_LocalEulerAnglesHint: {x: 0, y: 198.82, z: -11.21}
+--- !u!114 &1693036873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1693036868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b57ac5dc57128a941aeb0519514e4d5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AStarObstacle
+  _offset: {x: 0, y: 0, z: 0}
+  _scale: {x: 1, y: 1, z: 1}
 --- !u!1 &1748644959
 GameObject:
   m_ObjectHideFlags: 0

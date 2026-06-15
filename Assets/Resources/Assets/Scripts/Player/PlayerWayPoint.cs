@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -26,14 +28,20 @@ public class PlayerWayPoint : PlayerFeature
         if (context.performed)
         {
             _isShowedWayPoint = !_isShowedWayPoint;
+            if (_playerWayPointControl.IsBuilding)
+            {
+                return;
+            }
+            _playerWayPointControl.InitStartAndGoal(transform.position, _target.position);
             _playerWayPointControl.BuildOrClearWayPoint(_isShowedWayPoint);
         }
     }
 
     public void OnRebuildWayPoint(InputAction.CallbackContext context)
     {
-        if (_isShowedWayPoint == false)
+        if (_isShowedWayPoint == false || _playerWayPointControl.IsBuilding)
         {
+            _isAutoBuild = false;
             return;
         }
         if (context.performed)
@@ -47,9 +55,13 @@ public class PlayerWayPoint : PlayerFeature
             _playerWayPointControl.BuildWayPoint();
         }
     }
-
+    
     public override void UpdateFeature()
     {
+        if (_isShowedWayPoint == false || _playerWayPointControl.IsBuilding)
+        {
+            return;
+        }
         if(_isAutoBuild)
         {
             if(_curTime < _buildDelayTime)

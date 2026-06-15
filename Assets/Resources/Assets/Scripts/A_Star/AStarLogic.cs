@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,8 +11,8 @@ public class AStarLogic
     private float _height;
     private Vector2Int _start;
     private Vector2Int _goal;
-    private readonly int _maxIterationCount = 5000;
-    private readonly List<Vector2Int> _path = new();
+    private readonly int _maxIterationCount = 2000;
+    private List<Vector2Int> _path = new();
     private readonly List<Vector2Int> _neighbors = new();
     private readonly HashSet<Vector2Int> _closedSet = new();
     private AStarObstacle[] _aStarObstacles;
@@ -28,7 +29,9 @@ public class AStarLogic
         _goal = new Vector2Int(Mathf.RoundToInt(goalPosition.x), Mathf.RoundToInt(goalPosition.z));
     }
 
-    public List<Vector2Int> RebuildPath()
+
+    
+    public IEnumerator IERebuildPath(Action<List<Vector2Int>> onEndBuild)
     {
         _path.Clear();
         _neighbors.Clear();
@@ -37,61 +40,72 @@ public class AStarLogic
         Dictionary<Vector2Int, Vector2Int> cameFrom = new();
         Dictionary<Vector2Int, float> gCost = new();
         int curIterationCount = 0;
-
+        int frameSize = 200;
         openSet.Add(_start);
         gCost.Add(_start, 0);
+        
         while(openSet.Count > 0)
         {
-            ++curIterationCount;
-            if(curIterationCount > _maxIterationCount)
+            for (int f = 0; f < frameSize; f++)
             {
-                break;
-            }
-            Vector2Int currentNode = GetFLowestCostNode(openSet, gCost);
-            _closedSet.Add(currentNode);
-            openSet.Remove(currentNode);
-            if (_goal == currentNode)
-            {
-                BuildPath(currentNode, cameFrom);
-                return _path;
-            }
-
-
-            List<Vector2Int> neighborList = GetNeighbors(currentNode);
-            for (int i = 0; i < neighborList.Count; i++)
-            {
-                var neighbor = neighborList[i];
-                if (!IsInsideGrid(neighbor) || IsInsideObstacle(neighbor))
+                if (openSet.Count == 0) 
                 {
-                    continue;
+                    onEndBuild?.Invoke(null);
+                    yield break; 
                 }
-                if(!_closedSet.Contains(neighbor))
+                ++curIterationCount;
+                if(curIterationCount > _maxIterationCount)
                 {
-                    if(!openSet.Contains(neighbor))
+                    onEndBuild?.Invoke(null);
+                    yield break;
+                }
+                Vector2Int currentNode = GetFLowestCostNode(openSet, gCost);
+                _closedSet.Add(currentNode);
+                openSet.Remove(currentNode);
+                if (_goal == currentNode)
+                {
+                    BuildPath(currentNode, cameFrom);
+                    onEndBuild?.Invoke(_path);
+                    yield break;
+                }
+
+
+                List<Vector2Int> neighborList = GetNeighbors(currentNode);
+                for (int i = 0; i < neighborList.Count; i++)
+                {
+                    var neighbor = neighborList[i];
+                    if (!IsInsideGrid(neighbor) || IsInsideObstacle(neighbor))
                     {
-                        openSet.Add(neighbor);
+                        continue;
                     }
-                    gCost[neighbor] =  gCost[currentNode] + 10;
-                    cameFrom[neighbor]= currentNode;
+                    if(!_closedSet.Contains(neighbor))
+                    {
+                        if(!openSet.Contains(neighbor))
+                        {
+                            openSet.Add(neighbor);
+                        }
+                        gCost[neighbor] =  gCost[currentNode] + 10;
+                        cameFrom[neighbor]= currentNode;
+                    }
                 }
+                _neighbors.Clear();
             }
-
-            _neighbors.Clear();
+            yield return null;
         }
-        return null;
     }
-
-    private IEnumerator IEBuildPath()
-    {
-
-        yield return null;
-    }
-
+    
     private void BuildPath(Vector2Int currentNode, Dictionary<Vector2Int, Vector2Int> cameFrom)
     {
         Vector2Int current = currentNode;
+        int frameSize = 200;
+        int curFrame = 0;
         while(cameFrom.ContainsKey(current))
         {
+            ++curFrame;
+            if (curFrame > frameSize)
+            {
+                break;
+            }
             _path.Add(current);
             current = cameFrom[current];
         }
