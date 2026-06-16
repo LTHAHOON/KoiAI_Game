@@ -20,7 +20,7 @@
 
 
 ## 부가 설명
-- **A 알고리즘**을 사용하여 길찾기를 구현하였으며 Obstacle 스크립트를 따로 만들어서 **Collider의 Bounds**를 사용하여 장애물로 인식하게끔 만들었습니다.
+- **A * 알고리즘**을 사용하여 길찾기를 구현하였으며 Obstacle 스크립트를 따로 만들어서 **Collider의 Bounds**를 사용하여 장애물로 인식하게끔 만들었습니다.
 
 - **StateMachine과 Animator 흐름 구조(from To 구조)** 를 응용하여 MonsterAI를 구축하였고 PlayerController는 PlayerFeature를 기반으로 하는 자식 클래스들을 리스트에 넣어서 **마치 레고 조립처럼** 필요한 부분만 Update할 수 있게 구축하였습니다.
 
