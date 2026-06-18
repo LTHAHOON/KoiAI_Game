@@ -5,12 +5,12 @@ using UnityEngine.UIElements;
 [RequireComponent (typeof(Collider))]
 public class AStarObstacle : MonoBehaviour
 {
-    private Collider _collider;
     [SerializeField]
     private Vector3 _offset = Vector3.zero;
     [SerializeField]
     private Vector3 _scale = Vector3.one;
 
+    private Collider _collider;
     private Bounds _bounds;
     private void Awake()
     {

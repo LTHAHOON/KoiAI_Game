@@ -48,12 +48,18 @@ public abstract class ItemData : ScriptableObject
     [SerializeField]
     private Texture2D _itemTex;
     [SerializeField]
+    private Mesh _itemMesh;
+    [SerializeField]
+    private Material _itemMaterial;
+    [SerializeField]
     private string _itemName;
     [SerializeField]
     private ulong _itemId;
     [SerializeField]
     private bool _isCreatableObj = false;
 
+    public Mesh ItemMesh => _itemMesh;
+    public Material ItemMaterial => _itemMaterial;
     public bool IsCreatableObj => _isCreatableObj;
     public ItemBase ItemPrefab => _itemPrefab;
     public Texture2D ItemTex => _itemTex;
