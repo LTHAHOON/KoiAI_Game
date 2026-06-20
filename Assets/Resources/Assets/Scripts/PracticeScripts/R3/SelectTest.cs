@@ -20,7 +20,8 @@ public class SelectTest : MonoBehaviour
             .Subscribe(_ =>
             {
                 Debug.Log("Select");
-            });
+            })
+            .AddTo(this);
 
         //예) 이펙트 처리 끝나면 데미지
         //Attack()

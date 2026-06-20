@@ -1,13 +1,8 @@
-using NUnit.Framework.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
-using UnityEngine.UI;
-using static InventorySystem;
-using static UnityEditor.Progress;
 
 public enum ItemCategory
 {

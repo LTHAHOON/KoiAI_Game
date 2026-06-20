@@ -1,9 +1,4 @@
-using System;
-using UnityEditor.Callbacks;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEditor.PlayerSettings;
-
 
 public class GravityControl : MonoBehaviour
 {

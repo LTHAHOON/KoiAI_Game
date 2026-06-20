@@ -1,0 +1,4 @@
+repository "Game algorithm@ARTCREATOR@cloud"
+  path "/"
+    br "/main"
+    co "/main"

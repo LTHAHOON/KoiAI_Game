@@ -2,7 +2,6 @@ using System;
 using System.Text;
 using TMPro;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 [Serializable]
 public enum ItemSlotType
