@@ -25,12 +25,6 @@ public struct MonsterFeatureHandler
     public readonly MonsterFeature FromFeature => _toFeature;
 }
 
-public enum MonsterState
-{
-    Detection,
-    Attack,
-}
-
 public class MonsterAI : MonoBehaviour
 {
     [SerializeField]
