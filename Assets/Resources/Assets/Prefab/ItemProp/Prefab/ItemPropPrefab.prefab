@@ -124,4 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8daaf71e7d8bf694d96cc0c8d780087f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemProp
-  _itemData: {fileID: 11400000, guid: dff2d08bfa5dcf94db37f26aa54413e5, type: 2}
+  _itemPickUpEvent:
+    _itemData: {fileID: 11400000, guid: dff2d08bfa5dcf94db37f26aa54413e5, type: 2}
+    _itemAudioData: {fileID: 11400000, guid: 5850e09bb44ed4943b75b2233e3d0037, type: 2}
+  _itemOwnerTag: 0

@@ -7,6 +7,7 @@ public enum PoolName
 {
     Projectile,
     WayPoint,
+    AudioSource,
 }
 [Serializable]
 public struct PoolStorageData

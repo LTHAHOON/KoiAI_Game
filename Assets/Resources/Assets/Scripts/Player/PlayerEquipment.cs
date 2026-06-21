@@ -1,12 +1,12 @@
-using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using R3;
+using UnityEditor;
 
-
+[RequireComponent(typeof(ItemInteractable))]
 public class PlayerEquipment : PlayerFeature
 {
     [Serializable]
@@ -21,7 +21,7 @@ public class PlayerEquipment : PlayerFeature
         public readonly Transform Point => _point;
         #endregion
     }
-
+    
     [SerializeField]
     private InventorySystem _inventorySystem;
     [SerializeField]
@@ -36,6 +36,7 @@ public class PlayerEquipment : PlayerFeature
     [SerializeField]
     private PlayerEquipmentPoint[] _itemParentPoints;
 
+    private ItemInteractable _itemInteractable;
     private readonly Dictionary<ItemCategory, Transform> _dicItemParentPoint = new();
     private readonly StringBuilder _sb = new();
     public override PlayerFeatureProperty FeatureProperty => PlayerFeatureProperty.Equipment;
@@ -55,7 +56,7 @@ public class PlayerEquipment : PlayerFeature
         for (int i = 0; i < equipDataCount; i++)
         {
             Transform parent = _dicItemParentPoint[_equipDatas[i].ItemPrefab.Category];
-            _inventorySystem.CreateAndPushItem(Owner, parent,ItemSlotType.Equipped ,_equipDatas[i]);
+            _inventorySystem.CreateAndPushItem(Owner, parent, ItemSlotType.Equipped, _equipDatas[i]);
         }
 
         for (int i = 0; i < notEquipDataCount; i++)
@@ -65,6 +66,18 @@ public class PlayerEquipment : PlayerFeature
         }
         #endregion
 
+        #region ItemInteractable 구독
+
+        _itemInteractable = GetComponent<ItemInteractable>();
+        _itemInteractable.OnInteract.Subscribe(itemPickUpEvent =>
+        {
+            PickUpItem(itemPickUpEvent.ItemData);
+        });
+
+        #endregion
+        
+           
+        
         playerIA.Player.SelectItem_Equip.performed += OnSelectEquipItem;
         playerIA.Player.SelectItem_NotEquip.performed += OnSelectNotEquipItem;
         playerIA.Player.UseItem.performed += OnUseItem;
@@ -76,6 +89,18 @@ public class PlayerEquipment : PlayerFeature
 
     public override void UpdateFeature() { }
 
+    private void PickUpItem(ItemData itemData, ItemSlotType slotType = ItemSlotType.NotEquipped)
+    {
+        var itemList = GetItemList(slotType);
+        bool isExistEmptySlot = IsExistEmptySlot(itemList, slotType);
+        if (isExistEmptySlot)
+        {
+            itemList.Add(itemData);
+            Transform parent = _dicItemParentPoint[itemData.ItemPrefab.Category];
+            _inventorySystem.CreateAndPushItem(Owner, parent, slotType, itemData);
+        }
+    }
+    
     private List<ItemData> GetItemList(ItemSlotType itemSlotType)
     {
         switch (itemSlotType)
@@ -249,6 +274,18 @@ public class PlayerEquipment : PlayerFeature
             {
                 return true;
             }
+        }
+        return false;
+    }
+    
+    public bool IsExistEmptySlot(List<ItemData> itemList, ItemSlotType slotType)
+    {
+        _inventorySystem.TryGetInventorySlot(slotType, out var inventorySlot);
+        int curExistedCount = itemList.Count;
+        int maxSlotCount = inventorySlot.SlotData.SlotCount;
+        if (curExistedCount < maxSlotCount)
+        {
+            return true;
         }
         return false;
     }
