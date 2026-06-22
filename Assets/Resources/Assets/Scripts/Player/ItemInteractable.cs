@@ -1,12 +1,10 @@
-using System;
 using R3;
-using UnityEditor;
 using UnityEngine;
 
 public class ItemInteractable : BaseInteractable<ItemPickUpEvent>
 {
     [SerializeField]
-    private AudioTarget _audioTarget;
+    private AudioSFXTarget _mainSFXTarget;
     
     private void Awake()
     {
@@ -14,7 +12,7 @@ public class ItemInteractable : BaseInteractable<ItemPickUpEvent>
         OnInteract
             .Subscribe(itemPickUpEvent =>
             {
-                AudioManager.Instance.PlaySFX(_audioTarget, itemPickUpEvent.ItemAudioData, transform.position);
+                AudioManager.Instance.PlaySFX(_mainSFXTarget, itemPickUpEvent.ItemAudioData, transform.position);
             });
     }
     

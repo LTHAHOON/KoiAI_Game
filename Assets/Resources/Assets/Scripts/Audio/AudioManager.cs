@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -10,7 +11,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField]
     private PoolSize _sfxSourcePoolSize;
 
-    private HashSet<AudioTarget> _audioTargetHashSet = new();
+    private HashSet<AudioSFXTarget> _sfxTargetHashSet = new();
     private Pool<AudioSource> _sfxSourcePool;
     public static AudioManager Instance { get; private set; }
     private void Awake()
@@ -26,17 +27,47 @@ public class AudioManager : MonoBehaviour
         PoolManager.Instance.TryGetPool(id, out _sfxSourcePool);
     }
 
-    public void PlaySFX(AudioTarget audioTarget, AudioData audioData, Vector3 audioPos)
+    public void UpdateSFXAudioPos(AudioSFXTarget audioTarget, Vector3 audioPos)
     {
-        if (!_audioTargetHashSet.Contains(audioTarget))
+        if (!_sfxTargetHashSet.Contains(audioTarget))
+        {
+            return;
+        }
+        AudioSource audioSource = audioTarget.GetAudioSource();
+        audioSource.transform.position = audioPos;
+    }
+
+    public void PlayMusic(AudioMusicTarget audioTarget)
+    {
+        AudioSource audioSource = audioTarget.GetAudioSource();
+        if(audioSource == null)
+        {
+            return;
+        }
+        audioSource.Play();
+    }
+
+    public void StopMusic(AudioMusicTarget audioTarget)
+    {
+        AudioSource audioSource = audioTarget.GetAudioSource();
+        if (audioSource == null)
+        {
+            return;
+        }
+        audioSource.Stop();
+    }
+
+    public void PlaySFX(AudioSFXTarget audioTarget, AudioData audioData, Vector3 audioPos)
+    {
+        if (!_sfxTargetHashSet.Contains(audioTarget))
         {
             AudioSource newAudioSource = _sfxSourcePool.Pop();
             audioTarget.SetAudioSource(newAudioSource);
-            _audioTargetHashSet.Add(audioTarget);
+            _sfxTargetHashSet.Add(audioTarget);
         }
         
         AudioSource audioSource = audioTarget.GetAudioSource();
-        if (audioSource == null || audioData == null || audioData.AudioClip == null)
+        if (audioSource == null || audioData == null || audioData.AudioResource == null)
         {
             return;
         }
@@ -44,18 +75,45 @@ public class AudioManager : MonoBehaviour
         if (audioData.IsLoop)
         {
             audioSource.transform.position = audioPos;
-            audioSource.clip = audioData.AudioClip;
-            audioSource.loop = true;
+            audioSource.resource = audioData.AudioResource;
+            audioSource.loop = audioData.IsLoop;
             audioSource.volume = audioData.Volume;
             audioSource.Play();
         }
         else
         {
-            audioSource.PlayOneShot(audioData.AudioClip, audioData.Volume);
+            if(audioData.AudioResource is AudioClip audioClip)
+            {
+                audioSource.PlayOneShot(audioClip, audioData.Volume);
+            }
         }
     }
 
-    public void ReturnAudioSource(AudioTarget audioTarget)
+    public void FadeStopSFX(AudioSFXTarget audioTarget, float fadeTime)
+    {
+        AudioSource audioSource = audioTarget.GetAudioSource();
+        if (audioSource == null)
+        {
+            return;
+        }
+        audioSource.loop = false;
+        StartCoroutine(IEFadeStopSFX(audioSource, fadeTime));
+    }
+
+    private IEnumerator IEFadeStopSFX(AudioSource audioSource, float fadeTime)
+    {
+        float curTime = 0;
+        float curVolume = audioSource.volume;
+        while(curTime < fadeTime)
+        {
+            curTime += Time.deltaTime;
+            float volume = curVolume - (fadeTime / curTime);
+            audioSource.volume = volume;
+            yield return null;
+        }
+        audioSource.Stop();
+    }
+    public void ReturnSFX(AudioSFXTarget audioTarget)
     {
         AudioSource audioSource = audioTarget.GetAudioSource();
         if (audioSource == null)
@@ -69,6 +127,6 @@ public class AudioManager : MonoBehaviour
         audioSource.volume = 0;
         
         _sfxSourcePool.Return(audioSource);
-        _audioTargetHashSet.Remove(audioTarget);
+        _sfxTargetHashSet.Remove(audioTarget);
     }
 }

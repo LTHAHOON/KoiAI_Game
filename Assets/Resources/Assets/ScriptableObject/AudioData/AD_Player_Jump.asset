@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1add40ccb21e6f64b8b5adcfc6641a9c, type: 3}
-  m_Name: AD_CannonBall_PickUp
+  m_Name: AD_Player_Jump
   m_EditorClassIdentifier: Assembly-CSharp::AudioData
-  _audioResource: {fileID: 8300000, guid: e420187c967aa524fa1710106ec1701e, type: 3}
+  _audioResource: {fileID: 8300000, guid: 8d3075478175531489cb1cf6f0443ea2, type: 3}
   _volume: 1
   _isLoop: 0

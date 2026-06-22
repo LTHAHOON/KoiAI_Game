@@ -90,7 +90,7 @@ public class GravityControl : MonoBehaviour
 
     private bool IsGround(out Vector3 hitPoint)
     {
-        _isGrounded=  Physics.Raycast(_feetPoint.position, Vector3.down, out RaycastHit hit, _groundCheckDist);
+        _isGrounded=  Physics.Raycast(_feetPoint.position, Vector3.down, out RaycastHit hit, _groundCheckDist, _groundLayerMask);
         hitPoint = hit.point;
         return _isGrounded;
     }

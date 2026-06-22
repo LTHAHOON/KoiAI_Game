@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1233149941 &-2916700415666191044
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: wind-like_synthetic__#4-1782108463211_{-2916700415666191044}
+  m_AudioClip: {fileID: 8300000, guid: 224fb650ff40caf478bed948d98e00f2, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &-2410182072406385882
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: wind-like_synthetic__#3-1782108439043_{-2410182072406385882}
+  m_AudioClip: {fileID: 8300000, guid: 6b140a7a49e04bc43a9da710b11ffbf8, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1307931743 &6418180475301049370
+AudioRandomContainer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ARC_Player_Steps
+  m_Volume: -16.4
+  m_Pitch: -110
+  m_AutomaticTriggerTime: 1
+  m_LoopCount: 1
+  m_VolumeRandomizationRange: {x: 0, y: 0}
+  m_PitchRandomizationRange: {x: 0, y: 0}
+  m_AutomaticTriggerTimeRandomizationRange: {x: 0, y: 0}
+  m_LoopCountRandomizationRange: {x: -1, y: 0}
+  m_Elements:
+  - {fileID: -2410182072406385882}
+  - {fileID: 8112389550234072289}
+  - {fileID: -2916700415666191044}
+  m_AvoidRepeatingLast: 1
+  m_PlaybackMode: 2
+  m_TriggerMode: 1
+  m_AutomaticTriggerMode: 0
+  m_LoopMode: 0
+  m_VolumeRandomizationEnabled: 0
+  m_PitchRandomizationEnabled: 0
+  m_AutomaticTriggerTimeRandomizationEnabled: 0
+  m_LoopCountRandomizationEnabled: 0
+--- !u!1233149941 &8112389550234072289
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: wind-like_synthetic__#4-1782108388449_{8112389550234072289}
+  m_AudioClip: {fileID: 8300000, guid: ff5f145a280b67b4fb5d17e92d8679c5, type: 3}
+  m_Volume: 0
+  m_Enabled: 1

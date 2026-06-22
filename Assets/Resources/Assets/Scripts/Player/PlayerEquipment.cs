@@ -193,6 +193,10 @@ public class PlayerEquipment : PlayerFeature
 
             _inventorySystem.TryGetInventorySlot(ItemSlotType.Equipped, out var inventorySlot);
             Slot slot = _inventorySystem.FindSlotWithIndex(inventorySlot, curSelectedIndex);
+            if(!slot)
+            {
+                return;
+            }
             if (slot.IsEmpty())
             {
                 SetWeaponInfo(0, 0);

@@ -7,6 +7,8 @@ public class PlayerRotation : PlayerFeature
     private float _lookSpeed = 10f;
     [SerializeField]
     private float _surfaceCheckDistance = 3f;
+    [SerializeField]
+    private LayerMask _surfaceLayerMask;
 
     public override PlayerFeatureProperty FeatureProperty => PlayerFeatureProperty.Rotation;
     private SurfaceAngleFinder _surfaceAngleFinder;
@@ -28,7 +30,7 @@ public class PlayerRotation : PlayerFeature
         if (!IsValid())
             return;
         Vector3 localForward = transform.InverseTransformDirection(transform.forward);
-        _surfaceAngleFinder.TryGetLocalSurfaceAngle(out _targetAngle, transform);
+        _surfaceAngleFinder.TryGetLocalSurfaceAngle(out _targetAngle, transform, _surfaceLayerMask);
         _targetAngle.y = GetAngleWithAtan(_input);
     }
 

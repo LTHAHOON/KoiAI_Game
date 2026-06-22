@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class AudioTarget : MonoBehaviour
+public class AudioSFXTarget : MonoBehaviour
 {
     private AudioSource _audioSource;
 
@@ -15,8 +15,17 @@ public class AudioTarget : MonoBehaviour
         return _audioSource;
     }
 
+    public bool IsPlayingSFX()
+    {
+        if(_audioSource == null)
+        {
+            return false;
+        }
+        return _audioSource.isPlaying;
+    }
+
     private void OnDestroy()
     {
-        AudioManager.Instance.ReturnAudioSource(this);
+        AudioManager.Instance.ReturnSFX(this);
     }
 }

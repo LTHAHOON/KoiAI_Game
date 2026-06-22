@@ -4,6 +4,20 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : PlayerFeature
 {
     [SerializeField]
+    private AudioData _stepAuidoData;
+    [SerializeField]
+    private AudioData _stopStepAudioData;
+    [SerializeField]
+    private AudioData _jumpAudioData;
+
+    [SerializeField]
+    private float _stepAudioThresold;
+    [SerializeField]
+    private AudioSFXTarget _mainSFXTarget;
+    [SerializeField]
+    private AudioSFXTarget _moveSFXTarget;
+
+    [SerializeField]
     private Rigidbody _rigidBody;
     [SerializeField]
     private GravityControl _gravityControl;
@@ -14,8 +28,10 @@ public class PlayerMovement : PlayerFeature
     [SerializeField]
     private int _jumpMaxCount = 1;
 
+
     private int _jumpCurCount = 1;
     private Vector3 _moveDir;
+    private bool _isMoveStop;
     private Camera _camera;
     private Vector3 _translation = Vector3.zero;
     public override void Init(PlayerInputAction playerIA)
@@ -30,12 +46,32 @@ public class PlayerMovement : PlayerFeature
     {
         if (_moveDir.sqrMagnitude > 0)
         {
+            if (!_moveSFXTarget.IsPlayingSFX())
+            {
+                AudioManager.Instance.PlaySFX(_moveSFXTarget, _stepAuidoData, transform.position);
+            }
             Vector3 xDir = _camera.transform.right * _moveDir.x;
             Vector3 zDir = _camera.transform.forward * _moveDir.z;
             Vector3 dir = (xDir + zDir).normalized;
             dir.y = 0f;
             _translation = _moveSpeed * dir;
+            AudioManager.Instance.UpdateSFXAudioPos(_mainSFXTarget, transform.position);
+            AudioManager.Instance.UpdateSFXAudioPos(_moveSFXTarget, transform.position);
+
         }
+
+        #region 키를 연속 누름으로 인한 끊김 방지
+        if (_isMoveStop)
+        {
+            if (_rigidBody.linearVelocity.sqrMagnitude <= _stepAudioThresold)
+            {
+                Debug.Log(_rigidBody.linearVelocity.sqrMagnitude);
+                AudioManager.Instance.FadeStopSFX(_moveSFXTarget, 0.2f);
+                AudioManager.Instance.PlaySFX(_mainSFXTarget, _stopStepAudioData, transform.position);
+                _isMoveStop = false;
+            }
+        }
+        #endregion
 
         if (_gravityControl.IsGrounded)
         {
@@ -53,9 +89,10 @@ public class PlayerMovement : PlayerFeature
     
     public void OnMove(InputAction.CallbackContext context)
     {
-        if(context.started)
+        if (context.canceled)
         {
-            return;
+            _isMoveStop = true;
+
         }
         Vector2 normalizedDir = context.ReadValue<Vector2>();
         _moveDir = new Vector3(normalizedDir.x, 0f, normalizedDir.y);
@@ -69,6 +106,7 @@ public class PlayerMovement : PlayerFeature
             {
                 ++_jumpCurCount;
                 _gravityControl.AddForceUp(_jumpForce);
+                AudioManager.Instance.PlaySFX(_mainSFXTarget, _jumpAudioData, transform.position);
             }
         }
     }
