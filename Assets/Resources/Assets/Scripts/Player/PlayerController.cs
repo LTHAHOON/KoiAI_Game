@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Playables;
 using static PlayerFeature;
 using static PlayerSFXAudioFeature;
 
@@ -41,6 +42,8 @@ public struct PlayerSFXAudioFeature
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] 
+    private PlayableDirector _timeline;
     [SerializeField]
     private PlayerFeature[] _playerFeatures;
     [SerializeField]
@@ -75,6 +78,10 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (_timeline.state == PlayState.Playing)
+        {
+            return;
+        }
         for (int i = 0; i < _playerFeatures.Length; i++)
         {
             _playerFeatures[i].UpdateFeature();
