@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: AD_Player_StopStep
   m_EditorClassIdentifier: Assembly-CSharp::AudioData
   _audioResource: {fileID: 8300000, guid: 6b21d0df7485e5543aa56393a08e132c, type: 3}
-  _volume: 1
+  _volume: 0.3
   _isLoop: 0

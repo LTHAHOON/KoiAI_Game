@@ -22,7 +22,7 @@ public class MonsterAttack : MonsterFeature
         _entitySight = GetComponent<EntitySight>();
         for (int i = 0; i < _randomWeaponContorllers.Length; i++)
         {
-            _randomWeaponContorllers[i].ActivateTarget.Init();
+            _randomWeaponContorllers[i].ActivateTarget.Init(null);
         }
     }
 

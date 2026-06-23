@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static PlayerFeature;
+using static PlayerSFXAudioFeature;
 
 public abstract class PlayerFeature : MonoBehaviour 
 {
@@ -18,11 +20,31 @@ public abstract class PlayerFeature : MonoBehaviour
     public abstract void UpdateFeature();
 }
 
+[Serializable]
+public struct PlayerSFXAudioFeature
+{
+    public enum PlayerSFXAuidoProperty
+    {
+        Main,
+        Move,
+        Attack,
+    }
+    [SerializeField]
+    private PlayerSFXAuidoProperty _playerAudioProperty;
+    [SerializeField]
+    private AudioSFXTarget _auidoTarget;
+
+    public PlayerSFXAuidoProperty PlayerAudioProperty => _playerAudioProperty;
+    public AudioSFXTarget AudioTarget => _auidoTarget;
+}
+
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     private PlayerFeature[] _playerFeatures;
+    [SerializeField]
+    private PlayerSFXAudioFeature[] _sfxFeatures;
     [SerializeField]
     private LayerMask _targetLayerMask;
     
@@ -67,6 +89,19 @@ public class PlayerController : MonoBehaviour
             Debug.LogError($"Error: _dicPlayerFeatures has not {featureProperty}");
         }
         return playerFeature;
+    }
+
+    public AudioSFXTarget GetAudioSFXTarget(PlayerSFXAuidoProperty sfxProperty)
+    {
+        //Player AudioSFXTarget은 갯수가 적은 편이기 때문에 딕셔너리 대신 For문 사용
+        for (int i = 0; i < _sfxFeatures.Length; i++)
+        {
+            if (_sfxFeatures[i].PlayerAudioProperty == sfxProperty)
+            {
+                return _sfxFeatures[i].AudioTarget;
+            }
+        }
+        return null;
     }
 
     public PlayerInputAction PlayerIA=> _playerInputAction;

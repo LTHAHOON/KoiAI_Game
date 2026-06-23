@@ -27,7 +27,7 @@ AudioRandomContainer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: ARC_Player_Steps
-  m_Volume: -16.4
+  m_Volume: -23
   m_Pitch: -110
   m_AutomaticTriggerTime: 1
   m_LoopCount: 1

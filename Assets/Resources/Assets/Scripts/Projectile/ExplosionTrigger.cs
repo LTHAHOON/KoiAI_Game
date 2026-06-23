@@ -8,9 +8,9 @@ public class ExplosionTrigger : MonoBehaviour
 
     private CannonBallData _cannonBallData;
     private Collider[] _colliders;
-    private Action OnExplosion;
+    private Action<Vector3> OnExplosion;
     
-    public void Init(CannonBallData cannonBallData, LayerMask targetLayerMask, Action explosionEvent)
+    public void Init(CannonBallData cannonBallData, LayerMask targetLayerMask, Action<Vector3> explosionEvent)
     {
         _cannonBallData = cannonBallData;
         _targetLayerMask = targetLayerMask;
@@ -20,6 +20,7 @@ public class ExplosionTrigger : MonoBehaviour
     
     public void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Trigger");
         if (_cannonBallData == null)
         {
             return;
@@ -32,7 +33,8 @@ public class ExplosionTrigger : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             Debug.Log($"{_cannonBallData.Damage} 만큼 데미지를 주었습니다.");
-            OnExplosion?.Invoke();
         }
+        Vector3 hitPoint = other.ClosestPointOnBounds(transform.position);
+        OnExplosion?.Invoke(hitPoint);
     }
 }

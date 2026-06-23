@@ -93,6 +93,9 @@ public class PlayerRotation : PlayerFeature
     public void ConnectPlayerIA()
     {
         PlayerInputAction playerIA = Owner.PlayerIA;
+        //playerIA 재연결
+        playerIA.Disable();
+        playerIA.Enable();
         playerIA.Player.Move.started += OnRotation;
         playerIA.Player.Move.performed += OnRotation;
         playerIA.Player.Move.canceled += OnRotation;

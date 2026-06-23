@@ -50,8 +50,15 @@ public class PlayerMovement : PlayerFeature
             {
                 AudioManager.Instance.PlaySFX(_moveSFXTarget, _stepAuidoData, transform.position);
             }
-            Vector3 xDir = _camera.transform.right * _moveDir.x;
-            Vector3 zDir = _camera.transform.forward * _moveDir.z;
+            Vector3 cameraRight = _camera.transform.right;
+            cameraRight.y = 0;
+            cameraRight.Normalize();
+            Vector3 cameraForward = _camera.transform.forward;
+            cameraForward.y = 0;
+            cameraForward.Normalize();
+
+            Vector3 xDir = cameraRight * _moveDir.x;
+            Vector3 zDir = cameraForward * _moveDir.z;
             Vector3 dir = (xDir + zDir).normalized;
             dir.y = 0f;
             _translation = _moveSpeed * dir;
@@ -96,6 +103,7 @@ public class PlayerMovement : PlayerFeature
         }
         Vector2 normalizedDir = context.ReadValue<Vector2>();
         _moveDir = new Vector3(normalizedDir.x, 0f, normalizedDir.y);
+        _moveDir.Normalize();
     }
 
     public void OnJump(InputAction.CallbackContext context)

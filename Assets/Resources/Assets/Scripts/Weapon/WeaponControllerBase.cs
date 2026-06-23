@@ -9,7 +9,7 @@ public abstract class WeaponControllerBase : MonoBehaviour
     /// <summary>
     /// 풀링 또는 값 초기화를 위한 함수
     /// </summary>
-    public abstract void Init();
+    public abstract void Init(WeaponBase wepaonItem);
 
     /// <summary>
     /// 발동 함수

@@ -114,7 +114,7 @@ public class CannonItem : WeaponBase
         #region Projectile Pooling
         if (!bExistSameItem)
         {
-            _cannonControl.Init();
+            _cannonControl.Init(this);
         }
         #endregion
 

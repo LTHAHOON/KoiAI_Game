@@ -1,5 +1,8 @@
+using R3;
+using System.Buffers;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static PlayerSFXAudioFeature;
 
 public class CannonController : WeaponControllerBase
 {
@@ -21,8 +24,9 @@ public class CannonController : WeaponControllerBase
     private CannonSkin _cannonSkin;
     private Pool<CannonBallItem> _pool;
     private Vector3 _hitPoint;
-    
-    private int _curBallCount = 0;
+
+    private readonly ReactiveProperty<int> _curBallCount = new(0);
+    private AudioSFXTarget _attackAuidoTarget;
     private int _curBallLoadCount;
     private int _remainingBallCount = 0;
     private int _remainingBallLoadCount = 0;
@@ -49,12 +53,12 @@ public class CannonController : WeaponControllerBase
             }
             _curLoadTime += Time.deltaTime;
             int count = Mathf.RoundToInt(_curLoadTime / _targetLoadTime * _remainingBallCount);
-            _curBallLoadCount = _curBallCount + count;
+            _curBallLoadCount = _curBallCount.CurrentValue + count;
             _remainingBallLoadCount = Mathf.Clamp(_remainingBallCount - count, 0, _remainingBallCount);
 
             if (_curLoadTime >= _targetLoadTime || _curBallLoadCount >= _cannonData.LoadMaxCount)
             {
-                _curBallCount = _curBallLoadCount;
+                _curBallCount.Value = _curBallLoadCount;
                 _remainingBallCount = _remainingBallLoadCount;
                 _curLoadTime = 0f;
                 _targetLoadTime = 0f;
@@ -67,8 +71,28 @@ public class CannonController : WeaponControllerBase
         }
     }
 
-    public override void Init()
+    public override void Init(WeaponBase wepaonItem)
     {
+        _curBallCount
+            .Pairwise()
+            .Where(pair => pair.Current < pair.Previous)
+            .Subscribe(_ =>
+            {
+                if(_cannonSkin.FirePT)
+                {
+                    _cannonSkin.FirePT.Play();
+                }
+                if(_cannonSkin.FireAudioData)
+                {
+                    var owner = wepaonItem.ItemOwner;
+                    if(_attackAuidoTarget == null)
+                    {
+                        _attackAuidoTarget = owner.GetAudioSFXTarget(PlayerSFXAuidoProperty.Attack);
+                    }
+                    AudioManager.Instance.PlaySFX(_attackAuidoTarget, _cannonSkin.FireAudioData, _cannonSkin.FirePoint.position);
+                }
+            }).AddTo(this);
+
         CannonBallData cannonBallData = _cannonData.CannonBallData;
         EntityId entityID = GetEntityId();
         CannonBallItem projectilePrefab = (CannonBallItem)cannonBallData.ItemPrefab;
@@ -94,7 +118,7 @@ public class CannonController : WeaponControllerBase
             #region 장전 중일 경우 장전된 만큼 설정하고 초기화하고 True 리턴하기
             _curLoadTime = 0f;
             _targetLoadTime = 0;
-            _curBallCount = _curBallLoadCount;
+            _curBallCount.Value = _curBallLoadCount;
             _remainingBallCount = _remainingBallLoadCount;
             _curBallLoadCount = 0;
             _remainingBallLoadCount = 0;
@@ -109,7 +133,7 @@ public class CannonController : WeaponControllerBase
 
         if (!_cannonData.IsInfiniteLoad)
         {
-            --_curBallCount;
+            --_curBallCount.Value;
         }
 
         CannonBallItem bulletData = _pool.Pop();
@@ -160,7 +184,7 @@ public class CannonController : WeaponControllerBase
 
     public void OnLoadCannonBall(CannonBallData cannonBallData)
     {
-        if (_curBallCount >= _cannonData.LoadMaxCount)
+        if (_curBallCount.CurrentValue >= _cannonData.LoadMaxCount)
         {
             _remainingBallCount += cannonBallData.ProjectileCount;
             return;
@@ -178,7 +202,7 @@ public class CannonController : WeaponControllerBase
             return;
         }
         //탄이 꽉 차있거나 남은 탄이 없을 경우 리턴
-        if (_curBallCount >= _cannonData.LoadMaxCount || _remainingBallCount <= 0)
+        if (_curBallCount.CurrentValue >= _cannonData.LoadMaxCount || _remainingBallCount <= 0)
         {
             return;
         }
@@ -301,11 +325,11 @@ public class CannonController : WeaponControllerBase
     }
 
     public bool IsFireLoading() => _isFireLoading;
-    private bool HasNotCannonBall() => _pool == null || _curBallCount <= 0;
+    private bool HasNotCannonBall() => _pool == null || _curBallCount.CurrentValue <= 0;
     public bool IsAiming() => _isAiming;
     public CannonData CannonData => _cannonData;
     public CannonSkin CannonSkin => _cannonSkin;
-    public int CurBallCount => _curBallCount;
+    public int CurBallCount => _curBallCount.CurrentValue;
     public int RemainingBallCount => _remainingBallCount;
     public int CurBallLoadCount => _curBallLoadCount;
     public int RemainingBallLoadCount => _remainingBallLoadCount;

@@ -13,7 +13,8 @@ public class ItemInteractable : BaseInteractable<ItemPickUpEvent>
             .Subscribe(itemPickUpEvent =>
             {
                 AudioManager.Instance.PlaySFX(_mainSFXTarget, itemPickUpEvent.ItemAudioData, transform.position);
-            });
+            }).AddTo(this);
+
     }
     
     public override void Interact(ItemPickUpEvent dataEvent)
