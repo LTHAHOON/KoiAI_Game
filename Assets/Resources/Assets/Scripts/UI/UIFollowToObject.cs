@@ -1,13 +1,15 @@
+using R3;
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.VFX;
 
+[DefaultExecutionOrder(300)]
+[RequireComponent(typeof(RectTransform))]
 public class UIFollowToObject : MonoBehaviour
 {
     [SerializeField]
-    RectTransform _parentRectTransform;
-    [SerializeField]
-    private GameObject _targetObject;
+    CanvasType _parentCanvasType;
     [SerializeField]
     private Vector3 _viewPortOffset;
     [SerializeField]
@@ -21,6 +23,7 @@ public class UIFollowToObject : MonoBehaviour
     [SerializeField]
     private float _scaleMin;
     
+    public GameObject _targetObject;
     private RectTransform _rectTransform;
     private Camera _camera;
     private void Awake()
@@ -28,16 +31,19 @@ public class UIFollowToObject : MonoBehaviour
         _camera = Camera.main;
         _rectTransform = GetComponent<RectTransform>();
     }
-    
-    //캐릭터 물리 이동 프레임에 맞추기
-    private void FixedUpdate()
+
+    private void LateUpdate()
+    {
+        UIFollowProcess();
+    }
+
+    private void UIFollowProcess()
     {
         Vector3 targetWorldPos = _targetObject.transform.position + _worldOffset;
         Vector3 targetViewPortPos = _camera.WorldToViewportPoint(targetWorldPos) + _viewPortOffset;
         if (targetViewPortPos.z <= 0)
             return;
-        _rectTransform.anchoredPosition = new Vector2(targetViewPortPos.x * _parentRectTransform.rect.width, targetViewPortPos.y
-            * _parentRectTransform.rect.height);
+        _rectTransform.anchoredPosition = UIManager.Instance.ViewPortToAnchoredPoint(targetViewPortPos, _parentCanvasType);
 
         Vector3 dir = (_camera.transform.position - _targetObject.transform.position);
         float distance = dir.sqrMagnitude;
@@ -45,5 +51,10 @@ public class UIFollowToObject : MonoBehaviour
         scale = Mathf.Clamp(scale, _scaleMin, _scaleMax);
         Vector3 scaleVector = new Vector3(scale, scale, scale);
         transform.localScale = scaleVector + _scaleOffset;
+    }
+
+    public void SetTargetObject(GameObject targetObj)
+    {
+        _targetObject = targetObj;
     }
 }

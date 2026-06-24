@@ -2,11 +2,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Slider))]
-public class HealthBar : MonoBehaviour
+public class HealthBar : FollowableUI
 {
     private Slider _healthBarSlider;
     private float _maxHealth = -1f;
-        
+
     public void Init(float curHealth, float maxHealth)
     {
         _healthBarSlider = GetComponent<Slider>();
@@ -24,4 +24,5 @@ public class HealthBar : MonoBehaviour
         float normHealth = Mathf.Clamp01(currentHealth / _maxHealth);
         _healthBarSlider.value = normHealth;
     }
+
 }

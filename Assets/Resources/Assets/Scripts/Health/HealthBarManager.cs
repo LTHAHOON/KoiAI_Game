@@ -9,9 +9,9 @@ public class HealthBarManager : MonoBehaviour
     [SerializeField]
     private HealthBar _healthBarPrefab;
     
-    private Subject<HealthBar> OnAddHealthBar = new();
-    private Subject<HealthBar> OnRemoveHealthBar = new();
-    private Subject<Health> OnHealthChanged = new();
+    private readonly Subject<HealthBar> OnAddHealthBar = new();
+    private readonly Subject<HealthBar> OnRemoveHealthBar = new();
+    private readonly Subject<Health> OnHealthChanged = new();
     public static HealthBarManager Instance { get; private set; }
     private void Awake()
     {
