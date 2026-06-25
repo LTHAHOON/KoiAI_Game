@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7524291324122500109}
   - component: {fileID: 3555801848261502062}
   - component: {fileID: 4335789105605718740}
+  - component: {fileID: 6006897507996060950}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -75,6 +76,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 100
+--- !u!114 &6006897507996060950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330912121047177669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25ef60820956d914da01b1872d69398b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FadeInOutImageColor
+  _fadeCondition: {fileID: 11400000, guid: 940a35954d07ee048b433c45b1a7d68b, type: 2}
+  _baseColor: {r: 1, g: 1, b: 1, a: 0}
+  _fadeInSpeed: 0
+  _fadeOutSpeed: 2
+  _canPlayOnAwake: 1
 --- !u!1 &4681682610784587618
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,6 +264,7 @@ GameObject:
   - component: {fileID: 802114756866003921}
   - component: {fileID: 494392016757632058}
   - component: {fileID: 8971079361903947555}
+  - component: {fileID: 1526138149585474192}
   m_Layer: 5
   m_Name: Fill
   m_TagString: Untagged
@@ -310,3 +329,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 100
+--- !u!114 &1526138149585474192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7834375914423485128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25ef60820956d914da01b1872d69398b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FadeInOutImageColor
+  _fadeCondition: {fileID: 11400000, guid: 940a35954d07ee048b433c45b1a7d68b, type: 2}
+  _baseColor: {r: 1, g: 1, b: 1, a: 0}
+  _fadeInSpeed: 0
+  _fadeOutSpeed: 2
+  _canPlayOnAwake: 1

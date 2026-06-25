@@ -1,7 +1,7 @@
 using Unity.Cinemachine;
 using UnityEngine;
 
-//무조건 UIFollowToObject보다 먼저 실행되게 설정
+//무조건 UIFollowToObject보다 먼저 실행되게 설정(카메라 위치를 이용한 UI 떨림 현상 방지)
 [DefaultExecutionOrder(100)]
 public class CameraManualUpdater : MonoBehaviour
 {

@@ -43,6 +43,7 @@ public class UIFollowToObject : MonoBehaviour
         Vector3 targetViewPortPos = _camera.WorldToViewportPoint(targetWorldPos) + _viewPortOffset;
         if (targetViewPortPos.z <= 0)
             return;
+        Debug.Log(targetViewPortPos.z);
         _rectTransform.anchoredPosition = UIManager.Instance.ViewPortToAnchoredPoint(targetViewPortPos, _parentCanvasType);
 
         Vector3 dir = (_camera.transform.position - _targetObject.transform.position);
