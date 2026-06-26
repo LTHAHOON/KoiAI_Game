@@ -67,7 +67,7 @@ public class PlayerMovement : PlayerFeature
 
         }
 
-        #region 키를 연속 누름으로 인한 끊김 방지
+        #region 키를 연속 누름으로 인한 소리 끊김 방지
         if (_isMoveStop)
         {
             if (_rigidBody.linearVelocity.sqrMagnitude <= _stepAudioThresold)

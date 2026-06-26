@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.Playables;
-using UnityEngine.Timeline;
 
 [CreateAssetMenu(fileName = "new TimeFadeCondition", menuName = "FadeCondition/TimeFadeCondition")]
 public class TimeFadeCondition : FadeCondition
@@ -16,43 +14,37 @@ public class TimeFadeCondition : FadeCondition
     [SerializeField]
     private float _fadeOutEndTime;
 
-    private float _curTime = 0;
-    public override void Init()
+    public override bool IsPossibleFadeIn(float curTime)
     {
-        _curTime = 0;
-    }
-
-    public override bool IsPossibleFadeIn()
-    {
-        if (IsPossbileFadeInOut())
+        if (IsPossbileFadeInOut(curTime))
         {
-            bool isPossibleFadeIn = IsStartFadeIn();
+            bool isPossibleFadeIn = IsStartFadeIn(curTime);
             return isPossibleFadeIn;
         }
         return false;
     }
 
-    public override bool IsPossibleFadeOut()
+    public override bool IsPossibleFadeOut(float curTime)
     {
-        if(IsPossbileFadeInOut())
+        if(IsPossbileFadeInOut(curTime))
         {
-            bool isPossibleFadeOut = IsStartFadeOut();
+            bool isPossibleFadeOut = IsStartFadeOut(curTime);
             return isPossibleFadeOut;
         }
         return false;
     }
 
-    private bool IsPossbileFadeInOut()
+    private bool IsPossbileFadeInOut(float curTime)
     {
-        _curTime += Time.deltaTime;
-        bool isPossibleFade = !IsTimeOut();
+        curTime += Time.deltaTime;
+        bool isPossibleFade = !IsTimeOut(curTime);
         return isPossibleFade;
     }
 
-    private bool IsTimeOut() => _curTime >= _duration;
-    private bool IsStartFadeIn() => _curTime >= _fadeInStartTime && _curTime <= _fadeInEndTime;
+    private bool IsTimeOut(float curTime) => curTime >= _duration;
+    private bool IsStartFadeIn(float curTime) => curTime >= _fadeInStartTime && curTime <= _fadeInEndTime;
 
-    private bool IsStartFadeOut() => _curTime >= _fadeOutStartTime && _curTime <= _fadeOutEndTime;
+    private bool IsStartFadeOut(float curTime) => curTime >= _fadeOutStartTime && curTime <= _fadeOutEndTime;
 
     public float FadeInEndTime => _fadeInEndTime;
     public float FadeOutEndTime => _fadeOutEndTime;

@@ -1,7 +1,4 @@
-using System;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 /// 상속 시 하위 클래스 위에 Requirement(typeof()) 사용 권장
@@ -28,6 +25,7 @@ public abstract class FadeInOutColor<T> : MonoBehaviour where T : Component
     private T _uiComponent;
     private bool _isEndInit = false;
     private bool _isPlaying = false;
+    private float _fadeInOutCurTime = 0f;
     private void Awake()
     {
         _uiComponent = GetComponent<T>();
@@ -54,7 +52,6 @@ public abstract class FadeInOutColor<T> : MonoBehaviour where T : Component
 
     private void PlayFadeInOut()
     {
-        _fadeCondition.Init();
         _isPlaying = true;
     }
 
@@ -64,16 +61,19 @@ public abstract class FadeInOutColor<T> : MonoBehaviour where T : Component
         {
             return;
         }
-        if (_fadeCondition.IsPossibleFadeIn())
+
+        _fadeInOutCurTime += Time.deltaTime;
+        if (_fadeCondition.IsPossibleFadeIn(_fadeInOutCurTime))
         {
             SetFadeColor(-_fadeInSpeed);
         }
-        else if (_fadeCondition.IsPossibleFadeOut())
+        else if (_fadeCondition.IsPossibleFadeOut(_fadeInOutCurTime))
         {
             SetFadeColor(_fadeOutSpeed);
         }
         else
         {
+            _fadeInOutCurTime = 0f;
             _isPlaying = false;
         }
     }

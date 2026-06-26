@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_Item
+  m_Name: M_HealthBar_Outline
   m_Shader: {fileID: -6465566751694194690, guid: 5b5f1b37de330b249bb47748e485d32c, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -28,15 +28,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Item_Tex:
-        m_Texture: {fileID: 2800000, guid: ef4653662b04be5449b407162f48cded, type: 3}
+        m_Texture: {fileID: 10912, guid: 0000000000000000f000000000000000, type: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 8c358d19424b1534f8d830b23f24d64f, type: 3}
+        m_Texture: {fileID: 2800000, guid: 83654fb345db23642841c8746d2b391d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Main_Tex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 83654fb345db23642841c8746d2b391d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -53,14 +53,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BG_Alpha: 0.5
+    - _BG_Alpha: 0
     - _Boolean: 0
-    - _Main_Tex_Alpha: 1
-    - _OutlineThickness: 0.035
+    - _Main_Tex_Alpha: 0
+    - _OutlineThickness: 0.01
     m_Colors:
     - White: {r: 1, g: 1, b: 1, a: 1}
     - _BG_Color: {r: 0, g: 0, b: 0, a: 1}
-    - _Outline_Color: {r: 2.71698, g: 22.736198, b: 64, a: 1}
+    - _Outline_Color: {r: 18.81549, g: 18.81549, b: 18.81549, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &917798276366636230

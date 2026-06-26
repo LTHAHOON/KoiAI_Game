@@ -3,6 +3,34 @@
     "name": "PlayerControls",
     "maps": [
         {
+            "name": "Global",
+            "id": "92e359f5-c507-49ad-af2b-20335c681019",
+            "actions": [
+                {
+                    "name": "MenuESC",
+                    "type": "Button",
+                    "id": "bd3b4e48-aec5-40df-984d-24e7a99cbc24",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "9c20cb0d-2a46-48eb-bb1f-0eed387c9643",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MenuESC",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
             "name": "Player",
             "id": "7071e1b9-240d-4e80-9428-ed871e661bcf",
             "actions": [
