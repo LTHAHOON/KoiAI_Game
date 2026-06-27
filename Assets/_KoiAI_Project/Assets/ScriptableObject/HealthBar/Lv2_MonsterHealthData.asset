@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8908c1b33e7d5b4da69caf4749bf185, type: 3}
+  m_Name: Lv2_MonsterHealthData
+  m_EditorClassIdentifier: Assembly-CSharp::HealthData
+  _maxHealth: 200
+  _healthBarData: {fileID: 11400000, guid: eb29f42fe41b2d14e955f6a8801afb76, type: 2}
