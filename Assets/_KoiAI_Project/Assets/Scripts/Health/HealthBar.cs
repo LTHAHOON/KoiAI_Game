@@ -1,8 +1,9 @@
-using KoiAI.UI;
 using UnityEngine;
 
 namespace KoiAI.Health
 {
+    using KoiAI.Utilities;
+    
     public abstract class HealthBar : FollowableUI
     {
         private float _maxHealth = -1f;

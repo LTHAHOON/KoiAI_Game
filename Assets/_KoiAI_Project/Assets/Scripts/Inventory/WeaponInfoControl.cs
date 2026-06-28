@@ -2,7 +2,7 @@ using System.Text;
 using TMPro;
 using UnityEngine;
 
-namespace KoiAI.Inventory
+namespace KoiAI.UI.HUD
 {
     public class WeaponInfoControl : MonoBehaviour
     {

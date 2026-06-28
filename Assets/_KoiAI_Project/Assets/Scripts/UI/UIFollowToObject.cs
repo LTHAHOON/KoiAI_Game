@@ -1,7 +1,9 @@
 using UnityEngine;
 
-namespace KoiAI.UI
+namespace KoiAI.Utilities
 {
+    using KoiAI.UI;
+    
     [DefaultExecutionOrder(300)]
     [RequireComponent(typeof(RectTransform))]
     public class UIFollowToObject : MonoBehaviour

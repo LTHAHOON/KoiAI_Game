@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using KoiAI.Inventory;
-using KoiAI.Weapon;
 using R3;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace KoiAI.Player
 {
+    using KoiAI.UI.HUD;
+    using KoiAI.Item;
+    
     [RequireComponent(typeof(ItemInteractable))]
     public class PlayerEquipment : PlayerFeature
     {
@@ -23,6 +24,12 @@ namespace KoiAI.Player
             public readonly ItemCategory Category => _category;
             public readonly Transform Point => _point;
             #endregion
+            
+            public PlayerEquipmentPoint(ItemCategory category, Transform point)
+            {
+                _category = category;
+                _point = point;
+            }
         }
     
         [SerializeField]
@@ -37,17 +44,33 @@ namespace KoiAI.Player
         private List<ItemData>  _notEquipDatas;
         [Header("장비 저장 위치")]
         [SerializeField]
-        private PlayerEquipmentPoint[] _itemParentPoints;
+        private List<PlayerEquipmentPoint> _itemParentPoints;
 
         private ItemInteractable _itemInteractable;
         private readonly Dictionary<ItemCategory, Transform> _dicItemParentPoint = new();
         private readonly StringBuilder _sb = new();
         public override PlayerFeatureProperty FeatureProperty => PlayerFeatureProperty.Equipment;
 
-        public override void Init(PlayerInputAction playerIA)
+        public override void Init(PlayerInputAction playerIA, PlayerFeatureValueData playerFeatureValueData = null, 
+            PlayerFeatureExtensionData playerFeatureExtensionData = null)
         {
+            PlayerSkin playerSkin = Owner.CurrentPlayerSkin;
+            if (playerSkin == null)
+            {
+                return;
+            }
+            if (playerIA == null)
+            {
+                return;
+            }
+
+            #region 아이템 생성 위치 초기화
+            AddItemParent(ItemCategory.Weapon, playerSkin.WeaponPoint);
+            AddItemParent(ItemCategory.Resource, playerSkin.ResoucePoint);
+            #endregion
+            
             #region 인스펙터 아이템 저장 위치 세팅
-            for (int i = 0; i < _itemParentPoints.Length; i++)
+            for (int i = 0; i < _itemParentPoints.Count; i++)
             {
                 _dicItemParentPoint.TryAdd(_itemParentPoints[i].Category, _itemParentPoints[i].Point);
             }
@@ -79,8 +102,6 @@ namespace KoiAI.Player
 
             #endregion
         
-           
-        
             playerIA.Player.SelectItem_Equip.performed += OnSelectEquipItem;
             playerIA.Player.SelectItem_NotEquip.performed += OnSelectNotEquipItem;
             playerIA.Player.UseItem.performed += OnUseItem;
@@ -92,6 +113,7 @@ namespace KoiAI.Player
 
         public override void UpdateFeature() { }
 
+        
         private void PickUpItem(ItemData itemData, ItemSlotType slotType = ItemSlotType.NotEquipped)
         {
             var itemList = GetItemList(slotType);
@@ -153,7 +175,8 @@ namespace KoiAI.Player
 
         public void EquipItem(ItemBase item)
         {
-            if(!_notEquipDatas.Contains(item.GetItemData()))
+            ItemData itemData = item.GetItemData();
+            if(!_notEquipDatas.Contains(itemData))
             {
                 return;
             }
@@ -263,6 +286,14 @@ namespace KoiAI.Player
             return selectedSlot;
         }
 
+        
+        private void AddItemParent(ItemCategory category, Transform parent)
+        {
+            PlayerEquipmentPoint point = new PlayerEquipmentPoint(category, parent);
+            _itemParentPoints.Add(point);
+            _dicItemParentPoint.TryAdd(point.Category, point.Point);
+        }
+        
         public Transform GetItemParent(ItemCategory category)
         {
             if(_dicItemParentPoint.TryGetValue(category, out Transform parent))

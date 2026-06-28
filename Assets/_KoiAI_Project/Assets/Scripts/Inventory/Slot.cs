@@ -3,7 +3,7 @@ using System.Text;
 using TMPro;
 using UnityEngine;
 
-namespace KoiAI.Inventory
+namespace KoiAI.Item
 {
     [Serializable]
     public enum ItemSlotType
@@ -11,6 +11,7 @@ namespace KoiAI.Inventory
         NotEquipped,
         Equipped,
     }
+    
     [RequireComponent(typeof(RectTransform))]
     public class Slot : MonoBehaviour
     {

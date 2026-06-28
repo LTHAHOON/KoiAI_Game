@@ -1,9 +1,19 @@
+using System;
 using KoiAI.A_Star;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace KoiAI.Player
 {
+    [Serializable]
+    public class PlayerWayPointValueData : PlayerFeatureValueData
+    {
+        [SerializeField]
+        private float _buildDelayTime;
+        
+        public float BuildDelayTime => _buildDelayTime;
+    }
+    
     public class PlayerWayPoint : PlayerFeature
     {
         [SerializeField]
@@ -11,13 +21,25 @@ namespace KoiAI.Player
         [SerializeField]
         private WayPointHandle _playerWayPointControl;
         [SerializeField]
-        private float _buildDelayTime = 2f;
+        private PlayerWayPointValueData _valueData;
 
         private float _curTime = 0;
         private bool _isAutoBuild = false;
         private bool _isShowedWayPoint = false;
-        public override void Init(PlayerInputAction playerIA)
+        public override PlayerFeatureProperty FeatureProperty => PlayerFeatureProperty.WayPoint;
+
+        public override void Init(PlayerInputAction playerIA, PlayerFeatureValueData playerFeatureValueData = null, 
+            PlayerFeatureExtensionData playerFeatureExtensionData = null)
         {
+            if (playerIA == null)
+            {
+                return;
+            }
+            if (playerFeatureValueData is not PlayerWayPointValueData valueData)
+            {
+                return;
+            }
+            _valueData = valueData;
             playerIA.Player.SetVisibleWayPoint.performed += OnSetVisibleWayPoint;
             playerIA.Player.Move.performed += OnRebuildWayPoint;
             playerIA.Player.Move.canceled += OnRebuildWayPoint;
@@ -65,7 +87,7 @@ namespace KoiAI.Player
             }
             if(_isAutoBuild)
             {
-                if(_curTime < _buildDelayTime)
+                if(_curTime < _valueData.BuildDelayTime)
                 {
                     _curTime += Time.deltaTime;
                     return;

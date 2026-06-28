@@ -1,9 +1,10 @@
 using KoiAI.Utilities;
-using KoiAI.Weapon;
 using UnityEngine;
 
 namespace KoiAI.Monster
 {
+    using KoiAI.Item;
+    
     [RequireComponent (typeof(EntitySight))]
     public class MonsterAttack : MonsterFeature
     {

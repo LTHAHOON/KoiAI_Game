@@ -1,10 +1,11 @@
 using System;
-using KoiAI.UI;
 using R3;
 using UnityEngine;
 
 namespace KoiAI.Health
 {
+    using KoiAI.Utilities;
+    
     public class Health : UIFollowHandle
     {
         [SerializeField]

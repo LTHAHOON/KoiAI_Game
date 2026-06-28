@@ -2,12 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using KoiAI.Player;
-using KoiAI.Weapon;
 using UnityEngine;
 
-namespace KoiAI.Inventory
+namespace KoiAI.Item
 {
+    using KoiAI.Player;
+    using KoiAI.Utilities;
+    using Item;
+    
     public enum ItemCategory
     {
         Weapon,

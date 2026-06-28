@@ -1,7 +1,7 @@
 using R3;
 using UnityEngine;
 
-namespace KoiAI.UI
+namespace KoiAI.Utilities
 {
     public abstract class UIFollowHandle : MonoBehaviour
     {

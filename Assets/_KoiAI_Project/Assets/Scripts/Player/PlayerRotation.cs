@@ -1,28 +1,76 @@
+using System;
 using KoiAI.Utilities;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace KoiAI.Player
 {
-    public class PlayerRotation : PlayerFeature
+    [Serializable]
+    public class PlayerRotationExtensionData : PlayerFeatureExtensionData
     {
+        #region 보정값 및 추가 회전 데이터
+
+        [SerializeField]
+        private float _lookSpeedMod;
+        [SerializeField]
+        private float _surfaceCheckDistanceMod;
+        [SerializeField]
+        private LayerMask _surfaceLayerMask;
+
+        #endregion
+        public float LookSpeedMod => _lookSpeedMod;
+        public float SurfaceCheckDistanceMod => _surfaceCheckDistanceMod;
+        public LayerMask SurfaceLayerMask => _surfaceLayerMask;
+    }
+    
+    [Serializable]
+    public class PlayerRotationValueData : PlayerFeatureValueData
+    {
+        #region 회전 데이터
+
         [SerializeField]
         private float _lookSpeed = 10f;
         [SerializeField]
         private float _surfaceCheckDistance = 3f;
-        [SerializeField]
-        private LayerMask _surfaceLayerMask;
 
+        #endregion
+        public float LookSpeed => _lookSpeed;
+        public float SurfaceCheckDistance => _surfaceCheckDistance;
+    }
+    
+    public class PlayerRotation : PlayerFeature
+    {
+        [ReadOnly]
+        [SerializeField]
+        private PlayerRotationValueData _valueData;
+        [ReadOnly]
+        [SerializeField]
+        private PlayerRotationExtensionData _extensionValueData;
+    
         public override PlayerFeatureProperty FeatureProperty => PlayerFeatureProperty.Rotation;
         private SurfaceAngleFinder _surfaceAngleFinder;
         private UnityEngine.Camera _camera;
         private Vector2 _input = Vector2.zero;
         private Vector3 _targetAngle = Vector3.zero;
     
-        public override void Init(PlayerInputAction playerIA)
+        public override void Init(PlayerInputAction playerIA, PlayerFeatureValueData playerFeatureValueData = null, 
+            PlayerFeatureExtensionData playerFeatureExtensionData = null)
         {
+            if (playerIA == null)
+            {
+                return;
+            }
+            if (playerFeatureValueData is not PlayerRotationValueData valueData ||
+                playerFeatureExtensionData is not PlayerRotationExtensionData extensionValueData)
+            {
+                return;
+            }
+
+            _valueData = valueData;
+            _extensionValueData = extensionValueData;
             _camera = UnityEngine.Camera.main;
-            _surfaceAngleFinder = new(_surfaceCheckDistance);
+            _surfaceAngleFinder = new(_valueData.SurfaceCheckDistance + _extensionValueData.SurfaceCheckDistanceMod);
             playerIA.Player.Move.started += OnRotation;
             playerIA.Player.Move.performed += OnRotation;
             playerIA.Player.Move.canceled += OnRotation;
@@ -33,7 +81,7 @@ namespace KoiAI.Player
             if (!IsValid())
                 return;
             Vector3 localForward = transform.InverseTransformDirection(transform.forward);
-            _surfaceAngleFinder.TryGetLocalSurfaceAngle(out _targetAngle, transform, _surfaceLayerMask);
+            _surfaceAngleFinder.TryGetLocalSurfaceAngle(out _targetAngle, transform, _extensionValueData.SurfaceLayerMask);
             _targetAngle.y = GetAngleWithAtan(_input);
         }
 
@@ -42,7 +90,7 @@ namespace KoiAI.Player
             if (!IsValid())
                 return;
             Quaternion quat = Quaternion.Euler(_targetAngle.x, _targetAngle.y, _targetAngle.z);
-            transform.rotation = Quaternion.Slerp(transform.rotation, quat, Time.deltaTime * _lookSpeed);
+            transform.rotation = Quaternion.Slerp(transform.rotation, quat, Time.deltaTime * _valueData.LookSpeed + _extensionValueData.LookSpeedMod);
 
         }
 
@@ -111,6 +159,6 @@ namespace KoiAI.Player
             playerIA.Player.Move.performed -= OnRotation;
             playerIA.Player.Move.canceled -= OnRotation;
         }
-        private bool IsValid() => _input != Vector2.zero && _camera && _surfaceAngleFinder != null;
+        private bool IsValid() => _input != Vector2.zero && _camera && _surfaceAngleFinder != null && _valueData != null && _extensionValueData != null;
     }
 }

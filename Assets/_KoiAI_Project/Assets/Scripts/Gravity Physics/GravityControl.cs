@@ -67,6 +67,7 @@ namespace KoiAI.Gravity_Physics
             _startY = transform.position.y;
             _startTime = Time.time;
         }
+        
         private void GravityProcess()
         {
             _curTime = Time.time - _startTime;

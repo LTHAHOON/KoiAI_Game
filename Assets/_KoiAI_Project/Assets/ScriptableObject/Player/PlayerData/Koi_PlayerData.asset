@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc181690cd3a60b43bee8db9c2970258, type: 3}
+  m_Name: Koi_PlayerData
+  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Player.PlayerData
+  _playerFeatureDataBase: {fileID: 11400000, guid: d696849b4c6184b49b4ee354e8f18a3a, type: 2}
+  _playerFeatureDataType: 1
+  _playerSkin: {fileID: 2513457811619122350, guid: a7eb6b07e27283c4190f9cf2ae1d9b15, type: 3}
+  _playerMovementExtensionData:
+    _stepAuidoData: {fileID: 11400000, guid: e88b7b5f5216fc04294c2b8f05506877, type: 2}
+    _stopStepAudioData: {fileID: 11400000, guid: ca7ccb9d4cae6cc40949dabf8957d00d, type: 2}
+    _jumpAudioData: {fileID: 11400000, guid: d2074f1a90b541e4ba69c1b9fb0b31c8, type: 2}
+    _moveSpeedMod: 0
+    _jumpForceMod: 0
+    _jumpMaxCountMod: 0
+    _stepAudioThresold: 12
+  _playerRotationExtensionData:
+    _lookSpeedMod: 0
+    _surfaceCheckDistanceMod: 0
+    _surfaceLayerMask:
+      serializedVersion: 2
+      m_Bits: 64

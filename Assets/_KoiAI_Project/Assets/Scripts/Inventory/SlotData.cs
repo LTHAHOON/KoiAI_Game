@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace KoiAI.Inventory
+namespace KoiAI.Item
 {
     [CreateAssetMenu(fileName = "new SlotData", menuName = "SlotData")]
     public class SlotData : ScriptableObject
