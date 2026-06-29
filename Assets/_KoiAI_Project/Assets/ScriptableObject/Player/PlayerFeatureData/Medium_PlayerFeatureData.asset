@@ -17,7 +17,7 @@ MonoBehaviour:
   _playerMovementValueData:
     _moveSpeed: 15
     _jumpForce: 15
-    _jumpMaxCount: 2
+    _jumpMaxCount: 1
   _playerRotationValueData:
     _lookSpeed: 10
     _surfaceCheckDistance: 3

@@ -1,27 +1,19 @@
+using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Rendering;
 
-namespace KoiAI.Gravity_Physics
+//Never used Warning 차단
+#pragma warning disable CS0414
+
+namespace KoiAI.Physics
 {
     public class GravityControl : MonoBehaviour
     {
+        [DisableIf(nameof(_initCompleted))]
         [SerializeField]
-        private Transform _feetPoint;
-        [Header("Ground Check Distance")]
-        [SerializeField]
-        private float _groundCheckDistance = 1.2f;
-        [Header("Ground Layer")]
-        [SerializeField]
-        private LayerMask _groundLayerMask;
-        [Header("중력량")]
-        [SerializeField]
-        private float _gravity = -9.81f;
-        [Header("중력 가중치")]
-        [SerializeField] 
-        private float _gravityThresold = 10f;
-        [Header("떨어질때 목표 위치로 돌아가는 보간 속도")]
-        [SerializeField] 
-        private float _smoothSpeedToPos = 15f;
+        private GravityData _gravityData;
 
+        private bool _initCompleted = false;
         private float _groundCheckDist;
         private float _curTime;
         private float _startTime;
@@ -30,25 +22,44 @@ namespace KoiAI.Gravity_Physics
         private bool _isGrounded = false;
         private float _initialVelocity = 0f;
         private float _curGravity = 0f;
+
         private void Awake()
         {
-            Init();
+            if(_gravityData.IsInitOnAwake)
+            {
+                Init();
+            }
         }
         private void Update()
         {
-            Debug.DrawRay(_feetPoint.position, Vector3.down * _groundCheckDistance, Color.red, 0.1f);
+            if (!_gravityData.FeetPoint)
+            {
+                return;
+            }
+            Debug.DrawRay(_gravityData.FeetPoint.position, Vector3.down * _gravityData.GroundCheckDistance, Color.red, 0.1f);
         }
 
         private void FixedUpdate()
         {
+            if(!_gravityData.FeetPoint)
+            {
+                return;
+            }
             if (IsGround(out Vector3 hitPoint))
             {
-                if (_curGravity < _gravity)
+                if (_curGravity < _gravityData.Gravity)
                 {
                     Init();
                 }
                 Vector3 pos = transform.position;
-                pos.y = Mathf.Lerp(pos.y, hitPoint.y + _groundCheckDist , Time.fixedDeltaTime * _smoothSpeedToPos);
+                if(_gravityData.CanUseSmoothGravity)
+                {
+                    pos.y = Mathf.Lerp(pos.y, hitPoint.y + _groundCheckDist , Time.fixedDeltaTime * _gravityData.SpeedToFeetPos);
+                }
+                else
+                {
+                    pos.y = Mathf.MoveTowards(pos.y, hitPoint.y + _groundCheckDist, Time.fixedDeltaTime * _gravityData.SpeedToFeetPos);
+                }
                 transform.position = pos;
                 _startY = transform.position.y;
                 _startTime = Time.time;
@@ -57,13 +68,18 @@ namespace KoiAI.Gravity_Physics
             GravityProcess();
         }
 
-        private void Init()
+        public void Init(GravityData? gravityData = null)
         {
-            _curGravity = _gravity;
+            if(gravityData.HasValue) 
+            {
+                _gravityData = gravityData.Value;
+            }
+            _initCompleted = true;
+            _curGravity = _gravityData.Gravity;
             _initialVelocity = 0f;
             _curSpeed = 0f;
             _curTime = 0f;
-            _groundCheckDist = _groundCheckDistance;
+            _groundCheckDist = _gravityData.GroundCheckDistance;
             _startY = transform.position.y;
             _startTime = Time.time;
         }
@@ -78,8 +94,8 @@ namespace KoiAI.Gravity_Physics
             _curSpeed = _initialVelocity + _curGravity * _curTime;
             if (_curSpeed < 0)
             {
-                _curGravity -= Time.deltaTime * _gravityThresold;
-                _groundCheckDist = _groundCheckDistance;
+                _curGravity -= Time.deltaTime * _gravityData.GravityMod;
+                _groundCheckDist = _gravityData.GroundCheckDistance;
             }
         }
     
@@ -93,12 +109,12 @@ namespace KoiAI.Gravity_Physics
 
         private bool IsGround(out Vector3 hitPoint)
         {
-            _isGrounded=  Physics.Raycast(_feetPoint.position, Vector3.down, out RaycastHit hit, _groundCheckDist, _groundLayerMask);
+            _isGrounded = UnityEngine.Physics.Raycast(_gravityData.FeetPoint.position, Vector3.down, out RaycastHit hit, _groundCheckDist, _gravityData.GroundLayerMask);
             hitPoint = hit.point;
             return _isGrounded;
         }
 
 
-        public bool IsGrounded => _isGrounded;
+        public bool IsGrounded => _initialVelocity <= 0 && _isGrounded;
     }
 }

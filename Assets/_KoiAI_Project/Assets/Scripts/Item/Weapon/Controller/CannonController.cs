@@ -309,12 +309,12 @@ namespace KoiAI.Item
             {
                 Vector3 previousPosition = position;
                 velocity *= 1f - _cannonData.LinearDamping * _timeStep;
-                velocity += Physics.gravity * _timeStep;
+                velocity += UnityEngine.Physics.gravity * _timeStep;
                 position += velocity * _timeStep;
                 Vector3 move = position - previousPosition;
                 float distance = move.magnitude;
 
-                if (Physics.Raycast(previousPosition, move.normalized, out RaycastHit hit, distance, _cannonData.LayerMaskForAim))
+                if (UnityEngine.Physics.Raycast(previousPosition, move.normalized, out RaycastHit hit, distance, _cannonData.LayerMaskForAim))
                 {
                     _hitPoint = hit.point;
                     _hitPoint.y += 0.3f;

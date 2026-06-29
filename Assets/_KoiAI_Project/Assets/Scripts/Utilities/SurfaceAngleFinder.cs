@@ -13,7 +13,7 @@ namespace KoiAI.Utilities
 
         public bool TryGetLocalSurfaceAngle(out Vector3 angleVec,Transform rayTransform, int layerMask)
         {
-            bool bGet = Physics.Raycast(rayTransform.position,Vector3.down,out RaycastHit hit, _surfaceCheckDistance, layerMask);
+            bool bGet = UnityEngine.Physics.Raycast(rayTransform.position, Vector3.down,out RaycastHit hit, _surfaceCheckDistance, layerMask);
             angleVec = Vector3.zero;
             if (bGet)
             {
@@ -30,7 +30,7 @@ namespace KoiAI.Utilities
         }
         public bool TryGetWorldSurfaceAngle(out Vector3 angleVec,Transform rayTransform, int layerMask)
         {
-            bool bGet = Physics.Raycast(rayTransform.position,Vector3.down,out RaycastHit hit, _surfaceCheckDistance, layerMask);
+            bool bGet = UnityEngine.Physics.Raycast(rayTransform.position, Vector3.down,out RaycastHit hit, _surfaceCheckDistance, layerMask);
             if (bGet)
             {
                 angleVec = Quaternion.FromToRotation(Vector3.up, hit.normal).eulerAngles;
@@ -41,12 +41,12 @@ namespace KoiAI.Utilities
         }
         public bool TryGetLocalSurfaceAngle(out Vector3 angleVec,Transform rayTransform)
         {
-            return TryGetLocalSurfaceAngle(out angleVec, rayTransform,Physics.AllLayers);
+            return TryGetLocalSurfaceAngle(out angleVec, rayTransform, UnityEngine.Physics.AllLayers);
         }
 
         public bool TryGetWorldSurfaceAngle(out Vector3 angleVec, Transform rayTransform)
         {
-            return TryGetWorldSurfaceAngle(out angleVec, rayTransform,Physics.AllLayers);
+            return TryGetWorldSurfaceAngle(out angleVec, rayTransform, UnityEngine.Physics.AllLayers);
         }
     }
 }

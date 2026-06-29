@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Large_PlayerFeatureData
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Player.PlayerFeatureData
   _playerFeatureDataType: 2
-  _properties: 01000000020000000300000004000000
+  _properties: 01000000020000000400000003000000
   _playerMovementValueData:
     _moveSpeed: 10
     _jumpForce: 15
-    _jumpMaxCount: 1
+    _jumpMaxCount: 2
   _playerRotationValueData:
     _lookSpeed: 10
     _surfaceCheckDistance: 3

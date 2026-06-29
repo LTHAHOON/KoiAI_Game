@@ -1,6 +1,7 @@
 using NaughtyAttributes;
 using UnityEngine;
 using static KoiAI.Player.PlayerFeature;
+
 namespace KoiAI.Player
 {
     [CreateAssetMenu(fileName = "new PlayerData", menuName = "KoiAI/Player/PlayerData")]
@@ -9,11 +10,13 @@ namespace KoiAI.Player
         [ReadOnly]
         [SerializeField]
         private PlayerFeatureDataBase _playerFeatureDataBase;
+        [Space(10)]
         [SerializeField]
         private PlayerFeatureDataType _playerFeatureDataType;
         [SerializeField]
         private PlayerSkin _playerSkin;
 
+        [Space(10)]
         [ShowIf(nameof(HasMovementProperty))]
         [SerializeField]
         private PlayerMovementExtensionData _playerMovementExtensionData;
@@ -22,7 +25,7 @@ namespace KoiAI.Player
         private PlayerRotationExtensionData _playerRotationExtensionData;
         
         
-        private PlayerFeatureData GetPlayerFeatureData()
+        public PlayerFeatureData GetPlayerFeatureData()
         {
             PlayerFeatureData data = _playerFeatureDataBase?.GetPlayerFeatureData(_playerFeatureDataType);
             return data;

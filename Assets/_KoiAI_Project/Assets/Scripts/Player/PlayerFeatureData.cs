@@ -21,7 +21,8 @@ namespace KoiAI.Player
         private PlayerFeatureDataType _playerFeatureDataType;
         [SerializeField]
         private PlayerFeatureProperty[] _properties;
-        
+
+        [Space(10)]
         [ShowIf(nameof(HasMovementProperty))]
         [SerializeField]
         private PlayerMovementValueData _playerMovementValueData;

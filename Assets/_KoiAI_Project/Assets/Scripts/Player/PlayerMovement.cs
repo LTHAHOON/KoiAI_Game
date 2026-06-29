@@ -6,12 +6,12 @@ using UnityEngine.InputSystem;
 namespace KoiAI.Player
 {
     using KoiAI.Audio;
-    using KoiAI.Gravity_Physics;
+    using KoiAI.Physics;
     
     [Serializable]
     public class PlayerMovementExtensionData : PlayerFeatureExtensionData
     {
-        #region 가중치 및 추가 데이터
+        #region 보정값 및 추가 이동 데이터
         
         [SerializeField]
         private AudioData _stepAuidoData;
@@ -29,7 +29,20 @@ namespace KoiAI.Player
         private float _stepAudioThresold;
 
         #endregion
-        
+
+        #region 물리 데이터
+        [Space(10)]
+        [SerializeField]
+        private GravityData _gravityData;
+        [SerializeField]
+        private RigidbodyData _rigidData;
+        [SerializeField]
+        private CapsuleColliderData _colliderData;
+        #endregion
+
+        public GravityData GravityData => _gravityData;
+        public RigidbodyData RigidData => _rigidData;
+        public CapsuleColliderData ColliderData => _colliderData;
         public AudioData StepAuidoData => _stepAuidoData;
         public AudioData StopStepAudioData => _stopStepAudioData;
         public AudioData JumpAudioData => _jumpAudioData;
@@ -53,11 +66,13 @@ namespace KoiAI.Player
         private int _jumpMaxCount = 1;
 
         #endregion
+
         public float MoveSpeed => _moveSpeed;
         public float JumpForce => _jumpForce;
         public int JumpMaxCount => _jumpMaxCount;
     }
-    
+
+    [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider), typeof(GravityControl))]
     public class PlayerMovement : PlayerFeature
     {
         [ReadOnly]
@@ -70,12 +85,11 @@ namespace KoiAI.Player
         private AudioSFXTarget _mainSFXTarget;
         [SerializeField]
         private AudioSFXTarget _moveSFXTarget;
-        [SerializeField]
-        private Rigidbody _rigidBody;
-        [SerializeField]
+
         private GravityControl _gravityControl;
-        
-        private int _jumpCurCount = 1;
+        private Rigidbody _rigidBody;
+        private CapsuleCollider _capsuleCollider;
+        private int _jumpCurCount = 0;
         private Vector3 _moveDir;
         private bool _isMoveStop;
         private UnityEngine.Camera _camera;
@@ -94,10 +108,14 @@ namespace KoiAI.Player
             {
                 return;
             }
-            
+            //이동 데이터 초기화
             _valueData = valueData;
             _extensionValueData = extensionValueData;
+
+            //물리 데이터 초기화
+            InitPhysicsData(_extensionValueData.GravityData, _extensionValueData.ColliderData, _extensionValueData.RigidData);
             _camera = UnityEngine.Camera.main;
+            
             playerIA.Player.Move.started += OnMove;
             playerIA.Player.Move.performed += OnMove;
             playerIA.Player.Move.canceled += OnMove;
@@ -105,6 +123,10 @@ namespace KoiAI.Player
         }
         public override void UpdateFeature()
         {
+            if(!IsValid())
+            {
+                return;
+            }
             if (_moveDir.sqrMagnitude > 0)
             {
                 if (!_moveSFXTarget.IsPlayingSFX())
@@ -142,18 +164,47 @@ namespace KoiAI.Player
 
             if (_gravityControl.IsGrounded)
             {
-                _jumpCurCount = 1;
+                _jumpCurCount = 0;
             }
         }
     
         private void FixedUpdate()
         {
+            if (!IsValid())
+            {
+                return;
+            }
             if (_moveDir.sqrMagnitude > 0)
             {
                 _rigidBody.linearVelocity = _translation;
             }
         }
     
+        private void InitPhysicsData(GravityData? gravityData, CapsuleColliderData? colliderData, RigidbodyData? rigidData)
+        {
+            _gravityControl = GetComponent<GravityControl>();
+            _rigidBody = GetComponent<Rigidbody>();
+            _capsuleCollider = GetComponent<CapsuleCollider>();
+
+            if (!gravityData.HasValue || !colliderData.HasValue || !rigidData.HasValue)
+            {
+                return;
+            }
+            var gravityValueData = gravityData.Value;
+            var colliderValueData = colliderData.Value;
+            var rigidValueData = rigidData.Value;
+
+            gravityValueData.SetFeetPoint(Owner.CurrentPlayerSkin.FeetPoint);
+            _gravityControl.Init(gravityValueData);
+            _capsuleCollider.center = colliderValueData.Center;
+            _capsuleCollider.radius = colliderValueData.Radius;
+            _capsuleCollider.height = colliderValueData.Height;
+            _capsuleCollider.direction = colliderValueData.Direction;
+            _rigidBody.mass = rigidValueData.Mass;
+            _rigidBody.linearDamping = rigidValueData.LinearDamping;
+            _rigidBody.angularDamping = rigidValueData.AngularDamping;
+        }
+
         public void OnMove(InputAction.CallbackContext context)
         {
             if (context.canceled)
@@ -186,5 +237,7 @@ namespace KoiAI.Player
                 Debug.Log("Mouse Click");
             }
         }
+
+        private bool IsValid() => _valueData != null && _extensionValueData != null && _rigidBody != null && _capsuleCollider != null;
     }
 }

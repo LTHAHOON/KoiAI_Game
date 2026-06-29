@@ -140,6 +140,7 @@ namespace KoiAI.Player
             return null;
         }
 
+        public PlayerData PlayerData => _playerData;
         public PlayerInputAction PlayerIA=> _playerInputAction;
         public PlayerSkin CurrentPlayerSkin => _curPlayerSkin;
         public LayerMask TargetLayerMask => _targetLayerMask;

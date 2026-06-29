@@ -7,7 +7,7 @@ namespace KoiAI.Utilities
     {
         [Header("Trigger Target Layer Mask")]
         [SerializeField]
-        private LayerMask _triggerTargetLayerMask = Physics.AllLayers;
+        private LayerMask _triggerTargetLayerMask = UnityEngine.Physics.AllLayers;
         [Header("Damage Target Layer Mask")]
         [SerializeField]
         private LayerMask _damageTargetLayerMask;
@@ -48,7 +48,7 @@ namespace KoiAI.Utilities
                 _targetColliders = new Collider[_maxOverlapCount];
             }
         
-            bool isTriggerEnter = Physics.CheckSphere(transform.position, _overlapRadius, _triggerTargetLayerMask);
+            bool isTriggerEnter = UnityEngine.Physics.CheckSphere(transform.position, _overlapRadius, _triggerTargetLayerMask);
             _isTriggerEnter = isTriggerEnter;
             if (!isTriggerEnter)
             {
@@ -61,7 +61,7 @@ namespace KoiAI.Utilities
                 Instantiate(_explosionPrefab, hitPoint, Quaternion.identity);
             }
         
-            int damgeTargetCount = Physics.OverlapSphereNonAlloc(transform.position, _overlapRadius, _targetColliders, _damageTargetLayerMask);
+            int damgeTargetCount = UnityEngine.Physics.OverlapSphereNonAlloc(transform.position, _overlapRadius, _targetColliders, _damageTargetLayerMask);
             OnExplosion?.Invoke(_targetColliders, damgeTargetCount);
         }
     

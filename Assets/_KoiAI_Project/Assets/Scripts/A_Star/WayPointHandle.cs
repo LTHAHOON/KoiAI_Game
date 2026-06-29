@@ -8,17 +8,7 @@ namespace KoiAI.A_Star
     public class WayPointHandle : MonoBehaviour
     {
         [SerializeField]
-        private PoolSize _wayPointPoolSize;
-        [SerializeField]
-        private int _gridWidth = 10000;
-        [SerializeField]
-        private int _gridHeight = 10000;
-        [SerializeField]
-        private GameObject _wayPointPrefab;
-        [Range(0, 10)]
-        [SerializeField]
-        private int _wayPointStep;
-    
+        private WayPointData _wayPointData;
         private AStarLogic _aStartLogic;
         private bool _isBuilding = false;
         private List<GameObject> _wayPointList;
@@ -33,12 +23,12 @@ namespace KoiAI.A_Star
             {
                 _aStartLogic = new();
                 AStarObstacle[] aStarObstacles = FindObjectsByType<AStarObstacle>();
-                _aStartLogic.Initialize(aStarObstacles, _gridWidth, _gridHeight);
+                _aStartLogic.Initialize(aStarObstacles, _wayPointData.GridWidth, _wayPointData.GridHeight);
             }
             if (_pool == null)
             {
                 ulong id = gameObject.GetEntityULongID();
-                PoolManager.Instance.AddPool(id, _wayPointPrefab, _wayPointPoolSize, PoolName.WayPoint);
+                PoolManager.Instance.AddPool(id, _wayPointData.WayPointPrefab, _wayPointData.WayPointPoolSize, PoolName.WayPoint);
                 PoolManager.Instance.TryGetPool(id, out _pool);  
             }
             _aStartLogic.SetStartAndGoal(start, goal);
@@ -72,7 +62,7 @@ namespace KoiAI.A_Star
         {
             if(paths != null)
             {
-                for (int i = 0; i < paths.Count; i += _wayPointStep + 1)
+                for (int i = 0; i < paths.Count; i += _wayPointData.WayPointStep + 1)
                 {
                     GameObject wayPoint = _pool.Pop();
                     _wayPointList.Add(wayPoint);
