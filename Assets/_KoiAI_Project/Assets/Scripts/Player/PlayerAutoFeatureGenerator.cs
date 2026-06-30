@@ -2,6 +2,7 @@ using UnityEngine;
 using NaughtyAttributes;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 using static KoiAI.Player.PlayerFeature;
 
 #if UNITY_EDITOR
@@ -12,14 +13,17 @@ namespace KoiAI.Player
 {
     public class PlayerAutoFeatureGenerator : MonoBehaviour
     {
+        [InfoBox("플레이어 데이터를 바꾸게 되면 생성 버튼을 눌려주시고 \n " +
+                 "Player CMData Mediator 인스펙터에서 Connect 버튼을 눌려주세요", EInfoBoxType.Normal)]
+        [HorizontalLine(5, EColor.Gray)]
+        
         [SerializeField]
         private PlayerController _playerController;
 
         private PlayerData _playerData;
         private readonly Dictionary<PlayerFeatureProperty, PlayerFeature> _dicPlayerFeature = new();
 
-#if UNITY_EDITOR
-        [Button("(Re)Generate Feature Component")]
+        [Button("(Re)Generate Feature Component" , EButtonEnableMode.Editor)]
         public void GeneratePlayerFeature()
         {
             if (_playerController == null)
@@ -27,6 +31,7 @@ namespace KoiAI.Player
                 Debug.Log("Failed Generate: PlayerController is null");
                 return;
             }
+            _playerController.InitInEditor();
             _playerData = _playerController.PlayerData;
 
             ClearPlayerFeature();
@@ -34,8 +39,8 @@ namespace KoiAI.Player
 
             Debug.Log("Completed Generate Player Feature");
         }
-#endif
 
+#if UNITY_EDITOR
         private void AddPlayerFeature()
         {
             PlayerFeatureData playerFeatureData = _playerData.GetPlayerFeatureData();
@@ -45,8 +50,11 @@ namespace KoiAI.Player
                 for (int i = 0; i < properties.Length; i++)
                 {
                     PlayerFeatureProperty property = properties[i];
+                    bool success = false;
                     if (_dicPlayerFeature.ContainsKey(property))
                     {
+                        _dicPlayerFeature[property].InitAutoInEnditor();
+                        Debug.Log("Already Exist:");
                         continue;
                     }
                     Type featureType = GetPlayerFeatureType(property);
@@ -56,7 +64,7 @@ namespace KoiAI.Player
                         {
                             playerFeature.Owner = _playerController;
                             playerFeature.InitAutoInEnditor();
-                            _dicPlayerFeature.TryAdd(property, playerFeature);
+                            success  = _dicPlayerFeature.TryAdd(property, playerFeature);
                         }
                         continue;
                     }
@@ -65,26 +73,30 @@ namespace KoiAI.Player
                     {
                         addedPlayerFeature.Owner = _playerController;
                         addedPlayerFeature.InitAutoInEnditor();
-                        _dicPlayerFeature.Add(property, addedPlayerFeature);
+                        success= _dicPlayerFeature.TryAdd(property, addedPlayerFeature);
                     }
+                    Debug.Log(success);
                 }
             }
         }
 
         private void ClearPlayerFeature()
         {
-            foreach(var property in _dicPlayerFeature.Keys)
+            PlayerFeatureData playerFeatureData = _playerData.GetPlayerFeatureData();
+            PlayerFeatureProperty[] properties = playerFeatureData.Properties;
+            var playerFeatureList = _dicPlayerFeature.ToList();
+            foreach (var playerFeaturePair in playerFeatureList)
             {
-                Type featureType = GetPlayerFeatureType(property);
-                if(gameObject.TryGetComponent(featureType, out _))
+                if (!properties.Contains(playerFeaturePair.Value.FeatureProperty))
                 {
-                    Undo.DestroyObjectImmediate(_dicPlayerFeature[property]);
+                    Undo.DestroyObjectImmediate(playerFeaturePair.Value);
+                    _dicPlayerFeature.Remove(playerFeaturePair.Key);
                 }
             }
-            _dicPlayerFeature.Clear();
         }
-
-        public Type GetPlayerFeatureType(PlayerFeatureProperty property)
+#endif
+        
+        private Type GetPlayerFeatureType(PlayerFeatureProperty property)
         {
             return property switch
             {
@@ -95,7 +107,6 @@ namespace KoiAI.Player
                 _ => null
             };
         }
-
-
+        
     }
 }

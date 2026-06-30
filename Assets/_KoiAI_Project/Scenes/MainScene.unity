@@ -3943,8 +3943,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 961578135}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.31689066, y: 0.000000014178784, z: -0.0000000047372732, w: 0.9484621}
-  m_LocalPosition: {x: 0, y: 7.684235, z: -24.622301}
+  m_LocalRotation: {x: 0.28183544, y: 4.2137763e-31, z: -2.7129363e-31, w: 0.95946276}
+  m_LocalPosition: {x: 0, y: 8.285646, z: -26.529736}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3970,7 +3970,7 @@ MonoBehaviour:
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
   OrbitStyle: 0
-  Radius: 6
+  Radius: 8
   Orbits:
     Top:
       Radius: 2
@@ -4331,7 +4331,7 @@ GameObject:
   - component: {fileID: 1008070033}
   - component: {fileID: 1008070032}
   m_Layer: 0
-  m_Name: Player_CMData_Moderator
+  m_Name: Player_CMData_Mediator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4349,9 +4349,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6176a64692dd0dc468a7d46320704ff6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Camera.CinemachineHandle
+  _cmDataConnector: {fileID: 961578142}
   _cmDataHandles:
   - {fileID: 2116610985}
-  _cmDataConnector: {fileID: 961578142}
 --- !u!4 &1008070033
 Transform:
   m_ObjectHideFlags: 0
@@ -10009,16 +10009,13 @@ GameObject:
   - component: {fileID: 2116610965}
   - component: {fileID: 2116610972}
   - component: {fileID: 2116610964}
-  - component: {fileID: 2116610985}
   - component: {fileID: 2116610973}
   - component: {fileID: 2116610970}
   - component: {fileID: 2116610975}
   - component: {fileID: 2116610968}
+  - component: {fileID: 2116610985}
   - component: {fileID: 2116610980}
-  - component: {fileID: 2116610989}
   - component: {fileID: 2116610988}
-  - component: {fileID: 2116610987}
-  - component: {fileID: 2116610986}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -10229,7 +10226,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05b96fbc72eceea4b9282f7e19c2f44d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  _playerData: {fileID: 11400000, guid: 89a16fa2d87832b4cad97ac8d1ae81f2, type: 2}
+  _playerCmDataMediator: {fileID: 1008070032}
+  _playerData: {fileID: 11400000, guid: 18bda45513b101748a6176eaed4fad50, type: 2}
   _timeline: {fileID: 207791755}
   _playerFeatures: []
   _sfxFeatures:
@@ -10325,40 +10323,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c03a3a1f2a2eb664e8bd42de4af7c28d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Camera.CinemachineOrbitalFollowDataHandle
-  _cmData: {fileID: 11400000, guid: 38a1f75ff82275a4facef6a49fe865fc, type: 2}
---- !u!114 &2116610986
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2116610957}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e692700f9671fa47be58e2f697bd026, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Player.PlayerEquipment
-  _inventorySystem: {fileID: 203856415}
-  _weaponInfoControl: {fileID: 302235595}
-  _equipDatas: []
-  _notEquipDatas: []
-  _itemParentPoints: []
---- !u!114 &2116610987
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2116610957}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8543ec45a2bf354ab83644dba9b8bd6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Player.PlayerWayPoint
-  _target: {fileID: 0}
-  _valueData:
-    _wayPointData: {fileID: 0}
-    _buildDelayTime: 0
+  _cmData: {fileID: 11400000, guid: 710ea942ed897694faa5a50227313970, type: 2}
 --- !u!114 &2116610988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10380,52 +10345,6 @@ MonoBehaviour:
     _surfaceLayerMask:
       serializedVersion: 2
       m_Bits: 0
---- !u!114 &2116610989
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2116610957}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40d318a4f61cc344bb74eadc35f9633a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Player.PlayerMovement
-  _valueData:
-    _moveSpeed: 10
-    _jumpForce: 10
-    _jumpMaxCount: 1
-  _extensionValueData:
-    _stepAuidoData: {fileID: 0}
-    _stopStepAudioData: {fileID: 0}
-    _jumpAudioData: {fileID: 0}
-    _moveSpeedMod: 10
-    _jumpForceMod: 10
-    _jumpMaxCountMod: 1
-    _stepAudioThresold: 0
-    _gravityData:
-      _initOnAwake: 0
-      _groundLayerMask:
-        serializedVersion: 2
-        m_Bits: 0
-      _groundCheckDistance: 0
-      _gravity: 0
-      _gravityMod: 0
-      _speedToFeetPos: 0
-      _canUseSmoothGravity: 0
-      _feetPoint: {fileID: 0}
-    _rigidData:
-      _mass: 0
-      _linearDamping: 0
-      _angularDamping: 0
-    _colliderData:
-      _center: {x: 0, y: 0, z: 0}
-      _radius: 0
-      _height: 0
-      _direction: 0
-  _mainSFXTarget: {fileID: 1144688548}
-  _moveSFXTarget: {fileID: 277208230}
 --- !u!1 &2126284447
 GameObject:
   m_ObjectHideFlags: 0

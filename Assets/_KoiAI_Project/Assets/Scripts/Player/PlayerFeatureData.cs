@@ -25,7 +25,7 @@ namespace KoiAI.Player
 
         [Space(10)]
         [SerializeField]
-        private CinemachineData _cinemachineData;
+        private CinemachineData[] _playerCinemachineData;
         [ShowIf(nameof(HasMovementProperty))]
         [SerializeField]
         private PlayerMovementValueData _playerMovementValueData;
@@ -50,6 +50,7 @@ namespace KoiAI.Player
         public bool HasRotationProperty => HasProperty(PlayerFeatureProperty.Rotation);
         public PlayerFeatureDataType PlayerFeatureDataType => _playerFeatureDataType;
         public PlayerFeatureProperty[] Properties => _properties;
+        public CinemachineData[] PlayerCinemachineData => _playerCinemachineData;
 
     }
 }

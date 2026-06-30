@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Player.PlayerFeatureData
   _playerFeatureDataType: 3
   _properties: 02000000
+  _playerCinemachineData:
+  - {fileID: 11400000, guid: 710ea942ed897694faa5a50227313970, type: 2}
   _playerMovementValueData:
     _moveSpeed: 10
     _jumpForce: 15
@@ -22,4 +24,5 @@ MonoBehaviour:
     _lookSpeed: 10
     _surfaceCheckDistance: 3
   _playerWayPointValueData:
+    _wayPointData: {fileID: 0}
     _buildDelayTime: 0

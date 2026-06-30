@@ -19,7 +19,7 @@ MonoBehaviour:
     _stepAuidoData: {fileID: 11400000, guid: e88b7b5f5216fc04294c2b8f05506877, type: 2}
     _stopStepAudioData: {fileID: 11400000, guid: ca7ccb9d4cae6cc40949dabf8957d00d, type: 2}
     _jumpAudioData: {fileID: 11400000, guid: d2074f1a90b541e4ba69c1b9fb0b31c8, type: 2}
-    _moveSpeedMod: 10
+    _moveSpeedMod: 7
     _jumpForceMod: 0
     _jumpMaxCountMod: 0
     _stepAudioThresold: 12

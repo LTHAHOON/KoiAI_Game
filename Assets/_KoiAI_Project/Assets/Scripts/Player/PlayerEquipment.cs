@@ -44,7 +44,7 @@ namespace KoiAI.Player
         private List<ItemData>  _notEquipDatas;
         [Header("장비 저장 위치")]
         [SerializeField]
-        private List<PlayerEquipmentPoint> _itemParentPoints;
+        private List<PlayerEquipmentPoint> _itemParentPoints = new();
 
         private ItemInteractable _itemInteractable;
         private readonly Dictionary<ItemCategory, Transform> _dicItemParentPoint = new();

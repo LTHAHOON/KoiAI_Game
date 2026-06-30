@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using KoiAI.Camera;
 using NaughtyAttributes;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Playables;
@@ -60,6 +62,10 @@ namespace KoiAI.Player
     [RequireComponent(typeof(PlayerInput))]
     public class PlayerController : MonoBehaviour
     {
+        [Tooltip("Cinemachine Data Mediator")]
+        [SerializeField]
+        private CinemachineDataMediator _playerCmDataMediator;
+        [Header("플레이어 데이터")]
         [SerializeField] 
         private PlayerData _playerData;
         [SerializeField] 
@@ -122,6 +128,24 @@ namespace KoiAI.Player
             }
         }
 
+        public void InitInEditor()
+        {
+            PlayerFeatureData playerFeatureData = _playerData.GetPlayerFeatureData();
+            if (playerFeatureData)
+            {
+                CinemachineData[] cmData = playerFeatureData.PlayerCinemachineData;
+                if (cmData == null)
+                {
+                    return;
+                }
+
+                for (int i = 0; i < cmData.Length; i++)
+                {
+                    _playerCmDataMediator.ChangeDataInHandle(cmData[i]);
+                }
+            }
+;        }
+        
         public PlayerFeature GetPlayerFeatureWithProperty(PlayerFeatureProperty featureProperty)
         {
             bool bGet = _dicPlayerFeatures.TryGetValue((int)featureProperty, out PlayerFeature playerFeature);

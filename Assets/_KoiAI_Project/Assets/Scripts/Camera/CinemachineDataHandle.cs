@@ -9,7 +9,7 @@ namespace KoiAI.Camera
         [SerializeField]
         private CinemachineData _cmData;
         public abstract void SetDataInComponent(CinemachineComponentBase cmComponent);
-
+        public void SetData(CinemachineData data) => _cmData = data;
         public CinemachineData Data => _cmData;
     }
     
