@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bdc90e4a46dfbc40a20192a1d8d8c00, type: 3}
   m_Name: Lv2_MonsterHealthSliderData
   m_EditorClassIdentifier: Assembly-CSharp::HealthBarSliderData
+  _healthBarType: 1
   _healthBarPrefab: {fileID: 4756940917062229083, guid: 8a064d9bb7527f7419331a7179fbecea, type: 3}
   _width: 100
   _height: 35

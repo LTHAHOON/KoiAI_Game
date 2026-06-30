@@ -5,7 +5,7 @@ using UnityEngine;
 namespace KoiAI.Camera
 {
     [DefaultExecutionOrder(100)]
-    public class CameraManualUpdater : MonoBehaviour
+    public class CinemachineManualUpdater : MonoBehaviour
     {
         [SerializeField]
         private CinemachineBrain cinemachineBrain;

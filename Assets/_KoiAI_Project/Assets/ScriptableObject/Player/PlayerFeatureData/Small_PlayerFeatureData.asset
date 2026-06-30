@@ -18,3 +18,9 @@ MonoBehaviour:
     _moveSpeed: 10
     _jumpForce: 15
     _jumpMaxCount: 1
+  _playerRotationValueData:
+    _lookSpeed: 10
+    _surfaceCheckDistance: 3
+  _playerWayPointValueData:
+    _wayPointData: {fileID: 11400000, guid: 942638149da6ef74e8fa312367943b94, type: 2}
+    _buildDelayTime: 0

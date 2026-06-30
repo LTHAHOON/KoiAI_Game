@@ -16,9 +16,9 @@ namespace KoiAI.Player
         private PlayerController _playerController;
 
         private PlayerData _playerData;
-        private readonly Dictionary<PlayerFeatureProperty, Component> _dicPlayerFeature = new();
+        private readonly Dictionary<PlayerFeatureProperty, PlayerFeature> _dicPlayerFeature = new();
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
         [Button("(Re)Generate Feature Component")]
         public void GeneratePlayerFeature()
         {
@@ -27,16 +27,14 @@ namespace KoiAI.Player
                 Debug.Log("Failed Generate: PlayerController is null");
                 return;
             }
-            if(_playerData == null)
-            {
-                _playerData = _playerController.PlayerData;
-            }
+            _playerData = _playerController.PlayerData;
 
             ClearPlayerFeature();
             AddPlayerFeature();
 
             Debug.Log("Completed Generate Player Feature");
         }
+#endif
 
         private void AddPlayerFeature()
         {
@@ -54,11 +52,21 @@ namespace KoiAI.Player
                     Type featureType = GetPlayerFeatureType(property);
                     if (gameObject.TryGetComponent(featureType, out var feature))
                     {
-                        _dicPlayerFeature.TryAdd(property, feature);
+                        if(feature is PlayerFeature playerFeature)
+                        {
+                            playerFeature.Owner = _playerController;
+                            playerFeature.InitAutoInEnditor();
+                            _dicPlayerFeature.TryAdd(property, playerFeature);
+                        }
                         continue;
                     }
-                    var playerFeature = Undo.AddComponent(gameObject, featureType);
-                    _dicPlayerFeature.Add(property, playerFeature);
+                    var addedFeature = Undo.AddComponent(gameObject, featureType);
+                    if (addedFeature is PlayerFeature addedPlayerFeature)
+                    {
+                        addedPlayerFeature.Owner = _playerController;
+                        addedPlayerFeature.InitAutoInEnditor();
+                        _dicPlayerFeature.Add(property, addedPlayerFeature);
+                    }
                 }
             }
         }
@@ -88,6 +96,6 @@ namespace KoiAI.Player
             };
         }
 
-    #endif
+
     }
 }

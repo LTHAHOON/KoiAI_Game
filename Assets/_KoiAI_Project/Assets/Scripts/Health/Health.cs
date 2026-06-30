@@ -12,7 +12,7 @@ namespace KoiAI.Health
         private HealthData _healthData;
 
         private ReactiveProperty<float> _currentHealth = new(0);
-        private ReactiveProperty<HealthBar> _healthBar = new();
+        private HealthBar _healthBar;
         private bool _isDelayChanging = false;
     
         private void Awake()
@@ -28,18 +28,6 @@ namespace KoiAI.Health
                         OnDead();
                     }
                 }).AddTo(this);
-
-            _healthBar
-                .Where(healthBar => healthBar != null)
-                .Subscribe(healthBar =>
-                {
-                    if(healthBar.IsBlockFollowUI)
-                    {
-                        return;
-                    }
-                    var connector = GetUIFollowConnector();
-                    connector.OnNext(healthBar);
-                }).AddTo(this);
         }
     
         private void Start()
@@ -47,13 +35,15 @@ namespace KoiAI.Health
             bool bGet = HealthBarManager.Instance.TryGetHealthBar(this, out HealthBar healthBar);
             if (bGet)
             {
-                _healthBar.Value = healthBar;
+                SetUITargetObject(healthBar);
+                _healthBar = healthBar;
             }
             else
             {
-                _healthBar.Value = HealthBarManager.Instance.CreateHealthBar(this);
+                _healthBar = HealthBarManager.Instance.CreateHealthBar(this);
+                SetUITargetObject(_healthBar);
             }
-            _healthBar.Value.Init(_healthData.HealthBarData, _currentHealth.CurrentValue, _healthData.MaxHealth);
+            _healthBar.Init(_healthData.HealthBarData, _currentHealth.CurrentValue, _healthData.MaxHealth);
         }
 
         public void ChangeHealth(float amount)
@@ -81,7 +71,7 @@ namespace KoiAI.Health
             Debug.Log("Dead");
         }
     
-        public HealthBar GetHealthBar() => _healthBar.Value;
+        public HealthBar GetHealthBar() => _healthBar;
         public float CurrentHealth => _currentHealth.CurrentValue;
         public float MaxHealth => _healthData.MaxHealth;
         public HealthData HealthData => _healthData;    

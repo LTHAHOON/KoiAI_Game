@@ -51,6 +51,12 @@ namespace KoiAI.Player
         private readonly StringBuilder _sb = new();
         public override PlayerFeatureProperty FeatureProperty => PlayerFeatureProperty.Equipment;
 
+        public override void InitAutoInEnditor()
+        {
+            _inventorySystem = FindAnyObjectByType<InventorySystem>();
+            _weaponInfoControl = FindAnyObjectByType<WeaponInfoControl>();
+        }
+
         public override void Init(PlayerInputAction playerIA, PlayerFeatureValueData playerFeatureValueData = null, 
             PlayerFeatureExtensionData playerFeatureExtensionData = null)
         {

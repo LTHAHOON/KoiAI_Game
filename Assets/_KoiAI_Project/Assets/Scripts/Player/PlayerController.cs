@@ -4,17 +4,19 @@ using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Playables;
+using static KoiAI.Player.PlayerSFXAudioFeature;
+using static KoiAI.Player.PlayerFeature;
 
 namespace KoiAI.Player
 {
     using KoiAI.Audio;
-    using KoiAI.Skin;
     
     public abstract class PlayerFeatureExtensionData { }
     
     [Serializable]
     public abstract class PlayerFeatureValueData { }
 
+    [RequireComponent(typeof(PlayerController))]
     public abstract class PlayerFeature : MonoBehaviour 
     {
         //아이템에서 접근을 가능하게 해주는 Key역할을 합니다.
@@ -29,6 +31,9 @@ namespace KoiAI.Player
         
         public abstract PlayerFeatureProperty FeatureProperty { get; }
         public PlayerController Owner { get; set; }
+        
+        public virtual void InitAutoInEnditor() { }
+        
         public virtual void Init(PlayerInputAction playerIA, PlayerFeatureValueData playerFeatureValueData = null, 
                                     PlayerFeatureExtensionData playerFeatureExtensionData = null) { }
         public abstract void UpdateFeature();
@@ -93,8 +98,8 @@ namespace KoiAI.Player
         {
             for (int i = 0; i < _playerFeatures.Length; i++)
             {
-                PlayerFeature.PlayerFeatureProperty featureProperty = _playerFeatures[i].FeatureProperty;
-                if (featureProperty != PlayerFeature.PlayerFeatureProperty.None)
+                PlayerFeatureProperty featureProperty = _playerFeatures[i].FeatureProperty;
+                if (featureProperty != PlayerFeatureProperty.None)
                 {
                     _dicPlayerFeatures.Add((int)featureProperty, _playerFeatures[i]);
                 }
@@ -117,7 +122,7 @@ namespace KoiAI.Player
             }
         }
 
-        public PlayerFeature GetPlayerFeatureWithProperty(PlayerFeature.PlayerFeatureProperty featureProperty)
+        public PlayerFeature GetPlayerFeatureWithProperty(PlayerFeatureProperty featureProperty)
         {
             bool bGet = _dicPlayerFeatures.TryGetValue((int)featureProperty, out PlayerFeature playerFeature);
             if(!bGet)
@@ -127,7 +132,7 @@ namespace KoiAI.Player
             return playerFeature;
         }
 
-        public AudioSFXTarget GetAudioSFXTarget(PlayerSFXAudioFeature.PlayerSFXAuidoProperty sfxProperty)
+        public AudioSFXTarget GetAudioSFXTarget(PlayerSFXAuidoProperty sfxProperty)
         {
             //Player AudioSFXTarget은 갯수가 적은 편이기 때문에 딕셔너리 대신 For문 사용
             for (int i = 0; i < _sfxFeatures.Length; i++)
@@ -139,7 +144,7 @@ namespace KoiAI.Player
             }
             return null;
         }
-
+      
         public PlayerData PlayerData => _playerData;
         public PlayerInputAction PlayerIA=> _playerInputAction;
         public PlayerSkin CurrentPlayerSkin => _curPlayerSkin;

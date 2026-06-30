@@ -5,38 +5,46 @@ using UnityEngine;
 
 namespace KoiAI.A_Star
 {
-    public class WayPointHandle : MonoBehaviour
+    public class WayPointHandle
     {
-        [SerializeField]
-        private WayPointData _wayPointData;
-        private AStarLogic _aStartLogic;
-        private bool _isBuilding = false;
         private List<GameObject> _wayPointList;
+        private AStarLogic _aStartLogic;
         private Pool<GameObject> _pool;
-        public void InitStartAndGoal(Vector3 start, Vector3 goal)
+        private MonoBehaviour _owner;
+        private bool _isBuilding = false;
+        private int _wayPointStep = 0;
+        public void InitStartAndGoal(MonoBehaviour owner, WayPointData wayPointData, Vector3 start, Vector3 goal)
         {
-            if(_wayPointList == null)
+            if(!owner)
             {
+                return;
+            }
+
+            if(!IsCompletedInit())
+            {
+                _owner = owner;
+
                 _wayPointList = new();
-            }
-            if(_aStartLogic == null)
-            {
                 _aStartLogic = new();
-                AStarObstacle[] aStarObstacles = FindObjectsByType<AStarObstacle>();
-                _aStartLogic.Initialize(aStarObstacles, _wayPointData.GridWidth, _wayPointData.GridHeight);
-            }
-            if (_pool == null)
-            {
-                ulong id = gameObject.GetEntityULongID();
-                PoolManager.Instance.AddPool(id, _wayPointData.WayPointPrefab, _wayPointData.WayPointPoolSize, PoolName.WayPoint);
-                PoolManager.Instance.TryGetPool(id, out _pool);  
+                _wayPointStep = wayPointData.WayPointStep;
+                AStarObstacle[] aStarObstacles = Object.FindObjectsByType<AStarObstacle>();
+                _aStartLogic.Initialize(aStarObstacles, wayPointData.GridWidth, wayPointData.GridHeight);
+
+                ulong id = _owner.GetEntityULongID();
+                PoolManager.Instance.AddPool(id, wayPointData.WayPointPrefab, wayPointData.WayPointPoolSize, PoolName.WayPoint);
+                PoolManager.Instance.TryGetPool(id, out _pool);
             }
             _aStartLogic.SetStartAndGoal(start, goal);
         }
 
         public void BuildOrClearWayPoint(bool isVisible)
         {
-            if(isVisible)
+            if (!IsCompletedInit())
+            {
+                return;
+            }
+
+            if (isVisible)
             {
                 BuildWayPoint();
             }
@@ -48,21 +56,28 @@ namespace KoiAI.A_Star
     
         public void BuildWayPoint()
         {
-            if (_aStartLogic == null || _wayPointList == null || _pool == null || _isBuilding)
+            if (!IsCompletedInit() || _isBuilding)
             {
                 return;
             }
 
             _isBuilding = true;
             ClearWayPoint();
-            StartCoroutine(_aStartLogic.IERebuildPath(OnEndBuild));
+            
+            _owner.StartCoroutine(_aStartLogic.IERebuildPath(OnEndBuild));
+
         }
-    
+
         private void OnEndBuild(List<Vector2Int> paths)
         {
-            if(paths != null)
+            if (!IsCompletedInit())
             {
-                for (int i = 0; i < paths.Count; i += _wayPointData.WayPointStep + 1)
+                return;
+            }
+
+            if (paths != null)
+            {
+                for (int i = 0; i < paths.Count; i += _wayPointStep + 1)
                 {
                     GameObject wayPoint = _pool.Pop();
                     _wayPointList.Add(wayPoint);
@@ -78,6 +93,11 @@ namespace KoiAI.A_Star
     
         public void ClearWayPoint()
         {
+            if (!IsCompletedInit())
+            {
+                return;
+            }
+
             for (int i = 0; i < _wayPointList.Count; i++)
             {
                 _pool.Return(_wayPointList[i]);
@@ -85,7 +105,8 @@ namespace KoiAI.A_Star
             _wayPointList.Clear();
             _isBuilding = false;
         }
-    
+
+        private bool IsCompletedInit() => _owner && _aStartLogic != null && _pool != null && _wayPointList != null;
         public bool IsBuilding => _isBuilding;
     }
 }

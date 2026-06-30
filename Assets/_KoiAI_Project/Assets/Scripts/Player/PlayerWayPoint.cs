@@ -1,5 +1,6 @@
 using System;
 using KoiAI.A_Star;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,8 +10,11 @@ namespace KoiAI.Player
     public class PlayerWayPointValueData : PlayerFeatureValueData
     {
         [SerializeField]
+        private WayPointData _wayPointData;
+        [SerializeField]
         private float _buildDelayTime;
-        
+
+        public WayPointData WayPointData => _wayPointData;
         public float BuildDelayTime => _buildDelayTime;
     }
     
@@ -18,11 +22,11 @@ namespace KoiAI.Player
     {
         [SerializeField]
         private Transform _target;
-        [SerializeField]
-        private WayPointHandle _playerWayPointControl;
+        [ReadOnly]
         [SerializeField]
         private PlayerWayPointValueData _valueData;
 
+        private readonly WayPointHandle _wayPointHandle = new();
         private float _curTime = 0;
         private bool _isAutoBuild = false;
         private bool _isShowedWayPoint = false;
@@ -43,7 +47,6 @@ namespace KoiAI.Player
             playerIA.Player.SetVisibleWayPoint.performed += OnSetVisibleWayPoint;
             playerIA.Player.Move.performed += OnRebuildWayPoint;
             playerIA.Player.Move.canceled += OnRebuildWayPoint;
-            _playerWayPointControl.InitStartAndGoal(transform.position, _target.localPosition);
         }
 
         public void OnSetVisibleWayPoint(InputAction.CallbackContext context)
@@ -51,18 +54,18 @@ namespace KoiAI.Player
             if (context.performed)
             {
                 _isShowedWayPoint = !_isShowedWayPoint;
-                if (_playerWayPointControl.IsBuilding)
+                if (_wayPointHandle.IsBuilding)
                 {
                     return;
                 }
-                _playerWayPointControl.InitStartAndGoal(transform.position, _target.position);
-                _playerWayPointControl.BuildOrClearWayPoint(_isShowedWayPoint);
+                _wayPointHandle.InitStartAndGoal(this, _valueData.WayPointData, transform.position, _target.position);
+                _wayPointHandle.BuildOrClearWayPoint(_isShowedWayPoint);
             }
         }
 
         public void OnRebuildWayPoint(InputAction.CallbackContext context)
         {
-            if (_isShowedWayPoint == false || _playerWayPointControl.IsBuilding)
+            if (_isShowedWayPoint == false || _wayPointHandle.IsBuilding)
             {
                 _isAutoBuild = false;
                 return;
@@ -74,14 +77,18 @@ namespace KoiAI.Player
             if (context.canceled)
             {
                 _isAutoBuild = false;
-                _playerWayPointControl.InitStartAndGoal(transform.position, _target.position);
-                _playerWayPointControl.BuildWayPoint();
+                if(!_target)
+                {
+                    return;
+                }
+                _wayPointHandle.InitStartAndGoal(this, _valueData.WayPointData, transform.position, _target.position);
+                _wayPointHandle.BuildWayPoint();
             }
         }
     
         public override void UpdateFeature()
         {
-            if (_isShowedWayPoint == false || _playerWayPointControl.IsBuilding)
+            if (!_target || _isShowedWayPoint == false || _wayPointHandle.IsBuilding)
             {
                 return;
             }
@@ -93,8 +100,8 @@ namespace KoiAI.Player
                     return;
                 }
                 _curTime = 0f;
-                _playerWayPointControl.InitStartAndGoal(transform.position, _target.position);
-                _playerWayPointControl.BuildWayPoint();
+                _wayPointHandle.InitStartAndGoal(this, _valueData.WayPointData, transform.position, _target.position);
+                _wayPointHandle.BuildWayPoint();
             }
         }
     }

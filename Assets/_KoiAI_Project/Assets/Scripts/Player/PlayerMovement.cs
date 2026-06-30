@@ -2,6 +2,7 @@ using System;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static KoiAI.Player.PlayerSFXAudioFeature;
 
 namespace KoiAI.Player
 {
@@ -95,6 +96,12 @@ namespace KoiAI.Player
         private UnityEngine.Camera _camera;
         private Vector3 _translation = Vector3.zero;
         public override PlayerFeatureProperty FeatureProperty => PlayerFeatureProperty.Movement;
+
+        public override void InitAutoInEnditor()
+        {
+            _mainSFXTarget = Owner.GetAudioSFXTarget(PlayerSFXAuidoProperty.Main);
+            _moveSFXTarget = Owner.GetAudioSFXTarget(PlayerSFXAuidoProperty.Move);
+        }
 
         public override void Init(PlayerInputAction playerIA, PlayerFeatureValueData playerFeatureValueData = null, 
             PlayerFeatureExtensionData playerFeatureExtensionData = null)

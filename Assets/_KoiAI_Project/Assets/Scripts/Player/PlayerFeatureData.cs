@@ -1,4 +1,5 @@
 using System;
+using KoiAI.Camera;
 using NaughtyAttributes;
 using UnityEngine;
 using static KoiAI.Player.PlayerFeature;
@@ -23,6 +24,8 @@ namespace KoiAI.Player
         private PlayerFeatureProperty[] _properties;
 
         [Space(10)]
+        [SerializeField]
+        private CinemachineData _cinemachineData;
         [ShowIf(nameof(HasMovementProperty))]
         [SerializeField]
         private PlayerMovementValueData _playerMovementValueData;
