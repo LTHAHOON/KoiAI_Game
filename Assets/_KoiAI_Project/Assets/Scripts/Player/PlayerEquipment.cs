@@ -38,10 +38,10 @@ namespace KoiAI.Player
         private WeaponInfoControl _weaponInfoControl;
         [Header("장착된 아이템")]
         [SerializeField] 
-        private List<ItemData>  _equipDatas;
+        private List<ItemData> _equipDatas = new();
         [Header("장착되지 않은 아이템 ")]
         [SerializeField] 
-        private List<ItemData>  _notEquipDatas;
+        private List<ItemData> _notEquipDatas = new();
         [Header("장비 저장 위치")]
         [SerializeField]
         private List<PlayerEquipmentPoint> _itemParentPoints = new();

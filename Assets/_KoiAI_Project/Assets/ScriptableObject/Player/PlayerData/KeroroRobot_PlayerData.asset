@@ -15,6 +15,9 @@ MonoBehaviour:
   _playerFeatureDataBase: {fileID: 11400000, guid: d696849b4c6184b49b4ee354e8f18a3a, type: 2}
   _playerFeatureDataType: 2
   _playerSkin: {fileID: 2078883679052346806, guid: 584fd89b0f0fb0e47a5af06fc12c963d, type: 3}
+  _animatorData:
+    _animatorAvatar: {fileID: 9000000, guid: 53b926c7b5ef4e04a9ce07f093bb0afb, type: 2}
+    _animatorParamData: {fileID: 11400000, guid: ca3347233760bfd41a65520e66353502, type: 2}
   _playerMovementExtensionData:
     _stepAuidoData: {fileID: 11400000, guid: e88b7b5f5216fc04294c2b8f05506877, type: 2}
     _stopStepAudioData: {fileID: 11400000, guid: ca7ccb9d4cae6cc40949dabf8957d00d, type: 2}
@@ -31,8 +34,8 @@ MonoBehaviour:
       _groundCheckDistance: 5
       _gravity: -30
       _gravityMod: 5
-      _speedToFeetPos: 15
-      _canUseSmoothGravity: 0
+      _speedToFeetPos: 5
+      _canUseSmoothGravity: 1
       _feetPoint: {fileID: 0}
     _rigidData:
       _mass: 120

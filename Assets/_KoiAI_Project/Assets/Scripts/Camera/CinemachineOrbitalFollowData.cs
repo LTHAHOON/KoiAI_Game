@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace KoiAI.Camera
 {
-    [CreateAssetMenu(fileName = "new CinemahcineOrbitalData", menuName = "KoiAI/Camera/CinemahcineOrbitalData")]
+    [CreateAssetMenu(fileName = "new CinemahcineOrbitalFollowData", menuName = "KoiAI/Camera/CinemahcineOrbitalFollowData")]
     public class CinemachineOrbitalFollowData : CinemachineData
     {
         [SerializeField]

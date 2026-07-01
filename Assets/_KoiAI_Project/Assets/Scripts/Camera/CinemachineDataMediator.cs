@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using NaughtyAttributes;
+using System.Collections.Generic;
 
 namespace KoiAI.Camera
 {
@@ -17,28 +18,52 @@ namespace KoiAI.Camera
         private CinemachineDataConnector _cmDataConnector;
         [Header("시네머신 핸들")]
         [SerializeField]
-        private CinemachineDataHandle[] _cmDataHandles;
+        private List<CinemachineDataHandle> _cmDataHandles = new();
 
-        [Button("Connect Handles In Connector")]
+        [Button("Connect Handles In Connector", EButtonEnableMode.Editor)]
         public void ConnectHandlesInConnector()
         {
             _cmDataConnector.ConnectHandles(_cmDataHandles);
         }
 
-        public void ChangeDataInHandle(CinemachineData data)
+        public void ChangeDataInHandle(GameObject controller, CinemachineData data)
         {
-            CinemachineDataHandle cmDataHandle = GetCinemachineDataHandle(data.GetCinemachineType());
-            if (cmDataHandle == null)
+            Type cmType = data.GetCinemachineType();
+            CinemachineDataHandle cmDataHandle = GetCinemachineDataHandle(cmType);
+            if (!cmDataHandle)
             {
-                Debug.Log("Failed Change Data In Handle: CinemachineDataHandle is null");
-                return;
+                bool bAdd = TryAddCinemachineDataHandle(controller);
+                cmDataHandle = GetCinemachineDataHandle(cmType);
+                if (!bAdd || !cmDataHandle)
+                {
+                    Debug.Log("Failed Change Data In Handle: CinemachineDataHandle is null");
+                    return;
+                }
             }
             cmDataHandle.SetData(data);
         }
 
+        private bool TryAddCinemachineDataHandle(GameObject controller)
+        {
+            CinemachineDataHandle[] cmDataHandles = controller.GetComponents<CinemachineDataHandle>();
+            if(cmDataHandles == null || cmDataHandles.Length <= 0)
+            {
+                return false;
+            }
+            for(int i = 0; i < cmDataHandles.Length; i++)
+            {
+                CinemachineDataHandle cmDataHandle = cmDataHandles[i];
+                if (!_cmDataHandles.Contains(cmDataHandle))
+                {
+                    _cmDataHandles.Add(cmDataHandle);
+                }
+            }
+            return true;
+        }
+
         private CinemachineDataHandle GetCinemachineDataHandle(Type cmType)
         {
-            for (int i = 0; i < _cmDataHandles.Length; i++)
+            for (int i = 0; i < _cmDataHandles.Count; i++)
             {
                 Type cmTypeToCompare = _cmDataHandles[i].Data.GetCinemachineType();
                 if (cmTypeToCompare == cmType)

@@ -6,6 +6,7 @@ using static KoiAI.Player.PlayerSFXAudioFeature;
 
 namespace KoiAI.Player
 {
+    using KoiAI.AnimatorSystem;
     using KoiAI.Audio;
     using KoiAI.Physics;
     
@@ -95,6 +96,7 @@ namespace KoiAI.Player
         private bool _isMoveStop;
         private UnityEngine.Camera _camera;
         private Vector3 _translation = Vector3.zero;
+        private AnimatorParamData _animParamData;
         public override PlayerFeatureProperty FeatureProperty => PlayerFeatureProperty.Movement;
 
         public override void InitAutoInEnditor()
@@ -127,6 +129,15 @@ namespace KoiAI.Player
             playerIA.Player.Move.performed += OnMove;
             playerIA.Player.Move.canceled += OnMove;
             playerIA.Player.Jump.performed += OnJump;
+
+            if(Owner.PlayerAnimatorData.IsValid())
+            {
+                _animParamData = Owner.PlayerAnimatorData.AnimParamData;
+            }
+            else
+            {
+                Debug.LogError("Error: PlayerAnimatorData is not valid.");
+            }
         }
         public override void UpdateFeature()
         {
@@ -146,7 +157,7 @@ namespace KoiAI.Player
                 Vector3 cameraForward = _camera.transform.forward;
                 cameraForward.y = 0;
                 cameraForward.Normalize();
-
+                
                 Vector3 xDir = cameraRight * _moveDir.x;
                 Vector3 zDir = cameraForward * _moveDir.z;
                 Vector3 dir = (xDir + zDir).normalized;
@@ -214,14 +225,25 @@ namespace KoiAI.Player
 
         public void OnMove(InputAction.CallbackContext context)
         {
-            if (context.canceled)
-            {
-                _isMoveStop = true;
-
-            }
             Vector2 normalizedDir = context.ReadValue<Vector2>();
             _moveDir = new Vector3(normalizedDir.x, 0f, normalizedDir.y);
             _moveDir.Normalize();
+
+            if (context.canceled)
+            {
+                _isMoveStop = true;
+                if (Owner.PlayerAnimatorData.IsValid() && _animParamData.WalkParmID > 0)
+                {
+                    Owner.PlayerAnimator.SetBool(_animParamData.WalkParmID, false);
+                }
+            }
+            else
+            {
+                if (Owner.PlayerAnimatorData.IsValid() && _animParamData.WalkParmID > 0)
+                {
+                    Owner.PlayerAnimator.SetBool(_animParamData.WalkParmID, true);
+                }
+            }
         }
 
         public void OnJump(InputAction.CallbackContext context)

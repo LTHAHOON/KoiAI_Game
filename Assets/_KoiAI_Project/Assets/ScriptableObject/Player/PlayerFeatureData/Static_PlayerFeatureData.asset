@@ -16,6 +16,7 @@ MonoBehaviour:
   _properties: 02000000
   _playerCinemachineData:
   - {fileID: 11400000, guid: 710ea942ed897694faa5a50227313970, type: 2}
+  - {fileID: 11400000, guid: a9528f6ecfaf376449b463bd3663fcd9, type: 2}
   _playerMovementValueData:
     _moveSpeed: 10
     _jumpForce: 15

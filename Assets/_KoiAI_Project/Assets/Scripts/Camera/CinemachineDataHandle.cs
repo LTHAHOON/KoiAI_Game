@@ -6,6 +6,7 @@ namespace KoiAI.Camera
 {
     public abstract class CinemachineDataHandle : MonoBehaviour 
     {
+        [Header("시네머신 데이터")]
         [SerializeField]
         private CinemachineData _cmData;
         public abstract void SetDataInComponent(CinemachineComponentBase cmComponent);

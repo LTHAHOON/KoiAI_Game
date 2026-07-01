@@ -1,6 +1,7 @@
 using Unity.Cinemachine;
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 namespace KoiAI.Camera
 {
@@ -15,14 +16,14 @@ namespace KoiAI.Camera
         [SerializeField]
         private CinemachineComponentBase[] _cmComponents;
 
-        public void ConnectHandles(CinemachineDataHandle[] cmDataHandles)
+        public void ConnectHandles(List<CinemachineDataHandle> cmDataHandles)
         {
-            if(cmDataHandles == null || cmDataHandles.Length <= 0)
+            if(cmDataHandles == null || cmDataHandles.Count <= 0)
             {
-                Debug.Log("Failed Connect Handle: CinemachineDataHandles Length <= 0");
+                Debug.Log("Failed Connect Handle: CinemachineDataHandles Count <= 0");
             }
             bool isComplete = false;
-            for (int i = 0; i < cmDataHandles.Length; i++)
+            for (int i = 0; i < cmDataHandles.Count; i++)
             {
                 CinemachineDataHandle cmDataHandle = cmDataHandles[i];
 

@@ -4,6 +4,8 @@ using static KoiAI.Player.PlayerFeature;
 
 namespace KoiAI.Player
 {
+    using KoiAI.AnimatorSystem;
+
     [CreateAssetMenu(fileName = "new PlayerData", menuName = "KoiAI/Player/PlayerData")]
     public class PlayerData : ScriptableObject
     {
@@ -17,13 +19,18 @@ namespace KoiAI.Player
         private PlayerSkin _playerSkin;
 
         [Space(10)]
+        [HorizontalLine(5, EColor.Gray)]
+        [Space(10)]
+        [SerializeField]
+        private AnimatorData _animatorData;
+
+        [Space(10)]
         [ShowIf(nameof(HasMovementProperty))]
         [SerializeField]
         private PlayerMovementExtensionData _playerMovementExtensionData;
         [ShowIf(nameof(HasRotationProperty))]
         [SerializeField]
         private PlayerRotationExtensionData _playerRotationExtensionData;
-        
         
         public PlayerFeatureData GetPlayerFeatureData()
         {
@@ -62,5 +69,6 @@ namespace KoiAI.Player
         
         public PlayerFeatureDataType PlayerFeatureDataType => _playerFeatureDataType;
         public PlayerSkin PlayerSkin => _playerSkin;
+        public AnimatorData AnimatorData => _animatorData;
     }
 }

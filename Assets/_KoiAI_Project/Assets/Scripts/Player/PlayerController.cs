@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using KoiAI.Camera;
 using NaughtyAttributes;
-using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Playables;
@@ -12,7 +10,9 @@ using static KoiAI.Player.PlayerFeature;
 namespace KoiAI.Player
 {
     using KoiAI.Audio;
-    
+    using KoiAI.Camera;
+    using KoiAI.AnimatorSystem;
+
     public abstract class PlayerFeatureExtensionData { }
     
     [Serializable]
@@ -59,7 +59,7 @@ namespace KoiAI.Player
         public AudioSFXTarget AudioTarget => _auidoTarget;
     }
 
-    [RequireComponent(typeof(PlayerInput))]
+    [RequireComponent(typeof(PlayerInput), typeof(Animator))]
     public class PlayerController : MonoBehaviour
     {
         [Tooltip("Cinemachine Data Mediator")]
@@ -84,6 +84,8 @@ namespace KoiAI.Player
         private readonly Dictionary<int, PlayerFeature> _dicPlayerFeatures = new();
         private PlayerInput _playerInput;
         private PlayerInputAction _playerInputAction;
+        private Animator _playerAnimator;
+
         private void Awake()
         {
             if (!_playerData)
@@ -91,15 +93,10 @@ namespace KoiAI.Player
                 Debug.LogError("PlayerData is null");
                 return;
             }
-            //PlayerInput 바인딩
-            _playerInput = GetComponent<PlayerInput>();
-            _playerFeatures = GetComponents<PlayerFeature>();
-            _playerInputAction = new();
-            _playerInput.actions = _playerInputAction.asset;
-            PlayerSkin playerSkin = _playerData.PlayerSkin;
-            GameObject newPlayerSkinObj = Instantiate(playerSkin.SkinPrefab, transform);
-            _curPlayerSkin = newPlayerSkinObj.GetComponent<PlayerSkin>();
+
+            Init();
         }
+
         private void Start()
         {
             for (int i = 0; i < _playerFeatures.Length; i++)
@@ -128,8 +125,32 @@ namespace KoiAI.Player
             }
         }
 
+        private void Init()
+        {
+            //PlayerInput 바인딩
+            _playerInput = GetComponent<PlayerInput>();
+            _playerFeatures = GetComponents<PlayerFeature>();
+            _playerInputAction = new();
+            _playerInput.actions = _playerInputAction.asset;
+
+            //스킨 생성
+            PlayerSkin playerSkin = _playerData.PlayerSkin;
+            GameObject newPlayerSkinObj = Instantiate(playerSkin.SkinPrefab, transform);
+            _curPlayerSkin = newPlayerSkinObj.GetComponent<PlayerSkin>();
+
+            //Animator 초기화
+            _playerAnimator = GetComponent<Animator>();
+            AnimatorData animatorData = _playerData.AnimatorData;
+            if (animatorData.IsValid())
+            {
+                _playerAnimator.runtimeAnimatorController = animatorData.RuntimeAnimController;
+                _playerAnimator.avatar = animatorData.AnimatorAvatar;
+            }
+        }
+
         public void InitInEditor()
         {
+            //시네머신 데이터 핸들에 데이터 할당 
             PlayerFeatureData playerFeatureData = _playerData.GetPlayerFeatureData();
             if (playerFeatureData)
             {
@@ -141,10 +162,10 @@ namespace KoiAI.Player
 
                 for (int i = 0; i < cmData.Length; i++)
                 {
-                    _playerCmDataMediator.ChangeDataInHandle(cmData[i]);
+                    _playerCmDataMediator.ChangeDataInHandle(gameObject, cmData[i]);
                 }
             }
-;        }
+;       }
         
         public PlayerFeature GetPlayerFeatureWithProperty(PlayerFeatureProperty featureProperty)
         {
@@ -169,6 +190,8 @@ namespace KoiAI.Player
             return null;
         }
       
+        public Animator PlayerAnimator => _playerAnimator;
+        public AnimatorData PlayerAnimatorData => _playerData.AnimatorData;
         public PlayerData PlayerData => _playerData;
         public PlayerInputAction PlayerIA=> _playerInputAction;
         public PlayerSkin CurrentPlayerSkin => _curPlayerSkin;

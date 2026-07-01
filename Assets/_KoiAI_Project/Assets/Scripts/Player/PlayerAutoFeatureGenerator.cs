@@ -21,7 +21,14 @@ namespace KoiAI.Player
         private PlayerController _playerController;
 
         private PlayerData _playerData;
-        private readonly Dictionary<PlayerFeatureProperty, PlayerFeature> _dicPlayerFeature = new();
+
+        [SerializeField]
+        private Dictionary<PlayerFeatureProperty, PlayerFeature> _dicPlayerFeature = new();
+        [SerializeField]
+        private HashSet<PlayerFeatureProperty> _prevPlayerFeatureProperties = new();
+
+
+#if UNITY_EDITOR
 
         [Button("(Re)Generate Feature Component" , EButtonEnableMode.Editor)]
         public void GeneratePlayerFeature()
@@ -36,11 +43,11 @@ namespace KoiAI.Player
 
             ClearPlayerFeature();
             AddPlayerFeature();
-
+          
             Debug.Log("Completed Generate Player Feature");
         }
 
-#if UNITY_EDITOR
+
         private void AddPlayerFeature()
         {
             PlayerFeatureData playerFeatureData = _playerData.GetPlayerFeatureData();
@@ -50,49 +57,62 @@ namespace KoiAI.Player
                 for (int i = 0; i < properties.Length; i++)
                 {
                     PlayerFeatureProperty property = properties[i];
-                    bool success = false;
-                    if (_dicPlayerFeature.ContainsKey(property))
-                    {
-                        _dicPlayerFeature[property].InitAutoInEnditor();
-                        Debug.Log("Already Exist:");
-                        continue;
-                    }
                     Type featureType = GetPlayerFeatureType(property);
                     if (gameObject.TryGetComponent(featureType, out var feature))
                     {
-                        if(feature is PlayerFeature playerFeature)
+                        if (_dicPlayerFeature.ContainsKey(property))
                         {
-                            playerFeature.Owner = _playerController;
-                            playerFeature.InitAutoInEnditor();
-                            success  = _dicPlayerFeature.TryAdd(property, playerFeature);
+                            _dicPlayerFeature[property].InitAutoInEnditor();
+                            if (!_prevPlayerFeatureProperties.Contains(property))
+                            {
+                                _prevPlayerFeatureProperties.Add(property);
+                            }
+                            continue;
                         }
-                        continue;
+                        else
+                        {
+                            if (feature is PlayerFeature playerFeature)
+                            {
+                                playerFeature.Owner = _playerController;
+                                playerFeature.InitAutoInEnditor();
+                                _prevPlayerFeatureProperties.Add(property);
+                                _dicPlayerFeature.Add(property, playerFeature);
+                            }
+                        }
                     }
-                    var addedFeature = Undo.AddComponent(gameObject, featureType);
-                    if (addedFeature is PlayerFeature addedPlayerFeature)
+                    else
                     {
-                        addedPlayerFeature.Owner = _playerController;
-                        addedPlayerFeature.InitAutoInEnditor();
-                        success= _dicPlayerFeature.TryAdd(property, addedPlayerFeature);
+                        var addedFeature = Undo.AddComponent(gameObject, featureType);
+                        if (addedFeature is PlayerFeature addedPlayerFeature)
+                        {
+                            addedPlayerFeature.Owner = _playerController;
+                            addedPlayerFeature.InitAutoInEnditor();
+                            _prevPlayerFeatureProperties.Add(property);
+                            _dicPlayerFeature.TryAdd(property, addedPlayerFeature);
+                        }
                     }
-                    Debug.Log(success);
+                    
                 }
             }
+            UnityEditor.EditorUtility.SetDirty(gameObject);
         }
 
         private void ClearPlayerFeature()
         {
             PlayerFeatureData playerFeatureData = _playerData.GetPlayerFeatureData();
             PlayerFeatureProperty[] properties = playerFeatureData.Properties;
-            var playerFeatureList = _dicPlayerFeature.ToList();
-            foreach (var playerFeaturePair in playerFeatureList)
+            foreach(PlayerFeatureProperty prevProperty  in _prevPlayerFeatureProperties)
             {
-                if (!properties.Contains(playerFeaturePair.Value.FeatureProperty))
+                if (!properties.Contains(prevProperty))
                 {
-                    Undo.DestroyObjectImmediate(playerFeaturePair.Value);
-                    _dicPlayerFeature.Remove(playerFeaturePair.Key);
+                    if (_dicPlayerFeature.TryGetValue(prevProperty, out PlayerFeature feature))
+                    {
+                        Undo.DestroyObjectImmediate(feature);
+                        _dicPlayerFeature.Remove(prevProperty);
+                    }
                 }
             }
+            _prevPlayerFeatureProperties.Clear();
         }
 #endif
         

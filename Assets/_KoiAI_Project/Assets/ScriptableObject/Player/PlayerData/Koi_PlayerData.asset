@@ -15,13 +15,16 @@ MonoBehaviour:
   _playerFeatureDataBase: {fileID: 11400000, guid: d696849b4c6184b49b4ee354e8f18a3a, type: 2}
   _playerFeatureDataType: 1
   _playerSkin: {fileID: 2513457811619122350, guid: a7eb6b07e27283c4190f9cf2ae1d9b15, type: 3}
+  _animatorData:
+    _animatorAvatar: {fileID: 0}
+    _animatorParamData: {fileID: 0}
   _playerMovementExtensionData:
     _stepAuidoData: {fileID: 11400000, guid: e88b7b5f5216fc04294c2b8f05506877, type: 2}
     _stopStepAudioData: {fileID: 11400000, guid: ca7ccb9d4cae6cc40949dabf8957d00d, type: 2}
     _jumpAudioData: {fileID: 11400000, guid: d2074f1a90b541e4ba69c1b9fb0b31c8, type: 2}
     _moveSpeedMod: 0
     _jumpForceMod: 0
-    _jumpMaxCountMod: 0
+    _jumpMaxCountMod: 1
     _stepAudioThresold: 12
     _gravityData:
       _initOnAwake: 0
