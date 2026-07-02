@@ -18,6 +18,7 @@ MonoBehaviour:
   _animatorData:
     _animatorAvatar: {fileID: 9000000, guid: 53b926c7b5ef4e04a9ce07f093bb0afb, type: 2}
     _animatorParamData: {fileID: 11400000, guid: ca3347233760bfd41a65520e66353502, type: 2}
+    _stepAnimatorThresold: 47
   _playerMovementExtensionData:
     _stepAuidoData: {fileID: 11400000, guid: e88b7b5f5216fc04294c2b8f05506877, type: 2}
     _stopStepAudioData: {fileID: 11400000, guid: ca7ccb9d4cae6cc40949dabf8957d00d, type: 2}
@@ -39,7 +40,7 @@ MonoBehaviour:
       _feetPoint: {fileID: 0}
     _rigidData:
       _mass: 120
-      _linearDamping: 5
+      _linearDamping: 2.5
       _angularDamping: 0.05
     _colliderData:
       _center: {x: 0, y: 0.35, z: 0}
@@ -47,7 +48,7 @@ MonoBehaviour:
       _height: 5
       _direction: 1
   _playerRotationExtensionData:
-    _lookSpeedMod: 0
+    _lookSpeedMod: -5
     _surfaceCheckDistanceMod: 0
     _surfaceLayerMask:
       serializedVersion: 2

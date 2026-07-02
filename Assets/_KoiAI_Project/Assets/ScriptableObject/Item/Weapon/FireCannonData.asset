@@ -14,8 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FireGunData
   _itemPrefab: {fileID: 6473127510279200606, guid: 57be7ef47c393e3429865b8e2fc3d641, type: 3}
   _itemTex: {fileID: 2800000, guid: ef4653662b04be5449b407162f48cded, type: 3}
-  _itemMesh: {fileID: 0}
-  _itemMaterial: {fileID: 0}
+  _itemMesh: {fileID: -9075801455013421401, guid: 72a471f939b58d740bf132cda99d92c9, type: 3}
+  _itemMaterials:
+  - {fileID: 2100000, guid: f553727eabb7247418d102de8a33a700, type: 2}
+  - {fileID: 2100000, guid: f553727eabb7247418d102de8a33a700, type: 2}
+  - {fileID: 2100000, guid: f553727eabb7247418d102de8a33a700, type: 2}
+  - {fileID: 2100000, guid: f553727eabb7247418d102de8a33a700, type: 2}
   _itemName: FireCannon
   _itemId: 1234
   _isCreatableObj: 1

@@ -90,7 +90,7 @@ namespace KoiAI.Player
             if (!IsValid())
                 return;
             Quaternion quat = Quaternion.Euler(_targetAngle.x, _targetAngle.y, _targetAngle.z);
-            transform.rotation = Quaternion.Slerp(transform.rotation, quat, Time.deltaTime * _valueData.LookSpeed + _extensionValueData.LookSpeedMod);
+            transform.rotation = Quaternion.Slerp(transform.rotation, quat, Time.deltaTime * (_valueData.LookSpeed + _extensionValueData.LookSpeedMod));
 
         }
 

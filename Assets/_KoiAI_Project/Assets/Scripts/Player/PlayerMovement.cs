@@ -96,6 +96,7 @@ namespace KoiAI.Player
         private bool _isMoveStop;
         private UnityEngine.Camera _camera;
         private Vector3 _translation = Vector3.zero;
+        private AnimatorData _animatorData;
         private AnimatorParamData _animParamData;
         public override PlayerFeatureProperty FeatureProperty => PlayerFeatureProperty.Movement;
 
@@ -132,6 +133,9 @@ namespace KoiAI.Player
 
             if(Owner.PlayerAnimatorData.IsValid())
             {
+                //애니메이터 데이터 초기화
+                _animatorData = Owner.PlayerAnimatorData;
+                //애니메이터 파라미터 데이터 초기화
                 _animParamData = Owner.PlayerAnimatorData.AnimParamData;
             }
             else
@@ -168,14 +172,21 @@ namespace KoiAI.Player
 
             }
 
-            #region 키를 연속 누름으로 인한 소리 끊김 방지
+            #region 이동 키를 연속 누름으로 인한 애니메이션 및 소리 끊김 방지
             if (_isMoveStop)
             {
+                if (_rigidBody.linearVelocity.sqrMagnitude <= _animatorData.StepAnimatorTresold)
+                {
+                    if (Owner.PlayerAnimatorData.IsValid() && _animParamData.WalkParmID > 0)
+                    {
+                        Owner.PlayerAnimator.SetBool(_animParamData.WalkParmID, false);
+                    }
+                    _isMoveStop = false;
+                }
                 if (_rigidBody.linearVelocity.sqrMagnitude <= _extensionValueData.StepAudioThresold)
                 {
                     AudioManager.Instance.FadeStopSFX(_moveSFXTarget, 0.2f);
                     AudioManager.Instance.PlaySFX(_mainSFXTarget, _extensionValueData.StopStepAudioData, transform.position);
-                    _isMoveStop = false;
                 }
             }
             #endregion
@@ -232,10 +243,7 @@ namespace KoiAI.Player
             if (context.canceled)
             {
                 _isMoveStop = true;
-                if (Owner.PlayerAnimatorData.IsValid() && _animParamData.WalkParmID > 0)
-                {
-                    Owner.PlayerAnimator.SetBool(_animParamData.WalkParmID, false);
-                }
+
             }
             else
             {

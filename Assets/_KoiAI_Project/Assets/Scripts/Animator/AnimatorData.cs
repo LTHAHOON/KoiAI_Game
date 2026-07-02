@@ -10,10 +10,13 @@ namespace KoiAI.AnimatorSystem
         private Avatar _animatorAvatar;
         [SerializeField]
         private AnimatorParamData _animatorParamData;
+        [SerializeField]
+        private float _stepAnimatorThresold;
 
         public readonly AnimatorParamData AnimParamData => _animatorParamData;
         public readonly RuntimeAnimatorController RuntimeAnimController => _animatorParamData.RuntimeAC;
         public readonly Avatar AnimatorAvatar => _animatorAvatar;
+        public readonly float StepAnimatorTresold => _stepAnimatorThresold;
 
         public readonly bool IsValid() => _animatorAvatar != null && _animatorParamData != null && _animatorParamData.RuntimeAC != null;
     }

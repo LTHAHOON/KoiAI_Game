@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1add40ccb21e6f64b8b5adcfc6641a9c, type: 3}
-  m_Name: AD_Player_Steps
+  m_Name: AD_Koi_Steps
   m_EditorClassIdentifier: Assembly-CSharp::AudioData
   _audioResource: {fileID: 6418180475301049370, guid: 77898be7c7db1164d849341e181c735f, type: 2}
   _volume: 1

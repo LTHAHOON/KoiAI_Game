@@ -52,7 +52,7 @@ namespace KoiAI.Item
         [SerializeField]
         private Mesh _itemMesh;
         [SerializeField]
-        private Material _itemMaterial;
+        private Material[] _itemMaterials;
         [SerializeField]
         private string _itemName;
         [SerializeField]
@@ -61,7 +61,7 @@ namespace KoiAI.Item
         private bool _isCreatableObj = false;
 
         public Mesh ItemMesh => _itemMesh;
-        public Material ItemMaterial => _itemMaterial;
+        public Material[] ItemMaterials => _itemMaterials;
         public bool IsCreatableObj => _isCreatableObj;
         public ItemBase ItemPrefab => _itemPrefab;
         public Texture2D ItemTex => _itemTex;

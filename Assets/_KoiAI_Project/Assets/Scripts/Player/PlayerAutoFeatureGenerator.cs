@@ -21,14 +21,8 @@ namespace KoiAI.Player
         private PlayerController _playerController;
 
         private PlayerData _playerData;
-
-        [SerializeField]
-        private Dictionary<PlayerFeatureProperty, PlayerFeature> _dicPlayerFeature = new();
-        [SerializeField]
-        private HashSet<PlayerFeatureProperty> _prevPlayerFeatureProperties = new();
-
-
-#if UNITY_EDITOR
+        private readonly Dictionary<PlayerFeatureProperty, PlayerFeature> _dicPlayerFeature = new();
+        private readonly HashSet<PlayerFeatureProperty> _prevPlayerFeatureProperties = new();
 
         [Button("(Re)Generate Feature Component" , EButtonEnableMode.Editor)]
         public void GeneratePlayerFeature()
@@ -41,13 +35,28 @@ namespace KoiAI.Player
             _playerController.InitInEditor();
             _playerData = _playerController.PlayerData;
 
+            if (_dicPlayerFeature.Count <= 0)
+            {
+                //플레이 버튼 누르고 나갈 경우 리셋
+                ResetPlayerFeature();
+            }
             ClearPlayerFeature();
             AddPlayerFeature();
           
             Debug.Log("Completed Generate Player Feature");
         }
 
+        private void ResetPlayerFeature()
+        {
+            PlayerFeature[] playerFeature = gameObject.GetComponents<PlayerFeature>();
+            for (int i = 0; i < playerFeature.Length; i++)
+            {
+                _dicPlayerFeature.Add(playerFeature[i].FeatureProperty, playerFeature[i]);
+                _prevPlayerFeatureProperties.Add(playerFeature[i].FeatureProperty);
+            }
+        }
 
+#if UNITY_EDITOR
         private void AddPlayerFeature()
         {
             PlayerFeatureData playerFeatureData = _playerData.GetPlayerFeatureData();
@@ -62,6 +71,7 @@ namespace KoiAI.Player
                     {
                         if (_dicPlayerFeature.ContainsKey(property))
                         {
+                            _dicPlayerFeature[property].Owner = _playerController;
                             _dicPlayerFeature[property].InitAutoInEnditor();
                             if (!_prevPlayerFeatureProperties.Contains(property))
                             {
@@ -94,7 +104,6 @@ namespace KoiAI.Player
                     
                 }
             }
-            UnityEditor.EditorUtility.SetDirty(gameObject);
         }
 
         private void ClearPlayerFeature()
