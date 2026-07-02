@@ -1,6 +1,6 @@
 using System;
-
 using UnityEngine;
+using NaughtyAttributes;
 
 namespace KoiAI.ItemProp
 {
@@ -8,7 +8,6 @@ namespace KoiAI.ItemProp
     using KoiAI.Player;
     using KoiAI.Utilities;
     using KoiAI.Item;
-    using NaughtyAttributes;
 
     public enum ItemPickUpSize : int
     {
@@ -21,24 +20,31 @@ namespace KoiAI.ItemProp
     [Serializable]
     public struct ItemPickUpCondition
     {
-        [Header("비교 방향: CurXX (==) CompareXX")]
-        [InfoBox("주체의 크기와 비교할 Pick Up 크기")]
+        [Header("비교할 Pick Up 크기")]
         [SerializeField]
         private CompareEnumCondition<ItemPickUpSize> _itemSizeCompareCondition;
-        [InfoBox("현재 HP비율과 비교 할 HP비율")]
+        [Header("비교할 HP비율")]
         [SerializeField]
         private CompareValueCondition<float> _hpCompareCondition;
-        [InfoBox("현재 슬롯 갯수와 비교 할 최대 슬롯 갯수")]
+        [Header("비교할 슬롯 갯수")]
         [SerializeField]
         private CompareValueCondition<int> _slotCountCompareCondition;
-
-        public bool CheckCanPickUp(ItemPickUpSize ownerSize = ItemPickUpSize.None, float curHPRatio = -1, int curSlotCount = -1)
+        
+        public bool CheckCanPickUp(ItemPickUpCondition? currentConditionData = null)
         {
-            bool bValidOwnerSize =  ownerSize.CompareEnumWithCondition<ItemPickUpSize, int>(_itemSizeCompareCondition);
-            bool bValidHPRatio = curHPRatio.CompareWithCondition(_hpCompareCondition);
-            bool bValidSlotCount = curSlotCount.CompareWithCondition(_slotCountCompareCondition);
+            if (!currentConditionData.HasValue)
+            {
+                //조건이 없을 경우 true 반환
+                return true;
+            }
+            var curOwnerSizeData = currentConditionData.Value._itemSizeCompareCondition;
+            var curHpRatioData = currentConditionData.Value._hpCompareCondition;
+            var curSlotCountData = currentConditionData.Value._slotCountCompareCondition;
+            bool bValidOwnerSize =  curOwnerSizeData.CompareValue.CompareEnumWithCondition<ItemPickUpSize, int>(_itemSizeCompareCondition);
+            bool bValidHpRatio =  curHpRatioData.CompareValue.CompareWithCondition(_hpCompareCondition);
+            bool bValidSlotCount = curSlotCountData.CompareValue.CompareWithCondition(_slotCountCompareCondition);
 
-            if(bValidOwnerSize && bValidOwnerSize && bValidSlotCount)
+            if(bValidOwnerSize && bValidHpRatio && bValidSlotCount)
             {
                 return true;
             }
@@ -53,27 +59,24 @@ namespace KoiAI.ItemProp
         private ItemData _itemData;
         [SerializeField] 
         private AudioData _itemAudioData;
-    
-        public ItemPickUpEvent(ItemData itemData, AudioData itemAudioData)
-        {
-            _itemData = itemData;
-            _itemAudioData = itemAudioData;
-        }
+        [SerializeField]
+        [Header("비교 방향: CurXX (==) CompareXX")]
+        private ItemPickUpCondition _itemPickUpCondition;
     
         public ItemData ItemData => _itemData;
         public AudioData ItemAudioData => _itemAudioData;
+        public ItemPickUpCondition ItemPickUpCondition => _itemPickUpCondition;
     }
 
     [RequireComponent (typeof(MeshRenderer))]
     [RequireComponent(typeof(MeshFilter))]
     public class ItemProp : MonoBehaviour
     {
+        [BoxGroup]
         [SerializeField]
         private ItemPickUpEvent _itemPickUpEvent;
         [SerializeField]
         private GameTagName _itemOwnerTag;
-        [SerializeField]
-        ItemPickUpCondition itemPickUpCondition;
 
         private MeshRenderer _meshRenderer;
         private MeshFilter _meshFilter;
@@ -103,6 +106,12 @@ namespace KoiAI.ItemProp
             {
                 if (other.TryGetComponent(out ItemInteractable interactable))
                 {
+                    var itemPickUpConditionData = interactable.GetItemPickUpConditionData();
+                    bool canPickUp = _itemPickUpEvent.ItemPickUpCondition.CheckCanPickUp(itemPickUpConditionData);
+                    if (!canPickUp)
+                    {
+                        return;
+                    }
                     interactable.Interact(_itemPickUpEvent);
                     Destroy(gameObject);
                 }

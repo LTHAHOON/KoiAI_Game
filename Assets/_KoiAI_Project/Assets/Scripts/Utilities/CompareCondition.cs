@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Runtime.CompilerServices;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace KoiAI.Utilities
@@ -16,17 +17,22 @@ namespace KoiAI.Utilities
     }
 
     [Serializable]
-    public struct CompareValueCondition<T> where T : IComparable<T>
+    public struct CompareValueCondition<T> where T : IComparable<T> 
     {
         [SerializeField]
+        private bool _isDataOnly;
+        [SerializeField]
         private T _compareValue;
+        [DisableIf("_isDataOnly")]
+        [AllowNesting]  
         [SerializeField]
         private ComparisonType _comparisonType;
 
-        public CompareValueCondition(T compareValue, ComparisonType comparisonType)
+        public CompareValueCondition(T compareValue, ComparisonType comparisonType, bool isDataOnly)
         {
             _compareValue = compareValue;
             _comparisonType = comparisonType;
+            _isDataOnly = isDataOnly;
         }
 
         public T CompareValue => _compareValue;
@@ -37,9 +43,15 @@ namespace KoiAI.Utilities
     public struct CompareEnumCondition<T> where T : Enum
     {
         [SerializeField]
+        private bool _isDataOnly;
+        [SerializeField]
         private T _compareValue;
+        [DisableIf("_isDataOnly")]
+        [AllowNesting]  
         [SerializeField]
         private ComparisonType _comparisonType;
+        
+        public bool IsDataOnly { get; set; }
         public T CompareValue => _compareValue;
         public ComparisonType ComparisonType => _comparisonType;
 
@@ -50,7 +62,7 @@ namespace KoiAI.Utilities
         /// <summary>
         /// 조건데이터를 통해 비교합니다.
         /// </summary>
-        public static bool CompareWithCondition<T>(this T curValue, CompareValueCondition<T> compareValueCondition) where T : IComparable<T>
+        public static bool CompareWithCondition<TValue>(this TValue curValue, CompareValueCondition<TValue> compareValueCondition) where TValue : IComparable<TValue>
         {
             if(IsNoneCondition(compareValueCondition))
             {
@@ -72,16 +84,16 @@ namespace KoiAI.Utilities
         /// <summary>
         /// Enum 조건데이터를 통해 비교합니다.
         /// </summary>
-        public static bool CompareEnumWithCondition<T, TCompare>(this T curValue, CompareEnumCondition<T> compareEnumCondition) where T : Enum where TCompare : IComparable<TCompare>
+        public static bool CompareEnumWithCondition<TValue, TCompare>(this TValue curValue, CompareEnumCondition<TValue> compareEnumCondition) where TValue : Enum where TCompare : IComparable<TCompare>
         {
-            T enumCompareValue = compareEnumCondition.CompareValue;
-            if(Enum.GetUnderlyingType(typeof(T)) == typeof(TCompare))
+            TValue enumCompareValue = compareEnumCondition.CompareValue;
+            if(Enum.GetUnderlyingType(typeof(TValue)) != typeof(TCompare))
             {
                 return false;
             }
             //변환을 하지않고 메모리 주소를 해당 (int, long...)타입으로 해석합니다.(따라서 박싱이 없습니다.)
-            TCompare compareValue = Unsafe.As<T, TCompare>(ref enumCompareValue);
-            CompareValueCondition<TCompare> newValueCondition = new(compareValue, compareEnumCondition.ComparisonType);
+            TCompare compareValue = Unsafe.As<TValue, TCompare>(ref enumCompareValue);
+            CompareValueCondition<TCompare> newValueCondition = new(compareValue, compareEnumCondition.ComparisonType, compareEnumCondition.IsDataOnly);
             if (IsNoneCondition(newValueCondition))
             {
                 return false;

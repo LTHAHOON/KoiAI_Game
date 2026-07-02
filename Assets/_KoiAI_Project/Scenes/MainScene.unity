@@ -10131,6 +10131,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8b7f9afd850139439a58b3ca4db31e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemInteractable
+  _itemPickUpConditionData:
+    _itemSizeCompareCondition:
+      _isDataOnly: 1
+      _compareValue: 10
+      _comparisonType: 0
+    _hpCompareCondition:
+      _isDataOnly: 1
+      _compareValue: 0
+      _comparisonType: 0
+    _slotCountCompareCondition:
+      _isDataOnly: 1
+      _compareValue: 0
+      _comparisonType: 0
   _mainSFXTarget: {fileID: 1144688548}
 --- !u!81 &2116610972
 AudioListener:
