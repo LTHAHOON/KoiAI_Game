@@ -32,10 +32,12 @@ namespace KoiAI.Player
         [ShowIf(nameof(HasRotationProperty))]
         [SerializeField]
         private PlayerRotationValueData _playerRotationValueData;
+        [ShowIf(nameof(HasEquipmentProperty))]
+        [SerializeField]
+        private PlayerEquipmentValueData _playerEquipmentValueData;
         [ShowIf(nameof(HasWayPointProperty))]
         [SerializeField]
         private PlayerWayPointValueData _playerWayPointValueData;
-        
         private bool HasProperty(PlayerFeatureProperty property)
         {
             bool bHas = Array.IndexOf(_properties, property) != -1;
@@ -44,10 +46,12 @@ namespace KoiAI.Player
         
         public PlayerMovementValueData PlayerMovementValueData => _playerMovementValueData;
         public PlayerRotationValueData PlayerRotationValueData => _playerRotationValueData;
+        public PlayerEquipmentValueData PlayerEquipmentValueData => _playerEquipmentValueData;
         public PlayerWayPointValueData PlayerWayPointValueData => _playerWayPointValueData; 
         public bool HasMovementProperty => HasProperty(PlayerFeatureProperty.Movement);
-        public bool HasWayPointProperty => HasProperty(PlayerFeatureProperty.WayPoint);
         public bool HasRotationProperty => HasProperty(PlayerFeatureProperty.Rotation);
+        public bool HasEquipmentProperty => HasProperty(PlayerFeatureProperty.Equipment);
+        public bool HasWayPointProperty => HasProperty(PlayerFeatureProperty.WayPoint);
         public PlayerFeatureDataType PlayerFeatureDataType => _playerFeatureDataType;
         public PlayerFeatureProperty[] Properties => _properties;
         public CinemachineData[] PlayerCinemachineData => _playerCinemachineData;

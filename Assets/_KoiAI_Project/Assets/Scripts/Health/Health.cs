@@ -1,12 +1,14 @@
-using System;
 using R3;
+using System;
 using UnityEngine;
 
 namespace KoiAI.Health
 {
+    using KoiAI.Interact;
+    using KoiAI.ItemProp;
     using KoiAI.Utilities;
-    
-    public class Health : UIFollowHandle
+
+    public class Health : UIFollowHandle, IHealthProvider
     {
         [SerializeField]
         private HealthData _healthData;
@@ -72,6 +74,17 @@ namespace KoiAI.Health
         }
     
         public HealthBar GetHealthBar() => _healthBar;
+
+
+        public void RefreshItemPickUpCondition(ItemPickUpCondition currentConditionData, ItemPickUpCondition compareCondition)
+        {
+            var conditionData = currentConditionData.hpCompareCondition;
+
+            conditionData.SetCompareValue(CurrentHealthRatio);
+            currentConditionData.hpCompareCondition = conditionData;
+        }
+
+        public float CurrentHealthRatio => Mathf.Clamp01(CurrentHealth / MaxHealth);
         public float CurrentHealth => _currentHealth.CurrentValue;
         public float MaxHealth => _healthData.MaxHealth;
         public HealthData HealthData => _healthData;    

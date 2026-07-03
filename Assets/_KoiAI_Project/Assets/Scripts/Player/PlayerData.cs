@@ -31,7 +31,7 @@ namespace KoiAI.Player
         [ShowIf(nameof(HasRotationProperty))]
         [SerializeField]
         private PlayerRotationExtensionData _playerRotationExtensionData;
-        
+
         public PlayerFeatureData GetPlayerFeatureData()
         {
             PlayerFeatureData data = _playerFeatureDataBase?.GetPlayerFeatureData(_playerFeatureDataType);
@@ -58,6 +58,7 @@ namespace KoiAI.Player
                     PlayerFeatureProperty.Movement => data.PlayerMovementValueData,
                     PlayerFeatureProperty.Rotation => data.PlayerRotationValueData,
                     PlayerFeatureProperty.WayPoint => data.PlayerWayPointValueData,
+                    PlayerFeatureProperty.Equipment => data.PlayerEquipmentValueData,
                     _ => null
                 };
             }

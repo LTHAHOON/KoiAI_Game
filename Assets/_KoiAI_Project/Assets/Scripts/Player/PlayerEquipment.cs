@@ -1,17 +1,31 @@
+using NaughtyAttributes;
+using R3;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using R3;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace KoiAI.Player
 {
-    using KoiAI.UI.HUD;
+    using KoiAI.Interact;
     using KoiAI.Item;
-    
-    [RequireComponent(typeof(ItemInteractable))]
-    public class PlayerEquipment : PlayerFeature
+    using KoiAI.ItemProp;
+    using KoiAI.UI.HUD;
+    using KoiAI.Utilities;
+    using UnityEditor.ShaderGraph.Internal;
+
+    [Serializable]
+    public class PlayerEquipmentValueData : PlayerFeatureValueData
+    {
+        [SerializeField]
+        private ItemPickUpSize _itemPickUpSize;
+
+        public ItemPickUpSize ItemPickUpSize => _itemPickUpSize;
+    }
+
+    [RequireComponent(typeof(ItemPickUpInteractable), typeof(ItemPickUpConditionBinder))]
+    public class PlayerEquipment : PlayerFeature, IEquipmentProvider
     {
         [Serializable]
         private struct PlayerEquipmentPoint
@@ -31,7 +45,10 @@ namespace KoiAI.Player
                 _point = point;
             }
         }
-    
+
+        [ReadOnly]
+        [SerializeField]
+        private PlayerEquipmentValueData _valueData;
         [SerializeField]
         private InventorySystem _inventorySystem;
         [SerializeField]
@@ -46,11 +63,10 @@ namespace KoiAI.Player
         [SerializeField]
         private List<PlayerEquipmentPoint> _itemParentPoints = new();
 
-        private ItemInteractable _itemInteractable;
+        private ItemPickUpInteractable _itemInteractable;
         private readonly Dictionary<ItemCategory, Transform> _dicItemParentPoint = new();
         private readonly StringBuilder _sb = new();
         public override PlayerFeatureProperty FeatureProperty => PlayerFeatureProperty.Equipment;
-
         public override void InitAutoInEnditor()
         {
             _inventorySystem = FindAnyObjectByType<InventorySystem>();
@@ -69,7 +85,11 @@ namespace KoiAI.Player
             {
                 return;
             }
-
+            if (playerFeatureValueData is not PlayerEquipmentValueData valueData)
+            {
+                return;
+            }
+            _valueData = valueData;
             #region 아이템 생성 위치 초기화
             AddItemParent(ItemCategory.Weapon, playerSkin.WeaponPoint);
             AddItemParent(ItemCategory.Resource, playerSkin.ResoucePoint);
@@ -100,14 +120,14 @@ namespace KoiAI.Player
 
             #region ItemInteractable 구독
 
-            _itemInteractable = GetComponent<ItemInteractable>();
+            _itemInteractable = GetComponent<ItemPickUpInteractable>();
             _itemInteractable.OnInteract.Subscribe(itemPickUpEvent =>
             {
                 PickUpItem(itemPickUpEvent.ItemData);
             });
 
             #endregion
-        
+
             playerIA.Player.SelectItem_Equip.performed += OnSelectEquipItem;
             playerIA.Player.SelectItem_NotEquip.performed += OnSelectNotEquipItem;
             playerIA.Player.UseItem.performed += OnUseItem;
@@ -119,7 +139,6 @@ namespace KoiAI.Player
 
         public override void UpdateFeature() { }
 
-        
         private void PickUpItem(ItemData itemData, ItemSlotType slotType = ItemSlotType.NotEquipped)
         {
             var itemList = GetItemList(slotType);
@@ -333,5 +352,35 @@ namespace KoiAI.Player
             }
             return false;
         }
+
+        public void RefreshItemPickUpCondition(ItemPickUpCondition currentConditionData, ItemPickUpCondition compareCondition)
+        {
+            int remainingSlotCount = GetRemainingSlotCount();
+            int maxSlotCount = GetMaxSlotCount();
+
+            var compareSlotCountCondtiion = compareCondition.slotCountCompareCondition;
+            compareSlotCountCondtiion.SetCompareValue(maxSlotCount);
+            compareCondition.slotCountCompareCondition = compareSlotCountCondtiion;
+
+            var conditionSlotCountData = currentConditionData.slotCountCompareCondition;
+            conditionSlotCountData.SetCompareValue(remainingSlotCount);
+            currentConditionData.slotCountCompareCondition = conditionSlotCountData;
+
+            var conditionItemSizeData = currentConditionData.itemSizeCompareCondition;
+            conditionItemSizeData.SetCompareValue(ItemPickUpSize);
+            currentConditionData.itemSizeCompareCondition = conditionItemSizeData;
+        }
+
+        public int GetMaxSlotCount()
+        {
+            _inventorySystem.TryGetInventorySlot(ItemSlotType.NotEquipped, out var inventorySlot);
+            int maxSlotCount = inventorySlot.SlotData.SlotCount;
+            return maxSlotCount;
+        }
+
+        public int GetRemainingSlotCount() => _notEquipDatas.Count;
+
+
+        public ItemPickUpSize ItemPickUpSize => _valueData.ItemPickUpSize;
     }
 }

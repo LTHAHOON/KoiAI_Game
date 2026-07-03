@@ -7,7 +7,6 @@ namespace KoiAI.Health
     public abstract class HealthBar : FollowableUI
     {
         private float _maxHealth = -1f;
-
         public void Init(HealthBarData healthBarData, float curHealth, float maxHealth)
         {
             _maxHealth = maxHealth;

@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 #if UNITY_EDITOR
+using UnityEditor;
 using UnityEditor.Animations;
 #endif
 
@@ -14,18 +15,28 @@ namespace KoiAI.AnimatorSystem
     {
         [SerializeField]
         private RuntimeAnimatorController _runtimeAnimatorController;
+
         [SerializeField]
         [BoxGroup("애니메이터 파라미터(없으면 None)")]
         [Dropdown("GetAnimatorParamList")]
+        [OnValueChanged("OnValueChanged")]
         private string _walkParam;
         [SerializeField]
         [BoxGroup("애니메이터 파라미터(없으면 None)")]
         [Dropdown("GetAnimatorParamList")]
+        [OnValueChanged("OnValueChanged")]
         private string _jumpParam;
 
         private readonly List<string> _animatorParamList = new();
 
 #if UNITY_EDITOR
+
+        public void OnValueChanged()
+        {
+            EditorUtility.SetDirty(this);
+
+        }
+
         public List<string> GetAnimatorParamList()
         {
             _animatorParamList.Clear();

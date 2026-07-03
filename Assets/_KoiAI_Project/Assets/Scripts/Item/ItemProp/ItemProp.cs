@@ -8,6 +8,7 @@ namespace KoiAI.ItemProp
     using KoiAI.Player;
     using KoiAI.Utilities;
     using KoiAI.Item;
+    using KoiAI.Interact;
 
     public enum ItemPickUpSize : int
     {
@@ -18,31 +19,36 @@ namespace KoiAI.ItemProp
     }
 
     [Serializable]
-    public struct ItemPickUpCondition
+    public class ItemPickUpCondition
     {
+        [Tooltip("해당 ComparisonType이 None일 경우 True 반환")]
         [Header("비교할 Pick Up 크기")]
-        [SerializeField]
-        private CompareEnumCondition<ItemPickUpSize> _itemSizeCompareCondition;
+        public CompareEnumCondition<ItemPickUpSize> itemSizeCompareCondition;
+        [Tooltip("해당 ComparisonType이 None일 경우 True 반환")]
         [Header("비교할 HP비율")]
-        [SerializeField]
-        private CompareValueCondition<float> _hpCompareCondition;
-        [Header("비교할 슬롯 갯수")]
-        [SerializeField]
-        private CompareValueCondition<int> _slotCountCompareCondition;
+        public CompareValueCondition<float> hpCompareCondition;
+        [Tooltip("해당 ComparisonType이 None일 경우 True 반환")]
+        [Header("비교할 슬롯 갯수(자동으로 정해집니다.)")]
+        public CompareValueCondition<int> slotCountCompareCondition;
         
-        public bool CheckCanPickUp(ItemPickUpCondition? currentConditionData = null)
+        public bool CheckCanPickUp(ItemPickUpCondition currentConditionData = null)
         {
-            if (!currentConditionData.HasValue)
+            if (currentConditionData == null)
             {
                 //조건이 없을 경우 true 반환
                 return true;
             }
-            var curOwnerSizeData = currentConditionData.Value._itemSizeCompareCondition;
-            var curHpRatioData = currentConditionData.Value._hpCompareCondition;
-            var curSlotCountData = currentConditionData.Value._slotCountCompareCondition;
-            bool bValidOwnerSize =  curOwnerSizeData.CompareValue.CompareEnumWithCondition<ItemPickUpSize, int>(_itemSizeCompareCondition);
-            bool bValidHpRatio =  curHpRatioData.CompareValue.CompareWithCondition(_hpCompareCondition);
-            bool bValidSlotCount = curSlotCountData.CompareValue.CompareWithCondition(_slotCountCompareCondition);
+            if(!currentConditionData.IsAllDataOnly(currentConditionData))
+            {
+                return false;
+            }
+            var curOwnerSizeData = currentConditionData.itemSizeCompareCondition;
+            var curHpRatioData = currentConditionData.hpCompareCondition;
+            var curSlotCountData = currentConditionData.slotCountCompareCondition;
+
+            bool bValidOwnerSize =  curOwnerSizeData.CompareValue.CompareEnumWithCondition<ItemPickUpSize, int>(itemSizeCompareCondition);
+            bool bValidHpRatio =  curHpRatioData.CompareValue.CompareWithCondition(hpCompareCondition);
+            bool bValidSlotCount = curSlotCountData.CompareValue.CompareWithCondition(slotCountCompareCondition);
 
             if(bValidOwnerSize && bValidHpRatio && bValidSlotCount)
             {
@@ -50,6 +56,10 @@ namespace KoiAI.ItemProp
             }
             return false;
         }
+        public bool IsAllDataOnly(ItemPickUpCondition currentConditionData) => 
+            currentConditionData.itemSizeCompareCondition.IsDataOnly && 
+            currentConditionData.hpCompareCondition.IsDataOnly && 
+            currentConditionData.slotCountCompareCondition.IsDataOnly;
     }
 
     [Serializable]
@@ -104,10 +114,13 @@ namespace KoiAI.ItemProp
         {
             if(other.CompareTag(_ownerTag))
             {
-                if (other.TryGetComponent(out ItemInteractable interactable))
+                if (other.TryGetComponent(out ItemPickUpInteractable interactable))
                 {
-                    var itemPickUpConditionData = interactable.GetItemPickUpConditionData();
-                    bool canPickUp = _itemPickUpEvent.ItemPickUpCondition.CheckCanPickUp(itemPickUpConditionData);
+                    ItemPickUpCondition currentConditionData = interactable.GetItemPickUpConditionData();
+                    ItemPickUpConditionBinder conditionBinder = interactable.GetItemPickUpConditionBinder();
+                    conditionBinder.RefreshProviders(currentConditionData, _itemPickUpEvent.ItemPickUpCondition);
+
+                    bool canPickUp = _itemPickUpEvent.ItemPickUpCondition.CheckCanPickUp(currentConditionData);
                     if (!canPickUp)
                     {
                         return;

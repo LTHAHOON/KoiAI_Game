@@ -1,4 +1,3 @@
-using Cysharp.Threading.Tasks;
 using System;
 using System.Runtime.CompilerServices;
 using NaughtyAttributes;
@@ -35,6 +34,12 @@ namespace KoiAI.Utilities
             _isDataOnly = isDataOnly;
         }
 
+        public void SetCompareValue(T compareValue)
+        {
+            _compareValue = compareValue;
+        }
+
+        public bool IsDataOnly => _isDataOnly;
         public T CompareValue => _compareValue;
         public ComparisonType ComparisonType => _comparisonType;
     }
@@ -50,8 +55,13 @@ namespace KoiAI.Utilities
         [AllowNesting]  
         [SerializeField]
         private ComparisonType _comparisonType;
-        
-        public bool IsDataOnly { get; set; }
+
+        public void SetCompareValue(T compareValue)
+        {
+            _compareValue = compareValue;
+        }
+
+        public bool IsDataOnly => _isDataOnly;
         public T CompareValue => _compareValue;
         public ComparisonType ComparisonType => _comparisonType;
 
@@ -66,7 +76,7 @@ namespace KoiAI.Utilities
         {
             if(IsNoneCondition(compareValueCondition))
             {
-                return false;
+                return true;
             }
             int compareResult = curValue.CompareTo(compareValueCondition.CompareValue);
             bool result = compareValueCondition.ComparisonType switch
@@ -92,14 +102,15 @@ namespace KoiAI.Utilities
                 return false;
             }
             //변환을 하지않고 메모리 주소를 해당 (int, long...)타입으로 해석합니다.(따라서 박싱이 없습니다.)
+            TCompare curCompareValue = Unsafe.As<TValue, TCompare>(ref curValue);
             TCompare compareValue = Unsafe.As<TValue, TCompare>(ref enumCompareValue);
             CompareValueCondition<TCompare> newValueCondition = new(compareValue, compareEnumCondition.ComparisonType, compareEnumCondition.IsDataOnly);
             if (IsNoneCondition(newValueCondition))
             {
-                return false;
+                return true;
             }
 
-            bool result =  compareValue.CompareWithCondition(newValueCondition);
+            bool result = curCompareValue.CompareWithCondition(newValueCondition);
             return result; 
         }
 

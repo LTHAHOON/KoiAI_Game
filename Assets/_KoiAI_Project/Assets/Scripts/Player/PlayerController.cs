@@ -1,17 +1,19 @@
+using NaughtyAttributes;
 using System;
 using System.Collections.Generic;
-using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Playables;
-using static KoiAI.Player.PlayerSFXAudioFeature;
 using static KoiAI.Player.PlayerFeature;
+using static KoiAI.Player.PlayerSFXAudioFeature;
 
 namespace KoiAI.Player
 {
+    using KoiAI.AnimatorSystem;
     using KoiAI.Audio;
     using KoiAI.Camera;
-    using KoiAI.AnimatorSystem;
+    using KoiAI.Interact;
+    using KoiAI.ItemProp;
 
     public abstract class PlayerFeatureExtensionData { }
     
@@ -93,7 +95,6 @@ namespace KoiAI.Player
                 Debug.LogError("PlayerData is null");
                 return;
             }
-
             Init();
         }
 
@@ -189,12 +190,13 @@ namespace KoiAI.Player
             }
             return null;
         }
-      
+
         public Animator PlayerAnimator => _playerAnimator;
         public AnimatorData PlayerAnimatorData => _playerData.AnimatorData;
         public PlayerData PlayerData => _playerData;
         public PlayerInputAction PlayerIA=> _playerInputAction;
         public PlayerSkin CurrentPlayerSkin => _curPlayerSkin;
         public LayerMask TargetLayerMask => _targetLayerMask;
+
     }
 }

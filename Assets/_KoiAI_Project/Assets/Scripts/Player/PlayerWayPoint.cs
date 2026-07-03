@@ -1,6 +1,7 @@
-using System;
 using KoiAI.A_Star;
+using KoiAI.Monster;
 using NaughtyAttributes;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,7 +18,8 @@ namespace KoiAI.Player
         public WayPointData WayPointData => _wayPointData;
         public float BuildDelayTime => _buildDelayTime;
     }
-    
+
+    [RequireComponent(typeof(EntitySight))]
     public class PlayerWayPoint : PlayerFeature
     {
         [SerializeField]
@@ -26,6 +28,7 @@ namespace KoiAI.Player
         [SerializeField]
         private PlayerWayPointValueData _valueData;
 
+        private EntitySight _entitySight;
         private readonly WayPointHandle _wayPointHandle = new();
         private float _curTime = 0;
         private bool _isAutoBuild = false;
@@ -43,14 +46,31 @@ namespace KoiAI.Player
             {
                 return;
             }
+            _entitySight = GetComponent<EntitySight>(); 
             _valueData = valueData;
             playerIA.Player.SetVisibleWayPoint.performed += OnSetVisibleWayPoint;
             playerIA.Player.Move.performed += OnRebuildWayPoint;
             playerIA.Player.Move.canceled += OnRebuildWayPoint;
         }
 
+        public bool DetectTargetAroundPlayer()
+        {
+            _entitySight.Detect();
+            if(_entitySight.IsFindTarget())
+            {
+                _target = _entitySight.GetTargetToFind().transform;
+                return true;
+            }
+            return false;
+        }
+
         public void OnSetVisibleWayPoint(InputAction.CallbackContext context)
         {
+            bool isFindTarget = DetectTargetAroundPlayer();
+            if(!isFindTarget)
+            {
+                return;
+            }
             if (context.performed)
             {
                 _isShowedWayPoint = !_isShowedWayPoint;

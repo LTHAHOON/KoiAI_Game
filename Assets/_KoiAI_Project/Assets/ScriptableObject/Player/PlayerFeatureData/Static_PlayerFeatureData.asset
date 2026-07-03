@@ -24,6 +24,8 @@ MonoBehaviour:
   _playerRotationValueData:
     _lookSpeed: 10
     _surfaceCheckDistance: 3
+  _playerEquipmentValueData:
+    _itemPickUpSize: 0
   _playerWayPointValueData:
     _wayPointData: {fileID: 0}
     _buildDelayTime: 0

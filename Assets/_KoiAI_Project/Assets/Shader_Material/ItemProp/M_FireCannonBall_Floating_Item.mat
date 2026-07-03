@@ -68,9 +68,9 @@ Material:
     - _ZWrite: 1
     - _ZWriteControl: 0
     m_Colors:
-    - _Color: {r: 2.3931818, g: 2.3931818, b: 2.3931818, a: 1}
+    - _Color: {r: 1.1819878, g: 0.8849438, b: 0, a: 1}
     - _Color_1: {r: 0.033454508, g: 0.033454508, b: 0.033454508, a: 1}
-    - _Emission_Color: {r: 0, g: 3.1364167, b: 15.813396, a: 1}
+    - _Emission_Color: {r: 0, g: 0.9309493, b: 4.679244, a: 1}
     - _FloatDistance: {r: 0, g: 0.25, b: 0, a: 0}
     - _FloatSpeed: {r: 0, g: 1.3, b: 0, a: 0}
     - _Floating_Distance: {r: 0, g: 0.35, b: 0, a: 0}

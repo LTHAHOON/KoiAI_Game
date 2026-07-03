@@ -127,14 +127,17 @@ MonoBehaviour:
   _itemPickUpEvent:
     _itemData: {fileID: 11400000, guid: dff2d08bfa5dcf94db37f26aa54413e5, type: 2}
     _itemAudioData: {fileID: 11400000, guid: 5850e09bb44ed4943b75b2233e3d0037, type: 2}
+    _itemPickUpCondition:
+      itemSizeCompareCondition:
+        _isDataOnly: 0
+        _compareValue: 10
+        _comparisonType: 5
+      hpCompareCondition:
+        _isDataOnly: 0
+        _compareValue: 1
+        _comparisonType: 1
+      slotCountCompareCondition:
+        _isDataOnly: 0
+        _compareValue: 5
+        _comparisonType: 3
   _itemOwnerTag: 0
-  _itemPickUpCondition:
-    _itemSizeCompareCondition:
-      _compareValue: 10
-      _comparisonType: 0
-    _hpCompareCondition:
-      _compareValue: 1
-      _comparisonType: 1
-    _slotCountCompareCondition:
-      _compareValue: 5
-      _comparisonType: 3

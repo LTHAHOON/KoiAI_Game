@@ -1,21 +1,22 @@
 using System;
-using KoiAI.Audio;
-using KoiAI.ItemProp;
-using NaughtyAttributes;
 using R3;
 using UnityEngine;
+using NaughtyAttributes;
 
-namespace KoiAI.Player
+namespace KoiAI.Interact
 {
-    public class ItemInteractable : BaseInteractable<ItemPickUpEvent>
+    using KoiAI.Audio;
+    using KoiAI.ItemProp;
+
+    public class ItemPickUpInteractable : BaseInteractable<ItemPickUpEvent>
     {
+        [SerializeField]
+        private ItemPickUpConditionBinder _itemPickUpConditionBinder;
         [SerializeField]
         [BoxGroup("오직 데이터만 필요")]
         private ItemPickUpCondition _itemPickUpConditionData;
         [SerializeField]
         private AudioSFXTarget _mainSFXTarget;
-
-        public Action<ItemPickUpCondition> OnRefreshItemConditionData { get; set; }
 
         private void Awake()
         {
@@ -34,5 +35,6 @@ namespace KoiAI.Player
         }
         
         public ItemPickUpCondition GetItemPickUpConditionData() => _itemPickUpConditionData;
+        public ItemPickUpConditionBinder GetItemPickUpConditionBinder() => _itemPickUpConditionBinder;
     }
 }

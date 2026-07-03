@@ -1,7 +1,7 @@
 using R3;
 using UnityEngine;
 
-namespace KoiAI.Player
+namespace KoiAI.Interact
 {
     public abstract class BaseInteractable<T> : MonoBehaviour
     {

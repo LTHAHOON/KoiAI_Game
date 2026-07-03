@@ -44,8 +44,8 @@ MonoBehaviour:
       _angularDamping: 0.05
     _colliderData:
       _center: {x: 0, y: 0.35, z: 0}
-      _radius: 2
-      _height: 5
+      _radius: 2.5
+      _height: 7
       _direction: 1
   _playerRotationExtensionData:
     _lookSpeedMod: -5

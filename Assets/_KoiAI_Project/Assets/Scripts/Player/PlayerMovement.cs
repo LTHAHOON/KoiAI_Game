@@ -140,7 +140,7 @@ namespace KoiAI.Player
             }
             else
             {
-                Debug.LogError("Error: PlayerAnimatorData is not valid.");
+                Debug.Log("Check: PlayerAnimatorData is not valid.");
             }
         }
         public override void UpdateFeature()
