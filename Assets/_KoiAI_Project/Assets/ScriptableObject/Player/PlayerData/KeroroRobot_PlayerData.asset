@@ -26,7 +26,7 @@ MonoBehaviour:
     _moveSpeedMod: 7
     _jumpForceMod: 0
     _jumpMaxCountMod: 0
-    _stepAudioThresold: 12
+    _stepAudioThresold: 47
     _gravityData:
       _initOnAwake: 0
       _groundLayerMask:

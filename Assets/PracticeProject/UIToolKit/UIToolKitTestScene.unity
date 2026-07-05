@@ -221,6 +221,7 @@ GameObject:
   m_Component:
   - component: {fileID: 886269767}
   - component: {fileID: 886269766}
+  - component: {fileID: 886269768}
   m_Layer: 0
   m_Name: UI
   m_TagString: Untagged
@@ -242,7 +243,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
   m_PanelSettings: {fileID: 11400000, guid: faa1796516c0b0f47b70c0fd7001a230, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: c1641c97114613247805950aacc322bd, type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: e3d5dd1e9fab620478e71241e1ec9823, type: 3}
   m_SortingOrder: 0
   m_Position: 0
   m_WorldSpaceSizeMode: 1
@@ -266,6 +267,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &886269768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 886269765}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c25769e8f5cc3b4ca8417ba144b410f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CustomSlider
 --- !u!1 &1813099725
 GameObject:
   m_ObjectHideFlags: 0

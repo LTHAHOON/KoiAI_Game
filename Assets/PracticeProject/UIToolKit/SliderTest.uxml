@@ -1,0 +1,4 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/SliderSample.uss?fileID=7433441132597879392&amp;guid=bf2a6675827338e42a6c50a702a467cb&amp;type=3#SliderSample"/>
+    <ui:Slider label="Slider" value="6.78" high-value="100" fill="true" name="MySlider" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; background-image: none; height: 40px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; width: 100%; background-color: rgb(0, 0, 0); border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-bottom-left-radius: 20px; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;"/>
+</ui:UXML>
