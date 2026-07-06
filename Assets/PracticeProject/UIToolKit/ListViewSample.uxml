@@ -1,0 +1,6 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/ListViewControlTest.uss?fileID=7433441132597879392&amp;guid=9555d8cfe79668648b536fa3dd3636c7&amp;type=3#ListViewControlTest"/>
+    <ui:VisualElement name="root" class="root" style="width: 100%; height: 100%;">
+        <ui:ListView item-template="project://database/Assets/PracticeProject/UIToolKit/ItemSample.uxml?fileID=9197481963319205126&amp;guid=0b95d254e57803942834251fcf7df1ad&amp;type=3#ItemSample" binding-source-selection-mode="AutoAssign" fixed-item-height="150" style="align-self: center;"/>
+    </ui:VisualElement>
+</ui:UXML>
