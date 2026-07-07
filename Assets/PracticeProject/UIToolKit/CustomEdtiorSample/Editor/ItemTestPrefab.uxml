@@ -1,0 +1,8 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="prefab" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0.39); height: 90px;">
+        <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+            <ui:VisualElement name="icon" style="flex-grow: 0; width: 64px; height: 64px; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; background-image: url(&quot;project://database/Assets/PracticeProject/UIToolKit/CustomEdtiorSample/ItemTestIcon/f.PNG?fileID=21300000&amp;guid=32af26c7843a93f489d4a7c9c0660bd1&amp;type=3#f&quot;);"/>
+            <ui:Label text="ItemName" name="name" binding-path="name" style="margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-font-definition: url(&quot;project://database/Assets/_KoiAI_Project/Assets/Font/TerrarumSansBitmap.otf?fileID=12800000&amp;guid=29993aa07eeb560408110b77f46b6cbb&amp;type=3#TerrarumSansBitmap&quot;); font-size: 20px;"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
