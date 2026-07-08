@@ -87,3 +87,11 @@
     margin-bottom: 0;
     margin-left: 0;
 }
+
+
+
+.gameIcon {
+    width: 350px;
+    height: 350px;
+    margin-right: 20px;
+}
