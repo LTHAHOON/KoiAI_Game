@@ -1,0 +1,6 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/_KoiAI_Project/Assets/UXML/Slider.uss?fileID=7433441132597879392&amp;guid=4e19b795d556ea14caa526b1285789e8&amp;type=3#Slider"/>
+    <ui:VisualElement style="flex-grow: 1;">
+        <ui:Slider label="Slider" value="42" high-value="100" name="loadingSlider" fill="true"/>
+    </ui:VisualElement>
+</ui:UXML>

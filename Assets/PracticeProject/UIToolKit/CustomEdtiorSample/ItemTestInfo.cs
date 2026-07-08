@@ -9,6 +9,7 @@ public enum ItemType
     Food,
 }
 
+#pragma warning disable CS0108
 [CreateAssetMenu(fileName = "new ItemTestInfo", menuName = "ItemTestInfo")]
 public class ItemTestInfo : ScriptableObject
 {

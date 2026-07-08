@@ -10,17 +10,24 @@ using UnityEditor.UIElements;
 
 public class ItemTestEdtior : EditorWindow
 {
-    public static List<ItemTestInfo> itemTestInfoList = new();
-    private VisualTreeAsset itemPrefab;
-    private VisualElement itemList;
-    private ListView itemViewList;
-    private Sprite basicItemIcon;
+    public static List<ItemTestInfo> _itemTestInfoList = new();
+    //VisualElement를 생성해주는 프리팹 객체
+    private VisualTreeAsset _itemPrefab;
+    //왼쪽 뷰에 있는 리스트뷰의 parent
+    private VisualElement _itemList;
+    //왼쪽 뷰에 있는 리스트뷰
+    private ListView _itemViewList;
+    //기본 아이콘 스프라이트
+    private Sprite _basicItemIcon;
 
-    private ScrollView itemScrollView;
+    //오른쪽 뷰에 있는 스크롤뷰
+    private ScrollView _itemScrollView;
+    //오른쪽 뷰에 있는 아이콘
     private VisualElement itemIcon;
-    private ItemTestInfo currentItemInfo;
+    //선택된 아이템 정보
+    private ItemTestInfo _currentItemInfo;
 
-    [MenuItem("Tools/ItemEditor")]
+    [MenuItem("Tools/Test/ItemTestEditor")]
     public static void ShowEample()
     {
         ItemTestEdtior wnd = GetWindow<ItemTestEdtior>();
@@ -32,44 +39,47 @@ public class ItemTestEdtior : EditorWindow
     private void CreateGUI()
     {
         VisualElement root = rootVisualElement;
-        VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/PracticeProject/UIToolKit/CustomEdtiorSample/Editor/CustomEnditorTest.uxml");
+        //보통 이 방식은 옛날방식이고 이제는 SerializeField를 사용해서 Default Reference방식을 선호합니다.
+        string rootPath = AssetDatabase.GUIDToAssetPath("6a01cb204b3df274d9e9849c7c58eb77");
+        VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(rootPath);
+        //VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/PracticeProject/UIToolKit/CustomEdtiorSample/Editor/CustomEnditorTest.uxml");
         root.Add(visualTree.Instantiate());
 
-        itemScrollView = root.Q<ScrollView>("infos");
-        itemScrollView.style.visibility = Visibility.Hidden;
+        _itemScrollView = root.Q<ScrollView>("infos");
+        _itemScrollView.style.visibility = Visibility.Hidden;
         itemIcon = root.Q<VisualElement>("icon");
-        itemPrefab = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/PracticeProject/UIToolKit/CustomEdtiorSample/Editor/ItemTestPrefab.uxml");
+        _itemPrefab = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/PracticeProject/UIToolKit/CustomEdtiorSample/Editor/ItemTestPrefab.uxml");
         LoadData();
-        itemList = root.Q("itemList");
-        basicItemIcon = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/PracticeProject/UIToolKit/CustomEdtiorSample/ItemTestIcon/f.PNG");
+        _itemList = root.Q("itemList");
+        _basicItemIcon = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/PracticeProject/UIToolKit/CustomEdtiorSample/ItemTestIcon/f.PNG");
         CreateListView();
 
         root.Q<Button>("NewBtn").clicked += NewBtn_Click;
         root.Q<Button>("DelBtn").clicked += DelBtn_Click;
 
-        itemScrollView.Q<TextField>("name").RegisterValueChangedCallback(evt =>
+        _itemScrollView.Q<TextField>("name").RegisterValueChangedCallback(evt =>
         {
-            currentItemInfo.name = evt.newValue;
-            itemViewList.Rebuild();
+            _currentItemInfo.name = evt.newValue;
+            _itemViewList.Rebuild();
         });
 
-        itemScrollView.Q<ObjectField>("iconField").RegisterValueChangedCallback(evt =>
+        _itemScrollView.Q<ObjectField>("iconField").RegisterValueChangedCallback(evt =>
         {
             Sprite newSprite = evt.newValue as Sprite;
-            currentItemInfo.icon = newSprite == null ? basicItemIcon : newSprite;
-            itemIcon.style.backgroundImage = new(newSprite == null ? basicItemIcon : newSprite);
-            itemViewList.Rebuild();
+            _currentItemInfo.icon = newSprite == null ? _basicItemIcon : newSprite;
+            itemIcon.style.backgroundImage = new(newSprite == null ? _basicItemIcon : newSprite);
+            _itemViewList.Rebuild();
         });
     }
 
     private void CreateListView()
     {
         //프리팹 생성하는 함수
-        Func<VisualElement> makeItem = () => itemPrefab.CloneTree();
+        Func<VisualElement> makeItem = () => _itemPrefab.CloneTree();
 
         Action<VisualElement, int> bindItem = (e, i) =>
         {
-            if(itemTestInfoList[i] == null)
+            if(_itemTestInfoList[i] == null)
             {
                 return;
             }
@@ -79,14 +89,14 @@ public class ItemTestEdtior : EditorWindow
 
             //   SerializedObject so = new(itemTestInfoList[i]);
             //   e.Bind(so);
-            e.Q<VisualElement>("icon").style.backgroundImage = new(itemTestInfoList[i].icon);
-            e.Q<Label>("name").text = itemTestInfoList[i].name;
+            e.Q<VisualElement>("icon").style.backgroundImage = new(_itemTestInfoList[i].icon);
+            e.Q<Label>("name").text = _itemTestInfoList[i].name;
         };
-        itemViewList = new(itemTestInfoList, 40f, makeItem, bindItem);
-        itemViewList.selectionType = SelectionType.Single;
-        itemViewList.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
-        itemViewList.selectionChanged += SelectData;
-        itemList.Add(itemViewList);
+        _itemViewList = new(_itemTestInfoList, 40f, makeItem, bindItem);
+        _itemViewList.selectionType = SelectionType.Single;
+        _itemViewList.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+        _itemViewList.selectionChanged += SelectData;
+        _itemList.Add(_itemViewList);
 
     }
 
@@ -94,50 +104,50 @@ public class ItemTestEdtior : EditorWindow
     {
         ItemTestInfo item = CreateInstance<ItemTestInfo>();
         item.name = "new itemTestInfo";
-        item.icon = basicItemIcon;
+        item.icon = _basicItemIcon;
 
         AssetDatabase.CreateAsset(item, $"Assets/PracticeProject/UIToolKit/CustomEdtiorSample/Data/{item.id}.asset");
-        itemTestInfoList.Add(item);
-        itemViewList.Rebuild();
+        _itemTestInfoList.Add(item);
+        _itemViewList.Rebuild();
     }
 
     private void DelBtn_Click()
     {
-        if(currentItemInfo == null)
+        if(_currentItemInfo == null)
         {
             return;
         }
-        string path = AssetDatabase.GetAssetPath(currentItemInfo);
+        string path = AssetDatabase.GetAssetPath(_currentItemInfo);
         AssetDatabase.DeleteAsset(path);
-        itemTestInfoList.Remove(currentItemInfo);
-        itemViewList.Rebuild();
-        itemScrollView.style.visibility = Visibility.Hidden;
+        _itemTestInfoList.Remove(_currentItemInfo);
+        _itemViewList.Rebuild();
+        _itemScrollView.style.visibility = Visibility.Hidden;
     }
 
     private void LoadData()
     {
-        itemTestInfoList.Clear();
+        _itemTestInfoList.Clear();
         //string paths = Directory.GetFiles("Assets/PracticeProject/UIToolKit/CustomEdtiorSample/Data/*.asset");
         string[] itemGUID = AssetDatabase.FindAssets("t:ScriptableObject", new[] { "Assets/PracticeProject/UIToolKit/CustomEdtiorSample/Data/" });
         for (int i = 0; i < itemGUID.Length; i++)
         {
             string path = AssetDatabase.GUIDToAssetPath(itemGUID[i]);
             ItemTestInfo itemTestInfo = AssetDatabase.LoadAssetAtPath<ItemTestInfo>(path);
-            itemTestInfoList.Add(itemTestInfo);
+            _itemTestInfoList.Add(itemTestInfo);
         }
     }
 
     private void SelectData(IEnumerable<object> selectedItems)
     {
-        currentItemInfo = (ItemTestInfo)selectedItems.First();
-        SerializedObject so = new SerializedObject(currentItemInfo);
-        itemScrollView.Bind(so);
+        _currentItemInfo = (ItemTestInfo)selectedItems.First();
+        SerializedObject so = new SerializedObject(_currentItemInfo);
+        _itemScrollView.Bind(so);
 
-        if(currentItemInfo.icon != null)
+        if(_currentItemInfo.icon != null)
         {
-            itemIcon.style.backgroundImage = new(currentItemInfo.icon);
+            itemIcon.style.backgroundImage = new(_currentItemInfo.icon);
         }
 
-        itemScrollView.style.visibility = Visibility.Visible;
+        _itemScrollView.style.visibility = Visibility.Visible;
     }
 }
