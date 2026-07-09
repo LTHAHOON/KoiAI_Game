@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_Aim
+  m_Name: M_Title_GameIcon
   m_Shader: {fileID: -6465566751694194690, guid: 5b5f1b37de330b249bb47748e485d32c, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -74,7 +74,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Main_Tex:
-        m_Texture: {fileID: 2800000, guid: 047db3b97896f9a40a79a71555c218c5, type: 3}
+        m_Texture: {fileID: 2800000, guid: 6e79bbd3413904f43a5effd56b9b674f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -130,7 +130,7 @@ Material:
     - _Main_Tex_Alpha: 1
     - _Metallic: 0
     - _OcclusionStrength: 1
-    - _OutlineThickness: 0.01
+    - _OutlineThickness: 0.0149
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
@@ -152,7 +152,7 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Outline_Color: {r: 47.93726, g: 47.93726, b: 47.93726, a: 1}
+    - _Outline_Color: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

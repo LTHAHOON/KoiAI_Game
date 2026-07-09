@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 namespace KoiAI.UI
 {
     [CreateAssetMenu(fileName = "new LobbyViewInfo", menuName = "KoiAI/UI/ViewInfo/LobbyViewInfo")]
-    public class LobbyViewInfo : ScriptableObject
+    public class LobbyViewInfo : VisualViewInfo
     {
         [SerializeField]
         private string _playBtnName;

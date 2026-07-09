@@ -2,13 +2,13 @@
     <ui:Template name="LoadingSlider" src="project://database/Assets/_KoiAI_Project/Assets/UXML/LoadingSlider.uxml?fileID=9197481963319205126&amp;guid=06ebff6555a73d44eaf3109d946a0a14&amp;type=3#LoadingSlider"/>
     <Style src="project://database/Assets/_KoiAI_Project/Assets/UXML/Global.uss?fileID=7433441132597879392&amp;guid=6ab1825469abf394097e891374d6718e&amp;type=3#Global"/>
     <ui:VisualElement name="LoadingToInGameRoot" style="flex-grow: 1;">
-        <ui:VisualElement class="menu-list" style="background-color: rgba(255, 255, 255, 0.49);">
+        <ui:VisualElement class="menu-list">
             <ui:Instance template="LoadingSlider" name="" style="flex-grow: 1; align-self: center; margin-right: 5px; margin-left: 5px; height: 35px;"/>
         </ui:VisualElement>
         <ui:VisualElement style="flex-grow: 1; height: 800px;"/>
         <ui:VisualElement style="flex-grow: 0; align-items: flex-start;">
             <ui:VisualElement name="title" style="align-self: flex-end;">
-                <ui:Image name="title_gameIcon_image" source="project://database/Assets/_KoiAI_Project/Assets/UI_Texture/T_Title.png?fileID=21300000&amp;guid=6e79bbd3413904f43a5effd56b9b674f&amp;type=3#T_Title" class="gameIcon"/>
+                <ui:Image name="title_gameIcon_image" source="" class="gameIcon" style="background-color: rgb(255, 255, 255); transition-duration: 13s; transition-delay: 0s; transition-property: scale;"/>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

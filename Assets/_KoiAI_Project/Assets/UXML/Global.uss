@@ -88,10 +88,9 @@
     margin-left: 0;
 }
 
-
-
 .gameIcon {
     width: 350px;
     height: 350px;
     margin-right: 20px;
+    -unity-material: url("project://database/Assets/_KoiAI_Project/Assets/Shader_Material/SG_UIMaster.shadergraph?fileID=-876546973899608171&guid=5998a6842df54c847bbfb03a20c20e47&type=3#SG_UIMaster") prop("_OutlineColor" rgb(255, 255, 255));
 }

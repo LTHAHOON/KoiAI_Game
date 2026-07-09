@@ -62,7 +62,6 @@
 }
 
 #loadingSlider #unity-fill {
-    background-color: rgb(0, 199, 255);
     border-top-left-radius: 12px;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
@@ -71,4 +70,6 @@
     border-right-width: 0;
     border-bottom-width: 0;
     border-left-width: 0;
+    -unity-material: url("project://database/Assets/_KoiAI_Project/Assets/Shader_Material/VFX_VFXMasterShaderTransparent_URP.mat?fileID=2100000&guid=765522dba09639241bf8449abe94a3e5&type=2#VFX_VFXMasterShaderTransparent_URP");
+    translate: 2px 0;
 }

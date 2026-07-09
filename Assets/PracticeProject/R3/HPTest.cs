@@ -15,7 +15,6 @@ public class HPTest : MonoBehaviour
         {
             Debug.Log($"현재 체력: {value}");
         }).AddTo(gameObject);
-
         _hp.Value -= 10;
         _hp.Value -= 20;
     }
