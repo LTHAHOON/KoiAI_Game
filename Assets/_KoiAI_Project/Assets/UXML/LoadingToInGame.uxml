@@ -8,7 +8,7 @@
         <ui:VisualElement style="flex-grow: 1; height: 800px;"/>
         <ui:VisualElement style="flex-grow: 0; align-items: flex-start;">
             <ui:VisualElement name="title" style="align-self: flex-end;">
-                <ui:Image name="title_gameIcon_image" source="" class="gameIcon" style="background-color: rgb(255, 255, 255); transition-duration: 13s; transition-delay: 0s; transition-property: scale;"/>
+                <ui:Image name="title_gameIcon_image" source="" class="gameIcon" style="background-color: rgb(255, 255, 255);"/>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

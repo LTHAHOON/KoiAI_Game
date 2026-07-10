@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: VFX_VFXMasterShaderTransparent_URP
+  m_Name: M_LoadingSlider
   m_Shader: {fileID: 4800000, guid: 34d390b2da57d824fa7da8a034de38af, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -67,7 +67,7 @@ Material:
     - _VertexOffsetAmount: 0
     m_Colors:
     - _BurnCol: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 0, g: 0.27296615, b: 1, a: 1}
+    - _Color: {r: 0, g: 0.29848462, b: 13.928808, a: 1}
     - _PanningSpeed: {r: -1, g: 0, b: 0, a: 0}
     - _SecondaryPanningSpeed: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

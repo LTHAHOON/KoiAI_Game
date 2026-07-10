@@ -37,8 +37,8 @@ namespace KoiAI.UI
     public class UIScaleTransition
     {
         private UIScaleTransitionData _scaleTransitionData;
-        private VisualElement _uiTarget;
-        private GameObject _caller;
+        private readonly VisualElement _uiTarget;
+        private readonly GameObject _caller;
         
         public UIScaleTransition(GameObject caller, VisualElement uiTarget, UIScaleTransitionData scaleTransitionData)
         {
@@ -63,15 +63,17 @@ namespace KoiAI.UI
 
         public void ActivateTransition()
         {
-            if(_uiTarget == null)
+            if(!_caller || _uiTarget == null)
             {
                 return;
             }
-            Vector2 minScale = _scaleTransitionData.MinScale;
 
             DOTween.To(
-                () => minScale,
-                x => { minScale = x; _uiTarget.style.scale = x; },
+                () => _scaleTransitionData.MinScale,
+                x =>
+                {
+                    _uiTarget.style.scale = x;
+                },
                 _scaleTransitionData.MaxScale,
                 _scaleTransitionData.Duration
                 )
@@ -79,7 +81,6 @@ namespace KoiAI.UI
                 .SetEase(_scaleTransitionData.EasingType)
                 .SetLoops(-1, LoopType.Yoyo)
                 .SetLink(_caller, LinkBehaviour.KillOnDestroy);
-                
         }
 
     }

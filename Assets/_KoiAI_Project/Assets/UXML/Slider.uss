@@ -51,7 +51,6 @@
     border-bottom-left-radius: 15px;
     margin-right: 2px;
     margin-left: 2px;
-    background-color: rgb(0, 0, 0);
     margin-top: 0;
     height: 100%;
     top: 0;
@@ -59,6 +58,7 @@
     border-right-color: rgb(255, 255, 255);
     border-top-color: rgb(255, 255, 255);
     border-bottom-color: rgb(255, 255, 255);
+    background-color: rgb(0, 0, 0);
 }
 
 #loadingSlider #unity-fill {
@@ -70,6 +70,6 @@
     border-right-width: 0;
     border-bottom-width: 0;
     border-left-width: 0;
-    -unity-material: url("project://database/Assets/_KoiAI_Project/Assets/Shader_Material/VFX_VFXMasterShaderTransparent_URP.mat?fileID=2100000&guid=765522dba09639241bf8449abe94a3e5&type=2#VFX_VFXMasterShaderTransparent_URP");
+    -unity-material: url("project://database/Assets/_KoiAI_Project/Assets/Shader_Material/M_LoadingSlider.mat?fileID=2100000&guid=765522dba09639241bf8449abe94a3e5&type=2#M_LoadingSlider");
     translate: 2px 0;
 }

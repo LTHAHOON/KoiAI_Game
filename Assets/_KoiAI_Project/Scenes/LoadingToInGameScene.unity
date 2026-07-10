@@ -258,10 +258,12 @@ MonoBehaviour:
   _uiDoucument: {fileID: 350198044}
   _visualViewInfo: {fileID: 11400000, guid: 48439bd95614b6c4b9927b1e0a0810ba, type: 2}
   _gameIconScaleTransitionData:
-    _easingType: 25
-    _duration: 0.5
+    _easingType: 7
+    _duration: 0.8
     _minScale: {x: 1, y: 1}
-    _maxScale: {x: 1.7, y: 1.7}
+    _maxScale: {x: 1.1, y: 1.1}
+  _sceneReference:
+    _scenePathRecord: Assets/_KoiAI_Project/Scenes/InGameScene.unity
 --- !u!1 &933926627
 GameObject:
   m_ObjectHideFlags: 0
