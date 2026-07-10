@@ -25,7 +25,7 @@ namespace KoiAI.Core
                 .Subscribe(playableDirector =>
                 {
                     Observable.EveryUpdate()
-                        .Where(_ => playableDirector.state == PlayState.Paused)
+                        .Where(_ => playableDirector && playableDirector.state == PlayState.Paused)
                         .Take(1)
                         .Subscribe(_ => EndCutScene());
                 })

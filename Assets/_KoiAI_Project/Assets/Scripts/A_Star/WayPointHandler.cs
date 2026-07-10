@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace KoiAI.A_Star
 {
-    public class WayPointHandle
+    public class WayPointHandler
     {
         private List<GameObject> _wayPointList;
         private AStarLogic _aStartLogic;

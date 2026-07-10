@@ -8,7 +8,7 @@ namespace KoiAI.Utilities
     {
         [SerializeField][HideInInspector]
         private string _scenePathRecord;
-        
+
         public string ScenePath => _scenePathRecord;
     }
 }

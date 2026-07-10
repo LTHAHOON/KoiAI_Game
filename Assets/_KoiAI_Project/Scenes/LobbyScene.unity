@@ -754,6 +754,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.UI.LobbyPresenter
   _uiDoucument: {fileID: 1801810483}
   _visualViewInfo: {fileID: 11400000, guid: 8e8caa736a3b6f64ea5f50911b4f42d2, type: 2}
+  _sceneReference:
+    _scenePathRecord: Assets/_KoiAI_Project/Scenes/LoadingToInGameScene.unity
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

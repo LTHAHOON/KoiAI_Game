@@ -29,7 +29,7 @@ namespace KoiAI.Player
         private PlayerWayPointValueData _valueData;
 
         private EntitySight _entitySight;
-        private readonly WayPointHandle _wayPointHandle = new();
+        private readonly WayPointHandler _wayPointHandle = new();
         private float _curTime = 0;
         private bool _isAutoBuild = false;
         private bool _isShowedWayPoint = false;
