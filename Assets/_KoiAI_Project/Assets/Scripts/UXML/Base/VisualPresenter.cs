@@ -19,9 +19,12 @@ namespace KoiAI.UI
             {
                 return;
             }
-            Initalize(_uiDoucument, _visualView, _visualViewInfo);
+            Initalize(_uiDoucument, ref _visualView, _visualViewInfo);
         }
 
-        protected abstract void Initalize(UIDocument uiDoucument, TView visualView, TViewInfo visualViewInfo);
+        protected abstract void Initalize(UIDocument uiDoucument, ref TView visualView, TViewInfo visualViewInfo);
+        
+        public TView GetVisualView() => _visualView;
+        public TViewInfo GetVisualViewInfo() => _visualViewInfo;
     }
 }

@@ -3736,6 +3736,7 @@ GameObject:
   - component: {fileID: 961578137}
   - component: {fileID: 961578139}
   - component: {fileID: 961578142}
+  - component: {fileID: 961578143}
   - component: {fileID: 961578140}
   - component: {fileID: 961578141}
   m_Layer: 0
@@ -3795,7 +3796,7 @@ MonoBehaviour:
   RecenteringTarget: 2
   HorizontalAxis:
     Value: 0
-    Center: 0
+    Center: -0
     Range: {x: -180, y: 180}
     Wrap: 1
     Recentering:
@@ -3918,8 +3919,6 @@ MonoBehaviour:
       Input:
         InputAction: {fileID: 6028308318195334148, guid: d48d6878f6dcf4a469d9a37e65f3e191, type: 3}
         Gain: 15
-        LegacyInput: 
-        LegacyGain: 1
         CancelDeltaTime: 0
       InputValue: 0
       Driver:
@@ -3931,8 +3930,6 @@ MonoBehaviour:
       Input:
         InputAction: {fileID: 6028308318195334148, guid: d48d6878f6dcf4a469d9a37e65f3e191, type: 3}
         Gain: 15
-        LegacyInput: 
-        LegacyGain: 1
         CancelDeltaTime: 0
       InputValue: 0
       Driver:
@@ -3944,15 +3941,13 @@ MonoBehaviour:
       Input:
         InputAction: {fileID: 0}
         Gain: 1
-        LegacyInput: 
-        LegacyGain: 1
         CancelDeltaTime: 0
       InputValue: 0
       Driver:
         AccelTime: 0
         DecelTime: 0
   PlayerIndex: -1
-  AutoEnableInputs: 1
+  AutoEnableInputs: 0
 --- !u!95 &961578141
 Animator:
   serializedVersion: 7
@@ -3991,6 +3986,18 @@ MonoBehaviour:
   _cmComponents:
   - {fileID: 961578137}
   - {fileID: 961578139}
+--- !u!114 &961578143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 961578135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9181e6966cefa9a43bf7b3c8073343d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.CinemachineInputFixer
 --- !u!1 &995704083
 GameObject:
   m_ObjectHideFlags: 0

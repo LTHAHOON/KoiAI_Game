@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/_KoiAI_Project/Scenes/LobbyScene.unity
     guid: 4882f9b238c9a8641ae405f682cc8acc
   - enabled: 1
-    path: Assets/_KoiAI_Project/Scenes/LoadingToInGameScene.unity
+    path: Assets/_KoiAI_Project/Scenes/LoadingScreenScene.unity
     guid: 40f32e14dd2ae3d44a3da2ee5eaf2599
   - enabled: 1
     path: Assets/_KoiAI_Project/Scenes/InGameScene.unity

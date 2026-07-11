@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using DG.Tweening;
-using TMPro.EditorUtilities;
 
 public class UITestController : MonoBehaviour
 {

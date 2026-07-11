@@ -11,6 +11,8 @@ using UnityEditor;
 
 namespace KoiAI.Player
 {
+#if UNITY_EDITOR
+    
     public class PlayerAutoFeatureGenerator : MonoBehaviour
     {
         [InfoBox("플레이어 데이터를 바꾸게 되면 생성 버튼을 눌려주시고 \n " +
@@ -56,7 +58,6 @@ namespace KoiAI.Player
             }
         }
 
-#if UNITY_EDITOR
         private void AddPlayerFeature()
         {
             PlayerFeatureData playerFeatureData = _playerData.GetPlayerFeatureData();
@@ -123,7 +124,6 @@ namespace KoiAI.Player
             }
             _prevPlayerFeatureProperties.Clear();
         }
-#endif
         
         private Type GetPlayerFeatureType(PlayerFeatureProperty property)
         {
@@ -138,4 +138,6 @@ namespace KoiAI.Player
         }
         
     }
+#endif
+    
 }

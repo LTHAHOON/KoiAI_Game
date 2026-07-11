@@ -1,3 +1,6 @@
+using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using KoiAI.UI;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -15,11 +18,11 @@ namespace KoiAI.UI
         private UIScaleTransitionData _gameIconScaleTransitionData;
         [Header("로드할 씬")]
         [SerializeField]
-        private SceneReference _sceneReference;
+        private SceneReference _loadSceneReference;
          
         private UIScaleTransition _gameIconScaleTransition;
-
-        protected override void Initalize(UIDocument uiDoucument, LoadingScreenView visualView, LoadingScreenViewInfo visualViewInfo)
+        
+        protected override void Initalize(UIDocument uiDoucument, ref LoadingScreenView visualView, LoadingScreenViewInfo visualViewInfo)
         {
             visualView = new(uiDoucument.rootVisualElement, visualViewInfo);
             _gameIconScaleTransition = new(gameObject, visualView.GameIconImage,_gameIconScaleTransitionData);
@@ -32,18 +35,31 @@ namespace KoiAI.UI
                 //해당 UI의 모든 이벤트처리를 막아줍니다.(StopPropagation같은 경우 사용자가 등록한 이벤트는 막지 못합니다.)
                 e.StopImmediatePropagation();
             }, TrickleDown.TrickleDown);
-            IAsyncSceneLoadHandler loadHandler =  AsyncSceneLoader.CreateAsyncSceneLoadHandler();
-            loadHandler.CurrentProgressPct.Subscribe(pct =>
-            {
-                visualView.LoadingSlider.value = pct;
-            }).AddTo(this);
-
-
-            loadHandler.SetLoadSceneMode(LoadSceneMode.Additive).StartLoadAsync(this, _sceneReference);
-
         }
 
+        //TODO: 타임라인 시그널로 인해 호출되어 목표 씬으로 전환합니다.
+        public void OnStartLoadingScreen_Signal()
+        {
+            if (_loadSceneReference == null)
+            {
+                Debug.LogError("Error: LoadSceneReference is null");
+            }
 
+            LoadingScreenView visualView = GetVisualView();
+            CancellationToken cancellationToken = gameObject.GetCancellationTokenOnDestroy();
+            
+            //로딩 화면에서 인게임 화면으로 갈 때는 메모리를 줄이기 위해서 Unload를 해줍니다.(Single대신 Additive + Unload 사용)
+            IAsyncSceneChangeHandler sceneChangeHandler =  AsyncSceneChanger.CreateAsyncSceneLoadHandler();
+            sceneChangeHandler
+                .SetLoadSceneMode(LoadSceneMode.Additive)
+                .SetLoadDelayTime(0.7f)
+                .SetProgressSubscribe(pct =>
+                {
+                    visualView.LoadingSlider.value = pct;
+                }, cancellationToken)
+                .StartChangeScene(this, _loadSceneReference, true);
+        }
+        
     }
     
 }

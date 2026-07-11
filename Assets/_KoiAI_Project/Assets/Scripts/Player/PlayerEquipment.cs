@@ -12,8 +12,6 @@ namespace KoiAI.Player
     using KoiAI.Item;
     using KoiAI.ItemProp;
     using KoiAI.UI.HUD;
-    using KoiAI.Utilities;
-    using UnityEditor.ShaderGraph.Internal;
 
     [Serializable]
     public class PlayerEquipmentValueData : PlayerFeatureValueData

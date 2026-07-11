@@ -124,8 +124,8 @@ namespace KoiAI.Player
 
             //물리 데이터 초기화
             InitPhysicsData(_extensionValueData.GravityData, _extensionValueData.ColliderData, _extensionValueData.RigidData);
-            _camera = UnityEngine.Camera.main;
             
+            _camera = UnityEngine.Camera.main;
             playerIA.Player.Move.started += OnMove;
             playerIA.Player.Move.performed += OnMove;
             playerIA.Player.Move.canceled += OnMove;

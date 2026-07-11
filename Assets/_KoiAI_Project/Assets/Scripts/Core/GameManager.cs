@@ -1,4 +1,6 @@
+using System;
 using R3;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Playables;
@@ -36,8 +38,7 @@ namespace KoiAI.Core
         {
             GameStart();
         }
-    
-    
+        
         private void GameStart()
         {
             if (!_playableDirector || !_startCutSceneTimeline)

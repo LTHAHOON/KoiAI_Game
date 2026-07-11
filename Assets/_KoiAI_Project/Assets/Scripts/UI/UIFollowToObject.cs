@@ -40,7 +40,7 @@ namespace KoiAI.Utilities
 
         private void UIFollowProcess()
         {
-            if (!_targetObject)
+            if (!_targetObject || !_camera || !_rectTransform)
             {
                 return;
             }
