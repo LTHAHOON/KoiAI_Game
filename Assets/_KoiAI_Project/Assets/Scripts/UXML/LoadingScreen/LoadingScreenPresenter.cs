@@ -3,6 +3,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using KoiAI.UI;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.UIElements;
 
 namespace KoiAI.UI
@@ -14,6 +15,10 @@ namespace KoiAI.UI
 
     public class LoadingScreenPresenter : VisualPresenter<LoadingScreenView, LoadingScreenViewInfo>
     {
+        [SerializeField]
+        private PlayableDirector _exitLoadingDirector;
+        [SerializeField]
+        private PlayableAsset _exitLoadingTimeline;
         [SerializeField]
         private UIScaleTransitionData _gameIconScaleTransitionData;
         [Header("로드할 씬")]
@@ -37,8 +42,8 @@ namespace KoiAI.UI
             }, TrickleDown.TrickleDown);
         }
 
-        //TODO: 타임라인 시그널로 인해 호출되어 목표 씬으로 전환합니다.
-        public void OnStartLoadingScreen_Signal()
+        //TODO: FadeOut-End 타임라인 시그널로 인해 호출되어 목표 씬으로 전환합니다.
+        public void OnEndLoadingScreenEnter_Signal()
         {
             if (_loadSceneReference == null)
             {

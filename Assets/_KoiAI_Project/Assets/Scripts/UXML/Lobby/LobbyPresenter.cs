@@ -12,18 +12,11 @@ namespace KoiAI.UI
     public class LobbyPresenter : VisualPresenter<LobbyView, LobbyViewInfo>
     {
         [SerializeField]
-        private List<GameObject> _activeObjsForExit;
-        
-        [SerializeField]
         private SceneReference _loadSceneReference;
         [SerializeField]
         private PlayableDirector _exitLobbyDirector;
         [SerializeField]
-        private PlayableDirector _enterLobbyDirector;
-        [SerializeField]
         private PlayableAsset _exitLobbyTimeline;
-        [SerializeField]
-        private PlayableAsset _enterLobbyTimeline;
         
         protected override void Initalize(UIDocument uiDoucument, ref LobbyView visualView, LobbyViewInfo visualViewInfo)
         {
@@ -37,8 +30,8 @@ namespace KoiAI.UI
             _exitLobbyDirector.Play(_exitLobbyTimeline);
         }
         
-        //TODO: 타임라인 시그널로 인해 호출되어 로딩화면 씬으로 전환합니다. 
-        public void OnStartLobbyExit_Signal()
+        //TODO: FadeIn-End 타임라인 시그널로 인해 호출되어 로딩화면 씬으로 전환합니다. 
+        public void OnEndLobbyExit_Signal()
         {
             IAsyncSceneChangeHandler sceneChangeHandler =  AsyncSceneChanger.CreateAsyncSceneLoadHandler();
             sceneChangeHandler
@@ -46,13 +39,8 @@ namespace KoiAI.UI
                 .AssignOnLoadCompleted(OnLoadCompleted)
                 .StartChangeScene(this, _loadSceneReference, true);
         }
-        
-        public void OnEndLobbyExit_Signal()
-        {
 
-        }
-
-        private void OnLoadCompleted(Scene notActiveScene)
+        private void OnLoadCompleted(Scene prevScene)
         {
 
         }

@@ -107,9 +107,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ObjectFollowToObject
   _targetTransform: {fileID: 4140099211897267717}
   _delayTime: 0
-  _followSpeed: 13
+  _followSpeed: 15
   _targetOffset: {x: 0, y: 0, z: 0}
-  _followYPosThresold: 0.95
+  _followYPosThresold: 1.015
 --- !u!1 &1229801937088697154
 GameObject:
   m_ObjectHideFlags: 0

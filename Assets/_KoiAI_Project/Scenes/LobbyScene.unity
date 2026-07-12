@@ -158,7 +158,7 @@ MonoBehaviour:
   _loadSceneReference:
     _scenePathRecord: Assets/_KoiAI_Project/Scenes/LoadingScreenScene.unity
   _exitLobbyDirector: {fileID: 338620471}
-  _enterLobbyDirector: {fileID: 483082803}
+  _enterLobbyDirector: {fileID: 0}
   _exitLobbyTimeline: {fileID: 11400000, guid: c598e79b01170c044943e04f0c7d3226, type: 2}
   _enterLobbyTimeline: {fileID: 0}
 --- !u!4 &212207945
@@ -228,61 +228,14 @@ PlayableDirector:
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
   m_SceneBindings:
-  - key: {fileID: 6916572354361007688, guid: c598e79b01170c044943e04f0c7d3226, type: 2}
-    value: {fileID: 1348619940}
-  - key: {fileID: -483540779779291795, guid: c598e79b01170c044943e04f0c7d3226, type: 2}
-    value: {fileID: 1262152160}
-  m_ExposedReferences:
-    m_References: []
---- !u!1 &483082801
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 483082802}
-  - component: {fileID: 483082803}
-  m_Layer: 0
-  m_Name: LobbyEnter_Timeline
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &483082802
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 483082801}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 864675794}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!320 &483082803
-PlayableDirector:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 483082801}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: c598e79b01170c044943e04f0c7d3226, type: 2}
-  m_InitialState: 0
-  m_WrapMode: 2
-  m_DirectorUpdateMode: 1
-  m_InitialTime: 0
-  m_SceneBindings:
   - key: {fileID: 0}
-    value: {fileID: 0}
+    value: {fileID: 1348619940}
+  - key: {fileID: 0}
+    value: {fileID: 1262152160}
+  - key: {fileID: -2103800545798316249, guid: c598e79b01170c044943e04f0c7d3226, type: 2}
+    value: {fileID: 1348619940}
+  - key: {fileID: 3615182110910748824, guid: c598e79b01170c044943e04f0c7d3226, type: 2}
+    value: {fileID: 1262152160}
   m_ExposedReferences:
     m_References: []
 --- !u!1 &487591748
@@ -382,7 +335,6 @@ Transform:
   m_Children:
   - {fileID: 1262152161}
   - {fileID: 338620470}
-  - {fileID: 483082802}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &889882047
@@ -560,19 +512,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 9545ae45c30fb664d8c041af0f554978, type: 2}
     m_Events:
     - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 212207944}
-          m_TargetAssemblyTypeName: KoiAI.UI.LobbyPresenter, Assembly-CSharp
-          m_MethodName: OnStartLobbyExit_Signal
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+        m_Calls: []
     - m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 212207944}

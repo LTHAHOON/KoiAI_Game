@@ -9,7 +9,7 @@ namespace KoiAI.Utilities
     public class UIFollowToObject : MonoBehaviour
     {
         [SerializeField]
-        CanvasType _parentCanvasType;
+        private CanvasType _parentCanvasType;
         [SerializeField]
         private GameObject _targetObject;
         [SerializeField]
@@ -47,7 +47,9 @@ namespace KoiAI.Utilities
             Vector3 targetWorldPos = _targetObject.transform.position + _worldOffset;
             Vector3 targetViewPortPos = _camera.WorldToViewportPoint(targetWorldPos) + _viewPortOffset;
             if (targetViewPortPos.z <= 0)
+            {
                 return;
+            }
             _rectTransform.anchoredPosition = UIManager.Instance.ViewPortToAnchoredPoint(targetViewPortPos, _parentCanvasType);
 
             Vector3 dir = (_camera.transform.position - _targetObject.transform.position);
@@ -56,6 +58,7 @@ namespace KoiAI.Utilities
             scale = Mathf.Clamp(scale, _scaleMin, _scaleMax);
             Vector3 scaleVector = new Vector3(scale, scale, scale);
             transform.localScale = scaleVector + _scaleOffset;
+            Debug.Log( transform.localScale);
         }
 
         public void SetTargetObject(GameObject targetObj)

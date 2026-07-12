@@ -34,7 +34,7 @@ namespace KoiAI.Core
                 .AddTo(this);
         }
 
-        private void Start()
+        private void OnEnable()
         {
             GameStart();
         }

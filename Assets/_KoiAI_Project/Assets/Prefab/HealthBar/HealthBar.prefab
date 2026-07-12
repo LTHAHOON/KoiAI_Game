@@ -58,7 +58,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: ca6265b6368310a4598c7a4e789e1a8e, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -217,7 +217,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.163
+  m_Value: 0.199
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -250,7 +250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7766b7ced3c5fd14dad7769ef13e972f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIFollowToObject
-  _parentCanvasType: 0
+  _parentCanvasType: 1
   _targetObject: {fileID: 0}
   _viewPortOffset: {x: 0, y: 0, z: 0}
   _worldOffset: {x: 0, y: 4, z: 0}

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a713ef97b5f6814fb39e8718fe6b474, type: 3}
   m_Name: TimeFadeCondition
   m_EditorClassIdentifier: Assembly-CSharp::TimeFadeCondition
-  _duration: 2
+  _duration: 4
   _fadeInStartTime: 0
-  _fadeInEndTime: 1.5
-  _fadeOutStartTime: 1.5
-  _fadeOutEndTime: 2
+  _fadeInEndTime: 3.5
+  _fadeOutStartTime: 2.5
+  _fadeOutEndTime: 4

@@ -70,11 +70,11 @@ Material:
     m_Floats:
     - _AlphaClip: 1
     - _AlphaToMask: 0
-    - _Blend: 1
+    - _Blend: 2
     - _CastShadows: 0
     - _Cull: 2
-    - _DstBlend: 10
-    - _DstBlendAlpha: 10
+    - _DstBlend: 1
+    - _DstBlendAlpha: 1
     - _Gauage01_Noise: 17.68
     - _Gauage02_Noise: 25.98
     - _Gauge01_RotateSpeed: 0.3
@@ -87,15 +87,15 @@ Material:
     - _Outline_Width: 0.1
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _SrcBlend: 1
+    - _SrcBlend: 5
     - _SrcBlendAlpha: 1
     - _Surface: 1
     - _ZTest: 4
     - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
-    - _Gauge01_Color: {r: 48.301888, g: 0.22783963, b: 0.22783963, a: 1}
-    - _Gauge02_Color: {r: 8.161612, g: 0.42347986, b: 0.42347986, a: 1}
+    - _Gauge01_Color: {r: 11.984316, g: 0.056529928, b: 0.056529928, a: 1}
+    - _Gauge02_Color: {r: 11.984314, g: 0.6218276, b: 0.6218276, a: 1}
     - _Gauge_Amount_Offset: {r: 0, g: -1, b: 0, a: 0}
     - _Main_Color: {r: 1.4052986, g: 0.9892046, b: 0.9813537, a: 0.78039217}
     - _Outline_Color: {r: 1, g: 1, b: 1, a: 1}
