@@ -1,0 +1,5 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="circlePalette" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/_KoiAI_Project/Assets/UI_Texture/T_CircleColorPicker.png?fileID=21300000&amp;guid=c903746214e4f9b43a797d9eb460f9cf&amp;type=3#T_CircleColorPicker&quot;); width: 256px; height: 256px; flex-shrink: 0;">
+        <ui:VisualElement name="picker" style="flex-grow: 0; background-color: rgb(255, 255, 255); border-top-left-radius: 200px; border-top-right-radius: 200px; border-bottom-right-radius: 200px; border-bottom-left-radius: 200px; border-top-width: 3px; border-right-width: 3px; border-bottom-width: 3px; border-left-width: 3px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); width: 20px; height: 20px; flex-shrink: 0; position: absolute; translate: 0 0;"/>
+    </ui:VisualElement>
+</ui:UXML>

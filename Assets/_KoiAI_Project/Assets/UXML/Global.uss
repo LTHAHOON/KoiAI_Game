@@ -1,4 +1,6 @@
-.background {
+.gray-background {
+    background-color: rgba(204, 204, 204, 0.86);
+    height: 100%;
 }
 
 .menu-list {

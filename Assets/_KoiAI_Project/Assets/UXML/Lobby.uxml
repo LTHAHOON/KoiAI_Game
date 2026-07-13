@@ -1,4 +1,5 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="CharacterSetting" src="project://database/Assets/_KoiAI_Project/Assets/UXML/CharacterSetting.uxml?fileID=9197481963319205126&amp;guid=7ad80ab922d9c14479ce0f01dd761d6c&amp;type=3#CharacterSetting"/>
     <Style src="project://database/Assets/_KoiAI_Project/Assets/UXML/Global.uss?fileID=7433441132597879392&amp;guid=6ab1825469abf394097e891374d6718e&amp;type=3#Global"/>
     <ui:VisualElement name="root" style="flex-grow: 1;">
         <ui:VisualElement name="topMenuList" class="menu-list" style="flex-direction: row-reverse;">
@@ -14,7 +15,7 @@
             <ui:VisualElement name="VisualElement" style="flex-grow: 1;"/>
             <ui:VisualElement name="mainMenuList" style="flex-grow: 1; align-items: center; padding-top: 120px; padding-bottom: 120px;">
                 <ui:Button text="플레이" name="playBtn" class="menu-button terrarum-text" style="width: 325px; height: 80px; font-size: 50px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 25px; margin-right: 0; margin-bottom: 25px; margin-left: 0;"/>
-                <ui:Button text="캐릭터 설정" name="charSettingOpenBtn" class="menu-button terrarum-text" style="width: 325px; height: 80px; font-size: 50px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 25px; margin-right: 0; margin-bottom: 25px; margin-left: 0;"/>
+                <ui:Button text="캐릭터 설정" name="charSettingOpenBtn" focusable="false" class="menu-button terrarum-text" style="width: 325px; height: 80px; font-size: 50px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 25px; margin-right: 0; margin-bottom: 25px; margin-left: 0;"/>
                 <ui:VisualElement style="flex-grow: 0; flex-shrink: 0; height: 150px;"/>
                 <ui:Button text="기본 설정" name="settingOpenBtn" class="menu-button terrarum-text" style="width: 325px; height: 80px; font-size: 50px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 25px; margin-right: 0; margin-bottom: 25px; margin-left: 0;"/>
                 <ui:Button text="게임 나가기" name="exitGameBtn" class="menu-button terrarum-text" style="width: 325px; height: 80px; font-size: 50px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 25px; margin-right: 0; margin-bottom: 25px; margin-left: 0;"/>
@@ -24,6 +25,9 @@
             <ui:VisualElement name="title" style="flex-grow: 0;">
                 <ui:Image source="project://database/Assets/_KoiAI_Project/Assets/UI_Texture/T_Title.png?fileID=21300000&amp;guid=6e79bbd3413904f43a5effd56b9b674f&amp;type=3#T_Title" name="title_gameIcon_image" class="gameIcon"/>
             </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="pop-up" picking-mode="Ignore" style="flex-grow: 0; position: absolute; flex-shrink: 0; right: 0; width: 850px; height: 100%;">
+            <ui:Instance template="CharacterSetting" name="character-setting" enabled="true" style="position: relative; height: 100%; flex-shrink: 0; display: none; opacity: 1;"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

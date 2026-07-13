@@ -23,6 +23,7 @@ namespace KoiAI.UI
             visualView = new LobbyView(uiDoucument.rootVisualElement, visualViewInfo);
             
             visualView.PlayButton.clicked += OnClickPlayButton;
+            visualView.CharacterSettingButton.clicked += OnClickCharacterSettingButton;
         }
 
         private void OnClickPlayButton()
@@ -30,6 +31,11 @@ namespace KoiAI.UI
             _exitLobbyDirector.Play(_exitLobbyTimeline);
         }
         
+        private void OnClickCharacterSettingButton()
+        {
+            
+        }
+
         //TODO: FadeIn-End 타임라인 시그널로 인해 호출되어 로딩화면 씬으로 전환합니다. 
         public void OnEndLobbyExit_Signal()
         {

@@ -150,17 +150,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.UI.LobbyPresenter
   _uiDoucument: {fileID: 1801810483}
   _visualViewInfo: {fileID: 11400000, guid: 8e8caa736a3b6f64ea5f50911b4f42d2, type: 2}
-  _activeObjsForExit:
-  - {fileID: 1372758225}
-  - {fileID: 1348619936}
-  - {fileID: 212207943}
-  - {fileID: 864675793}
   _loadSceneReference:
     _scenePathRecord: Assets/_KoiAI_Project/Scenes/LoadingScreenScene.unity
   _exitLobbyDirector: {fileID: 338620471}
-  _enterLobbyDirector: {fileID: 0}
   _exitLobbyTimeline: {fileID: 11400000, guid: c598e79b01170c044943e04f0c7d3226, type: 2}
-  _enterLobbyTimeline: {fileID: 0}
 --- !u!4 &212207945
 Transform:
   m_ObjectHideFlags: 0
@@ -176,6 +169,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &233740997
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 233740998}
+  - component: {fileID: 233740999}
+  m_Layer: 0
+  m_Name: UI_PopUpManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &233740998
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 233740997}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &233740999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 233740997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4562a8f4ba823f45bcd71ad18da82a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.UI.PopUpManager
 --- !u!4 &289293922 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5495018153180887742, guid: a7eb6b07e27283c4190f9cf2ae1d9b15, type: 3}
@@ -1058,6 +1095,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1801810484}
   - component: {fileID: 1801810483}
+  - component: {fileID: 1801810485}
   m_Layer: 5
   m_Name: UIDocument
   m_TagString: Untagged
@@ -1103,6 +1141,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1801810485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1801810482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24a5eeec604bb954d8dfb4796e345724, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.CircleColorPicker
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1116,3 +1166,4 @@ SceneRoots:
   - {fileID: 864675794}
   - {fileID: 1638972989}
   - {fileID: 1148240366}
+  - {fileID: 233740998}
