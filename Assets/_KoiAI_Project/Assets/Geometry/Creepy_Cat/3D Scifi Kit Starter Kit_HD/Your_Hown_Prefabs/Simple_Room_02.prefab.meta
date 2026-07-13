@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 34d7c0326aa4144e0a3b7a904ee287bc
 timeCreated: 1426347314
-licenseType: Pro
+licenseType: Store
 NativeFormatImporter:
   userData: 
   assetBundleName: 
@@ -11,5 +11,6 @@ AssetOrigin:
   productId: 92152
   packageName: 3D Scifi Kit Starter Kit
   packageVersion: 3.5
-  assetPath: Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Your_Hown_Prefabs/Simple_Room_02.prefab
+  assetPath: Assets/_KoiAI_Project/Assets/Geometry/Creepy_Cat/3D Scifi Kit Starter
+    Kit_HD/Your_Hown_Prefabs/Simple_Room_02.prefab
   uploadId: 903402

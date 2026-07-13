@@ -16,9 +16,11 @@ Material:
   - _METALLICSPECGLOSSMAP
   - _NORMALMAP
   - _OCCLUSIONMAP
-  m_InvalidKeywords: []
+  - _SPECGLOSSMAP
+  m_InvalidKeywords:
+  - _METALLICGLOSSMAP
   m_LightmapFlags: 1
-  m_EnableInstancingVariants: 1
+  m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap:
@@ -118,7 +120,7 @@ Material:
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Shininess: 0.071379885
-    - _Smoothness: 0.5
+    - _Smoothness: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -129,14 +131,14 @@ Material:
     - _XRMotionVectorsPass: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 0.8602941, g: 0.8602941, b: 0.8602941, a: 1}
+    - _Color: {r: 0.8602941, g: 0.8602941, b: 0.8602941, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColorUI: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &7099889010600713179
+--- !u!114 &355011061157777770
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

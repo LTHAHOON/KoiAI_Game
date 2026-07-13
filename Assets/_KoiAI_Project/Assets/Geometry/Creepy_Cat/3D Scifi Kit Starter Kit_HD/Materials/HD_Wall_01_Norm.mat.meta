@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 5cab438c3585b43a5a21091c170ea329
 timeCreated: 1425906567
-licenseType: Pro
+licenseType: Store
 NativeFormatImporter:
   userData: 
   assetBundleName: 
@@ -11,5 +11,6 @@ AssetOrigin:
   productId: 92152
   packageName: 3D Scifi Kit Starter Kit
   packageVersion: 3.5
-  assetPath: Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_01_Norm.mat
+  assetPath: Assets/_KoiAI_Project/Assets/Geometry/Creepy_Cat/3D Scifi Kit Starter
+    Kit_HD/Materials/HD_Wall_01_Norm.mat
   uploadId: 903402

@@ -14,7 +14,6 @@ namespace KoiAI.Utilities
         private float _adjustFollowY = -0.1f;
         
         private Vector3 _myPos;
-        private float _curTime = 0f;
         
         private void Awake()
         {

@@ -58,7 +58,6 @@ namespace KoiAI.Utilities
             scale = Mathf.Clamp(scale, _scaleMin, _scaleMax);
             Vector3 scaleVector = new Vector3(scale, scale, scale);
             transform.localScale = scaleVector + _scaleOffset;
-            Debug.Log( transform.localScale);
         }
 
         public void SetTargetObject(GameObject targetObj)

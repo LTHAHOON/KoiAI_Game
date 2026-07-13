@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: df16725e55ff943dcb6dafa81511ad69
 timeCreated: 1426332861
-licenseType: Pro
+licenseType: Store
 TextureImporter:
   fileIDToRecycleName: {}
   serializedVersion: 2
@@ -58,5 +58,6 @@ AssetOrigin:
   productId: 92152
   packageName: 3D Scifi Kit Starter Kit
   packageVersion: 3.5
-  assetPath: Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Textures/Others/Light_Illum.tif
+  assetPath: Assets/_KoiAI_Project/Assets/Geometry/Creepy_Cat/3D Scifi Kit Starter
+    Kit_HD/Textures/Others/Light_Illum.tif
   uploadId: 903402
