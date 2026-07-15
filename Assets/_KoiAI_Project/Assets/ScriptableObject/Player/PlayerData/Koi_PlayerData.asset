@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc181690cd3a60b43bee8db9c2970258, type: 3}
   m_Name: Koi_PlayerData
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Player.PlayerData
+  _chracterBaseName: Koi
   _playerFeatureDataBase: {fileID: 11400000, guid: d696849b4c6184b49b4ee354e8f18a3a, type: 2}
   _playerFeatureDataType: 1
   _playerSkin: {fileID: 2513457811619122350, guid: a7eb6b07e27283c4190f9cf2ae1d9b15, type: 3}

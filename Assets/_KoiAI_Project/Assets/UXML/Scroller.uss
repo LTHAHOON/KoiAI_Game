@@ -34,13 +34,53 @@
 #unity-low-button {
     width: 50px;
     height: 100%;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
 }
 
 #unity-high-button {
     height: 100%;
     width: 50px;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
 }
 
 #unity-tracker {
     height: 100%;
+}
+
+#unity-low-button:hover {
+    background-color: rgb(0, 195, 255);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+}
+
+#unity-high-button:hover {
+    background-color: rgb(0, 195, 255);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+}
+
+#unity-low-button:active {
+    background-color: rgb(0, 118, 255);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+}
+
+#unity-high-button:active {
+    background-color: rgb(0, 118, 255);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
 }

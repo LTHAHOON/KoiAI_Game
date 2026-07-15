@@ -27,7 +27,7 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="pop-up" picking-mode="Ignore" style="flex-grow: 0; position: absolute; flex-shrink: 0; right: 0; width: 850px; height: 100%;">
-            <ui:Instance template="CharacterSetting" name="character-setting" enabled="true" style="position: relative; height: 100%; flex-shrink: 0; display: none; opacity: 1;"/>
+            <ui:Instance template="CharacterSetting" name="character-setting" enabled="true" style="position: relative; height: 100%; flex-shrink: 0; visibility: hidden;"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

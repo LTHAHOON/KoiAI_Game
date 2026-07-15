@@ -9,6 +9,8 @@ namespace KoiAI.Player
     [CreateAssetMenu(fileName = "new PlayerData", menuName = "KoiAI/Player/PlayerData")]
     public class PlayerData : ScriptableObject
     {
+        [SerializeField]
+        private string _chracterBaseName;
         [ReadOnly]
         [SerializeField]
         private PlayerFeatureDataBase _playerFeatureDataBase;
@@ -68,6 +70,7 @@ namespace KoiAI.Player
         public bool HasMovementProperty => GetPlayerFeatureData() is var data && data != null && data.HasMovementProperty;
         public bool HasRotationProperty => GetPlayerFeatureData() is var data && data != null && data.HasRotationProperty;
         
+        public string CharacterBaseName => _chracterBaseName;
         public PlayerFeatureDataType PlayerFeatureDataType => _playerFeatureDataType;
         public PlayerSkin PlayerSkin => _playerSkin;
         public AnimatorData AnimatorData => _animatorData;

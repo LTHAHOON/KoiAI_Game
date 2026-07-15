@@ -1,4 +1,3 @@
-using KoiAI.UI;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -6,6 +5,8 @@ namespace KoiAI.UI
 {
     public abstract class VisualPresenter<TView, TViewInfo> : MonoBehaviour  where TView : VisualView<TViewInfo> where TViewInfo : VisualViewInfo
     {
+        [SerializeField]
+        private PopUpWindow[] _popUpWindows;
         [SerializeField]
         private UIDocument _uiDoucument;
         [SerializeField]
@@ -26,5 +27,6 @@ namespace KoiAI.UI
         
         public TView GetVisualView() => _visualView;
         public TViewInfo GetVisualViewInfo() => _visualViewInfo;
+        public PopUpWindow[] GetPopUpWindows() => _popUpWindows;
     }
 }

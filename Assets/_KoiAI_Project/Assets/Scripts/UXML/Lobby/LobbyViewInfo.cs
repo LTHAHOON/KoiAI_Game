@@ -18,8 +18,6 @@ namespace KoiAI.UI
         private string _charSetttingOpenBtn;
         [SerializeField]
         private string _exitGameBtn;
-        [SerializeField]
-        private PopUpWindowPairList<string, string> _popUpWindowPairList;
 
         public string PlayBtnName => _playBtnName;
         public string SettingOpenBtnName => _settingOpenBtnName;
@@ -27,7 +25,6 @@ namespace KoiAI.UI
         public string ProfileNameTextName => _profileNameTextName;
         public string CharSettingOpenBtn => _charSetttingOpenBtn;
         public string ExitGameBtn => _exitGameBtn;
-        public PopUpWindowPairList<string, string> PopUpWindowPairList => _popUpWindowPairList;
 
     }
 }

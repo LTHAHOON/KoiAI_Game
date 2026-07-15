@@ -33,7 +33,9 @@ namespace KoiAI.UI
         
         private void OnClickCharacterSettingButton()
         {
-            
+            PopUpWindow[] popUpWindows =  GetPopUpWindows();
+            CharacterSettingWindow characterSettingWindow = PopUpManager.Instance.FindPopUpWindow<CharacterSettingWindow>(popUpWindows);
+            PopUpManager.Instance.ChangePopUpState(PopUpState.Open, characterSettingWindow);
         }
 
         //TODO: FadeIn-End 타임라인 시그널로 인해 호출되어 로딩화면 씬으로 전환합니다. 
