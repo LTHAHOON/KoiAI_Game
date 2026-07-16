@@ -106,10 +106,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectFollowToObject
   _targetTransform: {fileID: 4140099211897267717}
-  _delayTime: 0
   _followSpeed: 15
   _targetOffset: {x: 0, y: 0, z: 0}
-  _followYPosThresold: 1.015
+  _adjustFollowY: -0.1
 --- !u!1 &1229801937088697154
 GameObject:
   m_ObjectHideFlags: 0
@@ -176,7 +175,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 94812d75edd80944585145d1b9d297a5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -716,6 +715,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Player.PlayerSkin
   _skinPrefab: {fileID: 6511717388173413446}
+  _faceMaterial: {fileID: 2100000, guid: 94812d75edd80944585145d1b9d297a5, type: 2}
+  _bodyMaterial: {fileID: 2100000, guid: 932d1d333b223324795e741430f1d7c0, type: 2}
   _resoucePoint: {fileID: 8955401003359272067}
   _weaponPoint: {fileID: 187050536876341475}
   _feetPoint: {fileID: 7717523684058078094}

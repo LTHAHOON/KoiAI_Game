@@ -16,3 +16,5 @@ MonoBehaviour:
   _cancelBtnName: cancel-button
   _characterScrollerName: character-scroller
   _characterScrollerLabelName: scroller-text
+  _circlePaletteName: circlePalette
+  _palettePickerName: palettePicker

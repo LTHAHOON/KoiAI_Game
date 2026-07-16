@@ -1,4 +1,6 @@
 using KoiAI.Player;
+using System.Collections.Generic;
+using Unity.Properties;
 using UnityEngine;
 
 namespace KoiAI
@@ -7,12 +9,18 @@ namespace KoiAI
     public class CharacterSettingModel : VisualModel
     {
         [SerializeField]
-        private PlayerData[] _allPlayerData;
-
+        private List<PlayerData> _allPlayerData;
         [SerializeField]
-        private PlayerData _currentPlayerData;
+        private long _charChangeRepeatBtnDelay;
+        [SerializeField]
+        private long _charChangeRepeatBtnInterval;
 
-        public PlayerData[] AllPlayerData => _allPlayerData;
-        public PlayerData CurrentPlayerData => _currentPlayerData;
+        [CreateProperty]
+        public string CurrentPlayerName { get; set; }
+
+        public List<PlayerData> AllPlayerData => _allPlayerData;
+        public long CharChangeRpeatBtnDelay => _charChangeRepeatBtnDelay;
+        public long CharChangeRpeatBtnInterval => _charChangeRepeatBtnInterval;
+
     }
 }

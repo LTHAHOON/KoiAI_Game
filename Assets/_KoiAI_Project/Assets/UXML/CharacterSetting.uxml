@@ -4,10 +4,18 @@
     <Style src="project://database/Assets/_KoiAI_Project/Assets/UXML/Global.uss?fileID=7433441132597879392&amp;guid=6ab1825469abf394097e891374d6718e&amp;type=3#Global"/>
     <ui:VisualElement name="root" class="gray-background" style="flex-grow: 1; height: 100%;">
         <ui:VisualElement name="top" style="flex-grow: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
-            <ui:Instance template="Scroller" name="character-scroller" data-source="project://database/Assets/_KoiAI_Project/Assets/ScriptableObject/UI/Model/CharacterSettingModel.asset?fileID=11400000&amp;guid=9f55892ff1cd46546acc7da5e1bc2405&amp;type=2#CharacterSettingModel"/>
+            <ui:Instance template="Scroller" name="character-scroller"/>
         </ui:VisualElement>
         <ui:VisualElement name="middle" style="flex-grow: 1;">
-            <ui:Instance template="CircleColorPicker" name="TemplateContainer" style="scale: 1 1; position: absolute; align-self: flex-end; right: 0; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px; padding-top: 50px; padding-right: 50px; padding-bottom: 50px; padding-left: 50px;"/>
+            <ui:VisualElement name="circleColorPicker" style="flex-grow: 0; flex-direction: row;">
+                <ui:Instance template="CircleColorPicker" name="circleColorPicker-body" style="scale: 1 1; position: relative; align-self: flex-end; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px; padding-top: 50px; padding-right: 30px; padding-bottom: 30px; padding-left: 50px; flex-direction: column-reverse;">
+                    <ui:Label text="얼굴 피부색" style="font-size: 25px; -unity-font-definition: url(&quot;project://database/Assets/_KoiAI_Project/Assets/Font/TerrarumSansBitmap%20SDF.asset?fileID=11400000&amp;guid=56f1e7dfe73c7a14ca44186c51f1373b&amp;type=2#TerrarumSansBitmap SDF&quot;); -unity-font-style: bold; align-self: center; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 12px; padding-left: 0;"/>
+                </ui:Instance>
+                <ui:VisualElement style="flex-grow: 1;"/>
+                <ui:Instance template="CircleColorPicker" name="circleColorPicker-face" style="scale: 1 1; position: relative; align-self: flex-end; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px; padding-top: 50px; padding-right: 50px; padding-bottom: 30px; padding-left: 30px; flex-direction: column-reverse;">
+                    <ui:Label text="몸 피부색" style="font-size: 25px; -unity-font-definition: url(&quot;project://database/Assets/_KoiAI_Project/Assets/Font/TerrarumSansBitmap%20SDF.asset?fileID=11400000&amp;guid=56f1e7dfe73c7a14ca44186c51f1373b&amp;type=2#TerrarumSansBitmap SDF&quot;); -unity-font-style: bold; align-self: center; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 12px; padding-left: 0;"/>
+                </ui:Instance>
+            </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="bottom" style="flex-grow: 0;">
             <ui:VisualElement name="buttons" style="flex-grow: 1; flex-direction: row-reverse;">

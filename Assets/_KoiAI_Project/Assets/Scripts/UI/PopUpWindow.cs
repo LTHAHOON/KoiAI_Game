@@ -6,6 +6,16 @@ namespace KoiAI.UI
 {
     public abstract class PopUpWindow: MonoBehaviour
     {
+        /// <summary>
+        /// 열기가 다 되었을 경우 호출
+        /// </summary>
+        public virtual void OnCompleteOpen() { }
+
+        /// <summary>
+        /// 닫기가 다 되었을 경우 호출
+        /// </summary>
+        public virtual void OnCompleteClose() { }
+
         public abstract IPopUpWindowContainer GetIPopUpWindowContainer();
 
     }
@@ -21,6 +31,10 @@ namespace KoiAI.UI
             Initalize(_visualModel, _viewInfo);
         }
         public abstract void Initalize(TModel visualModel, TViewInfo viewInfo);
+
+        public TModel GetModel() => _visualModel;
+        public TViewInfo GetViewInfo() => _viewInfo;
+
     }
 
     public abstract class PopUpWindow_UID : PopUpWindow

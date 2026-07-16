@@ -1,68 +1,97 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace KoiAI
+namespace KoiAI.Utilities
 {
-
-
-    [RequireComponent(typeof(UIDocument))]
-    public class CircleColorPicker : MonoBehaviour
+    public interface ICircleColorPickerHandler 
     {
-        private VisualElement root;
-        private VisualElement circlePalette;
-        private VisualElement picker;
+        public void OnColorChanged(Color newColor);
+    }
 
-        private bool isDragging = false;
+    public class CircleColorPicker
+    {
+        private VisualElement _root;
+        private VisualElement _circlePalette;
+        private VisualElement _picker;
 
-        // 현재 선택된 색상 (외부에서 접근 가능)
+        private bool _isDragging = false;
+
         public Color SelectedColor { get; private set; } = Color.white;
+        private ICircleColorPickerHandler _colorPickerHandler;
 
-        // 색상이 바뀔 때마다 실행할 이벤트
-        public delegate void ColorChangedHandler(Color newColor);
-        public event ColorChangedHandler OnColorChanged;
-
-        private void OnEnable()
+        public CircleColorPicker(ICircleColorPickerHandler colorPickerHandler, VisualElement root, string circlePaletteName, string pickerName)
         {
-            root = GetComponent<UIDocument>().rootVisualElement;
+            if (root == null || colorPickerHandler == null)
+            {
+                return;
+            }
+            Init(colorPickerHandler, root, circlePaletteName, pickerName);
+        }
 
-            // UXML 요소 로드
-            circlePalette = root.Q<VisualElement>("circlePalette");
-            picker = root.Q<VisualElement>("picker");
+        public CircleColorPicker(ICircleColorPickerHandler colorPickerHandler, VisualElement root, bool bInitRegister, string circlePaletteName, string pickerName)
+        {
+            if (root == null || colorPickerHandler == null)
+            {
+                return;
+            }
+            Init(colorPickerHandler, root, circlePaletteName, pickerName);
+            if (bInitRegister)
+            {
+                RegisterAllCallBack();
+            }
+        }
 
-            if (circlePalette == null || picker == null)
+        private void Init(ICircleColorPickerHandler colorPickerHandler, VisualElement root, string circlePaletteName, string pickerName)
+        {
+            _root = root;
+            _colorPickerHandler = colorPickerHandler;
+            _circlePalette = _root.Q<VisualElement>(circlePaletteName);
+            _picker = _root.Q<VisualElement>(pickerName);
+
+            if (_circlePalette == null || _picker == null)
             {
                 Debug.LogError("UXML에서 'CirclePalette' 또는 'Picker' 요소를 찾을 수 없습니다.");
                 return;
             }
-
-            // UI Toolkit 전용 포인터 이벤트 등록
-            circlePalette.RegisterCallback<PointerDownEvent>(OnPointerDown);
-            circlePalette.RegisterCallback<PointerMoveEvent>(OnPointerMove);
-            circlePalette.RegisterCallback<PointerUpEvent>(OnPointerUp);
-
-            // 윈도우 크기 변경 등으로 레이아웃이 바뀔 때 피커 위치 재조정
-            circlePalette.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
         }
 
-        private void OnDisable()
+        public void RegisterAllCallBack()
         {
-            if (circlePalette == null) return;
-            circlePalette.UnregisterCallback<PointerDownEvent>(OnPointerDown);
-            circlePalette.UnregisterCallback<PointerMoveEvent>(OnPointerMove);
-            circlePalette.UnregisterCallback<PointerUpEvent>(OnPointerUp);
-            circlePalette.UnregisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+            if (_circlePalette == null)
+            {
+                return;
+            }
+            _circlePalette.RegisterCallback<PointerDownEvent>(OnPointerDown);
+            _circlePalette.RegisterCallback<PointerMoveEvent>(OnPointerMove);
+            _circlePalette.RegisterCallback<PointerUpEvent>(OnPointerUp);
+
+            // 윈도우 크기 변경 등으로 레이아웃이 바뀔 때 피커 위치 재조정
+            _circlePalette.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+            MovePickerToCenter();
+        }
+
+        public void UnregisterAllCallBack()
+        {
+            if (_circlePalette == null)
+            {
+                return;
+            }
+            _circlePalette.UnregisterCallback<PointerDownEvent>(OnPointerDown);
+            _circlePalette.UnregisterCallback<PointerMoveEvent>(OnPointerMove);
+            _circlePalette.UnregisterCallback<PointerUpEvent>(OnPointerUp);
+            _circlePalette.UnregisterCallback<GeometryChangedEvent>(OnGeometryChanged);
         }
 
         private void OnPointerDown(PointerDownEvent evt)
         {
-            isDragging = true;
-            circlePalette.CapturePointer(evt.pointerId); // 마우스가 원판 밖으로 나가도 드래그 유지
+            _isDragging = true;
+            _circlePalette.CapturePointer(evt.pointerId); // 마우스가 원판 밖으로 나가도 드래그 유지
             UpdatePickerAndColor(evt.position);
         }
 
         private void OnPointerMove(PointerMoveEvent evt)
         {
-            if (isDragging && circlePalette.HasPointerCapture(evt.pointerId))
+            if (_isDragging && _circlePalette.HasPointerCapture(evt.pointerId))
             {
                 UpdatePickerAndColor(evt.position);
             }
@@ -70,10 +99,10 @@ namespace KoiAI
 
         private void OnPointerUp(PointerUpEvent evt)
         {
-            if (isDragging)
+            if (_isDragging)
             {
-                circlePalette.ReleasePointer(evt.pointerId);
-                isDragging = false;
+                _circlePalette.ReleasePointer(evt.pointerId);
+                _isDragging = false;
             }
         }
 
@@ -86,7 +115,7 @@ namespace KoiAI
         private void UpdatePickerAndColor(Vector2 screenPosition)
         {
             // 1. 전역 스크린 좌표를 원판 중심 기준의 로컬 좌표로 변환
-            Rect bounds = circlePalette.worldBound;
+            Rect bounds = _circlePalette.worldBound;
             Vector2 center = bounds.center;
             Vector2 localOffset = screenPosition - center;
 
@@ -102,11 +131,11 @@ namespace KoiAI
 
             // 3. 피커 UI 위치 업데이트 (원판 내부 좌표계 기준 계산)
             // UI Toolkit의 Absolute 포지션은 좌측 상단(0,0) 기준이므로 변환 필요
-            float pickerX = (bounds.width * 0.5f) + localOffset.x - (picker.layout.width * 0.5f);
-            float pickerY = (bounds.height * 0.5f) + localOffset.y - (picker.layout.height * 0.5f);
+            float pickerX = (bounds.width * 0.5f) + localOffset.x - (_picker.layout.width * 0.5f);
+            float pickerY = (bounds.height * 0.5f) + localOffset.y - (_picker.layout.height * 0.5f);
 
-            picker.style.left = pickerX;
-            picker.style.top = pickerY;
+            _picker.style.left = pickerX;
+            _picker.style.top = pickerY;
 
             // 4. 수학적 HSV 색상 계산
             // Atan2 결과를 0~360도로 변환 후 0~1 값으로 정규화 (Hue)
@@ -122,7 +151,7 @@ namespace KoiAI
 
             // 5. 최종 색상 추출 및 이벤트 발송
             SelectedColor = Color.HSVToRGB(hue, saturation, value);
-            OnColorChanged?.Invoke(SelectedColor);
+            _colorPickerHandler?.OnColorChanged(SelectedColor);
 
             // 콘솔로 색상 확인용 (원하지 않으면 삭제 가능)
             Debug.Log($"선택된 색상: {ColorUtility.ToHtmlStringRGB(SelectedColor)}");
@@ -130,9 +159,9 @@ namespace KoiAI
 
         private void MovePickerToCenter()
         {
-            Rect bounds = circlePalette.layout;
-            picker.style.left = (bounds.width * 0.5f) - (picker.layout.width * 0.5f);
-            picker.style.top = (bounds.height * 0.5f) - (picker.layout.height * 0.5f);
+            Rect bounds = _circlePalette.layout;
+            _picker.style.left = (bounds.width * 0.5f) - (_picker.layout.width * 0.5f);
+            _picker.style.top = (bounds.height * 0.5f) - (_picker.layout.height * 0.5f);
         }
     }
 }

@@ -6,6 +6,10 @@ namespace KoiAI.Player
     
     public class PlayerSkin : Skin
     {
+        [SerializeField]
+        private Material _faceMaterial;
+        [SerializeField]
+        private Material _bodyMaterial;
         [SerializeField] 
         private Transform _resoucePoint;
         [SerializeField] 
@@ -13,6 +17,8 @@ namespace KoiAI.Player
         [SerializeField]
         private Transform _feetPoint;
 
+        public Material FaceMaterial => _faceMaterial;
+        public Material BodyMaterial => _bodyMaterial;  
         public Transform ResoucePoint => _resoucePoint;
         public Transform WeaponPoint => _weaponPoint;
         public Transform FeetPoint => _feetPoint;

@@ -32,7 +32,6 @@ namespace KoiAI.UI
                 DontDestroyOnLoad(gameObject);
             }
         }
-
         public void ChangePopUpState(PopUpState popUpStateToChange, PopUpWindow popUpWindow)
         {
             if(!popUpWindow)
@@ -73,6 +72,7 @@ namespace KoiAI.UI
                 window.visible = visible;
             }
             RefreshPopUpStack(popUpWindow);
+            CallOnCompleted(popUpWindow);
         }
 
         private void ChangePopUpState_Canvas(PopUpState popUpStateToChange, PopUpWindow_Canvas popUpWindow)
@@ -95,6 +95,21 @@ namespace KoiAI.UI
                 newWindow.SetActive(active);
             }
             RefreshPopUpStack(popUpWindow);
+            CallOnCompleted(popUpWindow);
+        }
+
+        private void CallOnCompleted(PopUpWindow popUpWindow)
+        {
+            IPopUpWindowContainer windowContainer = popUpWindow.GetIPopUpWindowContainer();
+            switch (windowContainer.CurrentPopUpState)
+            {
+                case PopUpState.Open:
+                    popUpWindow.OnCompleteOpen();
+                    break;
+                case PopUpState.Close:
+                    popUpWindow.OnCompleteClose();
+                    break;
+            }
         }
 
         private void RefreshPopUpStack(PopUpWindow popUpWindow)
@@ -108,7 +123,6 @@ namespace KoiAI.UI
                 case PopUpState.Close:
                     _popUpWindowStack.Pop();
                     break;
-
             }
         }
         public T FindPopUpWindow<T>(PopUpWindow[] popUpWindows) where T : PopUpWindow

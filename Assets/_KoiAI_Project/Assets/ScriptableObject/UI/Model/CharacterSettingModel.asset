@@ -15,4 +15,5 @@ MonoBehaviour:
   _allPlayerData:
   - {fileID: 11400000, guid: 0e1e6b01512a7324f826cebb894855af, type: 2}
   - {fileID: 11400000, guid: 89a16fa2d87832b4cad97ac8d1ae81f2, type: 2}
-  _currentPlayerData: {fileID: 11400000, guid: 0e1e6b01512a7324f826cebb894855af, type: 2}
+  _charChangeRepeatBtnDelay: 1000
+  _charChangeRepeatBtnInterval: 250

@@ -5548,6 +5548,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Player.PlayerSkin
   _skinPrefab: {fileID: 3410111381785488027}
+  _faceMaterial: {fileID: 2100000, guid: 58dd514823774ad4cb2ca7ddf30117a7, type: 2}
+  _bodyMaterial: {fileID: 2100000, guid: ca2e3004314349c4e99c84d7c4a06412, type: 2}
   _resoucePoint: {fileID: 3671630498389363028}
   _weaponPoint: {fileID: 7832087267154582837}
   _feetPoint: {fileID: 9133454014490863912}
