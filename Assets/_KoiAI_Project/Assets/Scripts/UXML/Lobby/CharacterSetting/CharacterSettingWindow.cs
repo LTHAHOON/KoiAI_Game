@@ -27,7 +27,8 @@ namespace KoiAI.UI
         private RepeatButton _charChangeLeftButton;
         private RepeatButton _charChangeRightButton;
         private Label _characterScrollerName;
-        private CircleColorPicker _circleColorPicker;
+        private CircleColorPicker _circleColorPicker_Face;
+        private CircleColorPicker _circleColorPicker_Body;
         private int _currentCharIndex = 0;
 
         public override void Initalize(CharacterSettingModel visualModel, CharacterSettingViewInfo viewInfo)
@@ -74,17 +75,26 @@ namespace KoiAI.UI
             OnChangeCharacter(0, visualModel);
             #endregion
 
-            _circleColorPicker = new CircleColorPicker(this, characterSettingRoot, viewInfo.CirclePaletteName, viewInfo.PalettePickerName);
+            
+            VisualElement circleColorPicker_Face_Root = windowContainer.Parent.rootVisualElement.Q<VisualElement>(viewInfo.CircleColorPickerName_Face);
+            VisualElement circleColorPicker_Body_Root = windowContainer.Parent.rootVisualElement.Q<VisualElement>(viewInfo.CircleColorPickerName_Body);
+            _circleColorPicker_Face = new CircleColorPicker(this, circleColorPicker_Face_Root, viewInfo.CirclePaletteName, viewInfo.PalettePickerName);
+            _circleColorPicker_Body = new CircleColorPicker(this, circleColorPicker_Body_Root, viewInfo.CirclePaletteName, viewInfo.PalettePickerName);
         }
 
         //PopUpWindow 콜백으로 호출됩니다.
         public override void OnCompleteOpen()
         {
-            if(_circleColorPicker == null)
+            if(_circleColorPicker_Face == null || _circleColorPicker_Body == null)
             {
                 return;
             }
-            _circleColorPicker.RegisterAllCallBack();
+            CharacterSettingModel visualModel =  GetVisualModel();
+            if (visualModel.AllPlayerData.Count > _currentCharIndex)
+            {
+                _circleColorPicker_Face.RegisterAllCallBack(visualModel.AllPlayerData[_currentCharIndex].CurColorPosition_Face);
+                _circleColorPicker_Body.RegisterAllCallBack(visualModel.AllPlayerData[_currentCharIndex].CurColorPosition_Body);
+            }
         }
 
         // TODO: 버튼 방향에 맞게 캐릭터 바꾸기
@@ -102,6 +112,13 @@ namespace KoiAI.UI
             
             await RefreshPreviewCameraPos(_currentCharIndex, visualModel);
             SetConfirmButtonEnabled(true);
+
+            //캐릭터 바뀔 때만 해당 캐릭터의 Color 위치 데이터 불러오기 
+            if (direction != 0)
+            {
+                _circleColorPicker_Face.RegisterAllCallBack(visualModel.AllPlayerData[_currentCharIndex].CurColorPosition_Face);
+                _circleColorPicker_Body.RegisterAllCallBack(visualModel.AllPlayerData[_currentCharIndex].CurColorPosition_Body);    
+            }
         }
 
         /// <summary>
@@ -187,21 +204,32 @@ namespace KoiAI.UI
         //닫기 버튼 누를 때
         private void OnClickCancelButton()
         {
-            _circleColorPicker.UnregisterAllCallBack();
+            _circleColorPicker_Face.UnregisterAllCallBack();
+            _circleColorPicker_Body.UnregisterAllCallBack();
             PopUpManager.Instance.ChangePopUpState(PopUpState.Close, this);
         }
 
         /// <summary>
         /// ICircleColorPickerHandler로 인해 컬러가 결정될 때 호출됩니다.
         /// </summary>
-        public void OnColorChanged(Color newColor)
+        public void OnColorChanged(CircleColorPicker circleColorPicker, Color newColor, Vector2 curColorPosition)
         {
-            CharacterSettingModel model = GetModel();
+            CharacterSettingModel model = GetVisualModel();
             PlayerData curPlayerData = model.AllPlayerData[_currentCharIndex];
             PlayerSkin curPlayerSkin = curPlayerData.PlayerSkin;
+            CharacterSettingModel visualModel =  GetVisualModel();
+    
             //데이터 유지를 위해 객체를 생성하지않고 material color설정
-            curPlayerSkin.FaceMaterial.color = newColor;
-            curPlayerSkin.BodyMaterial.color = newColor;
+            if (circleColorPicker == _circleColorPicker_Face)
+            {
+                curPlayerSkin.FaceMaterial.color = newColor;
+                visualModel.AllPlayerData[_currentCharIndex].SetCurColorPositionFace(curColorPosition);
+            }
+            else if (circleColorPicker == _circleColorPicker_Body)
+            {
+                curPlayerSkin.BodyMaterial.color = newColor;
+                visualModel.AllPlayerData[_currentCharIndex].SetCurColorPositionBody(curColorPosition);
+            }
         }
     }
 }

@@ -34,6 +34,19 @@ namespace KoiAI.Player
         [SerializeField]
         private PlayerRotationExtensionData _playerRotationExtensionData;
 
+        private Vector2? _curColorPosition_Face;
+        private Vector2? _curColorPosition_Body;
+        
+        public void SetCurColorPositionFace(Vector2 faceColorPos )
+        {
+            _curColorPosition_Face = faceColorPos;
+        }
+
+        public void SetCurColorPositionBody(Vector2 bodyColorPos)
+        {
+            _curColorPosition_Body = bodyColorPos;
+        }
+        
         public PlayerFeatureData GetPlayerFeatureData()
         {
             PlayerFeatureData data = _playerFeatureDataBase?.GetPlayerFeatureData(_playerFeatureDataType);
@@ -70,6 +83,8 @@ namespace KoiAI.Player
         public bool HasMovementProperty => GetPlayerFeatureData() is var data && data != null && data.HasMovementProperty;
         public bool HasRotationProperty => GetPlayerFeatureData() is var data && data != null && data.HasRotationProperty;
         
+        public Vector2? CurColorPosition_Face => _curColorPosition_Face;
+        public Vector2? CurColorPosition_Body => _curColorPosition_Body;
         public string CharacterBaseName => _chracterBaseName;
         public PlayerFeatureDataType PlayerFeatureDataType => _playerFeatureDataType;
         public PlayerSkin PlayerSkin => _playerSkin;

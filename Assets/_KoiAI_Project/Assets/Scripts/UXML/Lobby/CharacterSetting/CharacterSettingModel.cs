@@ -15,9 +15,13 @@ namespace KoiAI
         [SerializeField]
         private long _charChangeRepeatBtnInterval;
 
+
+        
         [CreateProperty]
         public string CurrentPlayerName { get; set; }
 
+
+        
         public List<PlayerData> AllPlayerData => _allPlayerData;
         public long CharChangeRpeatBtnDelay => _charChangeRepeatBtnDelay;
         public long CharChangeRpeatBtnInterval => _charChangeRepeatBtnInterval;

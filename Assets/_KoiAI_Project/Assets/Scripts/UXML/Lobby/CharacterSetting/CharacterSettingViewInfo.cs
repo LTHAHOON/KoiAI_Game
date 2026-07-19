@@ -13,11 +13,19 @@ namespace KoiAI.UI
         private string _characterScrollerName;
         [SerializeField]
         private string _characterScrollerLabelName;
+
+        [SerializeField] 
+        private string _circleColorPickerName_Face;
+        [SerializeField] 
+        private string _circleColorPickerName_Body;
         [SerializeField]
         private string _circlePaletteName;
         [SerializeField]
         private string _palettePickerName;
-
+        
+        
+        public string CircleColorPickerName_Face => _circleColorPickerName_Face;
+        public string CircleColorPickerName_Body => _circleColorPickerName_Body;
         public string CharacterScrollerName => _characterScrollerName;
         public string CharacterScrollerLabelName => _characterScrollerLabelName;
 

@@ -16,5 +16,7 @@ MonoBehaviour:
   _cancelBtnName: cancel-button
   _characterScrollerName: character-scroller
   _characterScrollerLabelName: scroller-text
+  _circleColorPickerName_Face: circleColorPicker-face
+  _circleColorPickerName_Body: circleColorPicker-body
   _circlePaletteName: circlePalette
   _palettePickerName: palettePicker

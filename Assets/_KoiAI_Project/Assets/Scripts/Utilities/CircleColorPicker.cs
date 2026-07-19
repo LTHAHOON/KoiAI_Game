@@ -5,7 +5,7 @@ namespace KoiAI.Utilities
 {
     public interface ICircleColorPickerHandler 
     {
-        public void OnColorChanged(Color newColor);
+        public void OnColorChanged(CircleColorPicker circleColorPicker, Color newColor, Vector2 curColorPosition);
     }
 
     public class CircleColorPicker
@@ -16,7 +16,7 @@ namespace KoiAI.Utilities
 
         private bool _isDragging = false;
 
-        public Color SelectedColor { get; private set; } = Color.white;
+        private Color SelectedColor { get; set; } = Color.white;
         private ICircleColorPickerHandler _colorPickerHandler;
 
         public CircleColorPicker(ICircleColorPickerHandler colorPickerHandler, VisualElement root, string circlePaletteName, string pickerName)
@@ -27,19 +27,7 @@ namespace KoiAI.Utilities
             }
             Init(colorPickerHandler, root, circlePaletteName, pickerName);
         }
-
-        public CircleColorPicker(ICircleColorPickerHandler colorPickerHandler, VisualElement root, bool bInitRegister, string circlePaletteName, string pickerName)
-        {
-            if (root == null || colorPickerHandler == null)
-            {
-                return;
-            }
-            Init(colorPickerHandler, root, circlePaletteName, pickerName);
-            if (bInitRegister)
-            {
-                RegisterAllCallBack();
-            }
-        }
+        
 
         private void Init(ICircleColorPickerHandler colorPickerHandler, VisualElement root, string circlePaletteName, string pickerName)
         {
@@ -51,11 +39,10 @@ namespace KoiAI.Utilities
             if (_circlePalette == null || _picker == null)
             {
                 Debug.LogError("UXML에서 'CirclePalette' 또는 'Picker' 요소를 찾을 수 없습니다.");
-                return;
             }
         }
 
-        public void RegisterAllCallBack()
+        public void RegisterAllCallBack(Vector2? curColorPosition)
         {
             if (_circlePalette == null)
             {
@@ -67,7 +54,14 @@ namespace KoiAI.Utilities
 
             // 윈도우 크기 변경 등으로 레이아웃이 바뀔 때 피커 위치 재조정
             _circlePalette.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
-            MovePickerToCenter();
+            if (curColorPosition.HasValue)
+            {
+                UpdatePickerAndColor(curColorPosition.Value);
+            }
+            else
+            {
+                MovePickerToCenter();
+            }
         }
 
         public void UnregisterAllCallBack()
@@ -151,10 +145,8 @@ namespace KoiAI.Utilities
 
             // 5. 최종 색상 추출 및 이벤트 발송
             SelectedColor = Color.HSVToRGB(hue, saturation, value);
-            _colorPickerHandler?.OnColorChanged(SelectedColor);
 
-            // 콘솔로 색상 확인용 (원하지 않으면 삭제 가능)
-            Debug.Log($"선택된 색상: {ColorUtility.ToHtmlStringRGB(SelectedColor)}");
+            _colorPickerHandler?.OnColorChanged(this, SelectedColor, screenPosition);
         }
 
         private void MovePickerToCenter()

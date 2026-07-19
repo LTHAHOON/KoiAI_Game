@@ -8,9 +8,7 @@ using UnityEngine.UIElements;
 
 namespace KoiAI.UI
 {
-    using DG.Tweening;
     using KoiAI.Utilities;
-    using R3;
     using UnityEngine.SceneManagement;
 
     public class LoadingScreenPresenter : VisualPresenter<LoadingScreenView, LoadingScreenViewInfo>

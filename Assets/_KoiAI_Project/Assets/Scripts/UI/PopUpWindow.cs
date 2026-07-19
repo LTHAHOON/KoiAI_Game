@@ -32,7 +32,7 @@ namespace KoiAI.UI
         }
         public abstract void Initalize(TModel visualModel, TViewInfo viewInfo);
 
-        public TModel GetModel() => _visualModel;
+        public TModel GetVisualModel() => _visualModel;
         public TViewInfo GetViewInfo() => _viewInfo;
 
     }
