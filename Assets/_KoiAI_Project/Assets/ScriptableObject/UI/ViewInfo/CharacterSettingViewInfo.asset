@@ -20,3 +20,4 @@ MonoBehaviour:
   _circleColorPickerName_Body: circleColorPicker-body
   _circlePaletteName: circlePalette
   _palettePickerName: palettePicker
+  _palettePickerCenterBtnName: palettePickerCenter-button

@@ -54,3 +54,5 @@ MonoBehaviour:
     _surfaceLayerMask:
       serializedVersion: 2
       m_Bits: 64
+  _curColorPosition_Face: {x: 1730.6222, y: 295.26556}
+  _curColorPosition_Body: {x: 1258.6343, y: 292.35205}

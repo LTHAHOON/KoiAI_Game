@@ -5206,6 +5206,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7076144899238363365}
+  - {fileID: 2703183958490520215}
+  - {fileID: 6143569943546230861}
   m_Father: {fileID: 6017448013681292900}
   m_LocalEulerAnglesHint: {x: 14.347098, y: 3.0517693, z: 0.18867545}
 --- !u!1 &1296489013781691917
@@ -5533,6 +5535,7 @@ Transform:
   - {fileID: 2607007774260562032}
   - {fileID: 3671630498389363028}
   - {fileID: 9133454014490863912}
+  - {fileID: 7209953036081593930}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2078883679052346806
@@ -6167,6 +6170,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 632998117930478882}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6495373078502681319
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7209953036081593930}
+  m_Layer: 0
+  m_Name: CapePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7209953036081593930
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6495373078502681319}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.02682, z: -0.0018}
+  m_LocalScale: {x: 0.02, y: 0.02, z: 0.02}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 632998117930478882}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6685795084618228272
 GameObject:
   m_ObjectHideFlags: 0
@@ -6615,6 +6649,68 @@ Transform:
   m_Children:
   - {fileID: 7832087267154582837}
   m_Father: {fileID: 3561472951797982454}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8236816205107024524
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2703183958490520215}
+  m_Layer: 0
+  m_Name: CapPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2703183958490520215
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8236816205107024524}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.000000014901156, y: -0, z: 0.000000001629814, w: 1}
+  m_LocalPosition: {x: -0.00021, y: 0.00903, z: -0.00043}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5022444889038940288}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8285554255895629523
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6143569943546230861}
+  m_Layer: 0
+  m_Name: GlassesPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6143569943546230861
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8285554255895629523}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.000000014901156, y: -0, z: 0.000000001629814, w: 1}
+  m_LocalPosition: {x: -0.00007, y: 0.00423, z: 0.00371}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5022444889038940288}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8343815301363532255
 GameObject:

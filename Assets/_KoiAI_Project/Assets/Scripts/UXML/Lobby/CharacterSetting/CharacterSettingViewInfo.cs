@@ -13,7 +13,7 @@ namespace KoiAI.UI
         private string _characterScrollerName;
         [SerializeField]
         private string _characterScrollerLabelName;
-
+        
         [SerializeField] 
         private string _circleColorPickerName_Face;
         [SerializeField] 
@@ -22,8 +22,9 @@ namespace KoiAI.UI
         private string _circlePaletteName;
         [SerializeField]
         private string _palettePickerName;
-        
-        
+        [SerializeField]
+        private string _palettePickerCenterBtnName;
+
         public string CircleColorPickerName_Face => _circleColorPickerName_Face;
         public string CircleColorPickerName_Body => _circleColorPickerName_Body;
         public string CharacterScrollerName => _characterScrollerName;
@@ -34,6 +35,7 @@ namespace KoiAI.UI
 
         public string CirclePaletteName => _circlePaletteName;
         public string PalettePickerName => _palettePickerName;
+        public string PalettePickerCenterBtnName => _palettePickerCenterBtnName;
 
     }
 }

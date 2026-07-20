@@ -42,7 +42,7 @@ namespace KoiAI.Utilities
             }
         }
 
-        public void RegisterAllCallBack(Vector2? curColorPosition)
+        public void RegisterAllCallBack(Vector2? curColorPosition = null)
         {
             if (_circlePalette == null)
             {
@@ -52,19 +52,13 @@ namespace KoiAI.Utilities
             _circlePalette.RegisterCallback<PointerMoveEvent>(OnPointerMove);
             _circlePalette.RegisterCallback<PointerUpEvent>(OnPointerUp);
 
-            // 윈도우 크기 변경 등으로 레이아웃이 바뀔 때 피커 위치 재조정
-            _circlePalette.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
             if (curColorPosition.HasValue)
             {
                 UpdatePickerAndColor(curColorPosition.Value);
             }
-            else
-            {
-                MovePickerToCenter();
-            }
         }
 
-        public void UnregisterAllCallBack()
+        public void UnregisterAllCallBack(Vector2? curColorPosition = null)
         {
             if (_circlePalette == null)
             {
@@ -73,7 +67,11 @@ namespace KoiAI.Utilities
             _circlePalette.UnregisterCallback<PointerDownEvent>(OnPointerDown);
             _circlePalette.UnregisterCallback<PointerMoveEvent>(OnPointerMove);
             _circlePalette.UnregisterCallback<PointerUpEvent>(OnPointerUp);
-            _circlePalette.UnregisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+            
+            if(curColorPosition.HasValue)
+            {
+                UpdatePickerAndColor(curColorPosition.Value);
+            }
         }
 
         private void OnPointerDown(PointerDownEvent evt)
@@ -100,11 +98,6 @@ namespace KoiAI.Utilities
             }
         }
 
-        private void OnGeometryChanged(GeometryChangedEvent evt)
-        {
-            // 초기화 시 또는 화면 크기 변경 시 피커를 원판 중심에 배치
-            MovePickerToCenter();
-        }
 
         private void UpdatePickerAndColor(Vector2 screenPosition)
         {
@@ -149,11 +142,12 @@ namespace KoiAI.Utilities
             _colorPickerHandler?.OnColorChanged(this, SelectedColor, screenPosition);
         }
 
-        private void MovePickerToCenter()
+        public void MovePickerToCenter()
         {
-            Rect bounds = _circlePalette.layout;
-            _picker.style.left = (bounds.width * 0.5f) - (_picker.layout.width * 0.5f);
-            _picker.style.top = (bounds.height * 0.5f) - (_picker.layout.height * 0.5f);
+          //  Rect bounds = _circlePalette.layout;
+        //    _picker.style.left = (bounds.width * 0.5f) - (_picker.layout.width * 0.5f);
+         //   _picker.style.top = (bounds.height * 0.5f) - (_picker.layout.height * 0.5f);
+            UpdatePickerAndColor(_circlePalette.worldBound.center);
         }
     }
 }

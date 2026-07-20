@@ -34,10 +34,21 @@ namespace KoiAI.Player
         [SerializeField]
         private PlayerRotationExtensionData _playerRotationExtensionData;
 
-        private Vector2? _curColorPosition_Face;
-        private Vector2? _curColorPosition_Body;
-        
-        public void SetCurColorPositionFace(Vector2 faceColorPos )
+        [ReadOnly]
+        [SerializeField]
+        private Vector2 _curColorPosition_Face;
+        [ReadOnly]
+        [SerializeField]
+        private Vector2 _curColorPosition_Body;
+
+        [HideInInspector]
+        [SerializeField]
+        private Vector2 _lastColorPosition_Face;
+        [HideInInspector]
+        [SerializeField]
+        private Vector2 _lastColorPosition_Body;
+
+        public void SetCurColorPositionFace(Vector2 faceColorPos)
         {
             _curColorPosition_Face = faceColorPos;
         }
@@ -47,6 +58,19 @@ namespace KoiAI.Player
             _curColorPosition_Body = bodyColorPos;
         }
         
+        public void SetLastColorPosition()
+        {
+            _lastColorPosition_Face = _curColorPosition_Face;
+            _lastColorPosition_Body = _curColorPosition_Body;
+
+        }
+
+        public void UndoToLastColorPosition()
+        {
+            _curColorPosition_Face = _lastColorPosition_Face;
+            _curColorPosition_Body = _lastColorPosition_Body;
+        }
+
         public PlayerFeatureData GetPlayerFeatureData()
         {
             PlayerFeatureData data = _playerFeatureDataBase?.GetPlayerFeatureData(_playerFeatureDataType);
@@ -83,8 +107,8 @@ namespace KoiAI.Player
         public bool HasMovementProperty => GetPlayerFeatureData() is var data && data != null && data.HasMovementProperty;
         public bool HasRotationProperty => GetPlayerFeatureData() is var data && data != null && data.HasRotationProperty;
         
-        public Vector2? CurColorPosition_Face => _curColorPosition_Face;
-        public Vector2? CurColorPosition_Body => _curColorPosition_Body;
+        public Vector2 CurColorPosition_Face => _curColorPosition_Face;
+        public Vector2 CurColorPosition_Body => _curColorPosition_Body;
         public string CharacterBaseName => _chracterBaseName;
         public PlayerFeatureDataType PlayerFeatureDataType => _playerFeatureDataType;
         public PlayerSkin PlayerSkin => _playerSkin;

@@ -12,7 +12,6 @@
 }
 
 .menu-button {
-    width: 8%;
     margin-top: 0;
     margin-right: 0;
     margin-bottom: 0;
@@ -75,7 +74,7 @@
 }
 
 .terrarum-text {
-    font-size: 70px;
+    font-size: 25px;
     -unity-font-definition: url("project://database/Assets/_KoiAI_Project/Assets/Font/TerrarumSansBitmap%20SDF.asset?fileID=11400000&guid=56f1e7dfe73c7a14ca44186c51f1373b&type=2#TerrarumSansBitmap SDF");
     -unity-font-style: bold;
     -unity-text-auto-size: none;
