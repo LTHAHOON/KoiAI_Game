@@ -1,14 +1,14 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/_KoiAI_Project/Assets/UXML/Global.uss?fileID=7433441132597879392&amp;guid=6ab1825469abf394097e891374d6718e&amp;type=3#Global"/>
-    <ui:VisualElement name="costumeSlotRoot" class="gray-background" style="background-color: rgba(0, 0, 0, 0.86);">
-        <ui:VisualElement name="Top" style="flex-grow: 0;">
-            <ui:Label text="Cap" name="costumeName-text" class="terrarum-text" style="color: rgb(27, 27, 27); font-size: 25px; padding-left: 20px; background-color: rgb(255, 255, 255);"/>
+    <ui:VisualElement name="costumeSlotRoot" class="gray-background" style="background-color: rgba(0, 0, 0, 0.86); width: 180px; height: 190px; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+        <ui:VisualElement name="Top">
+            <ui:Label name="costumeName-text" text="None" class="terrarum-text" style="color: rgb(27, 27, 27); font-size: 25px; padding-left: 0; background-color: rgb(255, 255, 255); flex-shrink: 1; width: auto; height: auto; -unity-text-align: upper-center;"/>
         </ui:VisualElement>
         <ui:VisualElement name="VisualElement" style="flex-grow: 1;">
-            <ui:Image style="position: absolute; background-image: url(&quot;project://database/Assets/_KoiAI_Project/Assets/UI_Texture/EmptySprite/Default_White.png?fileID=2800000&amp;guid=46f50f1c971339241a87b6aa616b5659&amp;type=3#Default_White&quot;); width: 90px; height: 90px; margin-top: 20px; margin-right: 15px; margin-bottom: 15px; margin-left: 15px; align-self: center;"/>
+            <ui:Image name="costumeTexture-image" style="position: absolute; background-image: none; width: 92px; height: 92px; margin-top: 20px; margin-right: 15px; margin-bottom: 15px; margin-left: 15px; align-self: center;"/>
         </ui:VisualElement>
         <ui:VisualElement style="flex-grow: 0;">
-            <ui:Button text="장착" class="menu-button terrarum-text" style="width: auto; margin-top: 10px; margin-right: 20px; margin-bottom: 10px; margin-left: 20px; height: auto;"/>
+            <ui:Button name="costumeEquip-button" enabled="true" text="장착" class="menu-button terrarum-text" style="width: auto; margin-top: 10px; margin-right: 20px; margin-bottom: 10px; margin-left: 20px; height: auto;"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

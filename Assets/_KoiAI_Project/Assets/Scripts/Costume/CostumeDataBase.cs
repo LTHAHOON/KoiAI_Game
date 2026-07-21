@@ -13,14 +13,14 @@ namespace KoiAI.Costume
     public class CostumeDataBase : ScriptableObject
     {
         [SerializeField]
-        private CustomeCategory _costumeCategory;
+        private CostumeCategory _costumeCategory;
 
         [SerializeField]
         private List<CostumeData> _costumeDataList;
 
 #if UNITY_EDITOR
         [Button("LoadCostumeData", EButtonEnableMode.Editor)]
-        public void LoadCostumeData()
+        private void LoadCostumeData()
         {
             _costumeDataList.Clear();
             GUID[] costumeDataGuids = AssetDatabase.FindAssetGUIDs("t: ScriptableObject", new[] { "Assets/_KoiAI_Project/Assets/ScriptableObject/Costume/CostumeData" });
@@ -37,5 +37,13 @@ namespace KoiAI.Costume
             }
         }
 #endif
+
+        public List<CostumeData> GetCostumeDataList()
+        {
+            return _costumeDataList;
+        }
+
+        public CostumeCategory CostumeCategory => _costumeCategory;
+
     }
 }

@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Costume.CostumeDataBase
   _costumeCategory: 0
   _costumeDataList:
+  - {fileID: 11400000, guid: 33ad63195cac3b142ba3ffe14549aad3, type: 2}
   - {fileID: 11400000, guid: 0c0b7b0e2c8afd24cab49a6eb8737f55, type: 2}

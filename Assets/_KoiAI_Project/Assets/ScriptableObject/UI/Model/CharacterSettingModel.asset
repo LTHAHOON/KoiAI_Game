@@ -17,3 +17,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 89a16fa2d87832b4cad97ac8d1ae81f2, type: 2}
   _charChangeRepeatBtnDelay: 1000
   _charChangeRepeatBtnInterval: 250
+  _costumeDataBases:
+  - {fileID: 11400000, guid: 473f20d90e6a63d41b885b5b69e10b74, type: 2}
+  - {fileID: 11400000, guid: 8741db91a24cb224b9c31137571f5554, type: 2}
+  - {fileID: 11400000, guid: 212f47f999157504eb0f606ef83722ab, type: 2}

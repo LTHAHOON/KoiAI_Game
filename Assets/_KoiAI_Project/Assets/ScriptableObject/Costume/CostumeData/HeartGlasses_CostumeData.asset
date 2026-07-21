@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 297ae3f5f25fad44da02cc41b4bc9690, type: 3}
+  m_Name: HeartGlasses_CostumeData
+  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Costume.CostumeData
+  _costumeCategory: 1
+  _costumeTexture: {fileID: 2800000, guid: 16a17c145ee99c34ba91a73f7ade3781, type: 3}
+  _costumeName: Heart Glasses
+  _costumePrefab: {fileID: 4867294627513241484, guid: eb0ff4297f2a5354e93f4f0037fd3c58, type: 3}

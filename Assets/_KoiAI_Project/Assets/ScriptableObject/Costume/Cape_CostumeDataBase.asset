@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 530f2041267d65e4486ace0782d24f17, type: 3}
+  m_Name: Cape_CostumeDataBase
+  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Costume.CostumeDataBase
+  _costumeCategory: 2
+  _costumeDataList:
+  - {fileID: 11400000, guid: 838cd218b60198e4180ae799836b464e, type: 2}
+  - {fileID: 11400000, guid: 4b02f4abe6f8d8740a6753f23e8a4cef, type: 2}

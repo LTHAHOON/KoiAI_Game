@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 297ae3f5f25fad44da02cc41b4bc9690, type: 3}
+  m_Name: MarioCap_CostumeData
+  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Costume.CostumeData
+  _costumeCategory: 0
+  _costumeTexture: {fileID: 2800000, guid: fa7366df96d2b2c42a3981fbf3212278, type: 3}
+  _costumeName: Mario Cap
+  _costumePrefab: {fileID: 730331440650914512, guid: 8e7d12f5b3f328d409492de269bc04c8, type: 3}

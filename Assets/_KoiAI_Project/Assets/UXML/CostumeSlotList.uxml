@@ -1,11 +1,19 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/_KoiAI_Project/Assets/UXML/Global.uss?fileID=7433441132597879392&amp;guid=6ab1825469abf394097e891374d6718e&amp;type=3#Global"/>
-    <ui:VisualElement name="costumeSlotList" class="gray-background" style="flex-grow: 1;">
-        <ui:VisualElement name="costumeSearch-button" style="flex-grow: 0; flex-direction: row; align-self: center; padding-bottom: 10px;">
-            <ui:Button text="모자" name="capSearch-button" class="menu-button terrarum-text" style="height: auto; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px; width: 80px;"/>
-            <ui:Button text="안경" name="glassesSearch-buton" class="menu-button terrarum-text" style="height: auto; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px; width: 80px;"/>
-            <ui:Button text="망토" name="capeSearch-button" class="menu-button terrarum-text" style="height: auto; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px; width: 80px;"/>
+    <ui:VisualElement name="costumeSlotList" picking-mode="Ignore" class="gray-background" style="flex-grow: 1;">
+        <ui:VisualElement name="costumeSearch" style="flex-grow: 0; flex-direction: row; align-self: center; padding-bottom: 10px;">
+            <ui:RadioButtonGroup name="costumeSearch-radioGroup" style="margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px;">
+                <ui:RadioButton name="capSearch-radioButton" text="" class="radio-button terrarum-text" style="border-left-color: rgba(0, 0, 0, 0); border-right-color: rgba(0, 0, 0, 0); border-top-color: rgba(0, 0, 0, 0); border-bottom-color: rgba(0, 0, 0, 0); border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px; padding-top: 0; padding-bottom: 0; padding-right: 0; padding-left: 0;">
+                    <ui:Label text="모자" class="terrarum-text" style="position: absolute; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-center; width: 80px; height: 100%;"/>
+                </ui:RadioButton>
+                <ui:RadioButton name="glassesSearch-radioButton" class="radio-button terrarum-text" style="border-left-color: rgba(0, 0, 0, 0); border-right-color: rgba(0, 0, 0, 0); border-top-color: rgba(0, 0, 0, 0); border-bottom-color: rgba(0, 0, 0, 0); border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
+                    <ui:Label text="안경" class="terrarum-text" style="position: absolute; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-center; width: 80px; height: 100%;"/>
+                </ui:RadioButton>
+                <ui:RadioButton name="capeSearch-radioButton" class="radio-button terrarum-text" style="border-left-color: rgba(0, 0, 0, 0); border-right-color: rgba(0, 0, 0, 0); border-top-color: rgba(0, 0, 0, 0); border-bottom-color: rgba(0, 0, 0, 0); border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
+                    <ui:Label text="망토" name="Label" class="terrarum-text" style="position: absolute; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-center; width: 80px; height: 100%;"/>
+                </ui:RadioButton>
+            </ui:RadioButtonGroup>
         </ui:VisualElement>
-        <ui:MultiColumnListView columns="" sort-column-descriptions=""/>
+        <ui:ScrollView name="costume-scrollView" style="flex-grow: 1;"/>
     </ui:VisualElement>
 </ui:UXML>

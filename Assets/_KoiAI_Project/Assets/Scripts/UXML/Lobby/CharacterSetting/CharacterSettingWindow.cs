@@ -1,4 +1,5 @@
 
+using System;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using Unity.Cinemachine;
@@ -8,6 +9,7 @@ using UnityEngine.UIElements;
 
 namespace KoiAI.UI
 {
+    using KoiAI.Costume;
     using KoiAI.Player;
     using KoiAI.Utilities;
 
@@ -21,14 +23,22 @@ namespace KoiAI.UI
         private float _activePointOffsetY = 10;
 
         private Vector3 _activePoint = Vector3.zero;
-        private Dictionary<int, PlayerSkin> _previewCharacters;
         private Button _confirmButton;
         private Button _cancelButton;
+
+        private Label _characterScrollerName;
         private RepeatButton _charChangeLeftButton;
         private RepeatButton _charChangeRightButton;
-        private Label _characterScrollerName;
+        private Dictionary<int, PlayerSkin> _previewCharacters;
+
         private CircleColorPicker _circleColorPicker_Face;
         private CircleColorPicker _circleColorPicker_Body;
+
+        private List<RadioButton> _costumeSearchRadioButtons;
+        private RadioButtonGroup _costumeSearchRadioGroup;
+        private CostumeCategory _curSearchCostumeCategory = CostumeCategory.Cap;
+        private readonly int _initialCostumeSearchIndex = 0;
+
         private int _currentCharIndex = 0;
         private int _lastCharIndex = 0;
         private bool _isConfirmed = false;
@@ -88,6 +98,87 @@ namespace KoiAI.UI
             palettePcikerCenterBtn_Face.clicked += _circleColorPicker_Face.MovePickerToCenter;
             palettePcikerCenterBtn_Body.clicked += _circleColorPicker_Body.MovePickerToCenter;
             #endregion
+
+            #region CostumeSlotList 초기화
+            VisualElement costumeSlotList = windowContainer.Parent.rootVisualElement.Q<VisualElement>(viewInfo.CostumeSlotList);
+            ScrollView costumeScrollView = costumeSlotList.Q<ScrollView>(viewInfo.CostumeScrollView);
+            for (int i = 0; i < visualModel.CostumeDataBases.Length; i++)
+            {
+                List<CostumeData> costumeDataList =  visualModel.CostumeDataBases[i].GetCostumeDataList();
+
+                for (int j = 0; j < costumeDataList.Count; j++)
+                {
+
+                    CostumeData costumeData = costumeDataList[j];
+
+                    VisualElement newCostumeSlot = viewInfo.CostumeSlotTemplate.CloneTree();
+                    newCostumeSlot.AddToClassList("CostumeSlot");
+
+                    Label costumeName = newCostumeSlot.Q<Label>(viewInfo.CostumeTextName);
+                    costumeName.text = costumeData.CostumeName;
+                    Image costumeImage = newCostumeSlot.Q<Image>(viewInfo.CostumeImageName);
+                    costumeImage.image = costumeData.CostumeTexture;
+
+                    costumeData.SetCostumeSlot(newCostumeSlot);
+                    costumeScrollView.Add(newCostumeSlot);
+                    newCostumeSlot.style.display = DisplayStyle.None;
+
+                    Button costumeEquipButton = newCostumeSlot.Q<Button>(viewInfo.CostumeEquipBtnName);
+                    costumeEquipButton.clicked += () => EquipCostume(costumeData);
+                }
+            }
+
+            _costumeSearchRadioGroup = costumeSlotList.Q<RadioButtonGroup>(viewInfo.CostumeSearchRadioGroupName);
+            _costumeSearchRadioButtons = _costumeSearchRadioGroup.Query<RadioButton>().ToList();
+
+            _costumeSearchRadioGroup.RegisterValueChangedCallback(evt =>
+            {
+                if(!Enum.IsDefined(typeof(CostumeCategory), evt.newValue))
+                {
+                    return;
+                }
+                CostumeCategory searchCategory = (CostumeCategory)evt.newValue;
+                SearchCostume(searchCategory);
+            });
+
+            #endregion
+        }
+
+        public void EquipCostume(CostumeData costumeData)
+        {
+
+        }
+
+        public void SearchCostume(CostumeCategory searchCostumeCategory)
+        {
+            if(_costumeSearchRadioGroup == null)
+            {
+                return;
+            }
+
+            CharacterSettingModel visualModel = GetVisualModel();
+
+            bool bCurGet = visualModel.TryGetCostumeDataBase(out CostumeDataBase curCostumeDataBase, _curSearchCostumeCategory);
+            bool bOtherGet = visualModel.TryGetCostumeDataBase(out CostumeDataBase targetCostumeDataBase, searchCostumeCategory);
+
+            if (bCurGet && bOtherGet)
+            {
+                List<CostumeData> costumeDataList = curCostumeDataBase.GetCostumeDataList();
+                SetDisplayCostumeSlot(DisplayStyle.None, costumeDataList);
+
+                costumeDataList = targetCostumeDataBase.GetCostumeDataList();
+                SetDisplayCostumeSlot(DisplayStyle.Flex, costumeDataList);
+
+                _curSearchCostumeCategory = searchCostumeCategory;
+            }
+        }
+
+        private void SetDisplayCostumeSlot(DisplayStyle displayStyle, List<CostumeData> costumeDataList)
+        {
+            for (int i = 0; i < costumeDataList.Count; i++)
+            {
+                costumeDataList[i].CostumeSlot.style.display = displayStyle;
+            }
         }
 
         //PopUpWindow 콜백으로 호출됩니다.
@@ -97,6 +188,7 @@ namespace KoiAI.UI
             {
                 return;
             }
+
             CharacterSettingModel visualModel =  GetVisualModel();
             if (visualModel.AllPlayerData.Count > _currentCharIndex)
             {
@@ -108,6 +200,9 @@ namespace KoiAI.UI
                 visualModel.AllPlayerData[i].SetLastColorPosition();
             }
             _lastCharIndex = _currentCharIndex;
+
+            _costumeSearchRadioButtons[_initialCostumeSearchIndex].value = true;
+
             SetConfirmButtonEnabled(false);
         }
 

@@ -21,3 +21,9 @@ MonoBehaviour:
   _circlePaletteName: circlePalette
   _palettePickerName: palettePicker
   _palettePickerCenterBtnName: palettePickerCenter-button
+  _costumeSlotList: costumeSlotList
+  _costumeScrollViewName: costume-scrollView
+  _costumeSearchRadioGroupName: costumeSearch-radioGroup
+  _costumeTextName: costumeName-text
+  _costumeImageName: costumeTexture-image
+  _costumeSlotTemplate: {fileID: 9197481963319205126, guid: 3b324cf650108b8468c8b892973044b3, type: 3}

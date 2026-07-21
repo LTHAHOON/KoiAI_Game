@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: SoliderCap_CostumeData
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Costume.CostumeData
   _costumeCategory: 0
+  _costumeTexture: {fileID: 2800000, guid: 8b02b747058edef4d90998b5e4231f8b, type: 3}
   _costumeName: Solider Cap
   _costumePrefab: {fileID: 5560661786670383032, guid: f6b093f8ca6f16a4cbc279f372e99106, type: 3}
