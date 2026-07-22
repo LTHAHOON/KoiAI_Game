@@ -5,6 +5,9 @@ using static KoiAI.Player.PlayerFeature;
 namespace KoiAI.Player
 {
     using KoiAI.AnimatorSystem;
+    using NUnit.Framework;
+    using System;
+    using System.Collections.Generic;
 
     [CreateAssetMenu(fileName = "new PlayerData", menuName = "KoiAI/Player/PlayerData")]
     public class PlayerData : ScriptableObject
@@ -34,6 +37,12 @@ namespace KoiAI.Player
         [SerializeField]
         private PlayerRotationExtensionData _playerRotationExtensionData;
 
+        [HideInInspector]
+        [SerializeField]
+        private List<Guid> _wearingCostumeGUIDs = new();
+        [HideInInspector]
+        private List<Guid> _lastWearingCostumeGUIDs = new();
+
         [ReadOnly]
         [SerializeField]
         private Vector2 _curColorPosition_Face;
@@ -47,6 +56,22 @@ namespace KoiAI.Player
         [HideInInspector]
         [SerializeField]
         private Vector2 _lastColorPosition_Body;
+
+        public void SaveWearingCostumeGUIDs()
+        {
+            _lastWearingCostumeGUIDs = _wearingCostumeGUIDs;
+        }
+
+
+        public List<Guid> GetWearingCostumeGUIDs()
+        {
+            return _wearingCostumeGUIDs;
+        }
+
+        public List<Guid> GetLastWearingCostumeGUIDs()
+        {
+            return _lastWearingCostumeGUIDs;
+        }
 
         public void SetCurColorPositionFace(Vector2 faceColorPos)
         {

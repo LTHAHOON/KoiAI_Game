@@ -8,7 +8,7 @@ namespace KoiAI.Player
 {
     using KoiAI.AnimatorSystem;
     using KoiAI.Audio;
-    using KoiAI.Physics;
+    using KoiAI.CustomPhysics;
     
     [Serializable]
     public class PlayerMovementExtensionData : PlayerFeatureExtensionData

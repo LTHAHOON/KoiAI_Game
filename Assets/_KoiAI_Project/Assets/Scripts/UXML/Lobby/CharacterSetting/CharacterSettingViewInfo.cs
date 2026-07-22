@@ -37,7 +37,9 @@ namespace KoiAI.UI
         [SerializeField]
         private string _costumeImageName;
         [SerializeField]
-        private string _costumeEquipBtnName;
+        private string _costumeWearBtnName;
+        [SerializeField]
+        private string _costumeWearingBtnName;
         [SerializeField]
         private VisualTreeAsset _costumeSlotTemplate;
 
@@ -58,7 +60,9 @@ namespace KoiAI.UI
         public string CostumeSearchRadioGroupName => _costumeSearchRadioGroupName;
         public string CostumeTextName => _costumeTextName;
         public string CostumeImageName => _costumeImageName;
-        public string CostumeEquipBtnName => _costumeEquipBtnName;  
+        public string CostumeWearBtnName => _costumeWearBtnName;
+        public string CostumeWearingBtnName => _costumeWearingBtnName;
+
         public VisualTreeAsset CostumeSlotTemplate => _costumeSlotTemplate;
     }
 }

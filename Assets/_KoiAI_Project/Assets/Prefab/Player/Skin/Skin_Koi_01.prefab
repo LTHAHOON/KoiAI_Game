@@ -732,8 +732,8 @@ Transform:
   - {fileID: 7174415843671491979}
   - {fileID: 7717523684058078094}
   - {fileID: 7394588145122402581}
-  - {fileID: 6004907975939307979}
   - {fileID: 5929834085470171341}
+  - {fileID: 6004907975939307979}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2513457811619122350
@@ -754,6 +754,9 @@ MonoBehaviour:
   _resoucePoint: {fileID: 8955401003359272067}
   _weaponPoint: {fileID: 187050536876341475}
   _feetPoint: {fileID: 7717523684058078094}
+  _capPoint: {fileID: 7394588145122402581}
+  _glassesPoint: {fileID: 5929834085470171341}
+  _capePoint: {fileID: 6004907975939307979}
 --- !u!1 &6957678930749791073
 GameObject:
   m_ObjectHideFlags: 0

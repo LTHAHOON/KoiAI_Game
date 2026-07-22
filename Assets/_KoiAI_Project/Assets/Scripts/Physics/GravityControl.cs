@@ -1,11 +1,11 @@
 using NaughtyAttributes;
+using UnityEditor.Timeline;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 //Never used Warning 차단
 #pragma warning disable CS0414
 
-namespace KoiAI.Physics
+namespace KoiAI.CustomPhysics
 {
     public class GravityControl : MonoBehaviour
     {
@@ -13,7 +13,10 @@ namespace KoiAI.Physics
         [SerializeField]
         private GravityData _gravityData;
 
+        private Vector3 _checkCollisionPos;
+        private Collider _collider;
         private bool _initCompleted = false;
+        private readonly float _checkCollisionDist = 0.5f;
         private float _groundCheckDist;
         private float _curTime;
         private float _startTime;
@@ -25,7 +28,8 @@ namespace KoiAI.Physics
 
         private void Awake()
         {
-            if(_gravityData.IsInitOnAwake)
+            _collider = GetComponent<Collider>();
+            if (_gravityData.IsInitOnAwake)
             {
                 Init();
             }
@@ -41,7 +45,9 @@ namespace KoiAI.Physics
 
         private void FixedUpdate()
         {
-            if(!_gravityData.FeetPoint)
+            Debug.DrawRay(transform.position + Vector3.one, transform.up * _checkCollisionDist, Color.red);
+
+            if (!_gravityData.FeetPoint)
             {
                 return;
             }
@@ -86,6 +92,9 @@ namespace KoiAI.Physics
         
         private void GravityProcess()
         {
+            _checkCollisionPos = transform.position;
+            _checkCollisionPos.y = _collider.bounds.max.y;
+
             _curTime = Time.time - _startTime;
             Vector3 pos = transform.position;
             float avgSpeed = (_curGravity * 0.5f * _curTime * _curTime) + _initialVelocity * _curTime;
@@ -96,6 +105,16 @@ namespace KoiAI.Physics
             {
                 _curGravity -= Time.deltaTime * _gravityData.GravityMod;
                 _groundCheckDist = _gravityData.GroundCheckDistance;
+            }
+            else if (Physics.Raycast(_checkCollisionPos, Vector3.up, out var hit, _checkCollisionDist))
+            {
+                //Y축 충돌하면 초기화
+                if(hit.collider.gameObject.layer != gameObject.layer)
+                {
+                    _initialVelocity = 0f;
+                    _startTime = Time.time;
+                    _startY = transform.position.y;
+                }
             }
         }
     

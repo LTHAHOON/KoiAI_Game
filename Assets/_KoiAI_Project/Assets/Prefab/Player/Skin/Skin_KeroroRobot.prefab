@@ -5556,6 +5556,9 @@ MonoBehaviour:
   _resoucePoint: {fileID: 3671630498389363028}
   _weaponPoint: {fileID: 7832087267154582837}
   _feetPoint: {fileID: 9133454014490863912}
+  _capPoint: {fileID: 2703183958490520215}
+  _glassesPoint: {fileID: 6143569943546230861}
+  _capePoint: {fileID: 7209953036081593930}
 --- !u!95 &1009281590484128031
 Animator:
   serializedVersion: 7

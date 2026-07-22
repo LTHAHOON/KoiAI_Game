@@ -2,7 +2,7 @@ using NaughtyAttributes;
 using System;
 using UnityEngine;
 
-namespace KoiAI.Physics
+namespace KoiAI.CustomPhysics
 {
     [Serializable]
     public struct GravityData
