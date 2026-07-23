@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 
 namespace KoiAI.Player
 {
+    using KoiAI.Input;
     using KoiAI.Interact;
     using KoiAI.Item;
     using KoiAI.ItemProp;
@@ -71,15 +72,11 @@ namespace KoiAI.Player
             _weaponInfoControl = FindAnyObjectByType<WeaponInfoControl>();
         }
 
-        public override void Init(PlayerInputAction playerIA, PlayerFeatureValueData playerFeatureValueData = null, 
+        public override void Init(PlayerFeatureValueData playerFeatureValueData = null, 
             PlayerFeatureExtensionData playerFeatureExtensionData = null)
         {
             PlayerSkin playerSkin = Owner.CurrentPlayerSkin;
             if (playerSkin == null)
-            {
-                return;
-            }
-            if (playerIA == null)
             {
                 return;
             }
@@ -126,9 +123,9 @@ namespace KoiAI.Player
 
             #endregion
 
-            playerIA.Player.SelectItem_Equip.performed += OnSelectEquipItem;
-            playerIA.Player.SelectItem_NotEquip.performed += OnSelectNotEquipItem;
-            playerIA.Player.UseItem.performed += OnUseItem;
+            InputService.PlayerIA.Player.SelectItem_Equip.performed += OnSelectEquipItem;
+            InputService.PlayerIA.Player.SelectItem_NotEquip.performed += OnSelectNotEquipItem;
+            InputService.PlayerIA.Player.UseItem.performed += OnUseItem;
             if(_inventorySystem.TryGetInventorySlot(ItemSlotType.NotEquipped, out var inventorySlot))
             {
                 _maxSelectNotEquipIndex = inventorySlot.SlotData.SlotCount;

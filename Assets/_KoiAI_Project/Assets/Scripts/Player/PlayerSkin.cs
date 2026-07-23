@@ -23,6 +23,11 @@ namespace KoiAI.Player
         [SerializeField]
         private Transform _capePoint;
 
+        public void SetDontDestroy()
+        {
+            DontDestroyOnLoad(this);
+        }
+
         public Material FaceMaterial => _faceMaterial;
         public Material BodyMaterial => _bodyMaterial;  
         public Transform ResoucePoint => _resoucePoint;

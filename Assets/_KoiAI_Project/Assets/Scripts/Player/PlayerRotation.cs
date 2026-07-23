@@ -1,6 +1,7 @@
-using System;
+using KoiAI.Input;
 using KoiAI.Utilities;
 using NaughtyAttributes;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -54,13 +55,9 @@ namespace KoiAI.Player
         private Vector2 _input = Vector2.zero;
         private Vector3 _targetAngle = Vector3.zero;
     
-        public override void Init(PlayerInputAction playerIA, PlayerFeatureValueData playerFeatureValueData = null, 
+        public override void Init(PlayerFeatureValueData playerFeatureValueData = null, 
             PlayerFeatureExtensionData playerFeatureExtensionData = null)
         {
-            if (playerIA == null)
-            {
-                return;
-            }
             if (playerFeatureValueData is not PlayerRotationValueData valueData ||
                 playerFeatureExtensionData is not PlayerRotationExtensionData extensionValueData)
             {
@@ -71,9 +68,9 @@ namespace KoiAI.Player
             _extensionValueData = extensionValueData;
             _camera = UnityEngine.Camera.main;
             _surfaceAngleFinder = new(_valueData.SurfaceCheckDistance + _extensionValueData.SurfaceCheckDistanceMod);
-            playerIA.Player.Move.started += OnRotation;
-            playerIA.Player.Move.performed += OnRotation;
-            playerIA.Player.Move.canceled += OnRotation;
+            InputService.PlayerIA.Player.Move.started += OnRotation;
+            InputService.PlayerIA.Player.Move.performed += OnRotation;
+            InputService.PlayerIA.Player.Move.canceled += OnRotation;
         }
     
         public override void UpdateFeature()
@@ -143,21 +140,17 @@ namespace KoiAI.Player
 
         public void ConnectPlayerIA()
         {
-            PlayerInputAction playerIA = Owner.PlayerIA;
-            //playerIA 재연결
-            playerIA.Disable();
-            playerIA.Enable();
-            playerIA.Player.Move.started += OnRotation;
-            playerIA.Player.Move.performed += OnRotation;
-            playerIA.Player.Move.canceled += OnRotation;
+            InputService.ReconnectInputAction();
+            InputService.PlayerIA.Player.Move.started += OnRotation;
+            InputService.PlayerIA.Player.Move.performed += OnRotation;
+            InputService.PlayerIA.Player.Move.canceled += OnRotation;
         }
 
         public void DisConnectPlayerIA()
         {
-            PlayerInputAction playerIA = Owner.PlayerIA;
-            playerIA.Player.Move.started -= OnRotation;
-            playerIA.Player.Move.performed -= OnRotation;
-            playerIA.Player.Move.canceled -= OnRotation;
+            InputService.PlayerIA.Player.Move.started -= OnRotation;
+            InputService.PlayerIA.Player.Move.performed -= OnRotation;
+            InputService.PlayerIA.Player.Move.canceled -= OnRotation;
         }
         private bool IsValid() => _input != Vector2.zero && _camera && _surfaceAngleFinder != null && _valueData != null && _extensionValueData != null;
     }

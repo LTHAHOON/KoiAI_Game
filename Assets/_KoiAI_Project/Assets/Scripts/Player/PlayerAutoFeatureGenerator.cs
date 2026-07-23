@@ -26,7 +26,12 @@ namespace KoiAI.Player
         private readonly Dictionary<PlayerFeatureProperty, PlayerFeature> _dicPlayerFeature = new();
         private readonly HashSet<PlayerFeatureProperty> _prevPlayerFeatureProperties = new();
 
-        [Button("(Re)Generate Feature Component" , EButtonEnableMode.Editor)]
+        private void Awake()
+        {
+            GeneratePlayerFeature();
+        }
+
+        [Button("(Re)Generate Feature Component")]
         public void GeneratePlayerFeature()
         {
             if (_playerController == null)

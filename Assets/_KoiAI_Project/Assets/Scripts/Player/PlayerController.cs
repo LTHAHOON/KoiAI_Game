@@ -2,7 +2,6 @@ using NaughtyAttributes;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Playables;
 using static KoiAI.Player.PlayerFeature;
 using static KoiAI.Player.PlayerSFXAudioFeature;
@@ -12,8 +11,6 @@ namespace KoiAI.Player
     using KoiAI.AnimatorSystem;
     using KoiAI.Audio;
     using KoiAI.Camera;
-    using KoiAI.Interact;
-    using KoiAI.ItemProp;
 
     public abstract class PlayerFeatureExtensionData { }
     
@@ -38,7 +35,7 @@ namespace KoiAI.Player
         
         public virtual void InitAutoInEnditor() { }
         
-        public virtual void Init(PlayerInputAction playerIA, PlayerFeatureValueData playerFeatureValueData = null, 
+        public virtual void Init(PlayerFeatureValueData playerFeatureValueData = null, 
                                     PlayerFeatureExtensionData playerFeatureExtensionData = null) { }
         public abstract void UpdateFeature();
     }
@@ -61,7 +58,7 @@ namespace KoiAI.Player
         public AudioSFXTarget AudioTarget => _auidoTarget;
     }
 
-    [RequireComponent(typeof(PlayerInput), typeof(Animator))]
+    [RequireComponent(typeof(Animator))]
     public class PlayerController : MonoBehaviour
     {
         [Tooltip("Cinemachine Data Mediator")]
@@ -84,8 +81,6 @@ namespace KoiAI.Player
         private PlayerSkin _curPlayerSkin;
     
         private readonly Dictionary<int, PlayerFeature> _dicPlayerFeatures = new();
-        private PlayerInput _playerInput;
-        private PlayerInputAction _playerInputAction;
         private Animator _playerAnimator;
 
         private void Awake()
@@ -110,7 +105,7 @@ namespace KoiAI.Player
                 _playerFeatures[i].Owner = this;
                 PlayerFeatureValueData valueData = _playerData.GetPlayerFeatureValueData(featureProperty);
                 PlayerFeatureExtensionData extensionData = _playerData.GetPlayerFeatureExtensionData(featureProperty);
-                _playerFeatures[i].Init(_playerInputAction, valueData, extensionData);
+                _playerFeatures[i].Init(valueData, extensionData);
             }
         }
 
@@ -128,16 +123,10 @@ namespace KoiAI.Player
 
         private void Init()
         {
-            //PlayerInput 바인딩
-            _playerInput = GetComponent<PlayerInput>();
             _playerFeatures = GetComponents<PlayerFeature>();
-            _playerInputAction = new();
-            _playerInput.actions = _playerInputAction.asset;
 
             //스킨 생성
-            PlayerSkin playerSkin = _playerData.PlayerSkin;
-            GameObject newPlayerSkinObj = Instantiate(playerSkin.SkinPrefab, transform);
-            _curPlayerSkin = newPlayerSkinObj.GetComponent<PlayerSkin>();
+            _curPlayerSkin = CharacterSettingService.InstantiateCharacter(transform);
 
             //Animator 초기화
             _playerAnimator = GetComponent<Animator>();
@@ -194,7 +183,6 @@ namespace KoiAI.Player
         public Animator PlayerAnimator => _playerAnimator;
         public AnimatorData PlayerAnimatorData => _playerData.AnimatorData;
         public PlayerData PlayerData => _playerData;
-        public PlayerInputAction PlayerIA=> _playerInputAction;
         public PlayerSkin CurrentPlayerSkin => _curPlayerSkin;
         public LayerMask TargetLayerMask => _targetLayerMask;
 

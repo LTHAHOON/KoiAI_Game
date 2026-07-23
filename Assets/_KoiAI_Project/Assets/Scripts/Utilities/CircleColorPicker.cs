@@ -67,8 +67,10 @@ namespace KoiAI.Utilities
             _circlePalette.UnregisterCallback<PointerDownEvent>(OnPointerDown);
             _circlePalette.UnregisterCallback<PointerMoveEvent>(OnPointerMove);
             _circlePalette.UnregisterCallback<PointerUpEvent>(OnPointerUp);
-            
-            if(curColorPosition.HasValue)
+            _circlePalette.ReleaseMouse();
+
+
+            if (curColorPosition.HasValue)
             {
                 UpdatePickerAndColor(curColorPosition.Value);
             }

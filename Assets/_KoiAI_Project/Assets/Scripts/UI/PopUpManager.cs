@@ -1,5 +1,7 @@
+using KoiAI.Input;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -32,12 +34,35 @@ namespace KoiAI.UI
                 DontDestroyOnLoad(gameObject);
             }
         }
+
+        private void Start()
+        {
+            ConnectPopUpStateInput();
+        }
+
+        private void ConnectPopUpStateInput()
+        {
+            InputService.PlayerIA.Global.Cancel.performed += _ => ChangeCurrentPopUpState(PopUpState.Close);
+        }
+
+        private void ChangeCurrentPopUpState(PopUpState popUpStateToChange)
+        {
+            if (_popUpWindowStack.Count <= 0)
+            {
+                return;
+            }
+            PopUpWindow popUpWindow = _popUpWindowStack.Peek();
+            ChangePopUpState(popUpStateToChange, popUpWindow);
+        }
+
         public void ChangePopUpState(PopUpState popUpStateToChange, PopUpWindow popUpWindow)
         {
             if(!popUpWindow)
             {
                 return;
             }
+            
+
 
             IPopUpWindowContainer windowContainer =  popUpWindow.GetIPopUpWindowContainer();
             if (windowContainer.CurrentPopUpState == popUpStateToChange) 
@@ -111,6 +136,7 @@ namespace KoiAI.UI
                     break;
             }
         }
+
 
         private void RefreshPopUpStack(PopUpWindow popUpWindow)
         {

@@ -1,6 +1,4 @@
-using System;
 using R3;
-using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Playables;
@@ -8,6 +6,8 @@ using UnityEngine.Timeline;
 
 namespace KoiAI.Core
 {
+    using KoiAI.Input;
+
     public class GameManager : MonoBehaviour
     {
         [SerializeField]
@@ -32,6 +32,8 @@ namespace KoiAI.Core
                         .Subscribe(_ => EndCutScene());
                 })
                 .AddTo(this);
+            InputService.ReconnectInputAction();
+            InputService.SetEnableActionMap(InputActionMapContext.Player);
         }
 
         private void OnEnable()

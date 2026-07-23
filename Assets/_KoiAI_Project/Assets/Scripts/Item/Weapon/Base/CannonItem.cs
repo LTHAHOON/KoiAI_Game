@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 namespace KoiAI.Item
 {
+    using KoiAI.Input;
     using KoiAI.Player;
     
     [RequireComponent(typeof(CannonController))]
@@ -54,8 +55,7 @@ namespace KoiAI.Item
             var curSlotType = GetCurrentSlotType();
             if (curSlotType == ItemSlotType.Equipped)
             {
-                PlayerInputAction playerIA = ItemOwner.PlayerIA;
-                DisConnectPlayerIA(ItemOwner.PlayerIA);
+                DisConnectPlayerIA();
             }
         }
 
@@ -93,7 +93,7 @@ namespace KoiAI.Item
             if(!bExistSameItem)
             {
                 _rotationFeature = (PlayerRotation)ItemOwner.GetPlayerFeatureWithProperty(PlayerFeature.PlayerFeatureProperty.Rotation);
-                ConnectPlayerIA(ItemOwner.PlayerIA);
+                ConnectPlayerIA();
             }
             #endregion
 
@@ -197,24 +197,24 @@ namespace KoiAI.Item
             }
         }
 
-        protected override void ConnectPlayerIA(PlayerInputAction playerIA)
+        protected override void ConnectPlayerIA()
         {
-            playerIA.Player.Fire.performed += OnFire;
-            playerIA.Player.FireLoad.performed += OnReLoadCannonBall;
-            playerIA.Player.ProjectileAiming.performed += OnProjectileAiming;
-            playerIA.Player.ProjectileAiming.canceled += OnProjectileAiming;
-            playerIA.Player.StartProjectileAiming.performed += OnStartProjectileAiming;
-            playerIA.Player.StartProjectileAiming.canceled += OnStartProjectileAiming;
+            InputService.PlayerIA.Player.Fire.performed += OnFire;
+            InputService.PlayerIA.Player.FireLoad.performed += OnReLoadCannonBall;
+            InputService.PlayerIA.Player.ProjectileAiming.performed += OnProjectileAiming;
+            InputService.PlayerIA.Player.ProjectileAiming.canceled += OnProjectileAiming;
+            InputService.PlayerIA.Player.StartProjectileAiming.performed += OnStartProjectileAiming;
+            InputService.PlayerIA.Player.StartProjectileAiming.canceled += OnStartProjectileAiming;
         }
 
-        protected override void DisConnectPlayerIA(PlayerInputAction playerIA)
+        protected override void DisConnectPlayerIA()
         {
-            playerIA.Player.Fire.performed -= OnFire;
-            playerIA.Player.FireLoad.performed -= OnReLoadCannonBall;
-            playerIA.Player.ProjectileAiming.performed -= OnProjectileAiming;
-            playerIA.Player.ProjectileAiming.canceled -= OnProjectileAiming;
-            playerIA.Player.StartProjectileAiming.performed -= OnStartProjectileAiming;
-            playerIA.Player.StartProjectileAiming.canceled -= OnStartProjectileAiming;
+            InputService.PlayerIA.Player.Fire.performed -= OnFire;
+            InputService.PlayerIA.Player.FireLoad.performed -= OnReLoadCannonBall;
+            InputService.PlayerIA.Player.ProjectileAiming.performed -= OnProjectileAiming;
+            InputService.PlayerIA.Player.ProjectileAiming.canceled -= OnProjectileAiming;
+            InputService.PlayerIA.Player.StartProjectileAiming.performed -= OnStartProjectileAiming;
+            InputService.PlayerIA.Player.StartProjectileAiming.canceled -= OnStartProjectileAiming;
         }
     }
 }

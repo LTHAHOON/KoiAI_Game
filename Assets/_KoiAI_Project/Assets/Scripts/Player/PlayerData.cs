@@ -8,6 +8,7 @@ namespace KoiAI.Player
     using NUnit.Framework;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     [CreateAssetMenu(fileName = "new PlayerData", menuName = "KoiAI/Player/PlayerData")]
     public class PlayerData : ScriptableObject
@@ -59,7 +60,7 @@ namespace KoiAI.Player
 
         public void SaveWearingCostumeGUIDs()
         {
-            _lastWearingCostumeGUIDs = _wearingCostumeGUIDs;
+            _lastWearingCostumeGUIDs = _wearingCostumeGUIDs.ToList();
         }
 
 

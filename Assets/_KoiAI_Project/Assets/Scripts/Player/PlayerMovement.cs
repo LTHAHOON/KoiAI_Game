@@ -9,7 +9,8 @@ namespace KoiAI.Player
     using KoiAI.AnimatorSystem;
     using KoiAI.Audio;
     using KoiAI.CustomPhysics;
-    
+    using KoiAI.Input;
+
     [Serializable]
     public class PlayerMovementExtensionData : PlayerFeatureExtensionData
     {
@@ -106,13 +107,11 @@ namespace KoiAI.Player
             _moveSFXTarget = Owner.GetAudioSFXTarget(PlayerSFXAuidoProperty.Move);
         }
 
-        public override void Init(PlayerInputAction playerIA, PlayerFeatureValueData playerFeatureValueData = null, 
+        public override void Init(PlayerFeatureValueData playerFeatureValueData = null, 
             PlayerFeatureExtensionData playerFeatureExtensionData = null)
         {
-            if (playerIA == null)
-            {
-                return;
-            }
+            Debug.Log("asdasd");
+
             if (playerFeatureValueData is not PlayerMovementValueData valueData ||
                 playerFeatureExtensionData is not PlayerMovementExtensionData extensionValueData)
             {
@@ -126,10 +125,10 @@ namespace KoiAI.Player
             InitPhysicsData(_extensionValueData.GravityData, _extensionValueData.ColliderData, _extensionValueData.RigidData);
             
             _camera = UnityEngine.Camera.main;
-            playerIA.Player.Move.started += OnMove;
-            playerIA.Player.Move.performed += OnMove;
-            playerIA.Player.Move.canceled += OnMove;
-            playerIA.Player.Jump.performed += OnJump;
+            InputService.PlayerIA.Player.Move.started += OnMove;
+            InputService.PlayerIA.Player.Move.performed += OnMove;
+            InputService.PlayerIA.Player.Move.canceled += OnMove;
+            InputService.PlayerIA.Player.Jump.performed += OnJump;
 
             if(Owner.PlayerAnimatorData.IsValid())
             {

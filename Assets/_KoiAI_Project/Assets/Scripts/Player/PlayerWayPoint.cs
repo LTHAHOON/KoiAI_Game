@@ -1,4 +1,5 @@
 using KoiAI.A_Star;
+using KoiAI.Input;
 using KoiAI.Monster;
 using NaughtyAttributes;
 using System;
@@ -35,22 +36,18 @@ namespace KoiAI.Player
         private bool _isShowedWayPoint = false;
         public override PlayerFeatureProperty FeatureProperty => PlayerFeatureProperty.WayPoint;
 
-        public override void Init(PlayerInputAction playerIA, PlayerFeatureValueData playerFeatureValueData = null, 
+        public override void Init(PlayerFeatureValueData playerFeatureValueData = null, 
             PlayerFeatureExtensionData playerFeatureExtensionData = null)
         {
-            if (playerIA == null)
-            {
-                return;
-            }
             if (playerFeatureValueData is not PlayerWayPointValueData valueData)
             {
                 return;
             }
             _entitySight = GetComponent<EntitySight>(); 
             _valueData = valueData;
-            playerIA.Player.SetVisibleWayPoint.performed += OnSetVisibleWayPoint;
-            playerIA.Player.Move.performed += OnRebuildWayPoint;
-            playerIA.Player.Move.canceled += OnRebuildWayPoint;
+            InputService.PlayerIA.Player.SetVisibleWayPoint.performed += OnSetVisibleWayPoint;
+            InputService.PlayerIA.Player.Move.performed += OnRebuildWayPoint;
+            InputService.PlayerIA.Player.Move.canceled += OnRebuildWayPoint;
         }
 
         public bool DetectTargetAroundPlayer()

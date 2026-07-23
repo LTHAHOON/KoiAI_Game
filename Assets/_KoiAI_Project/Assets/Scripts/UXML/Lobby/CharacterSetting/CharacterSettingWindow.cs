@@ -1,7 +1,8 @@
 
 using System;
-using Cysharp.Threading.Tasks;
+using System.Linq;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Unity.Cinemachine;
 using Unity.Properties;
 using UnityEngine;
@@ -12,8 +13,6 @@ namespace KoiAI.UI
     using KoiAI.Costume;
     using KoiAI.Player;
     using KoiAI.Utilities;
-    using TMPro;
-    using Unity.VisualScripting.Antlr3.Runtime.Tree;
 
     public class CharacterSettingWindow : PopUpWindow_UID<CharacterSettingModel, CharacterSettingViewInfo>, ICircleColorPickerHandler
     {
@@ -31,7 +30,7 @@ namespace KoiAI.UI
         private Label _characterScrollerName;
         private RepeatButton _charChangeLeftButton;
         private RepeatButton _charChangeRightButton;
-        private Dictionary<int, PlayerSkin> _previewCharacters;
+        private Dictionary<int, PlayerSkin> _dicPreviewCharacters;
 
         private CircleColorPicker _circleColorPicker_Face;
         private CircleColorPicker _circleColorPicker_Body;
@@ -76,12 +75,12 @@ namespace KoiAI.UI
             }
 
             #region 프리뷰 캐릭터 생성
-            _previewCharacters = new Dictionary<int, PlayerSkin>();
+            _dicPreviewCharacters = new Dictionary<int, PlayerSkin>();
             for (int i = 0; i < visualModel.AllPlayerData.Count; i++)
             {
                 PlayerSkin playerSkin = Instantiate(visualModel.AllPlayerData[i].PlayerSkin, _previewCharacterParent);
                 playerSkin.gameObject.SetActive(false);
-                _previewCharacters.Add(i, playerSkin);
+                _dicPreviewCharacters.Add(i, playerSkin);
             }
             #endregion
 
@@ -134,7 +133,6 @@ namespace KoiAI.UI
 
                 for (int j = 0; j < costumeDataList.Count; j++)
                 {
-
                     CostumeData costumeData = costumeDataList[j];
 
                     VisualElement newCostumeSlot = viewInfo.CostumeSlotTemplate.CloneTree();
@@ -152,7 +150,9 @@ namespace KoiAI.UI
                     Button costumeWearButton = newCostumeSlot.Q<Button>(viewInfo.CostumeWearBtnName);
                     Button costumeWearingButton = newCostumeSlot.Q<Button>(viewInfo.CostumeWearingBtnName);
 
+                    //착용 중 버튼 클릭시 TakeOffCostume 호출
                     costumeWearingButton.clicked += () => TakeOffCostume(costumeData, costumeWearButton, costumeWearingButton);
+                    //착용 버튼 클릭시 WearCostume 호출
                     costumeWearButton.clicked += () =>
                     {
                         //중복이 허용되지 않는 코스튬일 경우 해당 카테고리 전부 착용 해제
@@ -162,6 +162,8 @@ namespace KoiAI.UI
                         }
                         WearCostume(costumeData, costumeWearButton, costumeWearingButton);
                     };
+
+                    //코스튬 불러오기 및 버튼 새로고침 등록
                     OnLoadWearingCostume += (guidList) =>
                     {
                         Guid guidToCompare = costumeData.GetGUID();
@@ -171,7 +173,6 @@ namespace KoiAI.UI
                         }
                         else
                         {
-                            //새로 고침
                             TakeOffCostume(costumeData, costumeWearButton, costumeWearingButton);
                         }
                     };
@@ -190,19 +191,24 @@ namespace KoiAI.UI
                 CostumeCategory searchCategory = (CostumeCategory)evt.newValue;
                 SearchCostume(searchCategory);
             });
-
+            LoadWearingCostume(visualModel.AllPlayerData[_currentCharIndex]);
             #endregion
+
+
         }
 
         private void LoadWearingCostume(PlayerData playerData)
         {
+            foreach(GameObject costume in _dicWearingCostumes.Values)
+            {
+                Destroy(costume);
+            }
             _dicWearingCostumes.Clear();
             _dicWearingCostumeSlotData.Clear();
 
             List<Guid> weaingCostumeGuids =  playerData.GetWearingCostumeGUIDs();
             OnLoadWearingCostume?.Invoke(weaingCostumeGuids);
 
-            playerData.SaveWearingCostumeGUIDs();
         }
 
 
@@ -210,18 +216,36 @@ namespace KoiAI.UI
         {
             CharacterSettingModel visualModel = GetVisualModel();
             List<PlayerData> playerDataList = visualModel.AllPlayerData;
+            List<Guid> lastWearingCostumeGuids;
             for (int i = 0; i < playerDataList.Count; i++)
             {
                 PlayerData playerData = playerDataList[i];
-                List<Guid> lastWearingCostumeGuids = playerData.GetLastWearingCostumeGUIDs();
-                OnLoadWearingCostume?.Invoke(lastWearingCostumeGuids);
+                List<Guid> wearingCostumeGuids =  playerData.GetWearingCostumeGUIDs();
+                lastWearingCostumeGuids = playerDataList[i].GetLastWearingCostumeGUIDs();
+
+                wearingCostumeGuids.Clear();
+                foreach(Guid guid in lastWearingCostumeGuids)
+                {
+                    if(wearingCostumeGuids.Contains(guid))
+                    {
+                        wearingCostumeGuids.Remove(guid);
+                    }
+                    else
+                    {
+                        wearingCostumeGuids.Add(guid);
+                    }
+                }
+                if(i == _currentCharIndex)
+                {
+                    OnLoadWearingCostume?.Invoke(lastWearingCostumeGuids);
+                }
                 lastWearingCostumeGuids.Clear();
             }
         }
 
         private void WearCostume(CostumeData costumeData, Button wearButton, Button wearingButton)
         {
-            if (_previewCharacters.TryGetValue(_currentCharIndex, out PlayerSkin playerSkin))
+            if (_dicPreviewCharacters.TryGetValue(_currentCharIndex, out PlayerSkin playerSkin))
             {
                 Transform costumePoint = costumeData.CostumeCategory switch
                 {
@@ -239,13 +263,18 @@ namespace KoiAI.UI
 
                     //Costume ID 저장
                     List<Guid> wearingCostumeGuids = GetPlayerWearingCostumeGuids(_currentCharIndex);
-                    wearingCostumeGuids.Add(guid);
+                    if (!wearingCostumeGuids.Contains(guid))
+                    {
+                        wearingCostumeGuids.Add(guid);
+                    }
+                    Debug.Log(wearingCostumeGuids.Count);
 
                     wearButton.style.display = DisplayStyle.None;
                     wearingButton.style.display = DisplayStyle.Flex;
                     _dicWearingCostumes.TryAdd(guid, costume);
                     _dicWearingCostumeSlotData.TryAdd(guid, new(costumeData, wearButton, wearingButton));
 
+                    SetConfirmButtonEnabled(true);
                 }
             }
         }
@@ -277,12 +306,13 @@ namespace KoiAI.UI
             Guid guid = costumeData.GetGUID();
             if (_dicWearingCostumes.TryGetValue(guid, out GameObject wearingCostume))
             {
-                DestroyImmediate(wearingCostume);
+                Destroy(wearingCostume);
 
                 _dicWearingCostumes.Remove(guid);
                 if(!_bTakingOffUsingCategory)
                 {
                     _dicWearingCostumeSlotData.Remove(guid);
+
                 }
             }
 
@@ -351,12 +381,45 @@ namespace KoiAI.UI
             for (int i = 0; i < visualModel.AllPlayerData.Count; i++)
             {
                 visualModel.AllPlayerData[i].SetLastColorPosition();
+                visualModel.AllPlayerData[i].SaveWearingCostumeGUIDs();
+
             }
             _lastCharIndex = _currentCharIndex;
 
             _costumeSearchRadioButtons[_initialCostumeSearchIndex].value = true;
-            LoadWearingCostume(visualModel.AllPlayerData[_currentCharIndex]);
+
+            PlayerData curPlayerData = visualModel.AllPlayerData[_currentCharIndex];
+            LoadWearingCostume(curPlayerData);
             SetConfirmButtonEnabled(false);
+        }
+
+        //PopUpWindow 콜백으로 호출됩니다.
+        public override void OnCompleteClose()
+        {
+            CharacterSettingModel visualModel = GetVisualModel();
+
+            //적용 버튼을 누르지 않을 경우 이전 데이터로 되돌리기
+            if (!_isConfirmed)
+            {
+                UndoToChangeCharacter(visualModel);
+                UndoWearingCostume();
+
+                for (int i = 0; i < visualModel.AllPlayerData.Count; i++)
+                {
+                    PlayerData playerData = visualModel.AllPlayerData[i];
+                    if (!playerData)
+                    {
+                        continue;
+                    }
+
+                    playerData.UndoToLastColorPosition();
+                    if (i == _lastCharIndex)
+                    {
+                        _circleColorPicker_Face.UnregisterAllCallBack(playerData.CurColorPosition_Face);
+                        _circleColorPicker_Body.UnregisterAllCallBack(playerData.CurColorPosition_Body);
+                    }
+                }
+            }
         }
 
         // TODO: 버튼 방향에 맞게 캐릭터 바꾸기
@@ -380,9 +443,9 @@ namespace KoiAI.UI
             {
                 _circleColorPicker_Face.RegisterAllCallBack(curPlayerData.CurColorPosition_Face);
                 _circleColorPicker_Body.RegisterAllCallBack(curPlayerData.CurColorPosition_Body);
-
                 LoadWearingCostume(curPlayerData);
             }
+            CharacterSettingService.SetPlayerCharacter(visualModel, _currentCharIndex);
         }
 
         private async void UndoToChangeCharacter(CharacterSettingModel visualModel)
@@ -444,7 +507,7 @@ namespace KoiAI.UI
         /// </summary>
         private void SetActivePreviewCharacter(int index, bool active)
         {
-            if (_previewCharacters.TryGetValue(index, out PlayerSkin playerSkin))
+            if (_dicPreviewCharacters.TryGetValue(index, out PlayerSkin playerSkin))
             {
                 if (active)
                 {
@@ -479,38 +542,16 @@ namespace KoiAI.UI
             for (int i = 0; i < visualModel.AllPlayerData.Count; i++)
             {
                 visualModel.AllPlayerData[i].SetLastColorPosition();
+                visualModel.AllPlayerData[i].SaveWearingCostumeGUIDs();
+
             }
             _lastCharIndex = _currentCharIndex;
+
         }
 
         //닫기 버튼 누를 때 호출됩니다.
         private void OnClickCancelButton()
         {
-            CharacterSettingModel visualModel = GetVisualModel();
-
-            //적용 버튼을 누르지 않을 경우 이전 색으로 되돌리기
-            if (!_isConfirmed)
-            {
-                UndoWearingCostume();
-                UndoToChangeCharacter(visualModel);
-
-                for (int i = 0; i < visualModel.AllPlayerData.Count; i++)
-                {
-                    PlayerData playerData = visualModel.AllPlayerData[i];
-                    if (!playerData)
-                    {
-                        continue;
-                    }
-
-                    playerData.UndoToLastColorPosition();
-                    if(i == _lastCharIndex)
-                    {
-                        _circleColorPicker_Face.UnregisterAllCallBack(playerData.CurColorPosition_Face);
-                        _circleColorPicker_Body.UnregisterAllCallBack(playerData.CurColorPosition_Body);
-                    }
-                }
-            }
-
             PopUpManager.Instance.ChangePopUpState(PopUpState.Close, this);
         }
 

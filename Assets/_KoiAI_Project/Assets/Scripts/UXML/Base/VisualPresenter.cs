@@ -14,7 +14,7 @@ namespace KoiAI.UI
 
         private TView _visualView;
 
-        private void Awake()
+        private void Start()
         {
             if(!_uiDoucument && !_visualViewInfo)
             {

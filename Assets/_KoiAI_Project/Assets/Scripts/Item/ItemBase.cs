@@ -54,8 +54,8 @@ namespace KoiAI.Item
     }
     public abstract class WeaponBase : ItemBase
     {
-        protected abstract void ConnectPlayerIA(PlayerInputAction playerIA);
-        protected abstract void DisConnectPlayerIA(PlayerInputAction playerIA);
+        protected abstract void ConnectPlayerIA();
+        protected abstract void DisConnectPlayerIA();
 
         public override ItemCategory Category => ItemCategory.Weapon;
     }
