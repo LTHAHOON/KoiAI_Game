@@ -112,6 +112,7 @@
 <br>
 <image src = "캡처_08.PNG">
 </details>
+<br>
 
 <details>
 <summary> 2026-07-24: 진행 과정_03</summary>
