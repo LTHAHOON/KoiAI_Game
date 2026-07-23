@@ -61,8 +61,6 @@ namespace KoiAI.UI
             {
                 return;
             }
-            
-
 
             IPopUpWindowContainer windowContainer =  popUpWindow.GetIPopUpWindowContainer();
             if (windowContainer.CurrentPopUpState == popUpStateToChange) 

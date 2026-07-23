@@ -2,6 +2,10 @@ using NaughtyAttributes;
 using UnityEngine;
 using static KoiAI.Player.PlayerFeature;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace KoiAI.Player
 {
     using KoiAI.AnimatorSystem;
@@ -77,11 +81,17 @@ namespace KoiAI.Player
         public void SetCurColorPositionFace(Vector2 faceColorPos)
         {
             _curColorPosition_Face = faceColorPos;
+#if UNITY_EDITOR
+            EditorUtility.SetDirty(this);
+#endif
         }
 
         public void SetCurColorPositionBody(Vector2 bodyColorPos)
         {
             _curColorPosition_Body = bodyColorPos;
+#if UNITY_EDITOR
+            EditorUtility.SetDirty(this);
+#endif
         }
         
         public void SetLastColorPosition()
@@ -128,8 +138,11 @@ namespace KoiAI.Player
                 };
             }
             return null;
+
+            
         }
         
+
         public bool HasMovementProperty => GetPlayerFeatureData() is var data && data != null && data.HasMovementProperty;
         public bool HasRotationProperty => GetPlayerFeatureData() is var data && data != null && data.HasRotationProperty;
         

@@ -1,6 +1,7 @@
 using NaughtyAttributes;
 using System;
 using System.Collections.Generic;
+using KoiAI.Utilities;
 using UnityEngine;
 using UnityEngine.Playables;
 using static KoiAI.Player.PlayerFeature;
@@ -58,7 +59,7 @@ namespace KoiAI.Player
         public AudioSFXTarget AudioTarget => _auidoTarget;
     }
 
-    [RequireComponent(typeof(Animator))]
+    [RequireComponent(typeof(PlayerAutoFeatureGenerator), typeof(Animator))]
     public class PlayerController : MonoBehaviour
     {
         [Tooltip("Cinemachine Data Mediator")]
@@ -80,16 +81,14 @@ namespace KoiAI.Player
         [SerializeField]
         private PlayerSkin _curPlayerSkin;
     
+        private PlayerAutoFeatureGenerator _playerAutoFeatureGenerator;
         private readonly Dictionary<int, PlayerFeature> _dicPlayerFeatures = new();
         private Animator _playerAnimator;
 
         private void Awake()
         {
-            if (!_playerData)
-            {
-                Debug.LogError("PlayerData is null");
-                return;
-            }
+            _playerAutoFeatureGenerator = GetComponent<PlayerAutoFeatureGenerator>();
+
             Init();
         }
 
@@ -127,7 +126,15 @@ namespace KoiAI.Player
 
             //스킨 생성
             _curPlayerSkin = CharacterSettingService.InstantiateCharacter(transform);
-
+            _playerData = CharacterSettingService.GetCurrentPlayerData();
+            if (!_playerData)
+            {
+                Debug.LogError("PlayerData is null");
+                return;
+            }
+            _playerAutoFeatureGenerator.GeneratePlayerFeature();
+            _playerCmDataMediator.ConnectHandlesInConnector();
+            
             //Animator 초기화
             _playerAnimator = GetComponent<Animator>();
             AnimatorData animatorData = _playerData.AnimatorData;

@@ -20,7 +20,7 @@ namespace KoiAI.Camera
         [SerializeField]
         private List<CinemachineDataHandle> _cmDataHandles = new();
 
-        [Button("Connect Handles In Connector", EButtonEnableMode.Editor)]
+        [Button("Connect Handles In Connector")]
         public void ConnectHandlesInConnector()
         {
             _cmDataConnector.ConnectHandles(_cmDataHandles);

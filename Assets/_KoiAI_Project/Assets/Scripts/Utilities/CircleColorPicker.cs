@@ -13,7 +13,6 @@ namespace KoiAI.Utilities
         private VisualElement _root;
         private VisualElement _circlePalette;
         private VisualElement _picker;
-
         private bool _isDragging = false;
 
         private Color SelectedColor { get; set; } = Color.white;
@@ -40,9 +39,10 @@ namespace KoiAI.Utilities
             {
                 Debug.LogError("UXML에서 'CirclePalette' 또는 'Picker' 요소를 찾을 수 없습니다.");
             }
-        }
 
-        public void RegisterAllCallBack(Vector2? curColorPosition = null)
+        }
+        
+        public void RegisterAllCallBack(Vector2 curColorPosition)
         {
             if (_circlePalette == null)
             {
@@ -51,14 +51,11 @@ namespace KoiAI.Utilities
             _circlePalette.RegisterCallback<PointerDownEvent>(OnPointerDown);
             _circlePalette.RegisterCallback<PointerMoveEvent>(OnPointerMove);
             _circlePalette.RegisterCallback<PointerUpEvent>(OnPointerUp);
-
-            if (curColorPosition.HasValue)
-            {
-                UpdatePickerAndColor(curColorPosition.Value);
-            }
+            
+            UpdatePickerAndColor(curColorPosition);
         }
 
-        public void UnregisterAllCallBack(Vector2? curColorPosition = null)
+        public void UnregisterAllCallBack(Vector2 curColorPosition)
         {
             if (_circlePalette == null)
             {
@@ -70,10 +67,7 @@ namespace KoiAI.Utilities
             _circlePalette.ReleaseMouse();
 
 
-            if (curColorPosition.HasValue)
-            {
-                UpdatePickerAndColor(curColorPosition.Value);
-            }
+            UpdatePickerAndColor(curColorPosition);
         }
 
         private void OnPointerDown(PointerDownEvent evt)

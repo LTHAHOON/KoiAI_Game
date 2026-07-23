@@ -11,7 +11,6 @@ using UnityEditor;
 
 namespace KoiAI.Player
 {
-#if UNITY_EDITOR
     
     public class PlayerAutoFeatureGenerator : MonoBehaviour
     {
@@ -25,11 +24,6 @@ namespace KoiAI.Player
         private PlayerData _playerData;
         private readonly Dictionary<PlayerFeatureProperty, PlayerFeature> _dicPlayerFeature = new();
         private readonly HashSet<PlayerFeatureProperty> _prevPlayerFeatureProperties = new();
-
-        private void Awake()
-        {
-            GeneratePlayerFeature();
-        }
 
         [Button("(Re)Generate Feature Component")]
         public void GeneratePlayerFeature()
@@ -98,7 +92,17 @@ namespace KoiAI.Player
                     }
                     else
                     {
-                        var addedFeature = Undo.AddComponent(gameObject, featureType);
+                        Component addedFeature = null;
+                    #if UNITY_EDITOR
+                        addedFeature = Undo.AddComponent(gameObject, featureType);
+                    #else
+                        addedFeature = gameObject.AddComponent(featureType);
+                    #endif
+                        if (!addedFeature)
+                        {
+                            return;
+                        }
+                        
                         if (addedFeature is PlayerFeature addedPlayerFeature)
                         {
                             addedPlayerFeature.Owner = _playerController;
@@ -122,13 +126,18 @@ namespace KoiAI.Player
                 {
                     if (_dicPlayerFeature.TryGetValue(prevProperty, out PlayerFeature feature))
                     {
+                    #if UNITY_EDITOR
                         Undo.DestroyObjectImmediate(feature);
+                    #else
+                        Destroy(feature);    
+                    #endif
                         _dicPlayerFeature.Remove(prevProperty);
                     }
                 }
             }
             _prevPlayerFeatureProperties.Clear();
         }
+
         
         private Type GetPlayerFeatureType(PlayerFeatureProperty property)
         {
@@ -143,6 +152,5 @@ namespace KoiAI.Player
         }
         
     }
-#endif
     
 }
