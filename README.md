@@ -118,17 +118,17 @@
 <summary> 2026-07-24: 진행 과정_03</summary>
 <br>
 
-- **PopUpManager를 만들 때 UI tool kit 전용 창 또는 Canvas 창을 열 수 있게 Enum과 Switch을 이용해 구분을 해서 함수를 호출하도록 하였고 Stack을 사용하여 Peek함수로 마지막 창을 닫게 미리 만들어 두었습니다.
+- **PopUpManager**를 만들 때 **UI tool kit 전용 창** 또는 **Canvas 창**을 열 수 있게 Enum과 Switch을 이용해 구분을 해서 함수를 호출하도록 하였고 Stack을 사용하여 Peek함수로 마지막 창을 닫게 미리 만들어 두었습니다.
 
-- 전에 MVP 패턴을 사용했던 VisualPresenter와 다르게 PopUpWindow 전용 기반 클래스를 따로 만들었으며 VisualPresenter가 PopUpWindow를 참조하는 구조입니다. PopUpWindow의 View나 Model같은 경우 기존 기반 클래스를 그대로 상속받아서 사용하였습니다.
+- 전에 MVP 패턴을 사용했던 VisualPresenter와 다르게 PopUpWindow 전용 기반 클래스를 따로 만들었으며 **VisualPresenter가 PopUpWindow를 참조하는 구조**입니다. PopUpWindow의 View나 Model같은 경우 기존 기반 클래스를 그대로 상속받아서 사용하였습니다.
 
-- 로비씬과 인게임씬을 PlayerInput 컴포넌트 하나로 관리하기 위해 InputService 클래스를 만들어서 어디 씬이든 ActionMap을 Enable 시키거나 Switch할 수 있도록 만들었습니다.
+- 로비씬과 인게임씬을 PlayerInput 컴포넌트 하나로 관리하기 위해 **InputService 클래스**를 만들어서 어디 씬이든 **ActionMap을 Enable 시키거나 Switch**할 수 있도록 만들었습니다.
 
-- 캐릭터를 변경할 때 떨어지는 애니메이션 효과를 내기 위해 Cinemachine Position Composer 컴포넌트를 활용하였고 캐릭터는 active만 껐다 키게 하여 최적화를 하였습니다.
+- 캐릭터를 변경할 때 **떨어지는 애니메이션 효과**를 내기 위해 **Cinemachine Position Composer 컴포넌트**를 활용하였고 캐릭터는 active만 껐다 키게 하여 최적화를 하였습니다.
 
-- Circle Color Picker를 AI로 만든 다음 바로 써먹기 위해 Monobehaviour를 상속받지 않게 하였고 따로 ICircleColorPickerHandler를 만들어서 구현된 클래스는 콜백으로 호출될 수 있게 만들었습니다.
+- Circle Color Picker를 AI로 만든 다음 바로 써먹기 위해 Monobehaviour를 상속받지 않게 하였고 따로 **ICircleColorPickerHandler 인터페이스**를 만들어서 구현된 클래스는 콜백으로 호출될 수 있게 만들었습니다.
 
-- 테일즈런너처럼 코스튬을 장착할 수 있게 Guid로 코스튬 데이터 ID를 만든 후 저장하여 프리팹을 생성할 수 있게 하였고 게임을 시작하면 동기화할 수 있게 Guid를 가져와 재생성하는 방식으로 만들었습니다.
+- 테일즈런너처럼 코스튬을 장착할 수 있게 **Guid로 코스튬 데이터 ID를 만든 후** 저장하여 프리팹을 생성할 수 있게 하였고 게임을 시작하면 동기화할 수 있게 **Guid를 가져와 재생성하는 방식**으로 만들었습니다.
 
 ### Fixd Bug
 - 만들었던 커스텀 점프 스크립트가 속도가 아닌 위치 기반이라서 캐릭터가 점프할 때 천장을 뚫는 현상이 발생하였고 Raycast로 해결하였습니다.
