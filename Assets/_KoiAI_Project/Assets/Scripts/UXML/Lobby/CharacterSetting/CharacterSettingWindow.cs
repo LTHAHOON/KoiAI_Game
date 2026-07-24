@@ -9,6 +9,7 @@ using UnityEngine.UIElements;
 
 namespace KoiAI.UI
 {
+    using KoiAI.Core;
     using KoiAI.Costume;
     using KoiAI.Player;
     using KoiAI.Utilities;
@@ -195,6 +196,8 @@ namespace KoiAI.UI
             LoadWearingCostume(visualModel.AllPlayerData[_currentCharIndex]);
             #endregion
 
+            SaveManager.Instance.SaveFromJson(visualModel.AllPlayerData, SavePaths.CharacterSettingPath);
+            SaveManager.Instance.SaveToJson(visualModel.AllPlayerData, SavePaths.CharacterSettingPath);
         }
 
         private void LoadWearingCostume(PlayerData playerData)
@@ -551,7 +554,7 @@ namespace KoiAI.UI
 
             }
             _lastCharIndex = _currentCharIndex;
-
+            SaveManager.Instance.SaveToJson(visualModel.AllPlayerData, SavePaths.CharacterSettingPath);
         }
 
         //닫기 버튼 누를 때 호출됩니다.
