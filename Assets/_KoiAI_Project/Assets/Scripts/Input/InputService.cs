@@ -41,7 +41,6 @@ namespace KoiAI.Input
                 case InputActionMapContext.Player:
                     _playerIA.Lobby.Disable();
                     _playerIA.Player.Enable();
-                    Debug.Log("asd");
                     break;
                 case InputActionMapContext.Lobbdy:
                     _playerIA.Player.Disable();

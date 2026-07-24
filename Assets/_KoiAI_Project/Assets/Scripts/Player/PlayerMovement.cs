@@ -110,8 +110,6 @@ namespace KoiAI.Player
         public override void Init(PlayerFeatureValueData playerFeatureValueData = null, 
             PlayerFeatureExtensionData playerFeatureExtensionData = null)
         {
-            Debug.Log("asdasd");
-
             if (playerFeatureValueData is not PlayerMovementValueData valueData ||
                 playerFeatureExtensionData is not PlayerMovementExtensionData extensionValueData)
             {

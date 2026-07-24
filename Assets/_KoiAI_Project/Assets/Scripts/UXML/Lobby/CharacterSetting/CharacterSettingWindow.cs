@@ -324,6 +324,8 @@ namespace KoiAI.UI
             
             wearingButton.style.display = DisplayStyle.None;
             wearButton.style.display = DisplayStyle.Flex;
+        
+            SetConfirmButtonEnabled(true);
         }
 
         public List<Guid> GetPlayerWearingCostumeGuids(int index)
