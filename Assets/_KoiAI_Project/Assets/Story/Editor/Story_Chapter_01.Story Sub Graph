@@ -55,13 +55,13 @@ MonoBehaviour:
       type: {class: VariableNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: UnityEditor.GraphToolkitModule}
       data:
         m_Guid:
-          m_Value0: 12332293634688578969
-          m_Value1: 13611983039162326906
+          m_Value0: 1257768543038221419
+          m_Value1: 7918996024856549461
         m_HashGuid:
           serializedVersion: 2
-          Hash: 99756cb1b81b25ab7a9fe969747ae7bc
+          Hash: 6b2c7471d37d741155184e8fedece56d
         m_Version: 2
-        m_Position: {x: 3213.508, y: -2108.594}
+        m_Position: {x: 3529.8467, y: -2018.9553}
         m_Title: End
         m_Tooltip: 
         m_NodePreviewModel:
@@ -88,6 +88,38 @@ MonoBehaviour:
         m_DeclarationModelHashGuid:
           serializedVersion: 2
           Hash: 2bf83f7baa408ffad92db8712e1aa8d0
+    - rid: 1002
+      type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: UnityEditor.GraphToolkitModule}
+      data:
+        m_Guid:
+          m_Value0: 4183131916206599837
+          m_Value1: 12933543248007293974
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 9dee178a50780d3a166ca0280f2d7db3
+        m_Version: 2
+        m_FromPortReference:
+          m_NodeModelGuid:
+            m_Value0: 8072892576141714953
+            m_Value1: 1564106886095285176
+          m_NodeModelHashGuid:
+            serializedVersion: 2
+            Hash: 09a6d0a606ad0870b8ab7308edd2b415
+          m_UniqueId: Exit
+          m_PortDirection: 2
+          m_PortOrientation: 0
+          m_Title: Exit
+        m_ToPortReference:
+          m_NodeModelGuid:
+            m_Value0: 1257768543038221419
+            m_Value1: 7918996024856549461
+          m_NodeModelHashGuid:
+            serializedVersion: 2
+            Hash: 6b2c7471d37d741155184e8fedece56d
+          m_UniqueId: MainPortName
+          m_PortDirection: 1
+          m_PortOrientation: 0
+          m_Title: MainPortName
     - rid: 1003
       type: {class: VariableNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: UnityEditor.GraphToolkitModule}
       data:
@@ -189,38 +221,6 @@ MonoBehaviour:
           m_PortDirection: 1
           m_PortOrientation: 0
           m_Title: Enter
-    - rid: 1010
-      type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: UnityEditor.GraphToolkitModule}
-      data:
-        m_Guid:
-          m_Value0: 9465378411179801267
-          m_Value1: 6157102913540056057
-        m_HashGuid:
-          serializedVersion: 2
-          Hash: b3fa05e783c75b83f9e313677a6c7255
-        m_Version: 2
-        m_FromPortReference:
-          m_NodeModelGuid:
-            m_Value0: 8072892576141714953
-            m_Value1: 1564106886095285176
-          m_NodeModelHashGuid:
-            serializedVersion: 2
-            Hash: 09a6d0a606ad0870b8ab7308edd2b415
-          m_UniqueId: Exit
-          m_PortDirection: 2
-          m_PortOrientation: 0
-          m_Title: Exit
-        m_ToPortReference:
-          m_NodeModelGuid:
-            m_Value0: 12332293634688578969
-            m_Value1: 13611983039162326906
-          m_NodeModelHashGuid:
-            serializedVersion: 2
-            Hash: 99756cb1b81b25ab7a9fe969747ae7bc
-          m_UniqueId: MainPortName
-          m_PortDirection: 1
-          m_PortOrientation: 0
-          m_Title: MainPortName
     - rid: 8915585796475454302
       type: {class: GraphModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: UnityEditor.GraphToolkitModule}
       data:
@@ -329,8 +329,8 @@ MonoBehaviour:
         - rid: 8915585796491706839
         - rid: 8915585796491706840
         - rid: 8915585796491706841
-        - rid: 1001
         - rid: 1003
+        - rid: 1001
         m_GraphWireModels:
         - rid: 8915585796491706842
         - rid: 8915585796491706843
@@ -429,7 +429,7 @@ MonoBehaviour:
         - rid: 1000
         - rid: 1008
         - rid: 1009
-        - rid: 1010
+        - rid: 1002
         m_GraphStickyNoteModels: []
         m_GraphPlacematModels: []
         m_GraphVariableModels:
@@ -446,10 +446,10 @@ MonoBehaviour:
         m_LocalSubgraphs: []
         m_LastKnownBounds:
           serializedVersion: 2
-          x: -2047.2001
-          y: -2295.2
-          width: 5088.8
-          height: 4913.6
+          x: -2048
+          y: -2295
+          width: 5089
+          height: 4935
         m_GraphElementMetaData:
         - m_Guid:
             m_Value0: 4002955730693852839
@@ -2044,21 +2044,13 @@ MonoBehaviour:
           m_Category: 2
           m_Index: 94
         - m_Guid:
-            m_Value0: 12332293634688578969
-            m_Value1: 13611983039162326906
-          m_HashGuid:
-            serializedVersion: 2
-            Hash: 99756cb1b81b25ab7a9fe969747ae7bc
-          m_Category: 0
-          m_Index: 97
-        - m_Guid:
             m_Value0: 8400701564519392802
             m_Value1: 16178519247743724167
           m_HashGuid:
             serializedVersion: 2
             Hash: 22263f699049957487aa95d189a585e0
           m_Category: 0
-          m_Index: 98
+          m_Index: 97
         - m_Guid:
             m_Value0: 10088343791037992854
             m_Value1: 14735136732973440004
@@ -2076,11 +2068,19 @@ MonoBehaviour:
           m_Category: 2
           m_Index: 96
         - m_Guid:
-            m_Value0: 9465378411179801267
-            m_Value1: 6157102913540056057
+            m_Value0: 1257768543038221419
+            m_Value1: 7918996024856549461
           m_HashGuid:
             serializedVersion: 2
-            Hash: b3fa05e783c75b83f9e313677a6c7255
+            Hash: 6b2c7471d37d741155184e8fedece56d
+          m_Category: 0
+          m_Index: 98
+        - m_Guid:
+            m_Value0: 4183131916206599837
+            m_Value1: 12933543248007293974
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 9dee178a50780d3a166ca0280f2d7db3
           m_Category: 2
           m_Index: 97
         m_EntryPoint:
@@ -9106,11 +9106,11 @@ MonoBehaviour:
         m_Version: 2
         m_Items:
         - rid: 8915585796500881493
+        - rid: 8915585796491706938
         - rid: 8915585796491706942
         - rid: 8915585796491706941
         - rid: 8915585796491706940
         - rid: 8915585796491706939
-        - rid: 8915585796491706938
         - rid: 8915585796500881496
         m_Title: 
     - rid: 8915585796491706944

@@ -9,6 +9,7 @@ namespace KoiAI.Item
     using KoiAI.Skin;
     using KoiAI.Utilities;
     using KoiAI.Audio;
+    using System;
 
     public class GunController : WeaponControllerBase
     {
@@ -21,7 +22,7 @@ namespace KoiAI.Item
         private Pool<BulletItem> _pool;
 
         private RaycastHit[] _hits;
-        private readonly ReactiveProperty<int> _curBallCount = new(0);
+        private int _curBallCount = 0;
         private AudioSFXTarget _attackAuidoTarget;
         private int _curBallLoadCount;
         private int _remainingBallCount = 0;
@@ -29,7 +30,7 @@ namespace KoiAI.Item
         private float _curLoadTime = 0f;
         private float _targetLoadTime = 0f;
         private bool _isFireLoading = false;
-
+        private Action OnPlayFireEffect;
 
         private void Update()
         {
@@ -49,12 +50,12 @@ namespace KoiAI.Item
                 }
                 _curLoadTime += Time.deltaTime;
                 int count = Mathf.RoundToInt(_curLoadTime / _targetLoadTime * _remainingBallCount);
-                _curBallLoadCount = _curBallCount.CurrentValue + count;
+                _curBallLoadCount = _curBallCount + count;
                 _remainingBallLoadCount = Mathf.Clamp(_remainingBallCount - count, 0, _remainingBallCount);
 
                 if (_curLoadTime >= _targetLoadTime || _curBallLoadCount >= _gunData.LoadMaxCount)
                 {
-                    _curBallCount.Value = _curBallLoadCount;
+                    _curBallCount = _curBallLoadCount;
                     _remainingBallCount = _remainingBallLoadCount;
                     _curLoadTime = 0f;
                     _targetLoadTime = 0f;
@@ -66,30 +67,11 @@ namespace KoiAI.Item
             }
         }
 
-        public override void Init(WeaponBase wepaonItem)
+        public override void Init(WeaponBase weaponItem)
         {
             _gunData = GetWeaponData<GunData>();
             _hits = new RaycastHit[_gunData.MaxHitCount];
-            _curBallCount
-                .Pairwise()
-                .Where(pair => pair.Current < pair.Previous)
-                .Subscribe(_ =>
-                {
-                    if (_gunSkin.FirePT)
-                    {
-                        _gunSkin.FirePT.Play();
-                    }
-                    if (_gunSkin.FireAudioData)
-                    {
-                        var owner = wepaonItem.ItemOwner;
-                        if (_attackAuidoTarget == null)
-                        {
-                            _attackAuidoTarget = owner.GetAudioSFXTarget(PlayerSFXAuidoProperty.Attack);
-                        }
-                        AudioManager.Instance.PlaySFX(_attackAuidoTarget, _gunSkin.FireAudioData, _gunSkin.FirePoint.position);
-                    }
-                }).AddTo(this);
-
+            OnPlayFireEffect = () => PlayFireEffect(weaponItem);
             BulletData bulletData = _gunData.BulletData;
             ulong id = gameObject.GetEntityULongID();
             BulletItem projectilePrefab = (BulletItem)bulletData.ItemPrefab;
@@ -103,6 +85,23 @@ namespace KoiAI.Item
             }
             InitSkin();
         }
+        
+        private void PlayFireEffect(WeaponBase weaponItem)
+        {
+            if (_gunSkin.FirePT)
+            {
+                _gunSkin.FirePT.Play();
+            }
+            if (_gunSkin.FireAudioData)
+            {
+                var owner = weaponItem.ItemOwner;
+                if (_attackAuidoTarget == null)
+                {
+                    _attackAuidoTarget = owner.GetAudioSFXTarget(PlayerSFXAuidoProperty.Attack);
+                }
+                AudioManager.Instance.PlaySFX(_attackAuidoTarget, _gunSkin.FireAudioData, _gunSkin.FirePoint.position);
+            }
+        }
 
         public override bool Activate()
         {
@@ -111,7 +110,7 @@ namespace KoiAI.Item
                 #region 장전 중일 경우 장전된 만큼 설정하고 초기화하고 True 리턴하기
                 _curLoadTime = 0f;
                 _targetLoadTime = 0;
-                _curBallCount.Value = _curBallLoadCount;
+                _curBallCount = _curBallLoadCount;
                 _remainingBallCount = _remainingBallLoadCount;
                 _curBallLoadCount = 0;
                 _remainingBallLoadCount = 0;
@@ -126,7 +125,7 @@ namespace KoiAI.Item
 
             if (!_gunData.IsInfiniteLoad)
             {
-                --_curBallCount.Value;
+                --_curBallCount;
             }
 
             BulletItem bulletItem = _pool.Pop();
@@ -134,10 +133,12 @@ namespace KoiAI.Item
             {
                 return false;
             }
+            
             if (bulletItem.IsEmptyController())
             {
                 bulletItem.SetupController(_targetLayerMask);
             }
+            OnPlayFireEffect.Invoke();
 
             int count = Physics.SphereCastNonAlloc(transform.position, 0.1f,transform.forward, _hits, 500f, _targetLayerMask);
             if (count > 0)
@@ -162,7 +163,7 @@ namespace KoiAI.Item
 
         public void OnLoadCannonBall(BulletData bulletData)
         {
-            if (_curBallCount.CurrentValue >= _gunData.LoadMaxCount)
+            if (_curBallCount >= _gunData.LoadMaxCount)
             {
                 _remainingBallCount += bulletData.ProjectileCount;
                 return;
@@ -180,7 +181,7 @@ namespace KoiAI.Item
                 return;
             }
             //탄이 꽉 차있거나 남은 탄이 없을 경우 리턴
-            if (_curBallCount.CurrentValue >= _gunData.LoadMaxCount || _remainingBallCount <= 0)
+            if (_curBallCount >= _gunData.LoadMaxCount || _remainingBallCount <= 0)
             {
                 return;
             }
@@ -227,9 +228,9 @@ namespace KoiAI.Item
         }
 
         public bool IsFireLoading() => _isFireLoading;
-        private bool HasNotCannonBall() => _pool == null || _curBallCount.CurrentValue <= 0;
+        private bool HasNotCannonBall() => _pool == null || _curBallCount <= 0;
         public GunData GunData => _gunData;
-        public int CurBallCount => _curBallCount.CurrentValue;
+        public int CurBallCount => _curBallCount;
         public int RemainingBallCount => _remainingBallCount;
         public int CurBallLoadCount => _curBallLoadCount;
         public int RemainingBallLoadCount => _remainingBallLoadCount;

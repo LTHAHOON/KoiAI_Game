@@ -53,9 +53,9 @@ namespace KoiAI.AI
                 _weaponRandomGroup.ActivateTargets[i].ActivateTarget.Init(null);
             }
 
-            if (Brain.EnemyAnimatorData.IsValid())
+            if (Brain.AIAnimatorData.IsValid())
             {
-                _animParamData = Brain.EnemyAnimatorData.AnimParamData;
+                _animParamData = Brain.AIAnimatorData.AnimParamData;
             }
         }
 
@@ -68,10 +68,6 @@ namespace KoiAI.AI
         public override void UpdateFeature()
         {
             Debug.Log("Attacking");
-            if(_weaponController == null)
-            {
-                _weaponController = ActivateRandom.GetRandomActivateTarget(_weaponRandomGroup);
-            }
 
             if(_curAttackTime < _extensionData.AttackDelayTime)
             {
@@ -79,9 +75,8 @@ namespace KoiAI.AI
                 return;
             }
             _curAttackTime = 0f;
-     
+            _weaponController = ActivateRandom.GetRandomActivateTarget(_weaponRandomGroup);
             _weaponController.Activate();
-            _weaponController = null;
         }
 
         public override void ExitFeature()

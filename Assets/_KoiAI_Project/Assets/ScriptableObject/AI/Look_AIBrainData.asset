@@ -112,7 +112,7 @@ MonoBehaviour:
           _useOriginDistance: 0
           _distanceCondition:
             _isDataOnly: 0
-            _compareValue: 20
+            _compareValue: 22
             _comparisonType: 1
         _withFeatureConditionData:
           _listValue:
@@ -167,7 +167,7 @@ MonoBehaviour:
           _useOriginDistance: 0
           _distanceCondition:
             _isDataOnly: 0
-            _compareValue: 10
+            _compareValue: 13
             _comparisonType: 1
         _withFeatureConditionData:
           _listValue:

@@ -24,6 +24,6 @@ MonoBehaviour:
   _projectileDamage: 15
   _bulletController: {fileID: 5184176061379500615, guid: c6a3e3319aed1034fb59ba87595f2dc2, type: 3}
   _bulletPoolSize:
-    _initPoolSize: 20
-    _maxPoolSize: 30
+    _initPoolSize: 5
+    _maxPoolSize: 20
   _maxOverlapCount: 1

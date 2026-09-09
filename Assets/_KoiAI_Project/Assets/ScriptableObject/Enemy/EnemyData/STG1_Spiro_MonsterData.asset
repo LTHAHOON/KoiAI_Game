@@ -27,7 +27,7 @@ MonoBehaviour:
     _jumpForceMod: 0
     _jumpMaxCountMod: 0
     _stepAudioThresold: 0
-    _sizeForMoveStopMod: 2
+    _sizeForMoveStopMod: 3
     _rigidData:
       _mass: 0
       _linearDamping: 0
@@ -44,8 +44,4 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 8
   _aiAttackExtensionData:
-    _weaponID: 0
-    _randomWeaponContorllers:
-    - _chanceValue: 0
-      _activateTarget: {fileID: 0}
     _attackDelayTime: 1

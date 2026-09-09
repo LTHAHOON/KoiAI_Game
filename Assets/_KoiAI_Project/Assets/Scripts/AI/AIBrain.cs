@@ -252,8 +252,8 @@ namespace KoiAI.AI
 
         public AITargetContext TargetContext => _targetContext;
         public NavigationController AgentController => _agentController;
-        public AnimatorData EnemyAnimatorData => _aiStatData.AnimatorData;
-        public Animator EnemyAnimator => _aiAnimator;
+        public AnimatorData AIAnimatorData => _aiStatData.AnimatorData;
+        public Animator AIAnimator => _aiAnimator;
         public Vector3 OriginPosition => _originPosition;
     }
 }

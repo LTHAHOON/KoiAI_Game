@@ -17,10 +17,10 @@ namespace KoiAI.AI
             }
             _valueData = valueData;
             _extensionData = extensionData;
-            if (Brain.EnemyAnimatorData.IsValid())
+            if (Brain.AIAnimatorData.IsValid())
             {
                 //애니메이터 파라미터 데이터 초기화
-                _animParamData = Brain.EnemyAnimatorData.AnimParamData;
+                _animParamData = Brain.AIAnimatorData.AnimParamData;
             }
             else
             {
@@ -32,7 +32,7 @@ namespace KoiAI.AI
         {
             Brain.AgentController.ResetPath();
             Brain.AgentController.MoveToDest(Brain.OriginPosition, _valueData.MoveSpeed + _extensionData.MoveSpeedMod);
-            Brain.EnemyAnimator.SetBool(_animParamData.WalkParmID, true);
+            Brain.AIAnimator.SetBool(_animParamData.WalkParmID, true);
         }
 
         public override void UpdateFeature()
@@ -42,7 +42,7 @@ namespace KoiAI.AI
         public override void ExitFeature()
         {
             Brain.AgentController.ResetPath();
-            Brain.EnemyAnimator.SetBool(_animParamData.WalkParmID, false);
+            Brain.AIAnimator.SetBool(_animParamData.WalkParmID, false);
         }
     }
 }

@@ -1,7 +1,9 @@
 using Cysharp.Threading.Tasks;
 using R3;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -15,9 +17,9 @@ namespace KoiAI.Nav
         private float _curMoveSpeed = 0f;
         private NavMeshPath _navMeshPath;
         private Rigidbody _rigidBody;
-        private Vector3[] _path;
-        private readonly Subject<float> _rigidMoveSubject = new();
-        private IDisposable _rigidMoveSubscription;
+        private Vector3 _lastDestination;
+        private bool _hasDestination;
+
 
         private void Awake()
         {
@@ -59,6 +61,7 @@ namespace KoiAI.Nav
             Observable.Interval(TimeSpan.Zero, UnityTimeProvider.FixedUpdate)
                             .Subscribe(_ =>
                             {
+                                //Path계산이 끝날 경우
                                 if (!_navMeshAgent.pathPending && _navMeshAgent.hasPath)
                                 {
                                     Vector3 desiredVelocity = _navMeshAgent.desiredVelocity;
@@ -75,17 +78,25 @@ namespace KoiAI.Nav
                                 {
                                     _rigidBody.linearVelocity = new Vector3(0, _rigidBody.linearVelocity.y, 0);
                                 }
-                            });
+                            }).AddTo(this);
         }
 
         public void MoveToDest(Vector3 destination, float moveSpeed)
         {
-            if (!CanMoveToDestination(out _path, destination))
+            if (_hasDestination && (_lastDestination - destination).sqrMagnitude <= 0.01f)
+            {
+                _curMoveSpeed = moveSpeed;
+                return;
+            }
+
+            if (!CanMoveToDestination(out _, destination))
             {
                 return;
             }
 
             _navMeshAgent.SetDestination(destination);
+            _lastDestination = destination;
+            _hasDestination = true;
 
             switch (_navigationData.AgentPhyscisType)
             {
@@ -101,15 +112,26 @@ namespace KoiAI.Nav
         public void ResetPath()
         {
             _navMeshAgent.ResetPath();
-            _rigidMoveSubscription?.Dispose();
-            _rigidMoveSubscription = null;
+            _hasDestination = false;
+        }
+
+        public void StopMovement()
+        {
+            _navMeshAgent.ResetPath();
+            _curMoveSpeed = 0f;
+
+            if (_rigidBody)
+            {
+                _rigidBody.linearVelocity = new Vector3(0f, _rigidBody.linearVelocity.y, 0f);
+            }
         }
 
         public bool IsMoveStop()
         {
-
             if (_navMeshAgent.pathPending)
+            {
                 return false;
+            }
 
             return !_navMeshAgent.hasPath || _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance;
         }

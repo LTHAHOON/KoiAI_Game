@@ -85,6 +85,10 @@ namespace KoiAI.KoiCursor
         public static bool CheckPointerOverElement<TInfo>(VisualView<TInfo> visualView, VisualElement element) where TInfo : VisualViewInfo
         {
             Vector2 screenPosition = Mouse.current.position.ReadValue();
+            if(visualView.Root.panel == null)
+            {
+                return false;
+            }
             Vector2 panelPosition = RuntimePanelUtils.ScreenToPanel(visualView.Root.panel, screenPosition);
             //UI ToolKit은 위치 기준이 Top-Left 방식이기 때문에 반전시켜줘야 합니다.
             panelPosition.y = visualView.Root.layout.height - panelPosition.y;

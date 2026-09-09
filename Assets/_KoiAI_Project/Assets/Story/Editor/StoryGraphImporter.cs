@@ -12,7 +12,7 @@ namespace Story.GraphToolkit.Editor
         public override void OnImportAsset(AssetImportContext context)
         {
             Graph editorGraph = GraphDatabase.LoadGraphForImporter<StoryGraph>(context.assetPath);
-
+            
             StoryRuntimeGraph runtimeGraph = ScriptableObject.CreateInstance<StoryRuntimeGraph>();
 
             List<StoryRuntimeNode> runtimeNodes = StoryGraphRuntimeCreator.CreateRuntimeNodes(editorGraph);
