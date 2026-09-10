@@ -251,7 +251,7 @@ MonoBehaviour:
           _useOriginDistance: 1
           _distanceCondition:
             _isDataOnly: 0
-            _compareValue: 0.5
+            _compareValue: 1
             _comparisonType: 1
         _withFeatureConditionData:
           _listValue:
