@@ -19,12 +19,19 @@ namespace KoiAI.AI
 
         public override void EnterFeature()
         {
-            Brain.AIAnimator.SetBool(_animParamData.IdleParmID, true);
+            Brain.AgentController.StopMovement();
+            if(Brain.AIAnimator)
+            {
+                Brain.AIAnimator.SetBool(_animParamData.IdleParmID, true);
+            }
         }
 
         public override void ExitFeature()
         {
-            Brain.AIAnimator.SetBool(_animParamData.IdleParmID, false);
+            if(Brain.AIAnimator)
+            {
+                Brain.AIAnimator.SetBool(_animParamData.IdleParmID, false);
+            }
         }
 
         public override void UpdateFeature()

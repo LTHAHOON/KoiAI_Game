@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
+using System.Linq;
+
 #if UNITY_EDITOR
-    using UnityEditor;
+using UnityEditor;
 #endif
 
 namespace KoiAI.AI
@@ -55,6 +57,7 @@ namespace KoiAI.AI
             if (aiBrains != null && aiBrains.Length > 0)
             {
                 _aiBrains.AddRange(aiBrains);
+                _aiBrains = _aiBrains.Distinct().ToList();
             }
         }
 
@@ -99,6 +102,7 @@ namespace KoiAI.AI
                     _aiBrains[i].UpdateAIBrain();
                 }
             }
+            ClearNullAIBrains();
         }
     }
 }

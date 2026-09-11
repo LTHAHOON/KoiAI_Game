@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -16,10 +17,13 @@ namespace KoiAI.Nav
         private int _agentTypeIndex;
         [SerializeField]
         private AgentPhysicsType _agentPhysicsType;
+        [ShowIf(nameof(_agentPhysicsType), AgentPhysicsType.AgentPhysicsUpdate)]
         [SerializeField]
         private float _moveSpeed;
+        [ShowIf(nameof(_agentPhysicsType), AgentPhysicsType.AgentPhysicsUpdate)]
         [SerializeField]
         private float _angularSpeed;
+        [ShowIf(nameof(_agentPhysicsType), AgentPhysicsType.AgentPhysicsUpdate)]
         [SerializeField]
         private float _acceleration;
         [SerializeField]

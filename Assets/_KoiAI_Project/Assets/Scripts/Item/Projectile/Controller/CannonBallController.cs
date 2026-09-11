@@ -2,9 +2,11 @@ using UnityEngine;
 
 namespace KoiAI.Item
 {
+    using KoiAI.Health;
     using KoiAI.Utilities;
     using KoiAI.Skin;
-    
+    using System.Linq;
+
     public class CannonBallController : MonoBehaviour
     {
         [SerializeField]
@@ -30,14 +32,16 @@ namespace KoiAI.Item
             {
                 return;
             }
-        
-            for (int i = 0; i < hitCount; i++)
+
+            Collider[] nearestColliders = targetColliders
+                .Take(hitCount)
+                .Where(collider => collider)
+                .OrderBy(collider => (collider.ClosestPoint(transform.position) - transform.position).sqrMagnitude)
+                .ToArray();
+
+            for (int i = 0; i < nearestColliders.Length; i++)
             {
-                if (!targetColliders[i])
-                {
-                    continue;
-                }
-                if (targetColliders[i].TryGetComponent(out Health.Health health))
+                if (nearestColliders[i].TryGetComponent(out Health health))
                 {
                     health.ChangeHealth(-_cannonBallData.Damage);
                 }

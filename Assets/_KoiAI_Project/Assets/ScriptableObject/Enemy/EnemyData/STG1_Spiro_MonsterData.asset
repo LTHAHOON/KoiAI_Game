@@ -23,7 +23,7 @@ MonoBehaviour:
     _stepAuidoData: {fileID: 0}
     _stopStepAudioData: {fileID: 0}
     _jumpAudioData: {fileID: 0}
-    _moveSpeedMod: 0
+    _moveSpeedMod: 6
     _jumpForceMod: 0
     _jumpMaxCountMod: 0
     _stepAudioThresold: 0

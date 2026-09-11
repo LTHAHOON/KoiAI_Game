@@ -61,12 +61,22 @@ namespace KoiAI.AI
 
         public override void EnterFeature()
         {
+            if (Brain.IsDead)
+            {
+                return;
+            }
+
             _weaponController = ActivateRandom.GetRandomActivateTarget(_weaponRandomGroup);
             _weaponController.StartAiming();
         }
 
         public override void UpdateFeature()
         {
+            if (Brain.IsDead)
+            {
+                return;
+            }
+
             Debug.Log("Attacking");
 
             if(_curAttackTime < _extensionData.AttackDelayTime)

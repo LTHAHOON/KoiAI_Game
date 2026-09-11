@@ -20,6 +20,8 @@ namespace KoiAI.Nav
         private Vector3 _lastDestination;
         private bool _hasDestination;
 
+        private bool IsAgentReady => _navMeshAgent && _navMeshAgent.isActiveAndEnabled && _navMeshAgent.isOnNavMesh;
+
 
         private void Awake()
         {
@@ -61,12 +63,24 @@ namespace KoiAI.Nav
             Observable.Interval(TimeSpan.Zero, UnityTimeProvider.FixedUpdate)
                             .Subscribe(_ =>
                             {
+                                if (!IsAgentReady)
+                                {
+                                    if (_rigidBody)
+                                    {
+                                        _rigidBody.linearVelocity = new Vector3(
+                                            0f,
+                                            _rigidBody.linearVelocity.y,
+                                            0f);
+                                    }
+                                    return;
+                                }
+
                                 //Path계산이 끝날 경우
                                 if (!_navMeshAgent.pathPending && _navMeshAgent.hasPath)
                                 {
-                                    Vector3 desiredVelocity = _navMeshAgent.desiredVelocity;
+                                    Vector3 moveDir = _navMeshAgent.desiredVelocity.normalized;
 
-                                    Vector3 targetVelocity = desiredVelocity * _curMoveSpeed;
+                                    Vector3 targetVelocity = moveDir * _curMoveSpeed;
                                     targetVelocity.y = _rigidBody.linearVelocity.y;
 
                                     _rigidBody.linearVelocity = targetVelocity;
@@ -83,7 +97,14 @@ namespace KoiAI.Nav
 
         public void MoveToDest(Vector3 destination, float moveSpeed)
         {
-            if (_hasDestination && (_lastDestination - destination).sqrMagnitude <= 0.01f)
+            if (!IsAgentReady)
+            {
+                return;
+            }
+
+            if (_hasDestination
+                && _navMeshAgent.hasPath
+                && (_lastDestination - destination).sqrMagnitude <= 0.01f)
             {
                 _curMoveSpeed = moveSpeed;
                 return;
@@ -91,7 +112,7 @@ namespace KoiAI.Nav
 
             if (!CanMoveToDestination(out _, destination))
             {
-                return;
+                     return;
             }
 
             _navMeshAgent.SetDestination(destination);
@@ -109,16 +130,14 @@ namespace KoiAI.Nav
             }
         }
 
-        public void ResetPath()
-        {
-            _navMeshAgent.ResetPath();
-            _hasDestination = false;
-        }
-
         public void StopMovement()
         {
-            _navMeshAgent.ResetPath();
             _curMoveSpeed = 0f;
+
+            if (IsAgentReady)
+            {
+                _navMeshAgent.ResetPath();
+            }
 
             if (_rigidBody)
             {
@@ -128,6 +147,11 @@ namespace KoiAI.Nav
 
         public bool IsMoveStop()
         {
+            if (!IsAgentReady)
+            {
+                return true;
+            }
+
             if (_navMeshAgent.pathPending)
             {
                 return false;
@@ -139,7 +163,10 @@ namespace KoiAI.Nav
         public bool CanMoveToDestination(out Vector3[] path, Vector3 destination)
         {
             path = default;
-            if (_navMeshPath == null) return false;
+            if (_navMeshPath == null || !IsAgentReady)
+            {
+                return false;
+            }
 
             if (_navMeshAgent.CalculatePath(destination, _navMeshPath))
             {

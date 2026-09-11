@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using KoiAI.AnimatorSystem;
 using UnityEngine;
 
@@ -30,19 +31,25 @@ namespace KoiAI.AI
 
         public override void EnterFeature()
         {
-            Brain.AgentController.ResetPath();
-            Brain.AgentController.MoveToDest(Brain.OriginPosition, _valueData.MoveSpeed + _extensionData.MoveSpeedMod);
-            Brain.AIAnimator.SetBool(_animParamData.WalkParmID, true);
+            Brain.AgentController.StopMovement();
+      
+            if(Brain.AIAnimator)
+            {
+                Brain.AIAnimator.SetBool(_animParamData.WalkParmID, true);
+            }
         }
 
         public override void UpdateFeature()
         {
+            Brain.AgentController.MoveToDest(Brain.OriginPosition, _valueData.MoveSpeed + _extensionData.MoveSpeedMod);
         }
 
         public override void ExitFeature()
         {
-            Brain.AgentController.ResetPath();
-            Brain.AIAnimator.SetBool(_animParamData.WalkParmID, false);
+            if(Brain.AIAnimator)
+            {
+                Brain.AIAnimator.SetBool(_animParamData.WalkParmID, false);
+            }
         }
     }
 }

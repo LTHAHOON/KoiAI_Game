@@ -8,6 +8,7 @@ using static KoiAI.AI.AIFeature;
 
 namespace KoiAI.AI
 {
+    using KoiAI.Health;
     using KoiAI.AnimatorSystem;
     using KoiAI.Nav;
     
@@ -43,8 +44,10 @@ namespace KoiAI.AI
         private List<AIFeature> _aiFeatures;
         private Dictionary<AIFeatureProperty, Func<AIFeature>> _dicAIFeatureCreator;
         private readonly HashSet<AIFeatureProperty> _activeFeatures = new();
+        private readonly HashSet<AIFeatureProperty> _transitioningFeatures = new();
         private Vector3 _originPosition;
         private Animator _aiAnimator;
+        private Health _health;
         
         public void AwakeAIBrain()
         {
@@ -66,7 +69,8 @@ namespace KoiAI.AI
                 DecisionDisableLogic,
                 DecisionEnableLogic,
             };
-            _aiAnimator = GetComponent<Animator>();
+            TryGetComponent(out _aiAnimator);
+            TryGetComponent(out _health);
         }
         
         public void StartAIBrain()
@@ -135,12 +139,13 @@ namespace KoiAI.AI
             _activeFeatures.Clear();
         }
 
+        private static WaitForSeconds _waitForSeconds0_1 = new WaitForSeconds(0.1f);
         private IEnumerator AIDecisionLogic()
         {
             while (true)
             {
                 NextAIDecisionLogic();
-                yield return new WaitForSeconds(0.1f);
+                yield return _waitForSeconds0_1;
             }
         }
 
@@ -160,7 +165,7 @@ namespace KoiAI.AI
             {
                 if (_activeFeatures.Contains(feature.FeatureProperty))
                 {
-                    if (feature.CheckDisable())
+                    if(feature.CheckDisable())
                     {
                         DisableFeature(feature).Forget();
                     }
@@ -201,38 +206,55 @@ namespace KoiAI.AI
 
         private async UniTask EnableFeature(AIFeature feature)
         {
-            if (_activeFeatures.Contains(feature.FeatureProperty))
+            if (_activeFeatures.Contains(feature.FeatureProperty)
+                || !_transitioningFeatures.Add(feature.FeatureProperty))
             {
                 return;
             }
 
-            feature.EnterFeature();
+            try
+            {
+                feature.EnterFeature();
 
-            float delayTime = _aiRuntimeSettings.GetEnableDelayTime(feature);
-            await UniTask.Delay(TimeSpan.FromSeconds(delayTime));
+                float delayTime = _aiRuntimeSettings.GetEnableDelayTime(feature);
+                await UniTask.Delay(TimeSpan.FromSeconds(delayTime), cancellationToken: destroyCancellationToken);
 
-            _activeFeatures.Add(feature.FeatureProperty);
+                _activeFeatures.Add(feature.FeatureProperty);
+            }
+            finally
+            {
+                _transitioningFeatures.Remove(feature.FeatureProperty);
+            }
         }
 
-        private async UniTask DisableFeature(AIFeature feature)
+        public async UniTask DisableFeature(AIFeature feature)
         {
-            if (!_activeFeatures.Contains(feature.FeatureProperty))
+            if (!_activeFeatures.Contains(feature.FeatureProperty)
+                || !_transitioningFeatures.Add(feature.FeatureProperty))
             {
                 return;
             }
 
-            feature.ExitFeature();
+            try
+            {
+                feature.ExitFeature();
 
-            float delayTime = _aiRuntimeSettings.GetDisableDelayTime(feature);
-            await UniTask.Delay(TimeSpan.FromSeconds(delayTime));
+                float delayTime = _aiRuntimeSettings.GetDisableDelayTime(feature);
+                await UniTask.Delay(TimeSpan.FromSeconds(delayTime), cancellationToken: destroyCancellationToken);
 
-            _activeFeatures.Remove(feature.FeatureProperty);
+                _activeFeatures.Remove(feature.FeatureProperty);
+            }
+            finally
+            {
+                _transitioningFeatures.Remove(feature.FeatureProperty);
+            }
         }
 
         public bool IsFeatureActive(AIFeatureProperty property)
         {
             return _activeFeatures.Contains(property);
         }
+
 
         private void OnDrawGizmosSelected()
         {
@@ -250,6 +272,7 @@ namespace KoiAI.AI
             Gizmos.DrawWireSphere(eye.position, _sightConditionData.LoseDistance);
         }
 
+        public bool IsDead => _health && _health.IsDead;
         public AITargetContext TargetContext => _targetContext;
         public NavigationController AgentController => _agentController;
         public AnimatorData AIAnimatorData => _aiStatData.AnimatorData;

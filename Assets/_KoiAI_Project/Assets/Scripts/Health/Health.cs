@@ -16,7 +16,9 @@ namespace KoiAI.Health
         private bool _hasHealthBar = true;
         private ReactiveProperty<float> _currentHealth = new(0);
         private bool _isDelayChanging = false;
-     
+        public Action OnDeath;
+        private bool _isDead = false;
+
         private void Awake()
         {
             _currentHealth.Value = _healthData.MaxHealth;
@@ -24,9 +26,10 @@ namespace KoiAI.Health
                 .Skip(1)
                 .Subscribe(healthValue =>
                 {
-                    if (healthValue <= 0)
+                    if (!_isDead && healthValue <= 0)
                     {
-                        OnDead();
+                        _isDead = true;
+                        OnDeath?.Invoke();
                     }
                 }).AddTo(this);
         }
@@ -58,11 +61,7 @@ namespace KoiAI.Health
                     ChangeHealth(amount);
                 });
         }
-    
-        private void OnDead()
-        {
-            Debug.Log("Dead");
-        }
+
 
         public void RefreshItemPickUpCondition(ItemPickUpCondition currentConditionData, ItemPickUpCondition compareCondition)
         {
@@ -80,6 +79,7 @@ namespace KoiAI.Health
         public float CurrentHealthRatio => Mathf.Clamp01(CurrentHealth / MaxHealth);
         public float CurrentHealth => _currentHealth.CurrentValue;
         public float MaxHealth => _healthData.MaxHealth;
+        public bool IsDead => _isDead;
         public HealthData HealthData => _healthData;
         //Observable<float> 대신 ReadOnlyReactiveProperty<float> 사용
         public ReadOnlyReactiveProperty<float> CurrentHealthReactive => _currentHealth;

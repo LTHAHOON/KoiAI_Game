@@ -118,7 +118,10 @@ namespace KoiAI.AI
         public override void ExitFeature()
         {
             Brain.AgentController.StopMovement();
-            Brain.AIAnimator.SetBool(_animParamData.WalkParmID, false);
+            if(Brain.AIAnimator)
+            {
+                Brain.AIAnimator.SetBool(_animParamData.WalkParmID, false);
+            }
             _bHasTarget = false;
         }
 
@@ -131,16 +134,22 @@ namespace KoiAI.AI
             
             float stopDistance = _valueData.SizeForMoveStop + _extensionData.SizeForMoveStopMod;
             Vector3 targetPos = _target.transform.position + Vector3.forward * stopDistance;
-            Brain.AgentController.MoveToDest(targetPos, _valueData.MoveSpeed);
+            Brain.AgentController.MoveToDest(targetPos, _valueData.MoveSpeed + _extensionData.MoveSpeedMod);
 
             if (Brain.AgentController.IsMoveStop())
             {
                 Brain.AgentController.StopMovement();
-                Brain.AIAnimator.SetBool(_animParamData.WalkParmID, false);
+                if(Brain.AIAnimator)
+                {
+                    Brain.AIAnimator.SetBool(_animParamData.WalkParmID, false);
+                }
             }
             else
             {
-                Brain.AIAnimator.SetBool(_animParamData.WalkParmID, true);
+                if(Brain.AIAnimator)
+                {
+                    Brain.AIAnimator.SetBool(_animParamData.WalkParmID, true);
+                }
             }
 
         }
