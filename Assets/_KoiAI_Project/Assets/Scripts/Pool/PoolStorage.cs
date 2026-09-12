@@ -9,6 +9,7 @@ namespace KoiAI.Pool
         Projectile,
         WayPoint,
         AudioSource,
+        Quest,
     }
     [Serializable]
     public struct PoolStorageData

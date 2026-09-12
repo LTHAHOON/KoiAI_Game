@@ -477,29 +477,29 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 1.8333334
-        value: -80
+        time: 2.9166667
+        value: 300
         inSlope: 0
-        outSlope: 0
-        tangentMode: 136
+        outSlope: -1128.0005
+        tangentMode: 69
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3.3333333
-        value: -80
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
+        value: -170
+        inSlope: -1128.0005
+        outSlope: 110
+        tangentMode: 69
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3.8333333
-        value: 150
-        inSlope: 0
+        value: -115
+        inSlope: 110
         outSlope: 0
-        tangentMode: 136
+        tangentMode: 69
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
@@ -843,29 +843,29 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 1.8333334
-        value: -80
+        time: 2.9166667
+        value: 300
         inSlope: 0
-        outSlope: 0
-        tangentMode: 136
+        outSlope: -1128.0005
+        tangentMode: 69
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3.3333333
-        value: -80
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
+        value: -170
+        inSlope: -1128.0005
+        outSlope: 110
+        tangentMode: 69
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3.8333333
-        value: 150
-        inSlope: 0
+        value: -115
+        inSlope: 110
         outSlope: 0
-        tangentMode: 136
+        tangentMode: 69
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334

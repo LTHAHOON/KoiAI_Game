@@ -80,11 +80,16 @@ namespace KoiAI.Pool
                 gameObj.SetActive(active);
             }
         }
+
+        /// <summary>
+        /// PoolName을 사용하지 않을 경우 직접 생성 위치 지정 권장
+        /// </summary>
         public T Pop()
         {
             if (_poolStacks.Count <= 0)
             {
                 T newObj = Object.Instantiate(_prefabObj, _poolStorage);
+                    
                 _poolStacks.Push(newObj);
             }
             T obj = _poolStacks.Pop();

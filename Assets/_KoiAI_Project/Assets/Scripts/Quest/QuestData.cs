@@ -1,19 +1,52 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace KoiAI
+namespace KoiAI.Quest
 {
-    public class QuestData : MonoBehaviour
+    [CreateAssetMenu(fileName = "new QuestData", menuName = "KoiAI/QuestData")]
+    public class QuestData : ScriptableObject
     {
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
-        
-        }
+        [SerializeField]
+        private long _questID;
+        [SerializeField]
+        private string _questTitle;
 
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
+        [SerializeField]
+        private List<QuestObjectiveData> _questObjectiveData;
+
+        public long QuestID => _questID;
+        public string QuestTitle => _questTitle;
+        public List<QuestObjectiveData> QuestObjectiveData => _questObjectiveData;
+    }
+
+    [Serializable]
+    public enum QuestObjectiveType
+    {
+        Kill,
+        Collection,
+        Movement,
+        Interaction,
+    }
+
+    [Serializable]
+    public class QuestObjectiveData
+    {
+        [SerializeField]
+        private QuestObjectiveType _objectiveType;
+        [SerializeField]
+        private string _description;
+        [SerializeField]
+        private long _targetID;
+        [SerializeField]
+        private int _requirementCount;
+        [SerializeField]
+        private float _timeLimit;
+
+        public QuestObjectiveType ObjectiveType => _objectiveType;
+        public float TimeLimit => _timeLimit;
+        public long TargetID => _targetID;
+        public string Description => _description;
+        public int RequirementCount => _requirementCount;
     }
 }

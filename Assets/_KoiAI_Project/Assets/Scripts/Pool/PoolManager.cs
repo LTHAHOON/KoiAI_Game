@@ -32,7 +32,10 @@ namespace KoiAI.Pool
         public void AddPool<T>(ulong id, T prefab, PoolSize poolSize, PoolName poolName) where T : UnityEngine.Object
         {
             if (_dicPool.ContainsKey(id))
+            {
                 return;
+            }
+
             Pool<T> pool = new(prefab, poolSize.InitPoolSize, poolSize.MaxPoolSize, poolName);
             _dicPool.Add(id, pool);
         }
