@@ -4,10 +4,12 @@ using UnityEngine;
 
 namespace KoiAI.AI
 {
+    using System.Buffers;
     using KoiAI.A_Star;
     using KoiAI.AnimatorSystem;
     using KoiAI.Audio;
     using KoiAI.CustomPhysics;
+    using KoiAI.SurroundPos;
 
     [Serializable]
     public class AIMovementExtensionData : AIFeatureExtensionData
@@ -56,7 +58,8 @@ namespace KoiAI.AI
     public class AIMovementValueData : AIFeatureValueData
     {
         #region 이동 데이터
-
+        [SerializeField]
+        private SurroundPosContext _surroundPosContext;
         [SerializeField]
         private float _moveSpeed = 10f;
         [SerializeField]
@@ -76,6 +79,7 @@ namespace KoiAI.AI
         public int JumpMaxCount => _jumpMaxCount;
         public float SizeForMoveStop => _sizeForMoveStop;
         public WayPointData MoveWayPointData => _moveWapointData;
+        public SurroundPosContext SurroundPosContext => _surroundPosContext;
     }
 
     public class AIMovement : AIFeature
@@ -133,8 +137,11 @@ namespace KoiAI.AI
             }
             
             float stopDistance = _valueData.SizeForMoveStop + _extensionData.SizeForMoveStopMod;
-            Vector3 targetPos = _target.transform.position + Vector3.forward * stopDistance;
-            Brain.AgentController.MoveToDest(targetPos, _valueData.MoveSpeed + _extensionData.MoveSpeedMod);
+            if(SurroundPosManager.Instance.TryGetSurroundPos(_valueData.SurroundPosContext,_target, out SurroundPosSlot surroundPosSlot))
+            {
+                Vector3 targetPos = surroundPosSlot.Position + Vector3.forward * stopDistance;
+                Brain.AgentController.MoveToDest(targetPos, _valueData.MoveSpeed + _extensionData.MoveSpeedMod);
+            }
 
             if (Brain.AgentController.IsMoveStop())
             {

@@ -31481,13 +31481,14 @@ GameObject:
   - component: {fileID: 3239538328083206801}
   - component: {fileID: 5752012762449846022}
   - component: {fileID: 4935607812214051969}
-  - component: {fileID: 6157203360985047819}
   - component: {fileID: 8857722224692771334}
+  - component: {fileID: 5629071846775492384}
   - component: {fileID: 512464100212947924}
   - component: {fileID: 7474466815474248434}
   - component: {fileID: 4129940667833861889}
   - component: {fileID: 2888641819072732516}
   - component: {fileID: 6148596442559701446}
+  - component: {fileID: 3465265644486783169}
   m_Layer: 7
   m_Name: Enemy_Spiro
   m_TagString: Untagged
@@ -31560,27 +31561,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 116
   m_CollisionDetection: 0
---- !u!135 &6157203360985047819
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2706511028172561545}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 2
-  m_Center: {x: 0, y: 2, z: 0}
 --- !u!195 &8857722224692771334
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -31603,6 +31583,27 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!135 &5629071846775492384
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2706511028172561545}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 2
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!114 &512464100212947924
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31615,7 +31616,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6bf1a39d13b4ea4b99c21f7b0323c49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Health.Health
-  _useUIFollow: 0
+  _useUIFollow: 1
   _healthData: {fileID: 11400000, guid: d2057e332868fd54fa95759801d4f072, type: 2}
   _hasHealthBar: 0
 --- !u!114 &7474466815474248434
@@ -31632,7 +31633,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Health.PixelBurnDeath
   _health: {fileID: 512464100212947924}
   _rigidbody: {fileID: 4935607812214051969}
-  _collider: {fileID: 6157203360985047819}
+  _collider: {fileID: 5629071846775492384}
   _excludeLayersWhenDie:
     serializedVersion: 2
     m_Bits: 8
@@ -31718,6 +31719,18 @@ MonoBehaviour:
     _activateTarget: {fileID: 1242167338812817272}
   - _chanceValue: 50
     _activateTarget: {fileID: 6865309130937599887}
+--- !u!114 &3465265644486783169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2706511028172561545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26bef8df74dd2db41aec43c44c63e0b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Utilities.UIFollowConnector
 --- !u!1 &2857284113161726406
 GameObject:
   m_ObjectHideFlags: 0

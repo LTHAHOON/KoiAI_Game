@@ -9,6 +9,8 @@ using UnityEngine.AI;
 
 namespace KoiAI.Nav
 {
+    using KoiAI.SurroundPos;
+
     public class NavigationController : MonoBehaviour
     {
         [SerializeField] private NavMeshAgent _navMeshAgent;
@@ -22,6 +24,9 @@ namespace KoiAI.Nav
 
         private bool IsAgentReady => _navMeshAgent && _navMeshAgent.isActiveAndEnabled && _navMeshAgent.isOnNavMesh;
 
+        public float SurroundRadius => _navMeshAgent.radius;
+
+        public float SurroundHeight => _navMeshAgent.height;
 
         private void Awake()
         {
@@ -51,15 +56,12 @@ namespace KoiAI.Nav
             }
         }
 
-        public void SetUpRigidMoveSubscription()
+        private void SetUpRigidMoveSubscription()
         {
             _navMeshAgent.updatePosition = false;
             _navMeshAgent.updateRotation = false;
             TryGetComponent(out _rigidBody);
-            if (_rigidBody)
-            {
-                _rigidBody.constraints = RigidbodyConstraints.FreezeRotation;
-            }
+
             Observable.Interval(TimeSpan.Zero, UnityTimeProvider.FixedUpdate)
                             .Subscribe(_ =>
                             {
@@ -115,7 +117,13 @@ namespace KoiAI.Nav
                      return;
             }
 
-            _navMeshAgent.SetDestination(destination);
+            if(!NavMesh.SamplePosition(destination, out NavMeshHit navMeshHit, 100, NavMesh.AllAreas))
+            {
+                _navMeshAgent.ResetPath();
+                return;
+            }
+            _navMeshAgent.SetDestination(navMeshHit.position);
+            
             _lastDestination = destination;
             _hasDestination = true;
 
