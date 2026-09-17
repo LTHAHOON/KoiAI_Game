@@ -197,7 +197,9 @@ namespace KoiAI.AI
         {
             foreach (AIFeature feature in _aiFeatures)
             {
-                if (_activeFeatures.Contains(feature.FeatureProperty))
+                // Enable또는 Disable중일 때는 업데이트하지 않는다.
+                if (_activeFeatures.Contains(feature.FeatureProperty)
+                    && !_transitioningFeatures.Contains(feature.FeatureProperty))
                 {
                     feature.UpdateFeature();
                 }

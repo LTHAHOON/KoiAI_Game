@@ -41,12 +41,14 @@ namespace KoiAI.AI
 
             if(Brain.AIAnimator)
             {
-                Brain.AIAnimator.SetBool(_animParamData.WalkParmID, true);
+                bool isMoving = !Brain.AgentController.IsAgentArrived();
+                Brain.AIAnimator.SetBool(_animParamData.WalkParmID, isMoving);
             }
         }
 
         public override void ExitFeature()
         {
+            Brain.AgentController.StopMovement();
             if(Brain.AIAnimator)
             {
                 Brain.AIAnimator.SetBool(_animParamData.WalkParmID, false);

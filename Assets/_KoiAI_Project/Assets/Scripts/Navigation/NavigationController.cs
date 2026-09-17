@@ -1,4 +1,3 @@
-using Cysharp.Threading.Tasks;
 using R3;
 using System;
 using UnityEngine;
@@ -15,13 +14,9 @@ namespace KoiAI.Nav
         private float _curMoveSpeed = 0f;
         private NavMeshPath _navMeshPath;
         private Rigidbody _rigidBody;
-        private Vector3 _lastDestination;
 
         private bool IsAgentReady => _navMeshAgent && _navMeshAgent.isActiveAndEnabled && _navMeshAgent.isOnNavMesh;
 
-        public float SurroundRadius => _navMeshAgent.radius;
-
-        public float SurroundHeight => _navMeshAgent.height;
 
         private void Awake()
         {
@@ -72,20 +67,16 @@ namespace KoiAI.Nav
                                     return;
                                 }
 
-                                //Path계산이 끝날 경우
-                                if (!_navMeshAgent.pathPending && _navMeshAgent.hasPath)
-                                {
-                                    Vector3 moveDir = _navMeshAgent.desiredVelocity.normalized;
+                                _navMeshAgent.nextPosition = _rigidBody.position;
 
-                                    Vector3 targetVelocity = moveDir * _curMoveSpeed;
+                                if (!_navMeshAgent.pathPending && _navMeshAgent.hasPath && !IsAgentArrived())
+                                {
+                                    Vector3 targetVelocity = Vector3.ClampMagnitude(_navMeshAgent.desiredVelocity, _curMoveSpeed);
                                     targetVelocity.y = _rigidBody.linearVelocity.y;
 
                                     _rigidBody.linearVelocity = targetVelocity;
                                 }
-
-                                _navMeshAgent.nextPosition = _rigidBody.position;
-
-                                if (IsAgentArrived())
+                                else
                                 {
                                     _rigidBody.linearVelocity = new Vector3(0, _rigidBody.linearVelocity.y, 0);
                                 }
@@ -99,29 +90,24 @@ namespace KoiAI.Nav
                 return;
             }
 
-    
-            if(!TryGetNavMeshPath(out _, destination))
+            if (!TryGetNavMeshPath(out NavMeshPath path, destination))
             {
-                if (NavMesh.SamplePosition(destination, out NavMeshHit navMeshHit, 10, NavMesh.AllAreas))
+                if (!NavMesh.SamplePosition(destination, out NavMeshHit navMeshHit, 10, _navMeshAgent.areaMask)
+                    || !TryGetNavMeshPath(out path, navMeshHit.position))
                 {
-                    if (!TryGetNavMeshPath(out _, destination))
-                    {
-                        _navMeshAgent.ResetPath();
-                        return;
-                    }
-                }
-                else
-                {
-                    _navMeshAgent.ResetPath();
+                    StopMovement();
                     return;
                 }
-                destination = navMeshHit.position;
             }
 
-            _navMeshAgent.SetDestination(destination);
+            if (!_navMeshAgent.SetPath(path))
+            {
+                StopMovement();
+                return;
+            }
 
-            _lastDestination = destination;
-            _curMoveSpeed = moveSpeed;
+            _curMoveSpeed = Mathf.Max(0f, moveSpeed);
+            _navMeshAgent.speed = _curMoveSpeed;
         }
 
         public void StopMovement()
@@ -141,12 +127,18 @@ namespace KoiAI.Nav
 
         public bool IsAgentArrived()
         {
+            if (!IsAgentReady)
+            {
+                return true;
+            }
+
             if (_navMeshAgent.pathPending)
             {
                 return false;
             }
 
-            if(_navMeshAgent.hasPath && _navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance)
+            //0.25f 수치를 더함으로써 Walk_Parm이 켜졌다 꺼졌다 반복되는 문제를 해결하였습니다.
+            if(_navMeshAgent.hasPath && (_navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance + 0.25f))
             {
                 return false;
             }

@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace KoiAI.AI
 {
-    using Cysharp.Threading.Tasks;
     using KoiAI.A_Star;
     using KoiAI.AnimatorSystem;
     using KoiAI.Audio;
@@ -112,6 +111,7 @@ namespace KoiAI.AI
 
         public override void EnterFeature()
         {
+            Debug.Log("Start");
             _bHasTarget = TryGetTarget(out _target);
             _ratioStopDistance = UnityEngine.Random.Range(-1f, 1f);
             if (!_bHasTarget)
@@ -120,6 +120,8 @@ namespace KoiAI.AI
 
         public override void ExitFeature()
         {
+            Debug.Log("End");
+
             SurroundPosManager.Instance.ReleaseSurroundPos(Brain.gameObject, _target);
             Brain.AgentController.StopMovement();
             if(Brain.AIAnimator)
@@ -129,10 +131,15 @@ namespace KoiAI.AI
             _bHasTarget = false;
         }
 
-        public override async void UpdateFeature()
+        public override void UpdateFeature()
         {
-            if (!Brain.TargetContext.HasTarget && !_bHasTarget)
+            if (!Brain.TargetContext.HasTarget || !_bHasTarget || !_target)
             {
+                Brain.AgentController.StopMovement();
+                if (Brain.AIAnimator)
+                {
+                    Brain.AIAnimator.SetBool(_animParamData.WalkParmID, false);
+                }
                 return;
             }
 
@@ -141,13 +148,17 @@ namespace KoiAI.AI
                                                             _target, out SurroundPosSlot surroundPosSlot))
             {
                 
-                Vector3 moveDir = -(_target.transform.position - Brain.transform.position).normalized;
+                Vector3 moveDir = (surroundPosSlot.Position - _target.transform.position).normalized;
                 //약간의 랜덤 위치 분포
                 Vector3 targetPos = surroundPosSlot.Position + moveDir * stopDistance *_ratioStopDistance;
                 Brain.AgentController.MoveToDest(targetPos, _valueData.MoveSpeed + _extensionData.MoveSpeedMod);
-                await UniTask.WaitForEndOfFrame();
                 
             }
+            else
+            {
+                Brain.AgentController.StopMovement();
+            }
+
             bool isMoving = !Brain.AgentController.IsAgentArrived();
 
             if (Brain.AIAnimator)
