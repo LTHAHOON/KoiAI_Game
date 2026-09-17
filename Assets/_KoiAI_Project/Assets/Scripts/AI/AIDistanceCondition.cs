@@ -41,11 +41,19 @@ namespace KoiAI.AI
             if (_conditionData.UseOriginDistance)
             {
                 Vector3 originPosition = brain.OriginPosition;
-                originPosition.y = 0f;
-                Vector3 curPosition = brain.transform.position;
-                curPosition.y = 0f;
-                float distance = (originPosition - curPosition).sqrMagnitude;
-                result = distance.CompareWithCondition(_conditionData.DistanceCondition);
+
+                if(brain.AgentController && brain.AgentController.TryGetPathDistance(originPosition, out float pathDistance))
+                {
+                    result = pathDistance.CompareWithCondition(_conditionData.DistanceCondition);
+                }
+                else
+                {
+                    originPosition.y = 0f;
+                    Vector3 curPosition = brain.transform.position;
+                    curPosition.y = 0f;
+                    float distance = (originPosition - curPosition).sqrMagnitude;
+                    result = distance.CompareWithCondition(_conditionData.DistanceCondition);
+                }
             }
             else
             {
@@ -53,9 +61,17 @@ namespace KoiAI.AI
                 {
                     return false;
                 }
-                
-                result   = brain.TargetContext.Distance.CompareWithCondition(_conditionData.DistanceCondition);
+                if(brain.AgentController && brain.AgentController.TryGetPathDistance(brain.TargetContext.Target.position, out float pathDistance))
+                {
+                    result   = pathDistance.CompareWithCondition(_conditionData.DistanceCondition);
+                }
+                else
+                {
+                    result   = brain.TargetContext.Distance.CompareWithCondition(_conditionData.DistanceCondition);
+                }
             }
+
+
             return result;
         }
     }

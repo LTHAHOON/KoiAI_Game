@@ -31,17 +31,18 @@ namespace KoiAI.AI
 
         public override void EnterFeature()
         {
+            //새로운 Destination을 바로 받기 위해 즉각 멈추기
             Brain.AgentController.StopMovement();
-      
-            if(Brain.AIAnimator)
-            {
-                Brain.AIAnimator.SetBool(_animParamData.WalkParmID, true);
-            }
         }
 
         public override void UpdateFeature()
         {
             Brain.AgentController.MoveToDest(Brain.OriginPosition, _valueData.MoveSpeed + _extensionData.MoveSpeedMod);
+
+            if(Brain.AIAnimator)
+            {
+                Brain.AIAnimator.SetBool(_animParamData.WalkParmID, true);
+            }
         }
 
         public override void ExitFeature()

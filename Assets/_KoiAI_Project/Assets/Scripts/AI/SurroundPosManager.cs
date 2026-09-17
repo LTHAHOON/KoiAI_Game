@@ -29,7 +29,7 @@ namespace KoiAI.SurroundPos
             _surroundPosSlots = new();
         }
 
-        public bool TryGetSurroundPos(SurroundPosContext context, GameObject target, out SurroundPosSlot surroundPosSlot)
+        public bool TryGetSurroundPos(SurroundPosContext context, GameObject owner, GameObject target, out SurroundPosSlot surroundPosSlot)
         {
             surroundPosSlot = default;
             if (context == null || !target)
@@ -44,10 +44,10 @@ namespace KoiAI.SurroundPos
                 _surroundPosSlots.Add(targetID, surroundPosSlots);
             }
 
-            //삭제된 Slot이 있을 경우 제거
+            //Destroy된 Slot이 있을 경우 제거
             surroundPosSlots.RemoveAll(x => x.Owner == null);
 
-            int slotIndex = surroundPosSlots.FindIndex(slot => slot.Owner == context.Owner);
+            int slotIndex = surroundPosSlots.FindIndex(slot => slot.Owner == owner);
             if (slotIndex < 0)
             {
                 slotIndex = surroundPosSlots.Count;
@@ -69,7 +69,7 @@ namespace KoiAI.SurroundPos
                     
                     surroundPosSlot = new SurroundPosSlot
                     {
-                        Owner = context.Owner,
+                        Owner = owner,
                         Position = centerPos + direction * ringRadius
                     };
                     
@@ -91,6 +91,28 @@ namespace KoiAI.SurroundPos
             return false;
         }
 
+        public void ReleaseSurroundPos(GameObject owner, GameObject target)
+        {
+            if (!owner || !target)
+            {
+                return;
+            }
+
+            ulong targetID = target.GetEntityULongID();
+
+            if (!_surroundPosSlots.TryGetValue(targetID, out List<SurroundPosSlot> surroundPosSlots))
+            {
+                return;
+            }
+
+            surroundPosSlots.RemoveAll(slot => slot.Owner == owner);
+
+            if (surroundPosSlots.Count == 0)
+            {
+                _surroundPosSlots.Remove(targetID);
+                Debug.Log(_surroundPosSlots.Count);
+            }
+        }
 
         private int GetSlotCountPerRing(float ringRadius, float requiredDistance)
         {

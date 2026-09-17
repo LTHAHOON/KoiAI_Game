@@ -10,12 +10,12 @@ namespace KoiAI.Player
     using KoiAI.Audio;
     using KoiAI.CustomPhysics;
     using KoiAI.Input;
+    using UnityEngine.AI;
 
     [Serializable]
     public class PlayerMovementExtensionData : PlayerFeatureExtensionData
     {
         #region 보정값 및 추가 이동 데이터
-        
         [SerializeField]
         private AudioData _stepAuidoData;
         [SerializeField]
@@ -84,6 +84,8 @@ namespace KoiAI.Player
         [ReadOnly]
         [SerializeField]
         private PlayerMovementExtensionData _extensionValueData;
+        [SerializeField]
+        private NavMeshObstacle _playerNavMeshObstacle;
         [SerializeField]
         private AudioSFXTarget _mainSFXTarget;
         [SerializeField]
@@ -178,6 +180,7 @@ namespace KoiAI.Player
                     {
                         Owner.PlayerAnimator.SetBool(_animParamData.WalkParmID, false);
                     }
+                    _playerNavMeshObstacle.enabled = true;
                     _isMoveStop = false;
                 }
                 if (_rigidBody.linearVelocity.sqrMagnitude <= _extensionValueData.StepAudioThresold)
@@ -240,7 +243,7 @@ namespace KoiAI.Player
             if (context.canceled)
             {
                 _isMoveStop = true;
-
+                _playerNavMeshObstacle.enabled = true;
             }
             else
             {
@@ -248,6 +251,7 @@ namespace KoiAI.Player
                 {
                     Owner.PlayerAnimator.SetBool(_animParamData.WalkParmID, true);
                 }
+                _playerNavMeshObstacle.enabled = false;
             }
         }
 

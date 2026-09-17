@@ -1,10 +1,9 @@
-using NaughtyAttributes;
 using System;
 using UnityEngine;
 
 namespace KoiAI.AI
 {
-    using System.Buffers;
+    using Cysharp.Threading.Tasks;
     using KoiAI.A_Star;
     using KoiAI.AnimatorSystem;
     using KoiAI.Audio;
@@ -15,7 +14,8 @@ namespace KoiAI.AI
     public class AIMovementExtensionData : AIFeatureExtensionData
     {
         #region 보정값 및 추가 이동 데이터
-
+        [SerializeField]
+        private SurroundPosContext _surroundPosContext;
         [SerializeField]
         private AudioData _stepAuidoData;
         [SerializeField]
@@ -52,14 +52,14 @@ namespace KoiAI.AI
         public int JumpMaxCountMod => _jumpMaxCountMod;
         public float StepAudioThresold => _stepAudioThresold;
         public float SizeForMoveStopMod => _sizeForMoveStopMod;
+        public SurroundPosContext SurroundPosContext => _surroundPosContext;
     }
 
     [Serializable]
     public class AIMovementValueData : AIFeatureValueData
     {
         #region 이동 데이터
-        [SerializeField]
-        private SurroundPosContext _surroundPosContext;
+
         [SerializeField]
         private float _moveSpeed = 10f;
         [SerializeField]
@@ -79,7 +79,6 @@ namespace KoiAI.AI
         public int JumpMaxCount => _jumpMaxCount;
         public float SizeForMoveStop => _sizeForMoveStop;
         public WayPointData MoveWayPointData => _moveWapointData;
-        public SurroundPosContext SurroundPosContext => _surroundPosContext;
     }
 
     public class AIMovement : AIFeature
@@ -89,7 +88,7 @@ namespace KoiAI.AI
         private AnimatorParamData _animParamData;
         private GameObject _target;
         private bool _bHasTarget = false;
-
+        private float _ratioStopDistance = 0f;
         public override void InitFeature(AIFeatureValueData enemyFeatureValueData = null,
             AIFeatureExtensionData enemyFeatureExtensionData = null)
         {
@@ -114,13 +113,14 @@ namespace KoiAI.AI
         public override void EnterFeature()
         {
             _bHasTarget = TryGetTarget(out _target);
-
+            _ratioStopDistance = UnityEngine.Random.Range(-1f, 1f);
             if (!_bHasTarget)
                 return;
         }
 
         public override void ExitFeature()
         {
+            SurroundPosManager.Instance.ReleaseSurroundPos(Brain.gameObject, _target);
             Brain.AgentController.StopMovement();
             if(Brain.AIAnimator)
             {
@@ -129,34 +129,30 @@ namespace KoiAI.AI
             _bHasTarget = false;
         }
 
-        public override void UpdateFeature()
+        public override async void UpdateFeature()
         {
             if (!Brain.TargetContext.HasTarget && !_bHasTarget)
             {
                 return;
             }
-            
-            float stopDistance = _valueData.SizeForMoveStop + _extensionData.SizeForMoveStopMod;
-            if(SurroundPosManager.Instance.TryGetSurroundPos(_valueData.SurroundPosContext,_target, out SurroundPosSlot surroundPosSlot))
-            {
-                Vector3 targetPos = surroundPosSlot.Position + Vector3.forward * stopDistance;
-                Brain.AgentController.MoveToDest(targetPos, _valueData.MoveSpeed + _extensionData.MoveSpeedMod);
-            }
 
-            if (Brain.AgentController.IsMoveStop())
+            float stopDistance = _valueData.SizeForMoveStop + _extensionData.SizeForMoveStopMod;
+            if(SurroundPosManager.Instance.TryGetSurroundPos(_extensionData.SurroundPosContext,Brain.gameObject , 
+                                                            _target, out SurroundPosSlot surroundPosSlot))
             {
-                Brain.AgentController.StopMovement();
-                if(Brain.AIAnimator)
-                {
-                    Brain.AIAnimator.SetBool(_animParamData.WalkParmID, false);
-                }
+                
+                Vector3 moveDir = -(_target.transform.position - Brain.transform.position).normalized;
+                //약간의 랜덤 위치 분포
+                Vector3 targetPos = surroundPosSlot.Position + moveDir * stopDistance *_ratioStopDistance;
+                Brain.AgentController.MoveToDest(targetPos, _valueData.MoveSpeed + _extensionData.MoveSpeedMod);
+                await UniTask.WaitForEndOfFrame();
+                
             }
-            else
+            bool isMoving = !Brain.AgentController.IsAgentArrived();
+
+            if (Brain.AIAnimator)
             {
-                if(Brain.AIAnimator)
-                {
-                    Brain.AIAnimator.SetBool(_animParamData.WalkParmID, true);
-                }
+                Brain.AIAnimator.SetBool(_animParamData.WalkParmID, isMoving);
             }
 
         }

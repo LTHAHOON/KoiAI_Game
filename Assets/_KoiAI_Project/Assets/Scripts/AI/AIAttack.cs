@@ -77,7 +77,7 @@ namespace KoiAI.AI
                 return;
             }
 
-            Debug.Log("Attacking");
+//            Debug.Log("Attacking");
 
             if(_curAttackTime < _extensionData.AttackDelayTime)
             {

@@ -20,6 +20,9 @@ MonoBehaviour:
   _aiFeatureDataBase: {fileID: 11400000, guid: 587e3ecf27b34ba499460249aa750718, type: 2}
   _aiFeatureDataType: 1
   _aiMovementExtensionData:
+    _surroundPosContext:
+      _surroundRadius: 2
+      _surroundHeight: 3
     _stepAuidoData: {fileID: 0}
     _stopStepAudioData: {fileID: 0}
     _jumpAudioData: {fileID: 0}
@@ -27,7 +30,7 @@ MonoBehaviour:
     _jumpForceMod: 0
     _jumpMaxCountMod: 0
     _stepAudioThresold: 0
-    _sizeForMoveStopMod: 3
+    _sizeForMoveStopMod: 2
     _rigidData:
       _mass: 0
       _linearDamping: 0

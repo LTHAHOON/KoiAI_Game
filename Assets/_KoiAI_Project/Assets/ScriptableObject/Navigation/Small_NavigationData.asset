@@ -17,4 +17,5 @@ MonoBehaviour:
   _moveSpeed: 6
   _angularSpeed: 150
   _acceleration: 60
+  _stoppingDistance: 0.3
   _avoidancePriority: 50

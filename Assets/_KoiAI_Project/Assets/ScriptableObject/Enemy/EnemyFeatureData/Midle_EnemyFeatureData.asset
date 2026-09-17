@@ -18,7 +18,7 @@ MonoBehaviour:
     _moveSpeed: 4
     _jumpForce: 10
     _jumpMaxCount: 1
-    _sizeForMoveStop: 3
+    _sizeForMoveStop: 0
     _moveWapointData: {fileID: 0}
   aiRotationValueData:
     _lookSpeed: 10

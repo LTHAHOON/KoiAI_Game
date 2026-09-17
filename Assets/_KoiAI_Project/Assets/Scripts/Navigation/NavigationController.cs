@@ -1,15 +1,11 @@
 using Cysharp.Threading.Tasks;
 using R3;
 using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace KoiAI.Nav
 {
-    using KoiAI.SurroundPos;
 
     public class NavigationController : MonoBehaviour
     {
@@ -20,7 +16,6 @@ namespace KoiAI.Nav
         private NavMeshPath _navMeshPath;
         private Rigidbody _rigidBody;
         private Vector3 _lastDestination;
-        private bool _hasDestination;
 
         private bool IsAgentReady => _navMeshAgent && _navMeshAgent.isActiveAndEnabled && _navMeshAgent.isOnNavMesh;
 
@@ -90,7 +85,7 @@ namespace KoiAI.Nav
 
                                 _navMeshAgent.nextPosition = _rigidBody.position;
 
-                                if (IsMoveStop())
+                                if (IsAgentArrived())
                                 {
                                     _rigidBody.linearVelocity = new Vector3(0, _rigidBody.linearVelocity.y, 0);
                                 }
@@ -104,38 +99,29 @@ namespace KoiAI.Nav
                 return;
             }
 
-            if (_hasDestination
-                && _navMeshAgent.hasPath
-                && (_lastDestination - destination).sqrMagnitude <= 0.01f)
+    
+            if(!TryGetNavMeshPath(out _, destination))
             {
-                _curMoveSpeed = moveSpeed;
-                return;
-            }
-
-            if (!CanMoveToDestination(out _, destination))
-            {
-                     return;
-            }
-
-            if(!NavMesh.SamplePosition(destination, out NavMeshHit navMeshHit, 100, NavMesh.AllAreas))
-            {
-                _navMeshAgent.ResetPath();
-                return;
-            }
-            _navMeshAgent.SetDestination(navMeshHit.position);
-            
-            _lastDestination = destination;
-            _hasDestination = true;
-
-            switch (_navigationData.AgentPhyscisType)
-            {
-                case AgentPhysicsType.RigidPhysicsUpdate:
-                    if (_rigidBody)
+                if (NavMesh.SamplePosition(destination, out NavMeshHit navMeshHit, 10, NavMesh.AllAreas))
+                {
+                    if (!TryGetNavMeshPath(out _, destination))
                     {
-                        _curMoveSpeed = moveSpeed;
+                        _navMeshAgent.ResetPath();
+                        return;
                     }
-                    break;
+                }
+                else
+                {
+                    _navMeshAgent.ResetPath();
+                    return;
+                }
+                destination = navMeshHit.position;
             }
+
+            _navMeshAgent.SetDestination(destination);
+
+            _lastDestination = destination;
+            _curMoveSpeed = moveSpeed;
         }
 
         public void StopMovement()
@@ -153,22 +139,46 @@ namespace KoiAI.Nav
             }
         }
 
-        public bool IsMoveStop()
+        public bool IsAgentArrived()
         {
-            if (!IsAgentReady)
-            {
-                return true;
-            }
-
             if (_navMeshAgent.pathPending)
             {
                 return false;
             }
 
-            return !_navMeshAgent.hasPath || _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance;
+            if(_navMeshAgent.hasPath && _navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance)
+            {
+                return false;
+            }
+
+            return true;
         }
 
-        public bool CanMoveToDestination(out Vector3[] path, Vector3 destination)
+        public bool TryGetPathDistance(Vector3 destination, out float distance)
+        {
+            distance = 0f;
+
+            if (!IsAgentReady)
+            {
+                return false;
+            }
+
+            if (TryGetNavMeshPath(out NavMeshPath path, destination) || path == null)
+            {
+                return false;
+            }
+
+            Vector3[] corners = path.corners;
+
+            for (int i = 1; i < corners.Length; i++)
+            {
+                distance += Vector3.Distance(corners[i - 1], corners[i]);
+            }
+
+            return true;
+        }
+
+        private bool TryGetNavMeshPath(out NavMeshPath path, Vector3 destination)
         {
             path = default;
             if (_navMeshPath == null || !IsAgentReady)
@@ -178,11 +188,11 @@ namespace KoiAI.Nav
 
             if (_navMeshAgent.CalculatePath(destination, _navMeshPath))
             {
-                if (_navMeshPath.status == NavMeshPathStatus.PathInvalid)
+                if (_navMeshPath.status == NavMeshPathStatus.PathInvalid || _navMeshPath.status == NavMeshPathStatus.PathPartial)
                 {
                     return false;
                 }
-                path = _navMeshPath.corners;
+                path = _navMeshPath;
                 return true;
             }
             return false;
