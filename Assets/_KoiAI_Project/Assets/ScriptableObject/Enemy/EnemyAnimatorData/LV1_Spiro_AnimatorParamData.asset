@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.AnimatorSystem.AnimatorParamData
   _runtimeAnimatorController: {fileID: 9100000, guid: 8df5b386369d54778a922298504d1aba, type: 2}
   _idleParam: Close_Anim
-  _walkParam: Walk_Anim
+  _walkParam: CurrentMoveSpeed
   _jumpParam: None
   _attack01_Param: None
   _attack02_Param: None
-  _act1_Param: Roll_Anim
+  _act1_Param: None
   _act2_Param: None

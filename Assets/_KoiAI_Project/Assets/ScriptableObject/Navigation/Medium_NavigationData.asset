@@ -16,6 +16,6 @@ MonoBehaviour:
   _agentPhysicsType: 1
   _moveSpeed: 3
   _angularSpeed: 150
-  _acceleration: 60
+  _acceleration: 30
   _stoppingDistance: 0.3
   _avoidancePriority: 50

@@ -37,7 +37,7 @@ namespace KoiAI.AI
         private List<AIFeatureTransitionRuntimeDebug> _aiRuntimeDebugs;
         [SerializeField]
         private AIFeatureTransitionRuntimeSettings _aiRuntimeSettings;
-
+        
         private readonly AITargetContext _targetContext = new();
         private Action[] _aiDecisionLogics;
         private int _aiDecisionLogicIndex = -1;

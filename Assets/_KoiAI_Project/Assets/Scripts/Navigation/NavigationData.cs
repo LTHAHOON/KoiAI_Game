@@ -23,7 +23,6 @@ namespace KoiAI.Nav
         [ShowIf(nameof(_agentPhysicsType), AgentPhysicsType.AgentPhysicsUpdate)]
         [SerializeField]
         private float _angularSpeed;
-        [ShowIf(nameof(_agentPhysicsType), AgentPhysicsType.AgentPhysicsUpdate)]
         [SerializeField]
         private float _acceleration;
         [SerializeField]

@@ -19,7 +19,7 @@ namespace KoiAI.AI
 
         public override void EnterFeature()
         {
-            Brain.AgentController.StopMovement();
+            Brain.AgentController.StopMovement_Force();
             if(Brain.AIAnimator)
             {
                 Brain.AIAnimator.SetBool(_animParamData.IdleParmID, true);

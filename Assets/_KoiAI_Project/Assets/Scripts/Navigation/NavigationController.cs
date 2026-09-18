@@ -8,12 +8,15 @@ namespace KoiAI.Nav
 
     public class NavigationController : MonoBehaviour
     {
-        [SerializeField] private NavMeshAgent _navMeshAgent;
-        [SerializeField] private NavigationData _navigationData;
+        [SerializeField] 
+        private NavMeshAgent _navMeshAgent;
+        [SerializeField] 
+        private NavigationData _navigationData;
 
-        private float _curMoveSpeed = 0f;
+        private float _maxMoveSpeed = 0f;
         private NavMeshPath _navMeshPath;
         private Rigidbody _rigidBody;
+        private bool _hasDestination;
 
         private bool IsAgentReady => _navMeshAgent && _navMeshAgent.isActiveAndEnabled && _navMeshAgent.isOnNavMesh;
 
@@ -21,6 +24,19 @@ namespace KoiAI.Nav
         private void Awake()
         {
             Initialize();
+        }
+
+        private void FixedUpdate()
+        {
+            if (!IsAgentReady || !_hasDestination)
+            {
+                return;
+            }
+
+            Vector3 targetVelocity = Vector3.ClampMagnitude(_navMeshAgent.velocity, _maxMoveSpeed);
+            targetVelocity.y = _rigidBody.linearVelocity.y;
+            _rigidBody.linearVelocity = targetVelocity;
+            _navMeshAgent.nextPosition = _rigidBody.position;
         }
 
         private void Initialize()
@@ -41,49 +57,14 @@ namespace KoiAI.Nav
                     break;
 
                 case AgentPhysicsType.RigidPhysicsUpdate:
-                    SetUpRigidMoveSubscription();
+                    _navMeshAgent.updatePosition = false;
+                    _navMeshAgent.updateRotation = false;
+                    TryGetComponent(out _rigidBody);
                     break;
             }
         }
 
-        private void SetUpRigidMoveSubscription()
-        {
-            _navMeshAgent.updatePosition = false;
-            _navMeshAgent.updateRotation = false;
-            TryGetComponent(out _rigidBody);
-
-            Observable.Interval(TimeSpan.Zero, UnityTimeProvider.FixedUpdate)
-                            .Subscribe(_ =>
-                            {
-                                if (!IsAgentReady)
-                                {
-                                    if (_rigidBody)
-                                    {
-                                        _rigidBody.linearVelocity = new Vector3(
-                                            0f,
-                                            _rigidBody.linearVelocity.y,
-                                            0f);
-                                    }
-                                    return;
-                                }
-
-                                _navMeshAgent.nextPosition = _rigidBody.position;
-
-                                if (!_navMeshAgent.pathPending && _navMeshAgent.hasPath && !IsAgentArrived())
-                                {
-                                    Vector3 targetVelocity = Vector3.ClampMagnitude(_navMeshAgent.desiredVelocity, _curMoveSpeed);
-                                    targetVelocity.y = _rigidBody.linearVelocity.y;
-
-                                    _rigidBody.linearVelocity = targetVelocity;
-                                }
-                                else
-                                {
-                                    _rigidBody.linearVelocity = new Vector3(0, _rigidBody.linearVelocity.y, 0);
-                                }
-                            }).AddTo(this);
-        }
-
-        public void MoveToDest(Vector3 destination, float moveSpeed)
+        public void MoveToDest(Vector3 destination, float maxMoveSpeed)
         {
             if (!IsAgentReady)
             {
@@ -95,25 +76,25 @@ namespace KoiAI.Nav
                 if (!NavMesh.SamplePosition(destination, out NavMeshHit navMeshHit, 10, _navMeshAgent.areaMask)
                     || !TryGetNavMeshPath(out path, navMeshHit.position))
                 {
-                    StopMovement();
+                    StopMovement_Force();
                     return;
                 }
             }
-
+            
             if (!_navMeshAgent.SetPath(path))
             {
-                StopMovement();
+                StopMovement_Force();
                 return;
             }
 
-            _curMoveSpeed = Mathf.Max(0f, moveSpeed);
-            _navMeshAgent.speed = _curMoveSpeed;
+            _maxMoveSpeed = maxMoveSpeed;
+            _navMeshAgent.speed = maxMoveSpeed;
+            _hasDestination = true;
         }
 
-        public void StopMovement()
+        //강제로 멈추기
+        public void StopMovement_Force()
         {
-            _curMoveSpeed = 0f;
-
             if (IsAgentReady)
             {
                 _navMeshAgent.ResetPath();
@@ -123,6 +104,9 @@ namespace KoiAI.Nav
             {
                 _rigidBody.linearVelocity = new Vector3(0f, _rigidBody.linearVelocity.y, 0f);
             }
+
+            _maxMoveSpeed = 0f;
+            _hasDestination = false;
         }
 
         public bool IsAgentArrived()
@@ -137,8 +121,7 @@ namespace KoiAI.Nav
                 return false;
             }
 
-            //0.25f 수치를 더함으로써 Walk_Parm이 켜졌다 꺼졌다 반복되는 문제를 해결하였습니다.
-            if(_navMeshAgent.hasPath && (_navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance + 0.25f))
+            if (_navMeshAgent.hasPath && _navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance)
             {
                 return false;
             }
@@ -155,7 +138,7 @@ namespace KoiAI.Nav
                 return false;
             }
 
-            if (TryGetNavMeshPath(out NavMeshPath path, destination) || path == null)
+            if (!TryGetNavMeshPath(out NavMeshPath path, destination))
             {
                 return false;
             }
@@ -189,5 +172,8 @@ namespace KoiAI.Nav
             }
             return false;
         }
+
+        public float CurrentMoveSpeed => _navMeshAgent.velocity.magnitude;
+        public Rigidbody Rigidbody=> _rigidBody;
     }
 }

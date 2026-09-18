@@ -8,6 +8,7 @@ namespace KoiAI.AI
     using KoiAI.Audio;
     using KoiAI.CustomPhysics;
     using KoiAI.SurroundPos;
+    using Mono.Cecil.Cil;
 
     [Serializable]
     public class AIMovementExtensionData : AIFeatureExtensionData
@@ -123,7 +124,7 @@ namespace KoiAI.AI
             Debug.Log("End");
 
             SurroundPosManager.Instance.ReleaseSurroundPos(Brain.gameObject, _target);
-            Brain.AgentController.StopMovement();
+            Brain.AgentController.StopMovement_Force();
             if(Brain.AIAnimator)
             {
                 Brain.AIAnimator.SetBool(_animParamData.WalkParmID, false);
@@ -135,37 +136,32 @@ namespace KoiAI.AI
         {
             if (!Brain.TargetContext.HasTarget || !_bHasTarget || !_target)
             {
-                Brain.AgentController.StopMovement();
+                Brain.AgentController.StopMovement_Force();
                 if (Brain.AIAnimator)
                 {
-                    Brain.AIAnimator.SetBool(_animParamData.WalkParmID, false);
+                    Brain.AIAnimator.SetFloat(_animParamData.WalkParmID, 0f);
                 }
                 return;
             }
 
             float stopDistance = _valueData.SizeForMoveStop + _extensionData.SizeForMoveStopMod;
+            float maxMoveSpeed = _valueData.MoveSpeed + _extensionData.MoveSpeedMod;
             if(SurroundPosManager.Instance.TryGetSurroundPos(_extensionData.SurroundPosContext,Brain.gameObject , 
                                                             _target, out SurroundPosSlot surroundPosSlot))
             {
-                
                 Vector3 moveDir = (surroundPosSlot.Position - _target.transform.position).normalized;
                 //약간의 랜덤 위치 분포
                 Vector3 targetPos = surroundPosSlot.Position + moveDir * stopDistance *_ratioStopDistance;
-                Brain.AgentController.MoveToDest(targetPos, _valueData.MoveSpeed + _extensionData.MoveSpeedMod);
-                
+                Brain.AgentController.MoveToDest(targetPos, maxMoveSpeed);
             }
-            else
-            {
-                Brain.AgentController.StopMovement();
-            }
-
-            bool isMoving = !Brain.AgentController.IsAgentArrived();
 
             if (Brain.AIAnimator)
             {
-                Brain.AIAnimator.SetBool(_animParamData.WalkParmID, isMoving);
+                float curMoveSpeed = Brain.AgentController.CurrentMoveSpeed;
+                curMoveSpeed = Mathf.Clamp01(curMoveSpeed / maxMoveSpeed);
+                Brain.AIAnimator.SetFloat(_animParamData.WalkParmID, curMoveSpeed);
             }
-
+    
         }
     }
 }

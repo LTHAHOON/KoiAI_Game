@@ -65,7 +65,16 @@ namespace KoiAI.AI
             {
                 Quaternion quat = Quaternion.Euler(_targetAngle.x, _targetAngle.y, _targetAngle.z);
                 float speed = _valueData.LookSpeed + _extensionData.LookSpeedMod;
-                Brain.transform.rotation = Quaternion.Slerp(Brain.transform.rotation, quat, Time.fixedDeltaTime * speed);
+
+                //RigidPhysicsUpdate타입일 경우 Rigid회전 적용
+                if(Brain.AgentController.Rigidbody)
+                {
+                    Brain.AgentController.Rigidbody.MoveRotation(Quaternion.Slerp(Brain.transform.rotation, quat, Time.fixedDeltaTime * speed));
+                }
+                else
+                {
+                    Brain.transform.rotation = Quaternion.Slerp(Brain.transform.rotation, quat, Time.fixedDeltaTime * speed);   
+                }
             }).AddTo(Brain);
         }
 

@@ -41,7 +41,7 @@ MonoBehaviour:
       _height: 0
       _direction: 0
   _aiRotationExtensionData:
-    _lookSpeedMod: 5
+    _lookSpeedMod: 7
     _surfaceCheckDistanceMod: 0
     _surfaceLayerMask:
       serializedVersion: 2

@@ -318,11 +318,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!1 &20723120 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2706511028172561545, guid: 5834b2cc212511a47b14b88182df4a9e, type: 3}
-  m_PrefabInstance: {fileID: 1477214886}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &39154583
 GameObject:
   m_ObjectHideFlags: 0
@@ -1230,14 +1225,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 512464100212947924, guid: 5834b2cc212511a47b14b88182df4a9e, type: 3}
-      propertyPath: _useUIFollow
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 512464100212947924, guid: 5834b2cc212511a47b14b88182df4a9e, type: 3}
-      propertyPath: _hasHealthBar
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2706511028172561545, guid: 5834b2cc212511a47b14b88182df4a9e, type: 3}
       propertyPath: m_Name
       value: Enemy_Spiro
@@ -1284,19 +1271,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4935607812214051969, guid: 5834b2cc212511a47b14b88182df4a9e, type: 3}
       propertyPath: m_Constraints
-      value: 112
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 4935607812214051969, guid: 5834b2cc212511a47b14b88182df4a9e, type: 3}
+      propertyPath: m_AngularDamping
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8857722224692771334, guid: 5834b2cc212511a47b14b88182df4a9e, type: 3}
-      propertyPath: m_StoppingDistance
-      value: 0.3
+      propertyPath: m_Acceleration
+      value: 500
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2706511028172561545, guid: 5834b2cc212511a47b14b88182df4a9e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2091918361}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5834b2cc212511a47b14b88182df4a9e, type: 3}
 --- !u!43 &226977108
 Mesh:
@@ -7202,24 +7190,12 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2888641819072732516, guid: 5834b2cc212511a47b14b88182df4a9e, type: 3}
   m_PrefabInstance: {fileID: 1477214886}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 20723120}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ee44dc784605b34899f7cad4af95c5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.AI.AIBrain
---- !u!114 &1411620363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 20723120}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26bef8df74dd2db41aec43c44c63e0b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Utilities.UIFollowConnector
 --- !u!1 &1417530544
 GameObject:
   m_ObjectHideFlags: 0
@@ -7798,14 +7774,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 512464100212947924, guid: 5834b2cc212511a47b14b88182df4a9e, type: 3}
-      propertyPath: _useUIFollow
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 512464100212947924, guid: 5834b2cc212511a47b14b88182df4a9e, type: 3}
-      propertyPath: _hasHealthBar
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2706511028172561545, guid: 5834b2cc212511a47b14b88182df4a9e, type: 3}
       propertyPath: m_Name
       value: Enemy_Spiro (1)
@@ -7850,21 +7818,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4935607812214051969, guid: 5834b2cc212511a47b14b88182df4a9e, type: 3}
-      propertyPath: m_Constraints
-      value: 112
-      objectReference: {fileID: 0}
-    - target: {fileID: 8857722224692771334, guid: 5834b2cc212511a47b14b88182df4a9e, type: 3}
-      propertyPath: m_StoppingDistance
-      value: 0.3
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2706511028172561545, guid: 5834b2cc212511a47b14b88182df4a9e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1411620363}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5834b2cc212511a47b14b88182df4a9e, type: 3}
 --- !u!43 &1481027439
 Mesh:
@@ -9227,11 +9184,6 @@ Transform:
   - {fileID: 2144852070}
   m_Father: {fileID: 1805111114}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1704712124 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2706511028172561545, guid: 5834b2cc212511a47b14b88182df4a9e, type: 3}
-  m_PrefabInstance: {fileID: 226802771}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &1718736910
 Mesh:
   m_ObjectHideFlags: 0
@@ -10879,24 +10831,12 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2888641819072732516, guid: 5834b2cc212511a47b14b88182df4a9e, type: 3}
   m_PrefabInstance: {fileID: 226802771}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1704712124}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ee44dc784605b34899f7cad4af95c5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.AI.AIBrain
---- !u!114 &2091918361
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1704712124}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26bef8df74dd2db41aec43c44c63e0b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Utilities.UIFollowConnector
 --- !u!1 &2112752865
 GameObject:
   m_ObjectHideFlags: 0
@@ -11405,9 +11345,9 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 0
-  m_Extents: {x: 1.2, y: 1.75, z: 1.2}
+  m_Extents: {x: 1.25, y: 1.75, z: 1.25}
   m_MoveThreshold: 0.1
-  m_Carve: 1
+  m_Carve: 0
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0.35, z: 0}
   m_TimeToStationary: 0.5

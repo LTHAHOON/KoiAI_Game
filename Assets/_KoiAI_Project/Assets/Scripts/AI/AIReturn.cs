@@ -31,28 +31,26 @@ namespace KoiAI.AI
 
         public override void EnterFeature()
         {
-            //새로운 Destination을 바로 받기 위해 즉각 멈추기
-            Brain.AgentController.StopMovement();
+            Brain.AgentController.StopMovement_Force();
         }
 
         public override void UpdateFeature()
         {
-            Brain.AgentController.MoveToDest(Brain.OriginPosition, _valueData.MoveSpeed + _extensionData.MoveSpeedMod);
+            float maxMoveSpeed = _valueData.MoveSpeed + _extensionData.MoveSpeedMod;
 
-            if(Brain.AIAnimator)
+            Brain.AgentController.MoveToDest(Brain.OriginPosition, maxMoveSpeed);
+
+            if (Brain.AIAnimator)
             {
-                bool isMoving = !Brain.AgentController.IsAgentArrived();
-                Brain.AIAnimator.SetBool(_animParamData.WalkParmID, isMoving);
+                float curMoveSpeed = Brain.AgentController.CurrentMoveSpeed;
+                curMoveSpeed = Mathf.Clamp01(curMoveSpeed / maxMoveSpeed);
+                Brain.AIAnimator.SetFloat(_animParamData.WalkParmID, curMoveSpeed);
             }
         }
 
         public override void ExitFeature()
         {
-            Brain.AgentController.StopMovement();
-            if(Brain.AIAnimator)
-            {
-                Brain.AIAnimator.SetBool(_animParamData.WalkParmID, false);
-            }
+            Brain.AgentController.StopMovement_Force();
         }
     }
 }
