@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using KoiAI.Pool;
 using KoiAI.Utilities;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace KoiAI.Quest
@@ -17,48 +19,62 @@ namespace KoiAI.Quest
         [SerializeField]
         private PoolSize _questControlPoolSize;
 
-        public Action OnAcceptQuest;
-        public Action OnClearQuest;
         private Pool<QuestObjectiveView> _questObjectivePool;
-        private List<QuestObjectiveView> _questInProgressList = new();
-        private long _curQuestID;
-        private void Start()
+        private List<QuestObjectiveController> _questInProgressList = new();
+
+        private void Awake()
         {
             ulong questControlPrefabID = _questObjectivePrefab.GetEntityULongID();
             PoolManager.Instance.AddPool(questControlPrefabID, _questObjectivePrefab, _questControlPoolSize, PoolName.Quest);
             PoolManager.Instance.TryGetPool(questControlPrefabID, out _questObjectivePool);
+            
+        }
+
+        private void Start()
+        {
             if (_questDataList != null && _questDataList.Count > 0)
             {
-                _curQuestID = _questDataList[0].QuestID;    
-                AcceptQuest(_curQuestID);
+                //첫 퀘스트 받기
+                AcceptQuest(_questDataList[0].QuestID);
             }
         }
 
         public void AcceptQuest(long questID)
         {
             QuestData questData = GetQuestData(questID);
-            _questView.SetView(questData);
             foreach(QuestObjectiveData objectiveData in questData.QuestObjectiveData)
             {
                 QuestObjectiveView objectiveView = _questObjectivePool.Pop();
-                objectiveView.SetView(objectiveData);      
-                _questInProgressList.Add(objectiveView);
+                QuestObjectiveController objectiveController = CreateQuestObjectiveControl(questID, objectiveData, objectiveView);
+                objectiveController.Acppet();
+                _questInProgressList.Add(objectiveController);
             }
-            OnAcceptQuest?.Invoke();
+            QuestEvents.OnQuestAccpeted?.Invoke(questData);
         }
 
-        public void ClearQuest(long questID)
+        public void ClearQuestObjeictive(long questID, QuestObjectiveController objectiveController)
         {
-            QuestData questData = GetQuestData(questID);
-            foreach(QuestObjectiveView objectiveView in _questInProgressList)
+            _questObjectivePool.Return(objectiveController.ObjectiveView);
+            _questInProgressList.Remove(objectiveController);
+            int questInProgressCount =_questInProgressList.Count(controller => controller.QuestID == questID);
+            if(questInProgressCount <= 0)
             {
-                _questObjectivePool.Return(objectiveView);
+                QuestData questData = GetQuestData(questID);
+                QuestEvents.OnQuestCleared?.Invoke(questData);
             }
-            _questInProgressList.Clear();
-
-            OnClearQuest?.Invoke();
         }
 
+        private QuestObjectiveController CreateQuestObjectiveControl(long questID, QuestObjectiveData objectiveData, QuestObjectiveView objectiveView)
+        {
+            QuestObjectiveController newObjectiveController = null;
+            switch(objectiveData.ObjectiveType)
+            {
+                case QuestObjectiveType.KILL:
+                    newObjectiveController =  new QuestObjectiveController_Kill(questID, objectiveData, objectiveView);
+                    break;
+            }
+            return newObjectiveController;
+        }
         private QuestData GetQuestData(long questID)
         {
             for(int i = 0; i < _questDataList.Count; ++i)

@@ -33,10 +33,11 @@ namespace KoiAI.Nav
                 return;
             }
 
-            Vector3 targetVelocity = Vector3.ClampMagnitude(_navMeshAgent.velocity, _maxMoveSpeed);
+            Vector3 targetVelocity = Vector3.ClampMagnitude(_navMeshAgent.desiredVelocity, _maxMoveSpeed);
             targetVelocity.y = _rigidBody.linearVelocity.y;
             _rigidBody.linearVelocity = targetVelocity;
             _navMeshAgent.nextPosition = _rigidBody.position;
+
         }
 
         private void Initialize()

@@ -41,8 +41,22 @@ MonoBehaviour:
             _shouldBeActive: 0
           - _featureProperty: 2
             _shouldBeActive: 0
+      - _conditionType: 2
+        _invert: 0
+        _distanceConditionData:
+          _useOriginDistance: 1
+          _distanceCondition:
+            _isDataOnly: 0
+            _compareValue: 0.5
+            _comparisonType: 1
+        _withFeatureConditionData:
+          _listValue:
+          - _featureProperty: 5
+            _shouldBeActive: 0
+          - _featureProperty: 2
+            _shouldBeActive: 0
     _disableConditions:
-      _matchMode: 0
+      _matchMode: 1
       _conditions:
       - _conditionType: 1
         _invert: 0
@@ -215,7 +229,7 @@ MonoBehaviour:
           _useOriginDistance: 1
           _distanceCondition:
             _isDataOnly: 0
-            _compareValue: 5
+            _compareValue: 0.5
             _comparisonType: 1
         _withFeatureConditionData:
           _listValue:

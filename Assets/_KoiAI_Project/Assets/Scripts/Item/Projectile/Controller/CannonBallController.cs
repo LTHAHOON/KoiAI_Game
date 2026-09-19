@@ -5,7 +5,6 @@ namespace KoiAI.Item
     using KoiAI.Health;
     using KoiAI.Utilities;
     using KoiAI.Skin;
-    using System.Linq;
 
     public class CannonBallController : MonoBehaviour
     {
@@ -33,15 +32,9 @@ namespace KoiAI.Item
                 return;
             }
 
-            Collider[] nearestColliders = targetColliders
-                .Take(hitCount)
-                .Where(collider => collider)
-                .OrderBy(collider => (collider.ClosestPoint(transform.position) - transform.position).sqrMagnitude)
-                .ToArray();
-
-            for (int i = 0; i < nearestColliders.Length; i++)
+            for (int i = 0; i < targetColliders.Length; i++)
             {
-                if (nearestColliders[i].TryGetComponent(out Health health))
+                if (targetColliders[i].TryGetComponent(out Health health))
                 {
                     health.ChangeHealth(-_cannonBallData.Damage);
                 }

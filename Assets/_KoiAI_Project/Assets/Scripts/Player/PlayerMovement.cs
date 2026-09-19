@@ -232,6 +232,7 @@ namespace KoiAI.Player
             _rigidBody.mass = rigidValueData.Mass;
             _rigidBody.linearDamping = rigidValueData.LinearDamping;
             _rigidBody.angularDamping = rigidValueData.AngularDamping;
+            _rigidBody.interpolation = RigidbodyInterpolation.Interpolate;
         }
 
         public void OnMove(InputAction.CallbackContext context)

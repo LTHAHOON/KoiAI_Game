@@ -61,20 +61,12 @@ namespace KoiAI.AI
             _extensionData = extensionData;
             _surfaceAngleFinder = new(_valueData.SurfaceCheckDistance + _extensionData.SurfaceCheckDistanceMod);
 
-            Observable.EveryUpdate(UnityFrameProvider.FixedUpdate).Where(_ => _bHasTarget).Subscribe(_ =>
+            Observable.EveryUpdate(UnityFrameProvider.Update).Where(_ => _bHasTarget).Subscribe(_ =>
             {
+                
                 Quaternion quat = Quaternion.Euler(_targetAngle.x, _targetAngle.y, _targetAngle.z);
                 float speed = _valueData.LookSpeed + _extensionData.LookSpeedMod;
-
-                //RigidPhysicsUpdate타입일 경우 Rigid회전 적용
-                if(Brain.AgentController.Rigidbody)
-                {
-                    Brain.AgentController.Rigidbody.MoveRotation(Quaternion.Slerp(Brain.transform.rotation, quat, Time.fixedDeltaTime * speed));
-                }
-                else
-                {
-                    Brain.transform.rotation = Quaternion.Slerp(Brain.transform.rotation, quat, Time.fixedDeltaTime * speed);   
-                }
+                Brain.transform.rotation = Quaternion.Slerp(Brain.transform.rotation, quat, Time.deltaTime * speed);   
             }).AddTo(Brain);
         }
 

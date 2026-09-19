@@ -23,10 +23,10 @@ namespace KoiAI.Quest
     [Serializable]
     public enum QuestObjectiveType
     {
-        Kill,
-        Collection,
-        Movement,
-        Interaction,
+        KILL,
+        COLLECTION,
+        MOVEMENT,
+        INTERACTION,
     }
 
     [Serializable]

@@ -12,7 +12,8 @@ namespace KoiAI.Quest
         private TMP_Text _requireAmount;
         [SerializeField]
         private TMP_Text _questTimer;
-
+        
+        private QuestObjectiveController _objectiveController;
         private StringBuilder _sb;
         
         public void SetView(QuestObjectiveData questObjectiveData)

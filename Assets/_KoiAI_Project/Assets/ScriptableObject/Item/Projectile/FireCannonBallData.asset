@@ -28,5 +28,5 @@ MonoBehaviour:
     _initPoolSize: 10
     _maxPoolSize: 15
   _cannonBallLifeTime: 6
-  _maxOverlapCount: 2
-  _radiusExplosion: 5
+  _maxOverlapCount: 3
+  _radiusExplosion: 6

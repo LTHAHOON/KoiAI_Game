@@ -8,7 +8,6 @@ namespace KoiAI.AI
     using KoiAI.Audio;
     using KoiAI.CustomPhysics;
     using KoiAI.SurroundPos;
-    using Mono.Cecil.Cil;
 
     [Serializable]
     public class AIMovementExtensionData : AIFeatureExtensionData

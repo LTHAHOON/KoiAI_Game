@@ -36,7 +36,7 @@ namespace KoiAI.Utilities
         {
             _isTriggerEnter = false;
         }
-    
+        
         private void OnTriggerEnter(Collider other)
         {
             if (_isTriggerEnter)
@@ -60,6 +60,11 @@ namespace KoiAI.Utilities
             hitCount = Math.Min(hitCount, _maxOverlapCount);
             OnHit?.Invoke(_targetColliders, hitCount);
         }
-    
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(transform.position, _overlapRadius);
+        }
     }
 }
