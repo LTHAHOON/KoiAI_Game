@@ -46,5 +46,10 @@ namespace KoiAI.Quest
             }
             _questTimer.SetText(_sb);    
         }
+
+        public void SetRequirementCount()
+        {
+            
+        }
     }
 }

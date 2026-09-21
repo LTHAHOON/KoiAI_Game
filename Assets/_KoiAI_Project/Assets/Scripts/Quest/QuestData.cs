@@ -37,7 +37,7 @@ namespace KoiAI.Quest
         [SerializeField]
         private string _description;
         [SerializeField]
-        private long _targetID;
+        private string _targetGuidString;
         [SerializeField]
         private int _requirementCount;
         [SerializeField]
@@ -45,7 +45,7 @@ namespace KoiAI.Quest
 
         public QuestObjectiveType ObjectiveType => _objectiveType;
         public float TimeLimit => _timeLimit;
-        public long TargetID => _targetID;
+        public Guid TargetID => Guid.TryParse(_targetGuidString, out Guid guid) ? guid : Guid.Empty;
         public string Description => _description;
         public int RequirementCount => _requirementCount;
     }

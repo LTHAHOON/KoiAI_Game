@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace KoiAI.Health
 {
+    using KoiAI.Core;
     using KoiAI.Interact;
     using KoiAI.ItemProp;
     using KoiAI.Utilities;
@@ -16,8 +17,11 @@ namespace KoiAI.Health
         private bool _hasHealthBar = true;
         private ReactiveProperty<float> _currentHealth = new(0);
         private bool _isDelayChanging = false;
-        public Action OnDeath;
+        public Action<EntityIdentity> OnDeath;
         private bool _isDead = false;
+
+        //체력에 영향을 주는 상대 데이터
+        private EntityIdentity _lastInstigator;
 
         private void Awake()
         {
@@ -29,7 +33,7 @@ namespace KoiAI.Health
                     if (!_isDead && healthValue <= 0)
                     {
                         _isDead = true;
-                        OnDeath?.Invoke();
+                        OnDeath?.Invoke(_lastInstigator);
                     }
                 }).AddTo(this);
         }
@@ -42,12 +46,14 @@ namespace KoiAI.Health
             }
         }
 
-        public void ChangeHealth(float amount)
+        public void ChangeHealth(float amount, EntityIdentity instigator = null)
         {
+            _lastInstigator = instigator;
+
             _currentHealth.Value += amount;
         }
 
-        public void ChangeDelayHealth(float amount, float delayTime)
+        public void ChangeDelayHealth(float amount, float delayTime, EntityIdentity instigator = null)
         {
             if (_isDelayChanging)
             {

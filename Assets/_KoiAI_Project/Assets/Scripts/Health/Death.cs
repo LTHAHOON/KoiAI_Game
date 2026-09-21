@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using KoiAI.Core;
 using UnityEngine;
 
 namespace KoiAI.Health
@@ -18,19 +19,23 @@ namespace KoiAI.Health
         [SerializeField]
         private float _destroyDuration = 1f;
 
+        private EntityIdentity _myIdentity;
         private void Awake()
         {
             _health.OnDeath += OnDeath;
+            _myIdentity = GetComponent<EntityIdentity>();
             Initialize();
         }
 
-        public async void OnDeath()
+        public async void OnDeath(EntityIdentity instigatorIdentity)
         {
             _rigidbody.excludeLayers = _excludeLayersWhenDie;
             _collider.excludeLayers = _excludeLayersWhenDie;
             OnDeath(_health);
             await UniTask.Delay(TimeSpan.FromSeconds(_destroyDuration));
             Destroy(_health.gameObject);
+            GameplayEvents.OnKilled?.Invoke(new(Quest.QuestKillType.PlayerOREnemy, instigatorIdentity, _myIdentity, 1));
+
         }
 
         public abstract void Initialize();

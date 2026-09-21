@@ -1,23 +1,30 @@
 using KoiAI.Core;
-using KoiAI.Quest;
-using UnityEngine;
 
 namespace KoiAI.Quest
 {
     public enum QuestKillType
     {
-        Enemy,
+        PlayerOREnemy,
         Item
     }
 
     public struct QuestKillData
     {
         private QuestKillType _questKillType;
-        private long _targetID;
+        private EntityIdentity _instigatorIdentity;
+        private EntityIdentity _targetIdentity;
         private int _killCount;
-        public QuestKillType QuestKillType => _questKillType;
-        public long TargetID => _targetID;
-        public int KillCount => _killCount;
+        public QuestKillData(QuestKillType questKillType, EntityIdentity instiagtorIdentity, EntityIdentity targetIdentity, int killCount)
+        {
+            _questKillType = questKillType;
+            _instigatorIdentity = instiagtorIdentity;
+            _targetIdentity = targetIdentity;
+            _killCount = killCount;
+        }
+        public readonly QuestKillType QuestKillType => _questKillType;
+        public readonly EntityIdentity InstigatorIdentity => _instigatorIdentity;
+        public readonly EntityIdentity TargetIdentity => _targetIdentity;
+        public readonly int KillCount => _killCount;
     }
 
     public class QuestObjectiveController_Kill : QuestObjectiveController
@@ -33,16 +40,17 @@ namespace KoiAI.Quest
         {
         }
 
-        public void HandleEvent(QuestKillData questKillData, int killCount)
+        public void HandleEvent(QuestKillData questKillData)
         {
-            if(!IsValidTargetID(questKillData.TargetID))
+            if(!IsValidTargetID(questKillData.TargetIdentity.EntityID))
             {
                 return;
             }
             
             switch(questKillData.QuestKillType)
             {
-                
+                case QuestKillType.PlayerOREnemy:
+                    break;
             }
         }
     }

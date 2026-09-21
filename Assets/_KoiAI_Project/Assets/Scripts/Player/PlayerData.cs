@@ -11,7 +11,7 @@ namespace KoiAI.Player
     using KoiAI.Core;
 
     [CreateAssetMenu(fileName = "new PlayerData", menuName = "KoiAI/Player/PlayerData")]
-    public class PlayerData : ScriptableObject, ISaveDTOHandler
+    public class PlayerData : EntityData, ISaveDTOHandler
     {
         private PlayerDTO _playerDto;
         public void SetFromSaveDTO(SaveDTO saveDTO)
@@ -45,6 +45,8 @@ namespace KoiAI.Player
         
         [SerializeField]
         private string _chracterBaseName;
+        [SerializeField]
+        private long _characterID;
         [ReadOnly]
         [SerializeField]
         private PlayerFeatureDataBase _playerFeatureDataBase;
@@ -67,6 +69,8 @@ namespace KoiAI.Player
         [ShowIf(nameof(HasRotationProperty))]
         [SerializeField]
         private PlayerRotationExtensionData _playerRotationExtensionData;
+        
+        public long CharacterID => _characterID;
 
         private List<Guid> _wearingCostumeGUIDs = new();
         private List<Guid> _lastWearingCostumeGUIDs = new();

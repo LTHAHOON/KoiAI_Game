@@ -11,13 +11,15 @@ namespace KoiAI.AI
     using KoiAI.Health;
     using KoiAI.AnimatorSystem;
     using KoiAI.Nav;
-    
+    using KoiAI.Core;
+
     public abstract class AIFeatureExtensionData { }
     public abstract class AIFeatureValueData { }
 
     /// <summary>
     /// AI 두뇌(판단) 클래스
     /// </summary>
+    [RequireComponent(typeof(EntityIdentity))]
     public class AIBrain : MonoBehaviour
     {
         [SerializeField]
@@ -29,8 +31,6 @@ namespace KoiAI.AI
         [SerializeField]
         private NavigationController _agentController;
         [SerializeField]
-        private AIStatData _aiStatData;
-        [SerializeField]
         private AIBrainData _aiBrainData;
         [ReadOnly]
         [SerializeField]
@@ -38,6 +38,7 @@ namespace KoiAI.AI
         [SerializeField]
         private AIFeatureTransitionRuntimeSettings _aiRuntimeSettings;
         
+        private AIStatData _aiStatData;
         private readonly AITargetContext _targetContext = new();
         private Action[] _aiDecisionLogics;
         private int _aiDecisionLogicIndex = -1;
@@ -51,6 +52,14 @@ namespace KoiAI.AI
         
         public void AwakeAIBrain()
         {
+            EntityData entityData = GetComponent<EntityIdentity>().EntityData;
+            if(entityData is not AIStatData aiStatData)
+            {
+                Debug.LogError("Error: EntityData를 AIStatData로 변환할 수 없습니다.");
+                return;
+            }
+            _aiStatData = aiStatData;
+
             _originPosition = transform.position;
             _sightCondition = new AISightCondition(_sightConditionData);
 

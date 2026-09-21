@@ -5,12 +5,13 @@ using static KoiAI.AI.AIFeature;
 namespace KoiAI.AI
 {
     using KoiAI.AnimatorSystem;
-    
-    public class AIStatData : ScriptableObject
+    using KoiAI.Core;
+
+    public class AIStatData : EntityData
     {
         [SerializeField]
         private string _aiBaseName;
-        
+
         [Space(10)]
         [HorizontalLine(5, EColor.Gray)]
         [Space(10)]

@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using KoiAI.Pool;
 using KoiAI.Utilities;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace KoiAI.Quest

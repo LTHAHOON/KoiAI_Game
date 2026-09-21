@@ -11,6 +11,7 @@ namespace KoiAI.Player
     using KoiAI.AnimatorSystem;
     using KoiAI.Audio;
     using KoiAI.Camera;
+    using KoiAI.Core;
     using KoiAI.Utilities;
 
     public abstract class PlayerFeatureExtensionData { }
@@ -58,14 +59,14 @@ namespace KoiAI.Player
         public AudioSFXTarget AudioTarget => _auidoTarget;
     }
 
-    [RequireComponent(typeof(PlayerAutoFeatureGenerator), typeof(Animator))]
+    [RequireComponent(typeof(PlayerAutoFeatureGenerator), typeof(Animator), typeof(EntityIdentity))]
     public class PlayerController : MonoBehaviour
     {
         [Tooltip("Cinemachine Data Mediator")]
         [SerializeField]
         private CinemachineDataMediator _playerCmDataMediator;
         [Header("플레이어 데이터")]
-        [SerializeField] 
+        [SerializeField]
         private PlayerData _playerData;
         [SerializeField] 
         private PlayableDirector _timeline;
@@ -83,10 +84,11 @@ namespace KoiAI.Player
         private PlayerAutoFeatureGenerator _playerAutoFeatureGenerator;
         private readonly Dictionary<int, PlayerFeature> _dicPlayerFeatures = new();
         private Animator _playerAnimator;
-
+        private EntityIdentity _playerIdentity;
         private void Awake()
         {
             _playerAutoFeatureGenerator = GetComponent<PlayerAutoFeatureGenerator>();
+            _playerIdentity = GetComponent<EntityIdentity>();
 
             Init();
         }
@@ -130,11 +132,12 @@ namespace KoiAI.Player
             _playerData = CharacterSettingService.GetCurrentPlayerData();
             if (!_playerData)
             {
-                Debug.Log("PlayerData is null");
+                Debug.Log("CharacterSetting PlayerData is null");
                 _playerData = playerData;
                 _curPlayerSkin = Instantiate(playerSkin, transform);
                 // return;
             }
+            _playerIdentity.SetEntityData(_playerData);
             _playerAutoFeatureGenerator.GeneratePlayerFeature();
             _playerCmDataMediator.ConnectHandlesInConnector();
             

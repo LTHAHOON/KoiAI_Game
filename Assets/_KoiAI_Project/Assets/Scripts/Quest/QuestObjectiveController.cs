@@ -1,5 +1,7 @@
 
 
+using System;
+
 namespace KoiAI.Quest
 {
     public abstract class QuestObjectiveController
@@ -19,9 +21,9 @@ namespace KoiAI.Quest
 
         public abstract void Clear();
         
-        public bool IsValidTargetID(long targetID)
+        public bool IsValidTargetID(Guid targetID)
         {
-            bool isValid = targetID == _questID;
+            bool isValid = targetID == _objectiveData.TargetID;
             return isValid;
         }
 

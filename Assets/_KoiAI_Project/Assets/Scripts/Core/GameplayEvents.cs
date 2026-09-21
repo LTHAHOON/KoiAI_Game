@@ -10,7 +10,7 @@ namespace KoiAI.Core
     /// </summary>
     public static class GameplayEvents
     {
-        public static Action<QuestKillData, int> OnKilled;
+        public static Action<QuestKillData> OnKilled;
         public static Action OnAreaEntered;
         public static Action<ItemBase> OnCollected;
         public static Action OnInteracted;
