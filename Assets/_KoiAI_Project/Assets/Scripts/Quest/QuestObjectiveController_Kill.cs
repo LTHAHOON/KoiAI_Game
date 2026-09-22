@@ -1,4 +1,5 @@
 using KoiAI.Core;
+using UnityEngine;
 
 namespace KoiAI.Quest
 {
@@ -50,6 +51,7 @@ namespace KoiAI.Quest
             switch(questKillData.QuestKillType)
             {
                 case QuestKillType.PlayerOREnemy:
+                    Debug.Log("KILL");
                     break;
             }
         }

@@ -17,6 +17,6 @@ MonoBehaviour:
   _questObjectiveData:
   - _objectiveType: 0
     _description: "1. \uC801\uC744 3 \uBA85 \uCC98\uCE58\uD558\uC138\uC694"
-    _targetID: 0
+    _targetGuidString: 0078b4fd-0d76-4d9b-9c49-c33f099e06bd
     _requirementCount: 3
     _timeLimit: 0

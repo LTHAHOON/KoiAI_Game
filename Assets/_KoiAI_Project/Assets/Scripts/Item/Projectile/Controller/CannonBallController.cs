@@ -33,8 +33,8 @@ namespace KoiAI.Item
             }
 
             for (int i = 0; i < targetColliders.Length; i++)
-            {
-                if (targetColliders[i].TryGetComponent(out Health health))
+            {   
+                if (targetColliders[i] && targetColliders[i].TryGetComponent(out Health health))
                 {
                     health.ChangeHealth(-_cannonBallData.Damage);
                 }

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using NaughtyAttributes;
 
 namespace KoiAI.Core
 {
@@ -15,7 +16,7 @@ namespace KoiAI.Core
     {
         [SerializeField]
         private EntityType _entityType;
-        [HideInInspector]
+        [ReadOnly]
         [SerializeField] 
         private string _guidString;
         
