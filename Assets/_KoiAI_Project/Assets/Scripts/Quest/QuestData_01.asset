@@ -10,13 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 359d06210f1a36b498003c21cf8e8998, type: 3}
-  m_Name: QuestData
+  m_Name: QuestData_01
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Quest.QuestData
   _questID: 90001
   _questTitle: Stage 1
   _questObjectiveData:
   - _objectiveType: 0
-    _description: "1. \uC801\uC744 3 \uBA85 \uCC98\uCE58\uD558\uC138\uC694"
-    _targetGuidString: 0078b4fd-0d76-4d9b-9c49-c33f099e06bd
-    _requirementCount: 3
-    _timeLimit: 0
+    _description: "2. \uC801\uC744 1 \uBA85 \uCC98\uCE58\uD558\uC138\uC694"
+    _targetEntityData: {fileID: 11400000, guid: 5bda9bd72430676438c531188f16643b, type: 2}
+    _requirementCount: 1
+    _timeLimit: 100
+  - _objectiveType: 1
+    _description: "1. \uCE90\uB17C\uBCFC \uC544\uC774\uD15C\uC744 1\uAC1C \uD76D\uB4DD\uD558\uC138\uC694"
+    _targetEntityData: {fileID: 11400000, guid: dff2d08bfa5dcf94db37f26aa54413e5, type: 2}
+    _requirementCount: 1
+    _timeLimit: 5

@@ -13,9 +13,14 @@ namespace KoiAI.Health
         {
             health.CurrentHealthReactive.Subscribe(currentHealth =>
             {
-                HealthBarManager.Instance.RemoveHealthBar(health);
                 ChangeHealthBar(currentHealth);
-            });
+                if(currentHealth <= 0)
+                {
+                    HealthBarManager.Instance.RemoveHealthBar(health);
+                    Destroy(gameObject);
+                }
+            }).AddTo(this);
+            
             _maxHealth = maxHealth;
             float normHealth = Mathf.Clamp01(curHealth / maxHealth);
             SetHealthBarValue(normHealth);

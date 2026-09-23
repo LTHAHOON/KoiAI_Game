@@ -111,7 +111,6 @@ namespace KoiAI.AI
 
         public override void EnterFeature()
         {
-            Debug.Log("Start");
             _bHasTarget = TryGetTarget(out _target);
             _ratioStopDistance = UnityEngine.Random.Range(-1f, 1f);
             if (!_bHasTarget)
@@ -120,13 +119,11 @@ namespace KoiAI.AI
 
         public override void ExitFeature()
         {
-            Debug.Log("End");
-
             SurroundPosManager.Instance.ReleaseSurroundPos(Brain.gameObject, _target);
             Brain.AgentController.StopMovement_Force();
             if(Brain.AIAnimator)
             {
-                Brain.AIAnimator.SetBool(_animParamData.WalkParmID, false);
+                Brain.AIAnimator.SetFloat(_animParamData.WalkParmID, 0f);
             }
             _bHasTarget = false;
         }

@@ -33,6 +33,10 @@ namespace KoiAI.Health
                     if (!_isDead && healthValue <= 0)
                     {
                         _isDead = true;
+                        if (_hasHealthBar)
+                        {
+                            HealthBarManager.Instance.RemoveHealthBar(this);
+                        }
                         OnDeath?.Invoke(_lastInstigator);
                     }
                 }).AddTo(this);
@@ -71,7 +75,7 @@ namespace KoiAI.Health
 
         public void RefreshItemPickUpCondition(ItemPickUpCondition currentConditionData, ItemPickUpCondition compareCondition)
         {
-            var conditionData = currentConditionData.hpCompareCondition;
+            CompareValueCondition<float> conditionData = currentConditionData.hpCompareCondition;
 
             conditionData.SetCompareValue(CurrentHealthRatio);
             currentConditionData.hpCompareCondition = conditionData;

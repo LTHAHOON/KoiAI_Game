@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace KoiAI.Health
 {
-    [RequireComponent(typeof(Health))]
+    [RequireComponent(typeof(Health), typeof(EntityIdentity))]
     public abstract class Death : MonoBehaviour
     {
         [SerializeField]
@@ -29,12 +29,13 @@ namespace KoiAI.Health
 
         public async void OnDeath(EntityIdentity instigatorIdentity)
         {
+            GameplayEvents.OnKilled?.Invoke(new ObjectiveProgressEventData(instigatorIdentity, _myIdentity));
+
             _rigidbody.excludeLayers = _excludeLayersWhenDie;
             _collider.excludeLayers = _excludeLayersWhenDie;
             OnDeath(_health);
             await UniTask.Delay(TimeSpan.FromSeconds(_destroyDuration));
             Destroy(_health.gameObject);
-            GameplayEvents.OnKilled?.Invoke(new(Quest.QuestKillType.PlayerOREnemy, instigatorIdentity, _myIdentity, 1));
 
         }
 

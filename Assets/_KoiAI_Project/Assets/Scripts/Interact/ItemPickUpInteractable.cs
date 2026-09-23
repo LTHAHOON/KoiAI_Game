@@ -6,8 +6,11 @@ using NaughtyAttributes;
 namespace KoiAI.Interact
 {
     using KoiAI.Audio;
+    using KoiAI.Core;
+    using KoiAI.Item;
     using KoiAI.ItemProp;
 
+    [RequireComponent(typeof(EntityIdentity))]
     public class ItemPickUpInteractable : BaseInteractable<ItemPickUpEvent>
     {
         [SerializeField]
@@ -18,20 +21,18 @@ namespace KoiAI.Interact
         [SerializeField]
         private AudioSFXTarget _mainSFXTarget;
 
+        private EntityIdentity _myIdentity;
         private void Awake()
         {
+            _myIdentity = GetComponent<EntityIdentity>();
             //아이템 흭득 소리 및 파티클 등등 연결
             OnInteract
                 .Subscribe(itemPickUpEvent =>
                 {
                     AudioManager.Instance.PlaySFX(_mainSFXTarget, itemPickUpEvent.ItemAudioData, transform.position);
+                     GameplayEvents.OnCollected?.Invoke(new(_myIdentity, itemPickUpEvent.ItemIdentity, 1));
                 }).AddTo(this);
 
-        }
-    
-        public override void Interact(ItemPickUpEvent dataEvent)
-        {
-            base.Interact(dataEvent);
         }
         
         public ItemPickUpCondition GetItemPickUpConditionData() => _itemPickUpConditionData;

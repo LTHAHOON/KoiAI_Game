@@ -91,6 +91,10 @@ namespace KoiAI.AI
 
         public override void ExitFeature()
         {
+            if(Brain.IsDead)
+            {
+                return;
+            }
             _weaponController.EndAiming();
         }
     }

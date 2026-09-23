@@ -2,6 +2,8 @@ using UnityEngine;
 
 namespace KoiAI.Item
 {
+    using System;
+    using KoiAI.Core;
     using KoiAI.UI.HUD;
     
     public enum WeaponType
@@ -43,7 +45,7 @@ namespace KoiAI.Item
         public int ProjectileCount => _projectileCount;
     }
 
-    public abstract class ItemData : ScriptableObject
+    public abstract class ItemData : EntityData
     {
         [SerializeField]
         private ItemBase _itemPrefab;
@@ -56,8 +58,6 @@ namespace KoiAI.Item
         [SerializeField]
         private string _itemName;
         [SerializeField]
-        private ulong _itemId;
-        [SerializeField]
         private bool _isCreatableObj = false;
 
         public Mesh ItemMesh => _itemMesh;
@@ -66,6 +66,6 @@ namespace KoiAI.Item
         public ItemBase ItemPrefab => _itemPrefab;
         public Texture2D ItemTex => _itemTex;
         public string ItemName => _itemName;
-        public ulong ItemId => _itemId;
+        public Guid ItemId => GetEntityID();
     }
 }

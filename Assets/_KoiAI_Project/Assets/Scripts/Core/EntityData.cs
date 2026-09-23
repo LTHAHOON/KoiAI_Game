@@ -38,7 +38,7 @@ namespace KoiAI.Core
         }
 
         public EntityType EntityType => _entityType;
-        public Guid GetGUID() => _guid;
+        public Guid GetEntityID() => _guid;
         
     }
 }

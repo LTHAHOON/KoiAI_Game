@@ -5,6 +5,7 @@ using NaughtyAttributes;
 namespace KoiAI.ItemProp
 {
     using KoiAI.Audio;
+    using KoiAI.Core;
     using KoiAI.Player;
     using KoiAI.Utilities;
     using KoiAI.Item;
@@ -76,10 +77,15 @@ namespace KoiAI.ItemProp
         public ItemData ItemData => _itemData;
         public AudioData ItemAudioData => _itemAudioData;
         public ItemPickUpCondition ItemPickUpCondition => _itemPickUpCondition;
+        public EntityIdentity ItemIdentity { get; private set; }
+
+        public void SetItemIdentity(EntityIdentity identity)
+        {
+            ItemIdentity = identity;
+        }
     }
 
-    [RequireComponent (typeof(MeshRenderer))]
-    [RequireComponent(typeof(MeshFilter))]
+    [RequireComponent (typeof(MeshRenderer), typeof(MeshFilter), typeof(EntityIdentity))]
     public class ItemProp : MonoBehaviour
     {
         [BoxGroup]
@@ -90,12 +96,15 @@ namespace KoiAI.ItemProp
 
         private MeshRenderer _meshRenderer;
         private MeshFilter _meshFilter;
+        private EntityIdentity _itemIdentity;
         private string _ownerTag;
         private void Awake()
         {
             _ownerTag = GameTags.GetGameTag(_itemOwnerTag);
             _meshRenderer = GetComponent<MeshRenderer>();
             _meshFilter = GetComponent<MeshFilter>();
+            _itemIdentity = GetComponent<EntityIdentity>();
+            _itemIdentity.SetEntityData(_itemPickUpEvent.ItemData);
             SetItemProp();
         }
 
@@ -125,7 +134,9 @@ namespace KoiAI.ItemProp
                     {
                         return;
                     }
-                    interactable.Interact(_itemPickUpEvent);
+                    ItemPickUpEvent pickUpEvent = _itemPickUpEvent;
+                    pickUpEvent.SetItemIdentity(_itemIdentity);
+                    interactable.Interact(pickUpEvent);
                     Destroy(gameObject);
                 }
             }

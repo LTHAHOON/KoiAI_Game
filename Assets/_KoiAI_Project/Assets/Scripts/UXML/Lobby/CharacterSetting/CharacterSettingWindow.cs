@@ -170,7 +170,7 @@ namespace KoiAI.UI
                     //코스튬 불러오기 및 버튼 새로고침 등록
                     OnLoadWearingCostume += (guidList) =>
                     {
-                        Guid guidToCompare = costumeData.GetGUID();
+                        Guid guidToCompare = costumeData.GetEntityID();
                         if (guidList.Contains(guidToCompare))
                         {
                             WearCostume(costumeData, costumeWearButton, costumeWearingButton);
@@ -255,7 +255,7 @@ namespace KoiAI.UI
 
         private void WearCostume(CostumeData costumeData, Button wearButton, Button wearingButton)
         {
-            Guid guid = costumeData.GetGUID();
+            Guid guid = costumeData.GetEntityID();
             //중복 생성 방지
             if (_dicWearingCostumes.ContainsKey(guid) || _dicWearingCostumeSlotData.ContainsKey(guid))
             {
@@ -313,7 +313,7 @@ namespace KoiAI.UI
 
         private void TakeOffCostume(CostumeData costumeData, Button wearButton, Button wearingButton)
         {
-            Guid guid = costumeData.GetGUID();
+            Guid guid = costumeData.GetEntityID();
             if (_dicWearingCostumes.TryGetValue(guid, out GameObject wearingCostume))
             {
                 Destroy(wearingCostume);

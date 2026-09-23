@@ -6,5 +6,8 @@ namespace KoiAI.Quest
     {
         public static Action<QuestData> OnQuestAccpeted;
         public static Action<QuestData> OnQuestCleared;
+        public static Action<long, QuestObjectiveController> OnQuestObjectiveCleared;
+        public static Action OnQuestObjectiveFailed;
+
     }
 }

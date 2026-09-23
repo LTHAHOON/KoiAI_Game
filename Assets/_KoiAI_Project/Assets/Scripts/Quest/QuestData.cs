@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using KoiAI.Core;
 using UnityEngine;
 
 namespace KoiAI.Quest
@@ -25,7 +26,7 @@ namespace KoiAI.Quest
     {
         KILL,
         COLLECTION,
-        MOVEMENT,
+        AREA_ENTER, 
         INTERACTION,
     }
 
@@ -37,7 +38,7 @@ namespace KoiAI.Quest
         [SerializeField]
         private string _description;
         [SerializeField]
-        private string _targetGuidString;
+        private EntityData _targetEntityData;
         [SerializeField]
         private int _requirementCount;
         [SerializeField]
@@ -45,7 +46,7 @@ namespace KoiAI.Quest
 
         public QuestObjectiveType ObjectiveType => _objectiveType;
         public float TimeLimit => _timeLimit;
-        public Guid TargetID => Guid.TryParse(_targetGuidString, out Guid guid) ? guid : Guid.Empty;
+        public Guid TargetID => _targetEntityData.GetEntityID();
         public string Description => _description;
         public int RequirementCount => _requirementCount;
     }
