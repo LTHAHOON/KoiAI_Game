@@ -16,6 +16,14 @@ namespace KoiAI.Quest
         [SerializeField]
         private List<QuestObjectiveData> _questObjectiveData;
 
+        private int _questIndex;
+
+        public void SetQuestIndex(int questIndex)
+        {
+           _questIndex = questIndex;
+        }
+        
+        public int QuestIndex => _questIndex;
         public long QuestID => _questID;
         public string QuestTitle => _questTitle;
         public List<QuestObjectiveData> QuestObjectiveData => _questObjectiveData;

@@ -26,8 +26,7 @@ namespace KoiAI.Interact
         {
             _myIdentity = GetComponent<EntityIdentity>();
             //아이템 흭득 소리 및 파티클 등등 연결
-            OnInteract
-                .Subscribe(itemPickUpEvent =>
+            OnInteract.Subscribe(itemPickUpEvent =>
                 {
                     AudioManager.Instance.PlaySFX(_mainSFXTarget, itemPickUpEvent.ItemAudioData, transform.position);
                      GameplayEvents.OnCollected?.Invoke(new(_myIdentity, itemPickUpEvent.ItemIdentity, 1));

@@ -36,9 +36,8 @@ namespace KoiAI.Quest
         {
             if (_questDataList != null && _questDataList.Count > 0)
             {
-                _curQuestIndex = 0;
                 //첫 퀘스트 받기
-                AcceptQuest(_questDataList[_curQuestIndex].QuestID);
+                AcceptQuest(questIndex: 0);
             }
         }
 
@@ -50,9 +49,20 @@ namespace KoiAI.Quest
             }
         }
 
+        public void AcceptQuest(int questIndex)
+        {
+            if(questIndex >= _questDataList.Count)
+            {
+                return;
+            }
+            _curQuestIndex = questIndex;
+            AcceptQuest(_questDataList[_curQuestIndex].QuestID);
+        }
+
         public void AcceptQuest(long questID)
         {
             QuestData questData = GetQuestData(questID);
+            questData.SetQuestIndex(_curQuestIndex);
             foreach(QuestObjectiveData objectiveData in questData.QuestObjectiveData)
             {
                 QuestObjectiveView objectiveView = _questObjectivePool.Pop();
@@ -81,6 +91,7 @@ namespace KoiAI.Quest
             _completedObjectives.RemoveAll(objective => objective.QuestID == questID);
             Debug.Log($"Clear: {questData.QuestTitle}");
             _questView.ClearView(_questDataList[_curQuestIndex]);
+            QuestEvents.OnQuestCleared?.Invoke(_questDataList[_curQuestIndex]);
         }
 
         public void FailOuestObjective()
