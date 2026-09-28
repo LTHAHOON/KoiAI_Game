@@ -70,6 +70,7 @@ namespace KoiAI.Quest
                 objectiveController.AcppetObjective();
                 _inProgressObjectives.Add(objectiveController);
             }
+            QuestEvents.OnQuestAccpeted?.Invoke(questData);
         }
 
         public void ClearQuestObjective(long questID, QuestObjectiveController objectiveController)

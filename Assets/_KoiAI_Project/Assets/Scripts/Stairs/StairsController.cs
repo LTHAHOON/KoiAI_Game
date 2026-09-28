@@ -4,12 +4,17 @@ using UnityEngine;
 
 namespace KoiAI.Interact
 {
+    using DG.Tweening;
     using KoiAI.Quest;
 
     public class StairsController : BaseInteractable<QuestData>
     {
         [SerializeField]
         private int _stageIndex = 0;
+        [SerializeField]
+        private float _openDuration = 5f;
+        [SerializeField]
+        private Ease _openEaseType = Ease.Linear;
 
         private IDisposable _disposableInteract;
         
@@ -27,9 +32,16 @@ namespace KoiAI.Interact
             _disposableInteract = OnInteract.Subscribe(questData =>
             {
                 //열기
+                Open();
                 _disposableInteract.Dispose();
             });
+            QuestEvents.OnQuestAccpeted -= SubscribeOpen;
             QuestEvents.OnQuestCleared = Interact;
+        }
+        
+        public void Open()
+        {
+            transform.DOLocalRotate(Vector3.zero, _openDuration).SetEase(_openEaseType);
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace KoiAI.Core
 {
@@ -25,5 +26,14 @@ namespace KoiAI.Core
         public static Action<ObjectiveProgressEventData> OnAreaEntered;
         public static Action<ObjectiveProgressEventData> OnCollected;
         public static Action<ObjectiveProgressEventData> OnInteracted;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void Reset()
+        {
+            OnKilled = null;
+            OnAreaEntered = null;
+            OnCollected = null;
+            OnInteracted = null;
+        }
     }
 }
