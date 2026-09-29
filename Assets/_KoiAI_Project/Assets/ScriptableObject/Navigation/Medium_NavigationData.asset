@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Medium_NavigationData
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Nav.NavigationData
   _agentTypeIndex: 2
-  _agentPhysicsType: 1
-  _moveSpeed: 3
+  _agentPhysicsType: 0
+  _moveSpeed: 11.72
   _angularSpeed: 150
   _acceleration: 30
   _stoppingDistance: 0.3
