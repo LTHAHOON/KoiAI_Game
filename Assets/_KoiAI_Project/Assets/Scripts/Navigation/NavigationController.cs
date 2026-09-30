@@ -101,7 +101,7 @@ namespace KoiAI.Nav
                 _navMeshAgent.ResetPath();
             }
 
-            if (_rigidBody)
+            if (_navigationData.AgentPhyscisType == AgentPhysicsType.RigidPhysicsUpdate)
             {
                 _rigidBody.linearVelocity = new Vector3(0f, _rigidBody.linearVelocity.y, 0f);
             }
