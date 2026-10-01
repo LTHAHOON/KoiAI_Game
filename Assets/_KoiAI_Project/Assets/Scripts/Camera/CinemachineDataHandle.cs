@@ -2,7 +2,7 @@ using KoiAI.Player;
 using Unity.Cinemachine;
 using UnityEngine;
 
-namespace KoiAI.Camera
+namespace KoiAI.KoiCamera
 {
     public abstract class CinemachineDataHandle : MonoBehaviour 
     {

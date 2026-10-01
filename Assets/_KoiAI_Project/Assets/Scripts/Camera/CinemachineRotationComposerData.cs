@@ -2,7 +2,7 @@ using System;
 using Unity.Cinemachine;
 using UnityEngine;
 
-namespace KoiAI.Camera
+namespace KoiAI.KoiCamera
 {
     [CreateAssetMenu(fileName = "new CinemachineRotationComposerData", menuName = "KoiAI/Camera/CinemachineRotationComposerData")]
     public class CinemachineRotationComposerData : CinemachineData

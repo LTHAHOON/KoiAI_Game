@@ -3,7 +3,7 @@ using UnityEngine;
 using NaughtyAttributes;
 using System.Collections.Generic;
 
-namespace KoiAI.Camera
+namespace KoiAI.KoiCamera
 {
     /// <summary>
     /// 시네머신 데이터 핸들들을 가져와서 커넥터와 핸들을 중재하는 클래스

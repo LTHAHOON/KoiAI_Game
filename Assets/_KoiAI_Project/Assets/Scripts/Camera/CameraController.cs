@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace KoiAI.Camera
+namespace KoiAI.KoiCamera
 {
     public class CameraController : MonoBehaviour
     {

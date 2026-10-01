@@ -2,7 +2,7 @@ using System;
 using Unity.Cinemachine;
 using UnityEngine;
 
-namespace KoiAI.Camera
+namespace KoiAI.KoiCamera
 {
     [CreateAssetMenu(fileName = "new CinemahcineOrbitalFollowData", menuName = "KoiAI/Camera/CinemahcineOrbitalFollowData")]
     public class CinemachineOrbitalFollowData : CinemachineData

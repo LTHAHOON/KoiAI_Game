@@ -2,7 +2,7 @@ using System;
 using Unity.Cinemachine;
 using UnityEngine;
 
-namespace KoiAI.Camera
+namespace KoiAI.KoiCamera
 {
     public abstract class CinemachineData : ScriptableObject
     {

@@ -262,7 +262,7 @@ namespace KoiAI.Player
         {
             if (itemData == null)
                 return;
-            var itemList = GetItemList(slotTypeToPush);
+            IList<ItemData> itemList = GetItemList(slotTypeToPush);
             if(itemList == null)
                 return;
         
@@ -276,7 +276,7 @@ namespace KoiAI.Player
             Slot slot = _inventorySystem.GetSlotWithItem(item);
             ItemSlotType itemSlotType = item.GetCurrentSlotType();
 
-            var itemDatas = GetItemList(itemSlotType);
+            IList<ItemData> itemDatas = GetItemList(itemSlotType);
             ItemData itemData = item.GetItemData();
             if(itemDatas == null || itemData == null || slot == null)
                 return;

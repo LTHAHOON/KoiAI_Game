@@ -10,7 +10,7 @@ namespace KoiAI.Player
 {
     using KoiAI.AnimatorSystem;
     using KoiAI.Audio;
-    using KoiAI.Camera;
+    using KoiAI.KoiCamera;
     using KoiAI.Core;
     using KoiAI.Utilities;
 

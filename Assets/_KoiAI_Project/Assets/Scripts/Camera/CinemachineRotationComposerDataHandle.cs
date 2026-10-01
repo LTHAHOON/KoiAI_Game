@@ -1,6 +1,6 @@
 using Unity.Cinemachine;
 
-namespace KoiAI.Camera
+namespace KoiAI.KoiCamera
 {
     public class CinemachineRotationComposerDataHandle : CinemachineDataHandle<CinemachineRotationComposer, CinemachineRotationComposerData>
     {

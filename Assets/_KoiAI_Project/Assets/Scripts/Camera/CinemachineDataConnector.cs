@@ -3,7 +3,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-namespace KoiAI.Camera
+namespace KoiAI.KoiCamera
 {
     public class CinemachineDataConnector : MonoBehaviour
     {

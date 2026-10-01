@@ -34,7 +34,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: isOpend
+    m_ConditionEvent: isOpened
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4762091637208556082}
@@ -85,7 +85,7 @@ AnimatorController:
   m_Name: AC_Crate_01
   serializedVersion: 6
   m_AnimatorParameters:
-  - m_Name: isOpend
+  - m_Name: isOpened
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0

@@ -2,7 +2,7 @@ using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 
-namespace KoiAI.Camera
+namespace KoiAI.KoiCamera
 {
     [RequireComponent(typeof(CinemachineInputAxisController))]
     public class CinemachineInputFixer : MonoBehaviour

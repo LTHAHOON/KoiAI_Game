@@ -10,6 +10,7 @@ namespace KoiAI.Pool
         WayPoint,
         AudioSource,
         Quest,
+        DropTable,
     }
     [Serializable]
     public struct PoolStorageData

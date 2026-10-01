@@ -5,7 +5,8 @@ namespace KoiAI.Item
     using System;
     using KoiAI.Core;
     using KoiAI.UI.HUD;
-    
+    using NaughtyAttributes;
+
     public enum WeaponType
     {
         Cannon,
@@ -49,6 +50,7 @@ namespace KoiAI.Item
     {
         [SerializeField]
         private ItemBase _itemPrefab;
+
         [SerializeField]
         private Texture2D _itemTex;
         [SerializeField]
@@ -58,7 +60,26 @@ namespace KoiAI.Item
         [SerializeField]
         private string _itemName;
         [SerializeField]
+        private string _itemDescription;
+        [SerializeField]
         private bool _isCreatableObj = false;
+        
+        private Sprite _itemIcon;
+
+        public Sprite ItemIcon
+        {
+            get
+            {
+                if (_itemIcon == null && _itemTex != null)
+                {
+                    _itemIcon = Sprite.Create(
+                        _itemTex,
+                        new Rect(0f, 0f, _itemTex.width, _itemTex.height),
+                        new Vector2(0.5f, 0.5f));
+                }
+                return _itemIcon;
+            }
+        }   
 
         public Mesh ItemMesh => _itemMesh;
         public Material[] ItemMaterials => _itemMaterials;
@@ -66,6 +87,7 @@ namespace KoiAI.Item
         public ItemBase ItemPrefab => _itemPrefab;
         public Texture2D ItemTex => _itemTex;
         public string ItemName => _itemName;
+        public string ItemDescription => _itemDescription;
         public Guid ItemId => GetEntityID();
     }
 }

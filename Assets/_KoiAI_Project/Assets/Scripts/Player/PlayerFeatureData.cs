@@ -1,5 +1,5 @@
 using System;
-using KoiAI.Camera;
+using KoiAI.KoiCamera;
 using NaughtyAttributes;
 using UnityEngine;
 using static KoiAI.Player.PlayerFeature;

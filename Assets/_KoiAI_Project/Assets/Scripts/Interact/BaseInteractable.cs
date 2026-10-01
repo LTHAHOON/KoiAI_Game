@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace KoiAI.Interact
 {
+    
     public abstract class BaseInteractable<T> : MonoBehaviour
     {
         private readonly Subject<T> _interactSubject = new();

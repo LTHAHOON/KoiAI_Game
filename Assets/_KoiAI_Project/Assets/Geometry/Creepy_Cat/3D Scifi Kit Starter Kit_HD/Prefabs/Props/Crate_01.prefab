@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 2962135633559425303}
   - component: {fileID: 5912194625488601793}
   - component: {fileID: 6726977162041743893}
+  - component: {fileID: 71055749027761446}
   m_Layer: 0
   m_Name: Crate_01
-  m_TagString: Untagged
+  m_TagString: PlayerInteractable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -92,10 +93,12 @@ MonoBehaviour:
   _isOpenedParam: isOpened
   _crateAnimator: {fileID: 2962135633559425303}
   _keyType: 0
+  _dropItems: []
   _audioSFXTarget: {fileID: 6726977162041743893}
   _openAudioData: {fileID: 0}
   _closeAudioData: {fileID: 0}
   _throttleFirstTime: 2
+  _showDistanceToPlayer: 7
 --- !u!114 &6726977162041743893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,6 +111,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 195df8c4228298048ae7bd029427c254, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Audio.AudioSFXTarget
+--- !u!65 &71055749027761446
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 121674}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.8, z: 2}
+  m_Center: {x: 0, y: 0.31, z: 0}
 --- !u!1 &121676
 GameObject:
   m_ObjectHideFlags: 0
