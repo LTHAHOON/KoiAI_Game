@@ -622,6 +622,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "GetItem",
+                    "type": "Button",
+                    "id": "0ef7686c-08ad-4905-8415-a96afa6c2564",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "SetVisibleWayPoint",
                     "type": "Button",
                     "id": "33c14ad3-2a54-4c68-bd27-79bf5528d47e",
@@ -1034,6 +1043,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "UseItem",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2200a454-5050-4675-bebe-b573f709aca1",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "GetItem",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

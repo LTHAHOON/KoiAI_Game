@@ -1,12 +1,15 @@
-using KoiAI.Item;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace KoiAI.UI
 {
+    using KoiAI.Item;
+
     public class DropTableItem : MonoBehaviour
     {
+        private ItemData _itemData;
+        public ItemData ItemData => _itemData;
         [SerializeField]
         private Image _dropTableItemImage;
         [SerializeField]
@@ -23,6 +26,7 @@ namespace KoiAI.UI
                 return;
             }
 
+            _itemData = itemData;
             gameObject.SetActive(true);
 
             if (_itemNameText != null)
@@ -57,6 +61,7 @@ namespace KoiAI.UI
 
         public void Clear()
         {
+            _itemData = null;
             if (_itemNameText != null)
             {
                 _itemNameText.text = string.Empty;

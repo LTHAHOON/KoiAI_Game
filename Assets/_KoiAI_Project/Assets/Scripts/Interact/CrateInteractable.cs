@@ -57,20 +57,21 @@ namespace KoiAI.Interact
 
         public void Interact(PlayerInteractor playerInteractor)
         {
-            //NextInteractTime수정하자
             _playerInteractor = playerInteractor;
             if ((_keyType != CrateKeyType.None && !_hasMatchingKey) ||
                 (_onlyOpen && _isOpened) || Time.time < _nextInteractTime)
             {
                 //  return;
             }
-            if(_onlyOpen && _isOpened || (Time.time < _nextInteractTime))
+
+            bool isThrottled = Time.time < _nextInteractTime;
+            if ((_onlyOpen && _isOpened) || isThrottled)
             {
                 return;
             }
 
             OpenOrClose();
-            _nextInteractTime = Time.time + _throttleFirstTime;
+            _nextInteractTime = Time.time + Mathf.Max(0f, _throttleFirstTime);
         }
 
         public override void Interact(CrateInteractContext context)
@@ -95,14 +96,20 @@ namespace KoiAI.Interact
         {
             if (!_isOpenAnimationFinished)
             {
+                if(_isVisible)
+                {
+                    _dropTableSelector.HideItems();
+                    _isVisible = !_isVisible;
+                }
                 return;
             }
             float distanceToPlayer = Vector3.Distance(transform.position, _playerInteractor.transform.position);
-            if (distanceToPlayer <= _showDistanceToPlayer)
+            bool hasDropItems = _dropItems != null && _dropItems.Count > 0;
+            if (distanceToPlayer <= _showDistanceToPlayer && hasDropItems)
             {
                 if(!_isVisible)
                 {
-                    _dropTableSelector.ShowItems(_dropItems);
+                    _dropTableSelector.ShowItems(_dropItems, RemoveDropItem);
                     _isVisible = true;
                 }
             }
@@ -128,7 +135,17 @@ namespace KoiAI.Interact
         private void OpenOrClose()
         {
             _isOpened = !_isOpened;
-            _crateAnimator.SetBool(_isOpenedParamHash, _isOpened);
+            if (_crateAnimator != null)
+            {
+                if (_isOpened)
+                {
+                    _crateAnimator.SetBool(_isOpenedParamHash, true);
+                }
+                else
+                {
+                    _crateAnimator.SetBool(_isOpenedParamHash, false);
+                }
+            }
             AudioData audioData = _isOpened ? _openAudioData : _closeAudioData;
             AudioManager.Instance.PlaySFX(_audioSFXTarget, audioData, transform.position);
             if (_dropTableSelector == null)
@@ -145,6 +162,16 @@ namespace KoiAI.Interact
         public void OnCloseAnimationFinished()
         {
             _isOpenAnimationFinished = false;
+        }
+
+        public void RemoveDropItem(ItemData itemData)
+        {
+            if (itemData == null || _dropItems == null)
+            {
+                return;
+            }
+
+            _dropItems.Remove(itemData);
         }
     }
 }

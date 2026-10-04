@@ -89,7 +89,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb1911a3e556f404aaa08ad95df83e77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Interact.CrateInteractable
-  _onlyOpen: 1
+  _onlyOpen: 0
   _isOpenedParam: isOpened
   _crateAnimator: {fileID: 2962135633559425303}
   _keyType: 0
@@ -97,7 +97,7 @@ MonoBehaviour:
   _audioSFXTarget: {fileID: 6726977162041743893}
   _openAudioData: {fileID: 0}
   _closeAudioData: {fileID: 0}
-  _throttleFirstTime: 2
+  _throttleFirstTime: 0.2
   _showDistanceToPlayer: 7
 --- !u!114 &6726977162041743893
 MonoBehaviour:

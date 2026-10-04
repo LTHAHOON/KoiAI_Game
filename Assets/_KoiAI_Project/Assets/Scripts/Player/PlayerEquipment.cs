@@ -134,8 +134,13 @@ namespace KoiAI.Player
 
         public override void UpdateFeature() { }
 
-        private void PickUpItem(ItemData itemData, ItemSlotType slotType = ItemSlotType.NotEquipped)
+        public bool PickUpItem(ItemData itemData, ItemSlotType slotType = ItemSlotType.NotEquipped)
         {
+            if (itemData == null)
+            {
+                return false;
+            }
+
             var itemList = GetItemList(slotType);
             bool isExistEmptySlot = IsExistEmptySlot(itemList, slotType);
             if (isExistEmptySlot)
@@ -143,7 +148,10 @@ namespace KoiAI.Player
                 itemList.Add(itemData);
                 Transform parent = _dicItemParentPoint[itemData.ItemPrefab.Category];
                 _inventorySystem.CreateAndPushItem(Owner, parent, slotType, itemData);
+                return true;
             }
+
+            return false;
         }
     
         private List<ItemData> GetItemList(ItemSlotType itemSlotType)

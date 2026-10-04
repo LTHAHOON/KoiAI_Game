@@ -1,14 +1,19 @@
+using System;
+using System.Threading;
 using System.Collections;
 using System.Collections.Generic;
-using KoiAI.Input;
-using KoiAI.Item;
-using KoiAI.Pool;
-using KoiAI.Utilities;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Cysharp.Threading.Tasks;
 
 namespace KoiAI.UI
 {
+    using KoiAI.Input;
+    using KoiAI.Item;
+    using KoiAI.Player;
+    using KoiAI.Pool;
+    using KoiAI.Utilities;
+
     [RequireComponent(typeof(CanvasGroup))]
     public class DropTableSelector : MonoBehaviour
     {
@@ -33,16 +38,19 @@ namespace KoiAI.UI
         private readonly List<DropTableItem> _dropTableItems = new();
         private readonly List<DropTableItem> _returningItems = new();
         private Pool<DropTableItem> _dropTableItemPool;
-        private Coroutine _returnItemsCoroutine;
+        private CancellationTokenSource _returnItemsCancellation;
         private Transform _poolStorage;
         private CanvasGroup _canvasGroup;
         private int _selectedIndex;
         private int _firstVisibleIndex;
         private bool _isInputSubscribed;
         private bool _isDropTableVisible;
+        private PlayerEquipment _playerEquipment;
+        private Action<ItemData> _onItemTaken;
 
         private void Awake()
         {
+            _playerEquipment = FindAnyObjectByType<PlayerEquipment>();
             _canvasGroup = GetComponent<CanvasGroup>();
             _canvasGroup.alpha = 0f;
             _canvasGroup.blocksRaycasts = false;
@@ -75,8 +83,42 @@ namespace KoiAI.UI
         private void OnDisable()
         {
             UnsubscribeInput();
-            HideItems();
-            ReturnPendingItems();
+
+            _returnItemsCancellation?.Cancel();
+            _returnItemsCancellation?.Dispose();
+            _returnItemsCancellation = null;
+
+            _returningItems.AddRange(_dropTableItems);
+            _dropTableItems.Clear();
+            _selectedIndex = 0;
+            _firstVisibleIndex = 0;
+            SetDropTableVisible(false);
+            _canvasGroup.alpha = 0f;
+
+            if (_returningItems.Count > 0 && PoolManager.Instance != null && _dropTableItemPool != null)
+            {
+                List<DropTableItem> items = new(_returningItems);
+                _returningItems.Clear();
+                PoolManager.Instance.StartCoroutine(IEReturnItemsAfterDisable(items));
+            }
+        }
+
+        private IEnumerator IEReturnItemsAfterDisable(List<DropTableItem> items)
+        {
+            yield return null;
+
+            for (int i = 0; i < items.Count; i++)
+            {
+                DropTableItem item = items[i];
+                if (item == null)
+                {
+                    continue;
+                }
+
+                item.Clear();
+                item.transform.SetParent(_poolStorage, false);
+                _dropTableItemPool.Return(item);
+            }
         }
 
         private void LateUpdate()
@@ -99,9 +141,10 @@ namespace KoiAI.UI
             _poolStorage = PoolStorage.GetStorage(PoolName.DropTable);
         }
 
-        public void ShowItems(IReadOnlyList<ItemData> itemDatas)
+        public void ShowItems(IReadOnlyList<ItemData> itemDatas, Action<ItemData> onItemTaken = null)
         {
             HideItems();
+            _onItemTaken = onItemTaken;
             InitializePool();
             if (_dropTableItemPool == null || _itemContainer == null || itemDatas == null)
             {
@@ -130,6 +173,7 @@ namespace KoiAI.UI
 
         public void HideItems()
         {
+            _onItemTaken = null;
             ReturnPendingItems();
             SetDropTableVisible(false);
             if (_dropTableItemPool == null)
@@ -151,7 +195,10 @@ namespace KoiAI.UI
 
             if (_returningItems.Count > 0)
             {
-                _returnItemsCoroutine = StartCoroutine(IEReturnItemsAfterFade());
+                _returnItemsCancellation?.Cancel();
+                _returnItemsCancellation?.Dispose();
+                _returnItemsCancellation = new CancellationTokenSource();
+                ReturnItemsAfterFadeAsync(_returnItemsCancellation.Token).Forget();
             }
             else
             {
@@ -159,39 +206,19 @@ namespace KoiAI.UI
             }
         }
 
-        private IEnumerator IEReturnItemsAfterFade()
+        private async UniTask ReturnItemsAfterFadeAsync(CancellationToken cancellationToken)
         {
-            bool areItemsHidden = false;
-            while (!areItemsHidden)
+            while (_canvasGroup.alpha > 0.01f)
             {
-                areItemsHidden = true;
-                for (int i = 0; i < _returningItems.Count; i++)
-                {
-                    if (_canvasGroup.alpha > 0.01f)
-                    {
-                        areItemsHidden = false;
-                        break;
-                    }
-                }
-
-                if (!areItemsHidden)
-                {
-                    yield return null;
-                }
+                await UniTask.NextFrame(cancellationToken);
             }
 
-            _returnItemsCoroutine = null;
+            _returnItemsCancellation = null;
             ReturnPendingItems();
         }
 
         private void ReturnPendingItems()
         {
-            if (_returnItemsCoroutine != null)
-            {
-                StopCoroutine(_returnItemsCoroutine);
-                _returnItemsCoroutine = null;
-            }
-
             for (int i = 0; i < _returningItems.Count; i++)
             {
                 DropTableItem item = _returningItems[i];
@@ -224,6 +251,7 @@ namespace KoiAI.UI
             }
 
             InputService.PlayerIA.Global.ScrollWheel.performed += OnScrollWheel;
+            InputService.PlayerIA.Player.GetItem.performed += OnGetItem;
             _isInputSubscribed = true;
         }
 
@@ -235,7 +263,38 @@ namespace KoiAI.UI
             }
 
             InputService.PlayerIA.Global.ScrollWheel.performed -= OnScrollWheel;
+            InputService.PlayerIA.Player.GetItem.performed -= OnGetItem;
             _isInputSubscribed = false;
+        }
+
+        private void OnGetItem(InputAction.CallbackContext context)
+        {
+            if (!context.performed || !_isDropTableVisible || _dropTableItems.Count == 0 || _playerEquipment == null)
+            {
+                return;
+            }
+
+            DropTableItem selectedItem = _dropTableItems[_selectedIndex];
+            if (selectedItem == null || !_playerEquipment.PickUpItem(selectedItem.ItemData))
+            {
+                return;
+            }
+
+            _onItemTaken?.Invoke(selectedItem.ItemData);
+
+            _dropTableItems.RemoveAt(_selectedIndex);
+            _returningItems.Add(selectedItem);
+            selectedItem.SetDropTableItemVisible(false);
+            ReturnPendingItems();
+            _selectedIndex = Mathf.Clamp(_selectedIndex, 0, _dropTableItems.Count - 1);
+            if (_dropTableItems.Count == 0)
+            {
+                HideItems();
+                return;
+            }
+
+            UpdateVisibleItems();
+            UpdateSelectedColors();
         }
 
         private void OnScrollWheel(InputAction.CallbackContext context)
@@ -268,10 +327,12 @@ namespace KoiAI.UI
             _dropTableItems[_selectedIndex].SetSelected(true, _selectedColor, _normalColor);
 
             int visibleCount = Mathf.Max(1, _visibleItemCount);
+            //위쪽으로 벗어난 경우(_selectedIndex가 화면상에 보일수있는 젤 위쪽이 되게 합니다.)
             if (_selectedIndex < _firstVisibleIndex)
             {
                 _firstVisibleIndex = _selectedIndex;
             }
+            //아래쪽으로 벗어난 경우(_selectedIndex가 화면상에 보일수있는 젤 아래쪽이 되게 합니다.)
             else if (_selectedIndex >= _firstVisibleIndex + visibleCount)
             {
                 _firstVisibleIndex = _selectedIndex - visibleCount + 1;

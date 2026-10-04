@@ -708,6 +708,15 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""GetItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""0ef7686c-08ad-4905-8415-a96afa6c2564"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""SetVisibleWayPoint"",
                     ""type"": ""Button"",
                     ""id"": ""33c14ad3-2a54-4c68-bd27-79bf5528d47e"",
@@ -1125,6 +1134,17 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""2200a454-5050-4675-bebe-b573f709aca1"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""GetItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""9612b73d-7fd1-4a07-9ccb-bf7d89a4dd02"",
                     ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
@@ -1275,6 +1295,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         m_Player_SelectItem_NotEquip = m_Player.FindAction("SelectItem_NotEquip", throwIfNotFound: true);
         m_Player_SelectItem_Equip = m_Player.FindAction("SelectItem_Equip", throwIfNotFound: true);
         m_Player_UseItem = m_Player.FindAction("UseItem", throwIfNotFound: true);
+        m_Player_GetItem = m_Player.FindAction("GetItem", throwIfNotFound: true);
         m_Player_SetVisibleWayPoint = m_Player.FindAction("SetVisibleWayPoint", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         // Lobby
@@ -1568,6 +1589,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_SelectItem_NotEquip;
     private readonly InputAction m_Player_SelectItem_Equip;
     private readonly InputAction m_Player_UseItem;
+    private readonly InputAction m_Player_GetItem;
     private readonly InputAction m_Player_SetVisibleWayPoint;
     private readonly InputAction m_Player_Interact;
     /// <summary>
@@ -1625,6 +1647,10 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/UseItem".
         /// </summary>
         public InputAction @UseItem => m_Wrapper.m_Player_UseItem;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/GetItem".
+        /// </summary>
+        public InputAction @GetItem => m_Wrapper.m_Player_GetItem;
         /// <summary>
         /// Provides access to the underlying input action "Player/SetVisibleWayPoint".
         /// </summary>
@@ -1692,6 +1718,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @UseItem.started += instance.OnUseItem;
             @UseItem.performed += instance.OnUseItem;
             @UseItem.canceled += instance.OnUseItem;
+            @GetItem.started += instance.OnGetItem;
+            @GetItem.performed += instance.OnGetItem;
+            @GetItem.canceled += instance.OnGetItem;
             @SetVisibleWayPoint.started += instance.OnSetVisibleWayPoint;
             @SetVisibleWayPoint.performed += instance.OnSetVisibleWayPoint;
             @SetVisibleWayPoint.canceled += instance.OnSetVisibleWayPoint;
@@ -1742,6 +1771,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @UseItem.started -= instance.OnUseItem;
             @UseItem.performed -= instance.OnUseItem;
             @UseItem.canceled -= instance.OnUseItem;
+            @GetItem.started -= instance.OnGetItem;
+            @GetItem.performed -= instance.OnGetItem;
+            @GetItem.canceled -= instance.OnGetItem;
             @SetVisibleWayPoint.started -= instance.OnSetVisibleWayPoint;
             @SetVisibleWayPoint.performed -= instance.OnSetVisibleWayPoint;
             @SetVisibleWayPoint.canceled -= instance.OnSetVisibleWayPoint;
@@ -2104,6 +2136,13 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnUseItem(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "GetItem" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnGetItem(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "SetVisibleWayPoint" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
