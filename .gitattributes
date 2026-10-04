@@ -156,6 +156,7 @@ Packages/packages-lock.json linguist-generated
 *.reason                lfs
 *.rns                   lfs
 *.bytes                 lfs
+#data		lfs
 
 # Exceptions for .asset files such as lightning pre-baking
 LightingData.asset     binary
