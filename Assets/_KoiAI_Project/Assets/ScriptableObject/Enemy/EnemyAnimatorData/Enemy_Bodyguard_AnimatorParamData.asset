@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e4b997e9d4c1a646b247de0e2320c8c, type: 3}
+  m_Name: Enemy_Bodyguard_AnimatorParamData
+  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.AnimatorSystem.AnimatorParamData
+  _runtimeAnimatorController: {fileID: 9100000, guid: 6defa2fea7e9a934a8d2cafa30dc567a, type: 2}
+  _idleParam: Idle_Anim
+  _movementAnimatorType: 1
+  _walkParam: None
+  _xMoveParam: CurrentXMove
+  _zMoveParam: CurrentZMove
+  _jumpParam: None
+  _attack01_Param: None
+  _attack02_Param: None
+  _act1_Param: None
+  _act2_Param: None

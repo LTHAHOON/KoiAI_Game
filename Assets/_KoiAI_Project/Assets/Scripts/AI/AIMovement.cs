@@ -121,10 +121,7 @@ namespace KoiAI.AI
         {
             SurroundPosManager.Instance.ReleaseSurroundPos(Brain.gameObject, _target);
             Brain.AgentController.StopMovement_Force();
-            if(Brain.AIAnimator)
-            {
-                Brain.AIAnimator.SetFloat(_animParamData.WalkParmID, 0f);
-            }
+            SetMovementAnimation(Vector3.zero, 0f);
             _bHasTarget = false;
         }
 
@@ -133,10 +130,7 @@ namespace KoiAI.AI
             if (!Brain.TargetContext.HasTarget || !_bHasTarget || !_target)
             {
                 Brain.AgentController.StopMovement_Force();
-                if (Brain.AIAnimator)
-                {
-                    Brain.AIAnimator.SetFloat(_animParamData.WalkParmID, 0f);
-                }
+                SetMovementAnimation(Vector3.zero, 0f);
                 return;
             }
 
@@ -151,13 +145,17 @@ namespace KoiAI.AI
                 Brain.AgentController.MoveToDest(targetPos, maxMoveSpeed);
             }
 
-            if (Brain.AIAnimator)
+            SetMovementAnimation(Brain.AgentController.CurrentMoveVelocity, maxMoveSpeed);
+
+        }
+
+        private void SetMovementAnimation(Vector3 velocity, float maxMoveSpeed)
+        {
+            if (_animParamData)
             {
-                float curMoveSpeed = Brain.AgentController.CurrentMoveSpeed;
-                curMoveSpeed = Mathf.Clamp01(curMoveSpeed / maxMoveSpeed);
-                Brain.AIAnimator.SetFloat(_animParamData.WalkParmID, curMoveSpeed);
+                Vector3 localVelocity = Brain.transform.InverseTransformDirection(velocity);
+                _animParamData.SetMovementParameters(Brain.AIAnimator, localVelocity, maxMoveSpeed);
             }
-    
         }
     }
 }

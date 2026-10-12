@@ -10,11 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e4b997e9d4c1a646b247de0e2320c8c, type: 3}
-  m_Name: LV1_Spiro_AnimatorParamData
+  m_Name: Enemy_Spiro_AnimatorParamData
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.AnimatorSystem.AnimatorParamData
   _runtimeAnimatorController: {fileID: 9100000, guid: 8df5b386369d54778a922298504d1aba, type: 2}
-  _idleParam: Close_Anim
+  _idleParam: Idle_Anim
+  _movementAnimatorType: 0
   _walkParam: CurrentMoveSpeed
+  _xMoveParam: None
+  _zMoveParam: None
   _jumpParam: None
   _attack01_Param: None
   _attack02_Param: None

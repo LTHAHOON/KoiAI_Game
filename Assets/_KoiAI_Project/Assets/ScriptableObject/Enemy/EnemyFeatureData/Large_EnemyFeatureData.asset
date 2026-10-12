@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Large_EnemyFeatureData
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Enemy.EnemyFeatureData
   _aiFeatureDataType: 2
-  _properties: 010000000200000003000000
+  _properties: 01000000020000000300000004000000
   aiMovementValueData:
     _moveSpeed: 6
     _jumpForce: 10

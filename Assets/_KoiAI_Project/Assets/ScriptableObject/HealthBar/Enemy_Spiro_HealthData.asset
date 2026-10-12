@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b8908c1b33e7d5b4da69caf4749bf185, type: 3}
-  m_Name: Lv2_MonsterHealthData
+  m_Name: Enemy_Spiro_HealthData
   m_EditorClassIdentifier: Assembly-CSharp::HealthData
-  _maxHealth: 200
-  _healthBarData: {fileID: 11400000, guid: eb29f42fe41b2d14e955f6a8801afb76, type: 2}
+  _maxHealth: 120
+  _healthBarData: {fileID: 11400000, guid: fe3f1546450c73e49b6e73eb65fe20d1, type: 2}

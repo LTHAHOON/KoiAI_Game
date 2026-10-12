@@ -67,12 +67,15 @@ namespace KoiAI.AI
             }
 
             _weaponController = ActivateRandom.GetRandomActivateTarget(_weaponRandomGroup);
-            _weaponController.StartAiming();
+            if (_weaponController)
+            {
+                _weaponController.StartAiming();
+            }
         }
 
         public override void UpdateFeature()
         {
-            if (Brain.IsDead)
+            if (Brain.IsDead || !_weaponController)
             {
                 return;
             }
@@ -86,7 +89,10 @@ namespace KoiAI.AI
             }
             _curAttackTime = 0f;
             _weaponController = ActivateRandom.GetRandomActivateTarget(_weaponRandomGroup);
-            _weaponController.Activate();
+            if (_weaponController)
+            {
+                _weaponController.Activate();
+            }
         }
 
         public override void ExitFeature()
@@ -95,7 +101,11 @@ namespace KoiAI.AI
             {
                 return;
             }
-            _weaponController.EndAiming();
+            if (_weaponController)
+            {
+                _weaponController.EndAiming();
+                _weaponController = null;
+            }
         }
     }
 }

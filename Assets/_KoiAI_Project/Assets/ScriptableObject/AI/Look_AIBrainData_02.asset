@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fecce98cbc2371145b0587aabd96d1f4, type: 3}
-  m_Name: Look_AIBrainData
+  m_Name: Look_AIBrainData_02
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.AI.AIBrainData
   _aiFeatureTransitions:
   - _featureProperty: 1
@@ -39,8 +39,6 @@ MonoBehaviour:
           _listValue:
           - _featureProperty: 5
             _shouldBeActive: 0
-          - _featureProperty: 2
-            _shouldBeActive: 0
       - _conditionType: 2
         _invert: 0
         _distanceConditionData:
@@ -50,13 +48,9 @@ MonoBehaviour:
             _compareValue: 0.5
             _comparisonType: 1
         _withFeatureConditionData:
-          _listValue:
-          - _featureProperty: 5
-            _shouldBeActive: 0
-          - _featureProperty: 2
-            _shouldBeActive: 0
+          _listValue: []
     _disableConditions:
-      _matchMode: 1
+      _matchMode: 0
       _conditions:
       - _conditionType: 1
         _invert: 0
@@ -67,9 +61,7 @@ MonoBehaviour:
             _compareValue: 0
             _comparisonType: 0
         _withFeatureConditionData:
-          _listValue:
-          - _featureProperty: 5
-            _shouldBeActive: 0
+          _listValue: []
   - _featureProperty: 3
     _enableConditions:
       _matchMode: 0
@@ -93,25 +85,21 @@ MonoBehaviour:
             _compareValue: 22
             _comparisonType: 1
         _withFeatureConditionData:
-          _listValue:
-          - _featureProperty: 5
-            _shouldBeActive: 0
-          - _featureProperty: 2
-            _shouldBeActive: 0
+          _listValue: []
       - _conditionType: 3
         _invert: 0
         _distanceConditionData:
           _useOriginDistance: 0
           _distanceCondition:
             _isDataOnly: 0
-            _compareValue: 20
-            _comparisonType: 1
+            _compareValue: 0
+            _comparisonType: 0
         _withFeatureConditionData:
           _listValue:
           - _featureProperty: 1
             _shouldBeActive: 0
     _disableConditions:
-      _matchMode: 1
+      _matchMode: 0
       _conditions:
       - _conditionType: 3
         _invert: 0
@@ -145,31 +133,12 @@ MonoBehaviour:
           _useOriginDistance: 0
           _distanceCondition:
             _isDataOnly: 0
-            _compareValue: 13
-            _comparisonType: 1
+            _compareValue: 16
+            _comparisonType: 2
         _withFeatureConditionData:
-          _listValue:
-          - _featureProperty: 5
-            _shouldBeActive: 0
-          - _featureProperty: 2
-            _shouldBeActive: 0
+          _listValue: []
       - _conditionType: 3
         _invert: 0
-        _distanceConditionData:
-          _useOriginDistance: 0
-          _distanceCondition:
-            _isDataOnly: 0
-            _compareValue: 10
-            _comparisonType: 1
-        _withFeatureConditionData:
-          _listValue:
-          - _featureProperty: 1
-            _shouldBeActive: 0
-    _disableConditions:
-      _matchMode: 1
-      _conditions:
-      - _conditionType: 1
-        _invert: 1
         _distanceConditionData:
           _useOriginDistance: 0
           _distanceCondition:
@@ -178,10 +147,9 @@ MonoBehaviour:
             _comparisonType: 0
         _withFeatureConditionData:
           _listValue:
-          - _featureProperty: 1
-            _shouldBeActive: 1
-  - _featureProperty: 5
-    _enableConditions:
+          - _featureProperty: 5
+            _shouldBeActive: 0
+    _disableConditions:
       _matchMode: 0
       _conditions:
       - _conditionType: 1
@@ -197,19 +165,53 @@ MonoBehaviour:
       - _conditionType: 2
         _invert: 0
         _distanceConditionData:
+          _useOriginDistance: 0
+          _distanceCondition:
+            _isDataOnly: 0
+            _compareValue: 14
+            _comparisonType: 1
+        _withFeatureConditionData:
+          _listValue: []
+      - _conditionType: 2
+        _invert: 0
+        _distanceConditionData:
           _useOriginDistance: 1
           _distanceCondition:
             _isDataOnly: 0
-            _compareValue: 0.5
-            _comparisonType: 4
+            _compareValue: 12
+            _comparisonType: 2
+        _withFeatureConditionData:
+          _listValue: []
+  - _featureProperty: 5
+    _enableConditions:
+      _matchMode: 1
+      _conditions:
+      - _conditionType: 2
+        _invert: 0
+        _distanceConditionData:
+          _useOriginDistance: 1
+          _distanceCondition:
+            _isDataOnly: 0
+            _compareValue: 12
+            _comparisonType: 2
+        _withFeatureConditionData:
+          _listValue: []
+      - _conditionType: 3
+        _invert: 0
+        _distanceConditionData:
+          _useOriginDistance: 0
+          _distanceCondition:
+            _isDataOnly: 0
+            _compareValue: 0
+            _comparisonType: 0
         _withFeatureConditionData:
           _listValue:
-          - _featureProperty: 5
-            _shouldBeActive: 0
           - _featureProperty: 2
             _shouldBeActive: 0
+          - _featureProperty: 4
+            _shouldBeActive: 0
     _disableConditions:
-      _matchMode: 1
+      _matchMode: 0
       _conditions:
       - _conditionType: 1
         _invert: 0
@@ -217,12 +219,10 @@ MonoBehaviour:
           _useOriginDistance: 0
           _distanceCondition:
             _isDataOnly: 0
-            _compareValue: 10
-            _comparisonType: 1
+            _compareValue: 0
+            _comparisonType: 0
         _withFeatureConditionData:
-          _listValue:
-          - _featureProperty: 1
-            _shouldBeActive: 1
+          _listValue: []
       - _conditionType: 2
         _invert: 0
         _distanceConditionData:
@@ -232,9 +232,7 @@ MonoBehaviour:
             _compareValue: 0.5
             _comparisonType: 1
         _withFeatureConditionData:
-          _listValue:
-          - _featureProperty: 1
-            _shouldBeActive: 1
+          _listValue: []
   - _featureProperty: 4
     _enableConditions:
       _matchMode: 0
@@ -255,28 +253,26 @@ MonoBehaviour:
           _useOriginDistance: 0
           _distanceCondition:
             _isDataOnly: 0
-            _compareValue: 20
+            _compareValue: 16
             _comparisonType: 1
         _withFeatureConditionData:
-          _listValue:
-          - _featureProperty: 5
-            _shouldBeActive: 0
-          - _featureProperty: 2
-            _shouldBeActive: 0
+          _listValue: []
       - _conditionType: 3
         _invert: 0
         _distanceConditionData:
           _useOriginDistance: 0
           _distanceCondition:
             _isDataOnly: 0
-            _compareValue: 20
-            _comparisonType: 1
+            _compareValue: 0
+            _comparisonType: 0
         _withFeatureConditionData:
           _listValue:
           - _featureProperty: 2
-            _shouldBeActive: 1
+            _shouldBeActive: 0
+          - _featureProperty: 5
+            _shouldBeActive: 0
     _disableConditions:
-      _matchMode: 1
+      _matchMode: 0
       _conditions:
       - _conditionType: 1
         _invert: 1
@@ -284,21 +280,18 @@ MonoBehaviour:
           _useOriginDistance: 0
           _distanceCondition:
             _isDataOnly: 0
-            _compareValue: 10
-            _comparisonType: 1
+            _compareValue: 0
+            _comparisonType: 0
         _withFeatureConditionData:
-          _listValue:
-          - _featureProperty: 1
-            _shouldBeActive: 1
+          _listValue: []
       - _conditionType: 2
         _invert: 0
         _distanceConditionData:
           _useOriginDistance: 0
           _distanceCondition:
             _isDataOnly: 0
-            _compareValue: 20
-            _comparisonType: 4
+            _compareValue: 18
+            _comparisonType: 2
         _withFeatureConditionData:
-          _listValue:
-          - _featureProperty: 1
-            _shouldBeActive: 1
+          _listValue: []
+

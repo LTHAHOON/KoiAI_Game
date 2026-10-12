@@ -174,7 +174,13 @@ namespace KoiAI.Nav
             return false;
         }
 
-        public float CurrentMoveSpeed => _navMeshAgent.velocity.magnitude;
+        public Vector3 CurrentMoveVelocity =>
+            _navigationData && _navigationData.AgentPhyscisType == AgentPhysicsType.RigidPhysicsUpdate && _rigidBody
+                ? _rigidBody.linearVelocity
+                : (_navMeshAgent ? _navMeshAgent.velocity : Vector3.zero);
+        public float CurrentXMove => CurrentMoveVelocity.x;
+        public float CurrentZMove => CurrentMoveVelocity.z;
+        public float CurrentMoveSpeed => CurrentMoveVelocity.magnitude;
         public Rigidbody Rigidbody=> _rigidBody;
     }
 }

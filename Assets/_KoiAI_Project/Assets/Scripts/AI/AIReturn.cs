@@ -32,6 +32,7 @@ namespace KoiAI.AI
         public override void EnterFeature()
         {
             Brain.AgentController.StopMovement_Force();
+            SetMovementAnimation(Vector3.zero, 0f);
         }
 
         public override void UpdateFeature()
@@ -40,17 +41,22 @@ namespace KoiAI.AI
 
             Brain.AgentController.MoveToDest(Brain.OriginPosition, maxMoveSpeed);
 
-            if (Brain.AIAnimator)
-            {
-                float curMoveSpeed = Brain.AgentController.CurrentMoveSpeed;
-                curMoveSpeed = Mathf.Clamp01(curMoveSpeed / maxMoveSpeed);
-                Brain.AIAnimator.SetFloat(_animParamData.WalkParmID, curMoveSpeed);
-            }
+            SetMovementAnimation(Brain.AgentController.CurrentMoveVelocity, maxMoveSpeed);
         }
 
         public override void ExitFeature()
         {
             Brain.AgentController.StopMovement_Force();
+            SetMovementAnimation(Vector3.zero, 0f);
+        }
+
+        private void SetMovementAnimation(Vector3 velocity, float maxMoveSpeed)
+        {
+            if (_animParamData)
+            {
+                Vector3 localVelocity = Brain.transform.InverseTransformDirection(velocity);
+                _animParamData.SetMovementParameters(Brain.AIAnimator, localVelocity, maxMoveSpeed);
+            }
         }
     }
 }

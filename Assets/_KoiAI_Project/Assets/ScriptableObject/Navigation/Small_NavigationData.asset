@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a70c7d1fd5193540bef7f25b7e9f3d3, type: 3}
   m_Name: Small_NavigationData
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Nav.NavigationData
-  _agentTypeIndex: 3
+  _agentTypeIndex: 1
   _agentPhysicsType: 1
   _moveSpeed: 6
   _angularSpeed: 150

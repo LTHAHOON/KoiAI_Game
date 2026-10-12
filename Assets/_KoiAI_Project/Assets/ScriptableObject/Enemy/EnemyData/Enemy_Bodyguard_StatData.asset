@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 543af85d3d3dbc3428b539028883b347, type: 3}
+  m_Name: Enemy_Bodyguard_StatData
+  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Enemy.EnemyStatData
+  _entityType: 1
+  _guidString: e86b9341-7465-4cfb-ac92-1729a784639a
+  _aiBaseName: Bodyguard
+  _animatorData:
+    _animatorAvatar: {fileID: 9000000, guid: 860793eb3324391468f1c120a75ec049, type: 3}
+    _animatorParamData: {fileID: 11400000, guid: 27e44a2262e094a4e898801b342210dd, type: 2}
+    _stepAnimatorThresold: 0
+  _aiFeatureDataBase: {fileID: 11400000, guid: 587e3ecf27b34ba499460249aa750718, type: 2}
+  _aiFeatureDataType: 2
+  _aiMovementExtensionData:
+    _surroundPosContext:
+      _surroundRadius: 0
+      _surroundHeight: 0
+    _stepAuidoData: {fileID: 0}
+    _stopStepAudioData: {fileID: 0}
+    _jumpAudioData: {fileID: 0}
+    _moveSpeedMod: 6
+    _jumpForceMod: 0
+    _jumpMaxCountMod: 0
+    _stepAudioThresold: 0
+    _sizeForMoveStopMod: 3
+    _rigidData:
+      _mass: 0
+      _linearDamping: 0
+      _angularDamping: 0
+    _colliderData:
+      _center: {x: 0, y: 0, z: 0}
+      _radius: 0
+      _height: 0
+      _direction: 0
+  _aiRotationExtensionData:
+    _lookSpeedMod: 7
+    _surfaceCheckDistanceMod: 0
+    _surfaceLayerMask:
+      serializedVersion: 2
+      m_Bits: 8
+  _aiAttackExtensionData:
+    _attackDelayTime: 1
