@@ -176,9 +176,9 @@ namespace KoiAI.Player
             {
                 if (_rigidBody.linearVelocity.sqrMagnitude <= _animatorData.StepAnimatorTresold)
                 {
-                    if (Owner.PlayerAnimatorData.IsValid() && _animParamData.WalkParmID > 0)
+                    if (Owner.PlayerAnimatorData.IsValid() && _animParamData.MoveParmID > 0)
                     {
-                        Owner.PlayerAnimator.SetBool(_animParamData.WalkParmID, false);
+                        Owner.PlayerAnimator.SetBool(_animParamData.MoveParmID, false);
                     }
                     _playerNavMeshObstacle.enabled = true;
                     _isMoveStop = false;
@@ -248,9 +248,9 @@ namespace KoiAI.Player
             }
             else
             {
-                if (Owner.PlayerAnimatorData.IsValid() && _animParamData.WalkParmID > 0)
+                if (Owner.PlayerAnimatorData.IsValid() && _animParamData.MoveParmID > 0)
                 {
-                    Owner.PlayerAnimator.SetBool(_animParamData.WalkParmID, true);
+                    Owner.PlayerAnimator.SetBool(_animParamData.MoveParmID, true);
                 }
                 _playerNavMeshObstacle.enabled = false;
             }

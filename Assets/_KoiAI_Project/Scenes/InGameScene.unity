@@ -16016,6 +16016,10 @@ PrefabInstance:
       propertyPath: m_Mass
       value: 600
       objectReference: {fileID: 0}
+    - target: {fileID: 619695226491336817, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
+      propertyPath: m_Interpolate
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2228565721118875876, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
       propertyPath: m_LocalPosition.x
       value: -87.59

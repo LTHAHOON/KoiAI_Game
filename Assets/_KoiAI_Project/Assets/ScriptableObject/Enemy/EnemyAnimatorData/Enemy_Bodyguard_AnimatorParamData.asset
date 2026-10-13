@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e4b997e9d4c1a646b247de0e2320c8c, type: 3}
   m_Name: Enemy_Bodyguard_AnimatorParamData
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.AnimatorSystem.AnimatorParamData
-  _runtimeAnimatorController: {fileID: 9100000, guid: 6defa2fea7e9a934a8d2cafa30dc567a, type: 2}
+  _runtimeAnimatorController: {fileID: 9100000, guid: 4bf46416e52649c59b5a49e3b20101c2, type: 2}
   _idleParam: Idle_Anim
   _movementAnimatorType: 1
-  _walkParam: None
+  _movementDampTime: 0.2
+  _moveParam: 
   _xMoveParam: CurrentXMove
   _zMoveParam: CurrentZMove
   _jumpParam: None

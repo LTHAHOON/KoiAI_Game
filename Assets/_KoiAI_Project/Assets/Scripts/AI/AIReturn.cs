@@ -47,11 +47,17 @@ namespace KoiAI.AI
         public override void ExitFeature()
         {
             Brain.AgentController.StopMovement_Force();
-            SetMovementAnimation(Vector3.zero, 0f);
+            if (_animParamData && Brain.AIAnimator)
+            {
+                _animParamData.StopMovementParametersAsync(Brain.AIAnimator, Brain.BeginMovementAnimationStop())
+                    .SuppressCancellationThrow().Forget();
+            }
+
         }
 
-        private void SetMovementAnimation(Vector3 velocity, float maxMoveSpeed)
+        private void SetMovementAnimation(Vector3 velocity, float maxMoveSpeed = 1f)
         {
+            Brain.CancelMovementAnimationStop();
             if (_animParamData)
             {
                 Vector3 localVelocity = Brain.transform.InverseTransformDirection(velocity);

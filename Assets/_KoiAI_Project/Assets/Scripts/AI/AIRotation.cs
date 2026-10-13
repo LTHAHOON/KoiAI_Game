@@ -17,7 +17,7 @@ namespace KoiAI.AI
         private float _surfaceCheckDistanceMod;
         [SerializeField]
         private LayerMask _surfaceLayerMask;
-
+        
         #endregion
         public float LookSpeedMod => _lookSpeedMod;
         public float SurfaceCheckDistanceMod => _surfaceCheckDistanceMod;

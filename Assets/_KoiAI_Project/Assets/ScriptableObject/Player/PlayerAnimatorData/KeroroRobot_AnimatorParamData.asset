@@ -13,5 +13,14 @@ MonoBehaviour:
   m_Name: KeroroRobot_AnimatorParamData
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.AnimatorParamData
   _runtimeAnimatorController: {fileID: 9100000, guid: 3af1ac9c5ca097a428e4f55968fdf438, type: 2}
-  _walkParam: IsWalk
+  _idleParam: None
+  _movementAnimatorType: 2
+  _movementDampTime: 0
+  _moveParam: IsMove
+  _xMoveParam: None
+  _zMoveParam: None
   _jumpParam: None
+  _attack01_Param: None
+  _attack02_Param: None
+  _act1_Param: None
+  _act2_Param: None

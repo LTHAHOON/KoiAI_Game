@@ -1,3 +1,4 @@
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
 using System;
@@ -49,7 +50,28 @@ namespace KoiAI.AI
         private Vector3 _originPosition;
         private Animator _aiAnimator;
         private Health _health;
+        private CancellationTokenSource _movementAnimationStopCts;
         
+        public CancellationToken BeginMovementAnimationStop()
+        {
+            CancelMovementAnimationStop();
+            _movementAnimationStopCts = CancellationTokenSource.CreateLinkedTokenSource(destroyCancellationToken);
+            return _movementAnimationStopCts.Token;
+        }
+
+        public void CancelMovementAnimationStop()
+        {
+            if (_movementAnimationStopCts == null) return;
+            _movementAnimationStopCts.Cancel();
+            _movementAnimationStopCts.Dispose();
+            _movementAnimationStopCts = null;
+        }
+
+        private void OnDestroy()
+        {
+            CancelMovementAnimationStop();
+        }
+
         public void AwakeAIBrain()
         {
             EntityData entityData = GetComponent<EntityIdentity>().EntityData;

@@ -15,7 +15,8 @@ MonoBehaviour:
   _runtimeAnimatorController: {fileID: 9100000, guid: 8df5b386369d54778a922298504d1aba, type: 2}
   _idleParam: Idle_Anim
   _movementAnimatorType: 0
-  _walkParam: CurrentMoveSpeed
+  _movementDampTime: 0
+  _moveParam: CurrentMoveSpeed
   _xMoveParam: None
   _zMoveParam: None
   _jumpParam: None

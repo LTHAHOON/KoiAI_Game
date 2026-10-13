@@ -23,16 +23,16 @@ MonoBehaviour:
   _aiFeatureDataType: 2
   _aiMovementExtensionData:
     _surroundPosContext:
-      _surroundRadius: 0
+      _surroundRadius: 11
       _surroundHeight: 0
     _stepAuidoData: {fileID: 0}
     _stopStepAudioData: {fileID: 0}
     _jumpAudioData: {fileID: 0}
-    _moveSpeedMod: 6
+    _moveSpeedMod: 3.5
     _jumpForceMod: 0
     _jumpMaxCountMod: 0
     _stepAudioThresold: 0
-    _sizeForMoveStopMod: 3
+    _sizeForMoveStopMod: -3
     _rigidData:
       _mass: 0
       _linearDamping: 0
@@ -43,7 +43,7 @@ MonoBehaviour:
       _height: 0
       _direction: 0
   _aiRotationExtensionData:
-    _lookSpeedMod: 7
+    _lookSpeedMod: -5
     _surfaceCheckDistanceMod: 0
     _surfaceLayerMask:
       serializedVersion: 2

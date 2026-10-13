@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
 
@@ -111,6 +112,8 @@ namespace KoiAI.AI
 
         public override void EnterFeature()
         {
+            SetMovementAnimation(Vector3.zero, 0f);
+
             _bHasTarget = TryGetTarget(out _target);
             _ratioStopDistance = UnityEngine.Random.Range(-1f, 1f);
             if (!_bHasTarget)
@@ -121,7 +124,12 @@ namespace KoiAI.AI
         {
             SurroundPosManager.Instance.ReleaseSurroundPos(Brain.gameObject, _target);
             Brain.AgentController.StopMovement_Force();
-            SetMovementAnimation(Vector3.zero, 0f);
+            if (_animParamData && Brain.AIAnimator)
+            {
+                _animParamData.StopMovementParametersAsync(Brain.AIAnimator, Brain.BeginMovementAnimationStop())
+                    .SuppressCancellationThrow().Forget();
+            }
+
             _bHasTarget = false;
         }
 
@@ -151,6 +159,7 @@ namespace KoiAI.AI
 
         private void SetMovementAnimation(Vector3 velocity, float maxMoveSpeed)
         {
+            Brain.CancelMovementAnimationStop();
             if (_animParamData)
             {
                 Vector3 localVelocity = Brain.transform.InverseTransformDirection(velocity);
