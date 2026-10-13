@@ -145,6 +145,7 @@ namespace KoiAI.Item
             {
                 bulletItem.BulletController.OnHit(_hits, count);
             }
+            PoolManager.Instance.ReturnDelay(_pool, bulletItem, 2f);
 
             return true;
         }

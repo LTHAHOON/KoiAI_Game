@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b82781e09518e0d49946a41f797f6e12, type: 3}
+  m_Name: Bodyguard_BulletData
+  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.BulletData
+  _entityType: 3
+  _guidString: db33e777-e253-4055-8c4f-87e75714ddaa
+  _itemPrefab: {fileID: 4269043998097811684, guid: f168ae163f5c37641a344af0dd4b1315, type: 3}
+  _itemTex: {fileID: 0}
+  _itemMesh: {fileID: 0}
+  _itemMaterials: []
+  _itemName: Bodyguard Bullet
+  _itemDescription: 
+  _isCreatableObj: 0
+  _projectileType: 1
+  _projectileCount: 50
+  _projectileDamage: 10
+  _bulletController: {fileID: 5184176061379500615, guid: 935d71839848402489cc0006426d53c9, type: 3}
+  _bulletPoolSize:
+    _initPoolSize: 1
+    _maxPoolSize: 20
+  _maxOverlapCount: 1

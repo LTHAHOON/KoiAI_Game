@@ -12,18 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b82781e09518e0d49946a41f797f6e12, type: 3}
   m_Name: Spiro_BulletData
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.BulletData
+  _entityType: 3
+  _guidString: 345ae08b-79de-4a2b-b7fd-1be6181d11a8
   _itemPrefab: {fileID: 4269043998097811684, guid: 88ba9a9da0e886c499018bfbebac580c, type: 3}
   _itemTex: {fileID: 0}
   _itemMesh: {fileID: 0}
   _itemMaterials: []
   _itemName: Spiro Bullet
-  _itemId: 0
+  _itemDescription: 
   _isCreatableObj: 0
   _projectileType: 1
   _projectileCount: 50
   _projectileDamage: 15
   _bulletController: {fileID: 5184176061379500615, guid: c6a3e3319aed1034fb59ba87595f2dc2, type: 3}
   _bulletPoolSize:
-    _initPoolSize: 5
+    _initPoolSize: 1
     _maxPoolSize: 20
   _maxOverlapCount: 1

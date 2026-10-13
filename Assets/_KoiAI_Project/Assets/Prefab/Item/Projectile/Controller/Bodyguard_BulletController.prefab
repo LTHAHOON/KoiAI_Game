@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5158755000931906856}
-  - component: {fileID: 7190139778985183213}
+  - component: {fileID: 4269043998097811684}
   m_Layer: 0
-  m_Name: MonsterCannonBall
+  m_Name: Bodyguard_BulletController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7190139778985183213
+--- !u!114 &4269043998097811684
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 601774910944409318}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f0d5b2ede7798544b1a43d8240afb8c, type: 3}
+  m_Script: {fileID: 11500000, guid: 0043710fec87b84438465c1c0b4c7b62, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CannonBall
-  _cannonBallData: {fileID: 11400000, guid: 3419b40a6e0da2d4198eacf72d48e924, type: 2}
+  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Item.BulletItem
+  _bulletData: {fileID: 11400000, guid: 51de5f034ada78645b0fbcab7a0f02f5, type: 2}

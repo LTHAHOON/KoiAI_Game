@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9b05ab1acf437b4b81fec33aba9ee4c, type: 3}
+  m_Name: Bodyguard_GunData
+  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Item.GunData
+  _entityType: 3
+  _guidString: 9477c6a1-9bf0-4f31-8a68-a1c6831dc5f9
+  _itemPrefab: {fileID: 188779150067398950, guid: 935d71839848402489cc0006426d53c9, type: 3}
+  _itemTex: {fileID: 0}
+  _itemMesh: {fileID: 0}
+  _itemMaterials: []
+  _itemName: Spiro Gun
+  _itemDescription: 
+  _isCreatableObj: 0
+  _weaponType: 1
+  _weaponDamage: 15
+  _layerMaskForAim:
+    serializedVersion: 2
+    m_Bits: 8
+  _bulletData: {fileID: 11400000, guid: 51de5f034ada78645b0fbcab7a0f02f5, type: 2}
+  _isInfiniteLoad: 1
+  _maxHitCount: 1
+  _loadMaxCount: 20
+  _launchSpeed: 12
+  _loadTime: 1
+  _maxPitchAngle: 90
+  _minPitchAngle: 0
+  _maxYawAngle: 90
+  _minYawAngle: -90

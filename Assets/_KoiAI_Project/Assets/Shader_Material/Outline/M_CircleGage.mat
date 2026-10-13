@@ -81,7 +81,7 @@ Material:
     - _Gauge01_WaveScale: -0.27
     - _Gauge02_RotateSpeed: 0.5
     - _Gauge02_WaveScale: -0.13
-    - _Gauge_Amount: 1
+    - _Gauge_Amount: 0
     - _Gauge_RotateSpeed: 0.5
     - _Mask_Circle_Size: 0.7
     - _Outline_Width: 0.1

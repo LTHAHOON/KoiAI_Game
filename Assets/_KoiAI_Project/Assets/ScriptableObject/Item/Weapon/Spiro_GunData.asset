@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9b05ab1acf437b4b81fec33aba9ee4c, type: 3}
   m_Name: Spiro_GunData
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Item.GunData
+  _entityType: 3
+  _guidString: a0a2ba5a-80a8-45f8-a363-22bc65f54894
   _itemPrefab: {fileID: 188779150067398950, guid: c6a3e3319aed1034fb59ba87595f2dc2, type: 3}
   _itemTex: {fileID: 0}
   _itemMesh: {fileID: 0}
   _itemMaterials: []
   _itemName: Spiro Gun
-  _itemId: 100002
+  _itemDescription: 
   _isCreatableObj: 0
   _weaponType: 1
   _weaponDamage: 15

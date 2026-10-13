@@ -20,14 +20,6 @@ namespace KoiAI
 
         public void OnHit(RaycastHit[] hits, int hitCount)
         {
-            if (_hitEffectPrefab)
-            {
-                for (int i = 0; i < hits.Length; i++)
-                {
-                    Instantiate(_hitEffectPrefab, hits[i].transform.position, Quaternion.identity);
-                }
-            }
-
             if (!_bulletData)
             {
                 return;
@@ -42,6 +34,10 @@ namespace KoiAI
                 if (!hits[i].collider)
                 {
                     continue;
+                }
+                if (_hitEffectPrefab)
+                {
+                    Instantiate(_hitEffectPrefab, hits[i].point, Quaternion.identity);
                 }
                 if (hits[i].collider.TryGetComponent(out Health.Health health))
                 {
