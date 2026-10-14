@@ -21,6 +21,12 @@ namespace KoiAI.Health
             MeshRenderer[] meshRenderers = GetComponentsInChildren<MeshRenderer>();
             if(meshRenderers == null || meshRenderers.Length <= 0)
             {
+                SkinnedMeshRenderer[] skinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+                if(skinnedMeshRenderers == null || skinnedMeshRenderers.Length <= 0)
+                {
+                    return;
+                }
+                _materials = skinnedMeshRenderers.Select(skinnedMeshRenderer => skinnedMeshRenderer.material).ToArray();
                 return;
             }
             _materials = meshRenderers.Select(meshRenderer => meshRenderer.material).ToArray();

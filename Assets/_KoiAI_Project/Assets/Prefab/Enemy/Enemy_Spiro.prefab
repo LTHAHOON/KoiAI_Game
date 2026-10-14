@@ -31490,7 +31490,6 @@ GameObject:
   - component: {fileID: 7474466815474248434}
   - component: {fileID: 4129940667833861889}
   - component: {fileID: 6148596442559701446}
-  - component: {fileID: 1312415786912095101}
   m_Layer: 7
   m_Name: Enemy_Spiro
   m_TagString: Untagged
@@ -31694,9 +31693,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f69137f765d5ef409a14517fd4e2081, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Health.PixelBurnDeath
-  _health: {fileID: 512464100212947924}
-  _rigidbody: {fileID: 4935607812214051969}
-  _collider: {fileID: 5629071846775492384}
   _excludeLayersWhenDie:
     serializedVersion: 2
     m_Bits: 8
@@ -31745,18 +31741,6 @@ MonoBehaviour:
     _activateTarget: {fileID: 1242167338812817272}
   - _chanceValue: 50
     _activateTarget: {fileID: 6865309130937599887}
---- !u!114 &1312415786912095101
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2706511028172561545}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26bef8df74dd2db41aec43c44c63e0b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Utilities.UIFollowConnector
 --- !u!1 &2857284113161726406
 GameObject:
   m_ObjectHideFlags: 0

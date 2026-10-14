@@ -40,15 +40,15 @@ public static class FeatureStopProbe
             Application.runInBackground = true; EditorApplication.isPaused = false;
             if (phase == 1)
             {
-                brain = UnityEngine.Object.FindObjectsByType<AIBrain>(FindObjectsSortMode.None).FirstOrDefault(b => b.name.Contains("Bodyguard"));
-                var player = UnityEngine.Object.FindFirstObjectByType<PlayerController>();
+                brain = UnityEngine.Object.FindObjectsByType<AIBrain>().FirstOrDefault(b => b.name.Contains("Bodyguard"));
+                var player = UnityEngine.Object.FindAnyObjectByType<PlayerController>();
                 if (!brain || !player) throw new Exception("Bodyguard/player missing");
                 var features = (List<AIFeature>)typeof(AIBrain).GetField("_aiFeatures", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(brain);
                 if (features == null || features.Count == 0) return;
                 var agent = brain.GetComponent<NavMeshAgent>();
                 if (!agent.isOnNavMesh) return;
                 movement = features.First(f => f is AIMovement); returning = features.First(f => f is AIReturn);
-                foreach (var system in UnityEngine.Object.FindObjectsByType<AISystem>(FindObjectsSortMode.None)) system.enabled = false;
+                foreach (var system in UnityEngine.Object.FindObjectsByType<AISystem>()) system.enabled = false;
                 brain.StopAllCoroutines();
                 active = (HashSet<AIFeatureProperty>)typeof(AIBrain).GetField("_activeFeatures", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(brain);
                 active.Clear(); player.enabled = false;
