@@ -50,7 +50,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -607,7 +607,7 @@ ParticleSystem:
     maxNumParticles: 1000
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
-    rotation3D: 1
+    rotation3D: 0
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
@@ -1215,10 +1215,10 @@ ParticleSystem:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 0.57366633
-          value: -1
+          time: 0.57366705
+          value: -0.1370697
           inSlope: -2.9992917
-          outSlope: 2.3455806
+          outSlope: 0.3215086
           tangentMode: 65
           weightedMode: 0
           inWeight: 0.33333334
@@ -1243,6 +1243,15 @@ ParticleSystem:
           value: -1
           inSlope: 0
           outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.53242296
+          value: -0.12795925
+          inSlope: 1.486506
+          outSlope: 1.486506
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
@@ -1277,10 +1286,10 @@ ParticleSystem:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 0.57366633
-          value: -1
+          time: 0.57366705
+          value: -0.1370697
           inSlope: -2.9992917
-          outSlope: 2.3455806
+          outSlope: 0.3215086
           tangentMode: 65
           weightedMode: 0
           inWeight: 0.33333334
@@ -1305,6 +1314,15 @@ ParticleSystem:
           value: -1
           inSlope: 0
           outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.53242296
+          value: -0.12795925
+          inSlope: 1.486506
+          outSlope: 1.486506
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
@@ -1339,10 +1357,10 @@ ParticleSystem:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 0.57366633
-          value: -1
+          time: 0.57366705
+          value: -0.1370697
           inSlope: -2.9992917
-          outSlope: 2.3455806
+          outSlope: 0.3215086
           tangentMode: 65
           weightedMode: 0
           inWeight: 0.33333334
@@ -1367,6 +1385,15 @@ ParticleSystem:
           value: -1
           inSlope: 0
           outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.53242296
+          value: -0.12795925
+          inSlope: 1.486506
+          outSlope: 1.486506
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
@@ -4902,7 +4929,7 @@ ParticleSystemRenderer:
   m_SortingFudge: 0
   m_NormalDirection: 1
   m_ShadowBias: 0
-  m_RenderAlignment: 2
+  m_RenderAlignment: 1
   m_Pivot: {x: 0, y: 0, z: 0}
   m_Flip: {x: 0, y: 0, z: 0}
   m_EnableGPUInstancing: 1

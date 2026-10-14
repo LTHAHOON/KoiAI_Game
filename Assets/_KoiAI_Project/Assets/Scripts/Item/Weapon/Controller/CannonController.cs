@@ -140,19 +140,19 @@ namespace KoiAI.Item
                 --_curBallCount.Value;
             }
 
-            CannonBallItem bulletData = _pool.Pop();
-            if(!bulletData)
+            CannonBallItem cannonballItem = _pool.Pop();
+            if(!cannonballItem)
             {
                 return false;
             }
-            if (bulletData.IsEmptyController())
+            if (cannonballItem.IsEmptyController())
             {
-                bulletData.SetupController(_targetLayerMask);
+                cannonballItem.SetupController(_targetLayerMask);
             }
-            bulletData.TrailRenderer.Clear();
-            bulletData.TrailRenderer.enabled = false;
-            bulletData.TrailRenderer.enabled = true;
-            Rigidbody bulletRigid = bulletData.Rigidbody;
+            cannonballItem.TrailRenderer.Clear();
+            cannonballItem.TrailRenderer.enabled = false;
+            cannonballItem.TrailRenderer.enabled = true;
+            Rigidbody bulletRigid = cannonballItem.Rigidbody;
             if (!bulletRigid)
             {
                 return false;
@@ -161,7 +161,7 @@ namespace KoiAI.Item
             bulletRigid.linearDamping = _cannonData.LinearDamping;
             bulletRigid.useGravity = true;
             bulletRigid.linearVelocity = GetLaunchVelocity();
-            PoolManager.Instance.ReturnDelay(_pool, bulletData, _cannonData.CannonBallData.CannonBallLifeTime);
+            PoolManager.Instance.ReturnDelay(_pool, cannonballItem, _cannonData.CannonBallData.CannonBallLifeTime);
             return true;
         }
         public override void SetAim(Vector2 aim)
