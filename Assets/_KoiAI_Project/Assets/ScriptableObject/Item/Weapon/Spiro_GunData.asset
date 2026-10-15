@@ -28,6 +28,7 @@ MonoBehaviour:
     m_Bits: 8
   _bulletData: {fileID: 11400000, guid: 12d58ea322087c04ba6379be477c29b5, type: 2}
   _isInfiniteLoad: 1
+  _isAutoLoad: 1
   _maxHitCount: 1
   _loadMaxCount: 20
   _launchSpeed: 12

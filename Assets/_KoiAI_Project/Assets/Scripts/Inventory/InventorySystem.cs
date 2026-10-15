@@ -305,7 +305,7 @@ namespace KoiAI.Item
         {
             Renderer newItemUIRenderer = Instantiate(_itemUIRendererPrefab, targetSlot.transform);
             //아이템 텍스처 넣기
-            MPBSystem.ChangeMaterialProperty(newItemUIRenderer, _itemTexturePropertyID, texture);
+            MPBSystem.ChangeMaterialProperty(newItemUIRenderer, _itemTexturePropertyID, texture ? texture : Texture2D.whiteTexture);
             return newItemUIRenderer;
         }
 

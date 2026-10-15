@@ -1,5 +1,5 @@
 
-using R3;
+using System;
 using UnityEngine;
 using static KoiAI.Player.PlayerSFXAudioFeature;
 
@@ -31,7 +31,7 @@ namespace KoiAI.Item
         private Pool<CannonBallItem> _pool;
         private Vector3 _hitPoint;
 
-        private readonly ReactiveProperty<int> _curBallCount = new(0);
+        private int _curBallCount = 0;
         private AudioSFXTarget _attackAuidoTarget;
         private int _curBallLoadCount;
         private int _remainingBallCount = 0;
@@ -39,38 +39,30 @@ namespace KoiAI.Item
         private float _curLoadTime = 0f;
         private float _targetLoadTime = 0f;
         private bool _isFireLoading = false;
+        private int _reloadBallCount;
+        private Action OnPlayFireEffect;
 
         private void Update()
         {
-            if (!_cannonSkin)
+            if (!_cannonData)
             {
                 return;
             }
             if (IsFireLoading())
             {
                 #region 발사체 장전 로직
-                if(_targetLoadTime <= 0f)
-                {
-                    _curBallLoadCount = 0;
-                    _remainingBallLoadCount = 0;
-                    _isFireLoading = false;
-                    return;
-                }
                 _curLoadTime += Time.deltaTime;
-                int count = Mathf.RoundToInt(_curLoadTime / _targetLoadTime * _remainingBallCount);
-                _curBallLoadCount = _curBallCount.CurrentValue + count;
-                _remainingBallLoadCount = Mathf.Clamp(_remainingBallCount - count, 0, _remainingBallCount);
-
-                if (_curLoadTime >= _targetLoadTime || _curBallLoadCount >= _cannonData.LoadMaxCount)
+                float progress = _targetLoadTime > 0f ? Mathf.Clamp01(_curLoadTime / _targetLoadTime) : 1f;
+                int count = Mathf.FloorToInt(_reloadBallCount * progress);
+                _curBallLoadCount = _curBallCount + count;
+                _remainingBallLoadCount = _cannonData.IsInfiniteLoad ? _remainingBallCount : _remainingBallCount - count;
+                if (progress >= 1f)
                 {
-                    _curBallCount.Value = _curBallLoadCount;
-                    _remainingBallCount = _remainingBallLoadCount;
-                    _curLoadTime = 0f;
-                    _targetLoadTime = 0f;
+                    CompleteReload();
                 }
                 #endregion
             }
-            if(IsAiming())
+            if (_cannonSkin && IsAiming())
             {
                 ShowAiming();
             }
@@ -78,26 +70,12 @@ namespace KoiAI.Item
 
         public override void Init(WeaponBase wepaonItem)
         {
-            _curBallCount
-                .Pairwise()
-                .Where(pair => pair.Current < pair.Previous)
-                .Subscribe(_ =>
-                {
-                    if(_cannonSkin.FirePT)
-                    {
-                        _cannonSkin.FirePT.Play();
-                    }
-                    if(_cannonSkin.FireAudioData)
-                    {
-                        var owner = wepaonItem.ItemOwner;
-                        if(_attackAuidoTarget == null)
-                        {
-                            _attackAuidoTarget = owner.GetAudioSFXTarget(PlayerSFXAuidoProperty.Attack);
-                        }
-                        AudioManager.Instance.PlaySFX(_attackAuidoTarget, _cannonSkin.FireAudioData, _cannonSkin.FirePoint.position);
-                    }
-                }).AddTo(this);
-
+            CancelReload();
+            _curBallCount = _cannonData.IsInfiniteLoad ? Mathf.Max(0, _cannonData.LoadMaxCount) : 0;
+            _remainingBallCount = 0;
+            _curBallLoadCount = _curBallCount;
+            _remainingBallLoadCount = 0;
+            OnPlayFireEffect = () => PlayFireEffect(wepaonItem);
             CannonBallData cannonBallData = _cannonData.CannonBallData;
             ulong id =  gameObject.GetEntityULongID();
             CannonBallItem projectilePrefab = (CannonBallItem)cannonBallData.ItemPrefab;
@@ -110,34 +88,49 @@ namespace KoiAI.Item
                 cannonBalls[i].SetupController(_targetLayerMask);
             }
             _cannonAim = Instantiate(_cannonData.AimPrefab, transform);
-            _cannonAim.gameObject.SetActive(false);
+            if (_cannonAim)
+            {
+                _cannonAim.gameObject.SetActive(false);
+            }
             _surfaceAngleFinder = new(5);
             InitSkin();
         }
 
+        private void PlayFireEffect(WeaponBase weaponItem)
+        {
+            if (_cannonSkin.FirePT)
+            {
+                _cannonSkin.FirePT.Play();
+            }
+            if (_cannonSkin.FireAudioData)
+            {
+                var owner = weaponItem ? weaponItem.ItemOwner : null;
+                if (!owner)
+                {
+                    return;
+                }
+                if (_attackAuidoTarget == null)
+                {
+                    _attackAuidoTarget = owner.GetAudioSFXTarget(PlayerSFXAuidoProperty.Attack);
+                }
+                AudioManager.Instance.PlaySFX(_attackAuidoTarget, _cannonSkin.FireAudioData, _cannonSkin.FirePoint.position);
+            }
+        }
+
         public override bool Activate()
         {
-            if (_isFireLoading)
-            {
-                #region 장전 중일 경우 장전된 만큼 설정하고 초기화하고 True 리턴하기
-                _curLoadTime = 0f;
-                _targetLoadTime = 0;
-                _curBallCount.Value = _curBallLoadCount;
-                _remainingBallCount = _remainingBallLoadCount;
-                _curBallLoadCount = 0;
-                _remainingBallLoadCount = 0;
-                _isFireLoading = false;
-                return true;
-                #endregion
-            }
-            if (HasNotCannonBall() && !_cannonData.IsInfiniteLoad)
+            if (!_cannonData || _isFireLoading)
             {
                 return false;
             }
-
-            if (!_cannonData.IsInfiniteLoad)
+            if (_curBallCount <= 0)
             {
-                --_curBallCount.Value;
+                TryAutoReload();
+                return false;
+            }
+            if (_pool == null)
+            {
+                return false;
             }
 
             CannonBallItem cannonballItem = _pool.Pop();
@@ -157,11 +150,14 @@ namespace KoiAI.Item
             {
                 return false;
             }
+            --_curBallCount;
+            OnPlayFireEffect.Invoke();
             bulletRigid.transform.position = _cannonSkin.FirePoint.position;
             bulletRigid.linearDamping = _cannonData.LinearDamping;
             bulletRigid.useGravity = true;
             bulletRigid.linearVelocity = GetLaunchVelocity();
             PoolManager.Instance.ReturnDelay(_pool, cannonballItem, _cannonData.CannonBallData.CannonBallLifeTime);
+            TryAutoReload();
             return true;
         }
         public override void SetAim(Vector2 aim)
@@ -177,43 +173,112 @@ namespace KoiAI.Item
             _isAiming = true;
             _pitchAngle = startPitchAngle;
             _yawAngle = startYawAngle;
-            _cannonAim.gameObject.SetActive(true);
+            if (_cannonAim)
+            {
+                _cannonAim.gameObject.SetActive(true);
+            }
         }
 
         public override void EndAiming()
         {
             _isAiming = false;
-            _cannonAim.gameObject.SetActive(false);
+            if (_cannonAim)
+            {
+                _cannonAim.gameObject.SetActive(false);
+            }
         }
 
         public void OnLoadCannonBall(CannonBallData cannonBallData)
         {
-            if (_curBallCount.CurrentValue >= _cannonData.LoadMaxCount)
+            if (!_cannonData || !cannonBallData)
             {
-                _remainingBallCount += cannonBallData.ProjectileCount;
                 return;
             }
-            _targetLoadTime += _cannonData.LoadTime;
-            _remainingBallCount += cannonBallData.ProjectileCount;
-            _isFireLoading = true;
+            if (!_cannonData.IsInfiniteLoad)
+            {
+                _remainingBallCount += Mathf.Max(0, cannonBallData.ProjectileCount);
+            }
+            TryAutoReload();
+        }
+
+        private void TryAutoReload()
+        {
+            if (_cannonData && _cannonData.IsAutoLoad && _curBallCount <= 0)
+            {
+                OnReLoadCannonBall();
+            }
         }
 
         public void OnReLoadCannonBall()
         {
             //중복 장전 차단
-            if (_isFireLoading)
+            if (!_cannonData || _isFireLoading)
             {
                 return;
             }
             //탄이 꽉 차있거나 남은 탄이 없을 경우 리턴
-            if (_curBallCount.CurrentValue >= _cannonData.LoadMaxCount || _remainingBallCount <= 0)
+            int missingCount = Mathf.Max(0, _cannonData.LoadMaxCount - _curBallCount);
+            if (missingCount == 0 || (!_cannonData.IsInfiniteLoad && _remainingBallCount <= 0))
             {
                 return;
             }
-            _targetLoadTime = _cannonData.LoadTime * _remainingBallCount / _cannonData.LoadMaxCount;
+            _reloadBallCount = _cannonData.IsInfiniteLoad ? missingCount : Mathf.Min(missingCount, _remainingBallCount);
+            _curLoadTime = 0f;
+            // 빈 탄창을 채우는 속도를 기준으로 보충할 탄 수만큼 장전합니다.
+            _targetLoadTime = Mathf.Max(0f, _cannonData.LoadTime) * _reloadBallCount / _cannonData.LoadMaxCount;
+            _curBallLoadCount = _curBallCount;
+            _remainingBallLoadCount = _remainingBallCount;
             _isFireLoading = true;
+            NotifyReloadStateChanged(true);
+            if (_targetLoadTime <= 0f)
+            {
+                CompleteReload();
+            }
         }
-    
+
+        public override bool TryInterruptReload()
+        {
+            if (!_isFireLoading)
+            {
+                return false;
+            }
+            // 공격 입력으로 중단할 때는 지금까지 장전된 탄을 유지합니다.
+            _curBallCount = _curBallLoadCount;
+            _remainingBallCount = _remainingBallLoadCount;
+            CancelReload();
+            return true;
+        }
+
+        private void CompleteReload()
+        {
+            _curBallCount += _reloadBallCount;
+            if (!_cannonData.IsInfiniteLoad)
+            {
+                _remainingBallCount -= _reloadBallCount;
+            }
+            CancelReload();
+        }
+
+        private void CancelReload()
+        {
+            bool wasReloading = _isFireLoading;
+            _isFireLoading = false;
+            _reloadBallCount = 0;
+            _curLoadTime = 0f;
+            _targetLoadTime = 0f;
+            _curBallLoadCount = _curBallCount;
+            _remainingBallLoadCount = _remainingBallCount;
+            if (wasReloading)
+            {
+                NotifyReloadStateChanged(false);
+            }
+        }
+
+        private void OnDisable()
+        {
+            CancelReload();
+        }
+
         protected override void InitSkin()
         {
             if (_cannonSkin)
@@ -328,10 +393,9 @@ namespace KoiAI.Item
             _cannonAim.transform.position = _hitPoint;
         }
 
-        public bool IsFireLoading() => _isFireLoading;
-        private bool HasNotCannonBall() => _pool == null || _curBallCount.CurrentValue <= 0;
+        public override bool IsFireLoading() => _isFireLoading;
         public CannonData CannonData => _cannonData;
-        public int CurBallCount => _curBallCount.CurrentValue;
+        public int CurBallCount => _curBallCount;
         public int RemainingBallCount => _remainingBallCount;
         public int CurBallLoadCount => _curBallLoadCount;
         public int RemainingBallLoadCount => _remainingBallLoadCount;

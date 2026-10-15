@@ -10,18 +10,22 @@ namespace KoiAI.Health
     [RequireComponent(typeof(Health), typeof(Collider), typeof(EntityIdentity))]
     public abstract class Death : MonoBehaviour
     {
-        private Health _health;
         [SerializeField]
         private LayerMask _excludeLayersWhenDie;
         [SerializeField]
         private float _destroyDuration = 1f;
         [SerializeField]
         private float _ditherDuration = 0.6f;
+        [SerializeField]
+        private ParticleSystem _deathParticlePrefab;
+        [SerializeField]
+        private Vector3 _deathParticlePosOffset;
 
         private static readonly int DitherAlphaID = Shader.PropertyToID("_Dither_Alpha");
         private Material[] _materials;
         private EntityIdentity _myIdentity;
         private Rigidbody _rigidbody;
+        private Health _health;
         private Collider _collider;
 
         private void Awake()
@@ -47,7 +51,7 @@ namespace KoiAI.Health
             Initialize();
         }
 
-        public async void OnDeath(EntityIdentity instigatorIdentity)
+        private async UniTask OnDeath(EntityIdentity instigatorIdentity)
         {
             GameplayEvents.OnKilled?.Invoke(new ObjectiveProgressEventData(instigatorIdentity, _myIdentity));
             if (_rigidbody)
@@ -55,6 +59,17 @@ namespace KoiAI.Health
                 _rigidbody.excludeLayers = _excludeLayersWhenDie;
             }
             _collider.excludeLayers = _excludeLayersWhenDie;
+            ParticleSystem deathParticle = null;
+            if(_deathParticlePrefab)
+            {
+                deathParticle = Instantiate(_deathParticlePrefab);
+                deathParticle.transform.position = transform.position + _deathParticlePosOffset;
+                if(deathParticle)
+                {
+                    deathParticle.Play();    
+                }    
+            }
+            
             OnDeath(_health);
 
             if (_materials != null)
@@ -64,11 +79,24 @@ namespace KoiAI.Health
                     _materials[i].DOFloat(0f, DitherAlphaID, _ditherDuration);
                 }
             }
-
-            await UniTask.Delay(TimeSpan.FromSeconds(_destroyDuration));
+            await UniTask.WhenAll(DeathDelayTask(), WaitUntilStopDeathParticle(deathParticle));
+            Destroy(deathParticle.gameObject);
             Destroy(_health.gameObject);
-
         }
+
+        private async UniTask DeathDelayTask()
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(_destroyDuration));
+        }
+        
+        private async UniTask WaitUntilStopDeathParticle(ParticleSystem deathParticle)
+        {
+            if(deathParticle)
+            {
+                await UniTask.WaitUntil(() => deathParticle.isStopped);
+            }
+        }
+
 
         public abstract void Initialize();
         public abstract void OnDeath(Health health);

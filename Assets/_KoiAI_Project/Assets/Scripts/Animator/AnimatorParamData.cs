@@ -81,6 +81,13 @@ namespace KoiAI.AnimatorSystem
         [BoxGroup("애니메이터 파라미터(없으면 None)")]
         [Dropdown("GetAnimatorParamList")]
         [OnValueChanged("OnValueChanged")]
+        [Tooltip("재장전 상태를 나타내는 Bool 또는 재장전 시작 시 실행할 Trigger 파라미터입니다.")]
+        private string _reloadParam = "None";
+
+        [SerializeField]
+        [BoxGroup("애니메이터 파라미터(없으면 None)")]
+        [Dropdown("GetAnimatorParamList")]
+        [OnValueChanged("OnValueChanged")]
         private string _act1_Param;
         [SerializeField]
         [BoxGroup("애니메이터 파라미터(없으면 None)")]
@@ -143,9 +150,46 @@ namespace KoiAI.AnimatorSystem
         /// <summary> -1일 경우 None</summary>
         public int JumpParmID => IsNone(_jumpParam) ? -1 : Animator.StringToHash(_jumpParam);
         /// <summary> -1일 경우 None</summary>
+        public int ReloadParamID => IsNone(_reloadParam) ? -1 : Animator.StringToHash(_reloadParam);
+        /// <summary> -1일 경우 None</summary>
         public int Act1ParamID => IsNone(_act1_Param) ? -1 : Animator.StringToHash(_act1_Param);
         /// <summary> -1일 경우 None</summary>
         public int Act2ParamID => IsNone(_act2_Param) ? -1 : Animator.StringToHash(_act2_Param);
+
+        /// <summary>
+        /// 실제 재장전 상태에 맞춰 애니메이션을 설정합니다.
+        /// </summary>
+        public void SetReloadParameter(Animator animator, bool isReloading)
+        {
+            if (!animator || ReloadParamID == -1)
+            {
+                return;
+            }
+            AnimatorControllerParameter[] parameters = animator.parameters;
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                if (parameters[i].nameHash != ReloadParamID)
+                {
+                    continue;
+                }
+                if (parameters[i].type == AnimatorControllerParameterType.Bool)
+                {
+                    animator.SetBool(ReloadParamID, isReloading);
+                }
+                else if (parameters[i].type == AnimatorControllerParameterType.Trigger)
+                {
+                    if (isReloading)
+                    {
+                        animator.SetTrigger(ReloadParamID);
+                    }
+                    else
+                    {
+                        animator.ResetTrigger(ReloadParamID);
+                    }
+                }
+                return;
+            }
+        }
 
         /// <summary>
         /// Exit에서만 호출하여 정지값까지 보간합니다. 새 이동이 시작되면 종료합니다.

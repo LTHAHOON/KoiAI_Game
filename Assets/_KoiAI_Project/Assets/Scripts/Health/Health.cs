@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace KoiAI.Health
 {
+    using Cysharp.Threading.Tasks;
     using KoiAI.Core;
     using KoiAI.Interact;
     using KoiAI.ItemProp;
@@ -17,7 +18,7 @@ namespace KoiAI.Health
         private bool _hasHealthBar = true;
         private ReactiveProperty<float> _currentHealth = new(0);
         private bool _isDelayChanging = false;
-        public Action<EntityIdentity> OnDeath;
+        public Func<EntityIdentity,  UniTask> OnDeath;
         private bool _isDead = false;
 
         //체력에 영향을 주는 상대 데이터

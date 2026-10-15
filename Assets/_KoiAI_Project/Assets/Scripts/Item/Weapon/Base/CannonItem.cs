@@ -14,6 +14,9 @@ namespace KoiAI.Item
         private PlayerRotation _rotationFeature;
         private CannonData _cannonData;
         private Vector2 _aim;
+        private bool _isControllerInitialized;
+
+        private bool IsEquipped => isActiveAndEnabled && GetCurrentSlotType() == ItemSlotType.Equipped;
 
         private void Awake()
         {
@@ -33,7 +36,7 @@ namespace KoiAI.Item
             }
 
             //장전 중일 경우 무기 정보(탄 갯수 Text) 설정
-            if (_cannonControl.IsFireLoading())
+            if (_equipmentFeature && IsEquipped && _cannonControl.IsFireLoading())
             {
                 _equipmentFeature.SetWeaponInfo(_cannonControl.CurBallLoadCount, _cannonControl.RemainingBallLoadCount);
             }
@@ -41,17 +44,32 @@ namespace KoiAI.Item
 
         private void OnEnable()
         {
-            var curSlotType = GetCurrentSlotType();
-            if (curSlotType == ItemSlotType.Equipped)
+            if (IsEquipped && _equipmentFeature)
             {
-                int curBallCount = _cannonControl.CurBallCount;
-                int remainingBallCount = _cannonControl.RemainingBallCount;
-                _equipmentFeature.SetWeaponInfo(curBallCount, remainingBallCount);
+                InitializeWeapon();
             }
         }
 
+        private void OnDisable()
+        {
+            bool wasAiming = _cannonControl && _cannonControl.IsAiming();
+            if (_cannonControl)
+            {
+                _cannonControl.EndAiming();
+            }
+            _aim = Vector2.zero;
+            DisConnectPlayerIA();
+            if (wasAiming && _rotationFeature)
+            {
+                _rotationFeature.ConnectPlayerIA();
+            }
+        }
         private void OnDestroy()
         {
+            if (_cannonControl)
+            {
+                _cannonControl.OnReloadStateChanged -= OnReloadAmmoChanged;
+            }
             var curSlotType = GetCurrentSlotType();
             if (curSlotType == ItemSlotType.Equipped)
             {
@@ -62,15 +80,45 @@ namespace KoiAI.Item
         /// <summary>
         /// 아이템 초기화(본체를 생성하기 전 세팅)
         /// </summary>
-        public override void Init(PlayerController itemOwner, Renderer itemUI ,ItemSlotType curSlotType)
+        public override void Init(PlayerController itemOwner, Renderer itemUI, ItemSlotType curSlotType)
         {
             base.Init(itemOwner, itemUI, curSlotType);
-            #region PlayerEquipment 참조
+            if (!_cannonControl)
+            {
+                _cannonControl = GetComponent<CannonController>();
+            }
+            _cannonData = _cannonControl.CannonData;
             _equipmentFeature = (PlayerEquipment)ItemOwner.GetPlayerFeatureWithProperty(PlayerFeature.PlayerFeatureProperty.Equipment);
-            #endregion
+            _cannonControl.OnReloadStateChanged -= OnReloadAmmoChanged;
+            _cannonControl.OnReloadStateChanged += OnReloadAmmoChanged;
+            if (curSlotType == ItemSlotType.Equipped)
+            {
+                InitializeWeapon();
+            }
         }
 
+        private void InitializeWeapon()
+        {
+            if (!_isControllerInitialized)
+            {
+                _cannonControl.Init(this);
+                _isControllerInitialized = true;
+            }
+            _rotationFeature = ItemOwner.GetComponent<PlayerRotation>();
+            if (IsEquipped)
+            {
+                ConnectPlayerIA();
+                _equipmentFeature.SetWeaponInfo(_cannonControl.CurBallCount, _cannonControl.RemainingBallCount);
+            }
+        }
 
+        private void OnReloadAmmoChanged(bool isReloading)
+        {
+            if (_equipmentFeature && IsEquipped)
+            {
+                _equipmentFeature.SetWeaponInfo(_cannonControl.CurBallCount, _cannonControl.RemainingBallCount);
+            }
+        }
         public override ItemData GetItemData()
         {
             return _cannonControl.CannonData;
@@ -115,7 +163,7 @@ namespace KoiAI.Item
             #region Projectile Pooling
             if (!bExistSameItem)
             {
-                _cannonControl.Init(this);
+                InitializeWeapon();
             }
             #endregion
 
@@ -127,6 +175,10 @@ namespace KoiAI.Item
 
         public void OnStartProjectileAiming(InputAction.CallbackContext context)
         {
+            if (!IsEquipped || !_isControllerInitialized)
+            {
+                return;
+            }
             if(context.performed)
             {
                 float pitchAngle = (_cannonData.MinPitchAngle + _cannonData.MaxPitchAngle) / 2;
@@ -144,6 +196,10 @@ namespace KoiAI.Item
 
         public void OnProjectileAiming(InputAction.CallbackContext context)
         {
+            if (!IsEquipped || !_isControllerInitialized)
+            {
+                return;
+            }
             if(!_cannonControl.IsAiming())
             {
                 _aim = Vector2.zero;
@@ -161,12 +217,20 @@ namespace KoiAI.Item
 
         public void OnFire(InputAction.CallbackContext context)
         {
+            if (!IsEquipped || !_isControllerInitialized)
+            {
+                return;
+            }
             if(!_cannonControl.IsAiming() || gameObject.activeSelf == false)
             {
                 return;
             }
             if(context.performed)
             {
+                if (_cannonControl.TryInterruptReload())
+                {
+                    return;
+                }
                 bool bScucessActivate = _cannonControl.Activate();
                 if(bScucessActivate)
                 {
@@ -191,6 +255,10 @@ namespace KoiAI.Item
         /// </summary>
         private void OnReLoadCannonBall(InputAction.CallbackContext context)
         {
+            if (!IsEquipped || !_isControllerInitialized)
+            {
+                return;
+            }
             if (context.performed)
             {
                 _cannonControl.OnReLoadCannonBall();
@@ -199,6 +267,11 @@ namespace KoiAI.Item
 
         protected override void ConnectPlayerIA()
         {
+            DisConnectPlayerIA();
+            if (!IsEquipped || !_isControllerInitialized || InputService.PlayerIA == null)
+            {
+                return;
+            }
             InputService.PlayerIA.Player.Fire.performed += OnFire;
             InputService.PlayerIA.Player.FireLoad.performed += OnReLoadCannonBall;
             InputService.PlayerIA.Player.ProjectileAiming.performed += OnProjectileAiming;
@@ -209,6 +282,10 @@ namespace KoiAI.Item
 
         protected override void DisConnectPlayerIA()
         {
+            if (InputService.PlayerIA == null)
+            {
+                return;
+            }
             InputService.PlayerIA.Player.Fire.performed -= OnFire;
             InputService.PlayerIA.Player.FireLoad.performed -= OnReLoadCannonBall;
             InputService.PlayerIA.Player.ProjectileAiming.performed -= OnProjectileAiming;

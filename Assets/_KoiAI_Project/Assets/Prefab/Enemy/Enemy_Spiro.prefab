@@ -31698,6 +31698,8 @@ MonoBehaviour:
     m_Bits: 8
   _destroyDuration: 5
   _ditherDuration: 0.6
+  _deathParticlePrefab: {fileID: 3167395012800652672, guid: a5a0110ef07ea10408e40d69ecb83fbe, type: 3}
+  _deathParticlePosOffset: {x: 0, y: 1, z: 0}
   _pixelBurnVFX:
   - {fileID: 7205574497007117599}
   - {fileID: 852662480643964209}

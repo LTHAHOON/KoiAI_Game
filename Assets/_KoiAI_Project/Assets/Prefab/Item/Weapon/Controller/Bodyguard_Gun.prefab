@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0043710fec87b84438465c1c0b4c7b62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Item.BulletItem
-  _bulletData: {fileID: 11400000, guid: 12d58ea322087c04ba6379be477c29b5, type: 2}
+  _bulletData: {fileID: 11400000, guid: 51de5f034ada78645b0fbcab7a0f02f5, type: 2}
 --- !u!114 &5184176061379500615
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59,4 +59,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.BulletController
   _bulletSkin: {fileID: 0}
-  _hitEffectPrefab: {fileID: 5238538877814813142, guid: 47096eff328e11a418ace7db2d72aa97, type: 3}
+  _hitEffectPrefab: {fileID: 7275548786892498063, guid: 5bc9a0bf98f67d240a936bf476ba2082, type: 3}

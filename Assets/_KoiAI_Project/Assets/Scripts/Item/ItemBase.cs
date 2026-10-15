@@ -54,6 +54,51 @@ namespace KoiAI.Item
     }
     public abstract class WeaponBase : ItemBase
     {
+        private WeaponControllerBase _reloadController;
+        private bool _isReloadAnimationPlaying;
+
+        public override void Init(PlayerController itemOwner, Renderer itemUI, ItemSlotType curSlotType)
+        {
+            base.Init(itemOwner, itemUI, curSlotType);
+            if (_reloadController)
+            {
+                return;
+            }
+            _reloadController = GetComponent<WeaponControllerBase>();
+            if (_reloadController)
+            {
+                _reloadController.OnReloadStateChanged += OnReloadStateChanged;
+                destroyCancellationToken.Register(DisconnectReloadAnimation);
+            }
+        }
+
+        private void OnReloadStateChanged(bool isReloading)
+        {
+            if (!ItemOwner || (isReloading && (!isActiveAndEnabled || GetCurrentSlotType() != ItemSlotType.Equipped)))
+            {
+                return;
+            }
+            if (!isReloading && !_isReloadAnimationPlaying)
+            {
+                return;
+            }
+            var animParamData = ItemOwner.PlayerAnimatorData.AnimParamData;
+            if (animParamData)
+            {
+                animParamData.SetReloadParameter(ItemOwner.PlayerAnimator, isReloading);
+            }
+            _isReloadAnimationPlaying = isReloading;
+        }
+
+        private void DisconnectReloadAnimation()
+        {
+            OnReloadStateChanged(false);
+            if (_reloadController)
+            {
+                _reloadController.OnReloadStateChanged -= OnReloadStateChanged;
+            }
+        }
+
         protected abstract void ConnectPlayerIA();
         protected abstract void DisConnectPlayerIA();
 

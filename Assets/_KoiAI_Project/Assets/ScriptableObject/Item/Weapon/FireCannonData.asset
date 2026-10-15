@@ -33,6 +33,7 @@ MonoBehaviour:
   _cannonAimPrefab: {fileID: 4487254017076381408, guid: d54589f5a1e8c734cab932cc6fda2691, type: 3}
   _cannonBallData: {fileID: 11400000, guid: dff2d08bfa5dcf94db37f26aa54413e5, type: 2}
   _isInfiniteLoad: 0
+  _isAutoLoad: 0
   _loadMaxCount: 20
   _aimSensitity: 3
   _launchSpeed: 20

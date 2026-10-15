@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9b05ab1acf437b4b81fec33aba9ee4c, type: 3}
+  m_Name: Player_GunData
+  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Item.GunData
+  _entityType: 3
+  _guidString: bd473ba5-9075-459a-b742-849474ce661a
+  _itemPrefab: {fileID: 7407635991718606596, guid: 54e3e87eb30dddb4f8f53748c4e24e2b, type: 3}
+  _itemTex: {fileID: 0}
+  _itemMesh: {fileID: 0}
+  _itemMaterials: []
+  _itemName: Player Gun
+  _itemDescription: 
+  _isCreatableObj: 1
+  _weaponType: 1
+  _weaponDamage: 15
+  _layerMaskForAim:
+    serializedVersion: 2
+    m_Bits: 0
+  _bulletData: {fileID: 11400000, guid: 51de5f034ada78645b0fbcab7a0f02f5, type: 2}
+  _isInfiniteLoad: 0
+  _isAutoLoad: 0
+  _aimSensitity: 3
+  _maxHitCount: 1
+  _loadMaxCount: 20
+  _launchSpeed: 12
+  _loadTime: 1
+  _maxPitchAngle: 50
+  _minPitchAngle: -50
+  _maxYawAngle: 50
+  _minYawAngle: -50

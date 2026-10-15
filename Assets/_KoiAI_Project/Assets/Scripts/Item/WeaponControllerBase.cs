@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace KoiAI.Item
@@ -16,6 +17,20 @@ namespace KoiAI.Item
         private Skin _skin;
 
         protected bool _isAiming = false;
+
+        public event Action<bool> OnReloadStateChanged;
+
+        protected void NotifyReloadStateChanged(bool isReloading)
+        {
+            OnReloadStateChanged?.Invoke(isReloading);
+        }
+
+        public virtual bool IsFireLoading() => false;
+
+        /// <summary>
+        /// 장전된 탄을 유지하고 중단합니다. 중단했다면 해당 공격 입력은 소모합니다.
+        /// </summary>
+        public virtual bool TryInterruptReload() => false;
 
 
         /// <summary>

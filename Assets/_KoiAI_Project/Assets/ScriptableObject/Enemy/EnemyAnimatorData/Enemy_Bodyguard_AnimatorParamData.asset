@@ -22,5 +22,6 @@ MonoBehaviour:
   _jumpParam: None
   _attack01_Param: None
   _attack02_Param: None
+  _reloadParam: Reload_Anim
   _act1_Param: None
   _act2_Param: None
