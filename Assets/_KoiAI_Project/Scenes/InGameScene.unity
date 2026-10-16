@@ -15113,9 +15113,57 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
+      propertyPath: _useDropItemProp
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
+      propertyPath: _itemPropDropper._dropRadius
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
       propertyPath: '_collisionPlanes.Array.data[0]'
       value: 
       objectReference: {fileID: 494358865}
+    - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
+      propertyPath: _itemPropDropper._dropJumpPower
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
+      propertyPath: _itemPropDropper._useDropItemProp
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
+      propertyPath: _itemPropDropper._dropJumpDuration
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
+      propertyPath: _itemPropDropper._useAutoDropOrgin
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
+      propertyPath: _itemPropDropper._useDropOriginOffset
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
+      propertyPath: _itemPropDropper._dropItemPropList.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
+      propertyPath: '_itemPropDropper._dropItemPropList.Array.data[0]'
+      value: 
+      objectReference: {fileID: 4132597977021415532, guid: c0aaf31eb6c4bd74a9e34b841af82664, type: 3}
+    - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
+      propertyPath: '_itemPropDropper._dropItemPropList.Array.data[1]'
+      value: 
+      objectReference: {fileID: 4132597977021415532, guid: c0aaf31eb6c4bd74a9e34b841af82664, type: 3}
+    - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
+      propertyPath: '_itemPropDropper._dropItemPropList.Array.data[2]'
+      value: 
+      objectReference: {fileID: 4132597977021415532, guid: c0aaf31eb6c4bd74a9e34b841af82664, type: 3}
+    - target: {fileID: 4554679877393191497, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
+      propertyPath: m_CullingMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6171121325972365863, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
       propertyPath: _activateTargets.Array.data[0]._activateTarget
       value: 

@@ -31241,6 +31241,7 @@ MonoBehaviour:
   _targetLayerMask:
     serializedVersion: 2
     m_Bits: 8
+  _useFirePointForShot: 0
 --- !u!114 &1715635641560925275
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31524,7 +31525,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: bff429107601444d59c67940e6ad78c4, type: 3}
   m_Controller: {fileID: 9100000, guid: 8df5b386369d54778a922298504d1aba, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -79141,6 +79142,7 @@ MonoBehaviour:
   _targetLayerMask:
     serializedVersion: 2
     m_Bits: 8
+  _useFirePointForShot: 0
 --- !u!114 &6241394938780809008
 MonoBehaviour:
   m_ObjectHideFlags: 0

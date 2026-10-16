@@ -7,7 +7,7 @@ namespace KoiAI.Health
     using Cysharp.Threading.Tasks;
     using KoiAI.Core;
     using KoiAI.Interact;
-    using KoiAI.ItemProp;
+    using KoiAI.Item;
     using KoiAI.Utilities;
 
     public class Health : UIFollowHandle, IHealthProvider

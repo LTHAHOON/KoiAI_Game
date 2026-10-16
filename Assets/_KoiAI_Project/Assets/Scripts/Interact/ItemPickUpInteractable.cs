@@ -8,7 +8,6 @@ namespace KoiAI.Interact
     using KoiAI.Audio;
     using KoiAI.Core;
     using KoiAI.Item;
-    using KoiAI.ItemProp;
 
     [RequireComponent(typeof(EntityIdentity))]
     public class ItemPickUpInteractable : BaseInteractable<ItemPickUpEvent>

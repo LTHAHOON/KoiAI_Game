@@ -66,8 +66,6 @@ namespace KoiAI.Health
         private ParticleSystem _separatedObjPrefab;
         [SerializeField]
         private List<SeparatedObjData> _separatedObjDataList = new() { SeparatedObjData.CreateDefault() };
-        [SerializeField]
-        private List<Transform> _collisionPlanes = new();
 
         private readonly List<ParticleSystem> _separatedObjList = new();
 
@@ -79,19 +77,7 @@ namespace KoiAI.Health
                 ParticleSystem separatedObj = Instantiate(_separatedObjPrefab, separatedObjData.CreatePrefabPos);
                 var mainModule = separatedObj.main;
                 var shapeModule = separatedObj.shape;
-                var collisionModule = separatedObj.collision;
                 var particleRenderer = separatedObj.GetComponent<ParticleSystemRenderer>();
-                
-                collisionModule.type = ParticleSystemCollisionType.Planes;
-                bool hasCollisionPlane = _collisionPlanes.Count > 0;
-                if(hasCollisionPlane)
-                {
-                    for (int planeIndex = 0; planeIndex < collisionModule.planeCount; ++planeIndex)
-                    {
-                        Transform plane = _collisionPlanes[planeIndex];
-                        collisionModule.SetPlane(planeIndex, plane);
-                    }
-                }
 
                 mainModule.loop = false;
                 mainModule.duration = separatedObjData.Duration;

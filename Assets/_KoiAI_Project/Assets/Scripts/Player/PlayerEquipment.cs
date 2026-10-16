@@ -11,7 +11,6 @@ namespace KoiAI.Player
     using KoiAI.Input;
     using KoiAI.Interact;
     using KoiAI.Item;
-    using KoiAI.ItemProp;
     using KoiAI.UI.HUD;
 
     [Serializable]

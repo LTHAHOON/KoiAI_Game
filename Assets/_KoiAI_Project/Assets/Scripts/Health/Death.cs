@@ -1,12 +1,17 @@
 using System;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
+using NaughtyAttributes;
 using DG.Tweening;
-using KoiAI.Core;
 using UnityEngine;
 
 namespace KoiAI.Health
 {
+    using JetBrains.Annotations;
+    using KoiAI.Core;
+    using KoiAI.Item;
+
     [RequireComponent(typeof(Health), typeof(Collider), typeof(EntityIdentity))]
     public abstract class Death : MonoBehaviour
     {
@@ -20,7 +25,12 @@ namespace KoiAI.Health
         private ParticleSystem _deathParticlePrefab;
         [SerializeField]
         private Vector3 _deathParticlePosOffset;
-
+        [SerializeField]
+        private bool _useDropItemProp;
+        [ShowIf(nameof(_useDropItemProp))]
+        [SerializeField]
+        private ItemPropDropper _itemPropDropper;
+        
         private static readonly int DitherAlphaID = Shader.PropertyToID("_Dither_Alpha");
         private Material[] _materials;
         private EntityIdentity _myIdentity;
@@ -69,7 +79,10 @@ namespace KoiAI.Health
                     deathParticle.Play();    
                 }    
             }
-            
+            if(_useDropItemProp)
+            {
+                _itemPropDropper.DropItemProps(transform.position);
+            }
             OnDeath(_health);
 
             if (_materials != null)

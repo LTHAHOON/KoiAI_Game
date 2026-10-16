@@ -2,13 +2,11 @@ using System;
 using UnityEngine;
 using NaughtyAttributes;
 
-namespace KoiAI.ItemProp
+namespace KoiAI.Item
 {
     using KoiAI.Audio;
     using KoiAI.Core;
-    using KoiAI.Player;
     using KoiAI.Utilities;
-    using KoiAI.Item;
     using KoiAI.Interact;
 
     public enum ItemPickUpSize : int

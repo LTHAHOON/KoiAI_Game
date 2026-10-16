@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace KoiAI.Interact
 {
-    using KoiAI.ItemProp;
+    using KoiAI.Item;
 
     public class ItemPickUpConditionBinder : MonoBehaviour
     {
