@@ -18,8 +18,6 @@ namespace KoiAI.Item
         [SerializeField]
         private float _aimSensitity = 3f;
         [SerializeField]
-        private int _maxHitCount = 1;
-        [SerializeField]
         private int _loadMaxCount = 20;
         [SerializeField]
         private float _launchSpeed = 12f;
@@ -35,7 +33,6 @@ namespace KoiAI.Item
         [SerializeField]
         private float _minYawAngle = -90f;
 
-        public int MaxHitCount => _maxHitCount;
         public bool IsInfiniteLoad => _isInfiniteLoad;
         public bool IsAutoLoad => _isAutoLoad;
         public float AimSensitity => _aimSensitity;

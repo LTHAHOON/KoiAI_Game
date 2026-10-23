@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 
 namespace KoiAI.AI
@@ -26,7 +26,9 @@ namespace KoiAI.AI
         [Range(0f, 1f)]
         [SerializeField]
         private float _bodyClearance = 0.12f;
-
+        [Range(0f, 30f)]
+        [SerializeField]
+        private float _shotSpreadAngle = 4f;
         #endregion
 
         private AIBrain _brain;
@@ -43,6 +45,7 @@ namespace KoiAI.AI
         private float _weight;
 
         public WeaponControllerBase Weapon => _weapon;
+        public float ShotSpreadAngle => _shotSpreadAngle;
         public event Action OnAimUpdated;
 
         private bool CanAim => _brain && _brain.isActiveAndEnabled && !_brain.IsDead
@@ -113,15 +116,15 @@ namespace KoiAI.AI
 
         private void LateUpdate()
         {
-            //애니메이션 적용이 끝난 자세를 기준으로 무기와 양팔을 보정하기
             if (_weight > 0f && !_brain.IsDead && _brain.TargetContext.HasTarget && !_weapon.IsFireLoading())
             {
-                UpdateAim();
                 if (CanAim)
                 {
+                    UpdateAim();
                     OnAimUpdated?.Invoke();
                 }
             }
+
         }
 
         private void UpdateAim()

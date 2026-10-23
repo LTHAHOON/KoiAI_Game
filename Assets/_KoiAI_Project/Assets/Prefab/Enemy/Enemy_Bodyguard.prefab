@@ -34520,10 +34520,26 @@ MonoBehaviour:
   _excludeLayersWhenDie:
     serializedVersion: 2
     m_Bits: 8
-  _destroyDuration: 2
-  _ditherDuration: 0
+  _destroyDuration: 3
+  _ditherDuration: 1
   _deathParticlePrefab: {fileID: 4806255131864380379, guid: 435778297c5494e43a9cf7f49412a87b, type: 3}
   _deathParticlePosOffset: {x: 0, y: 3, z: 0}
+  _useDropItemProp: 1
+  _itemPropDropper:
+    _dropItemPropList:
+    - {fileID: 4132597977021415532, guid: c0aaf31eb6c4bd74a9e34b841af82664, type: 3}
+    - {fileID: 4132597977021415532, guid: c0aaf31eb6c4bd74a9e34b841af82664, type: 3}
+    - {fileID: 4132597977021415532, guid: c0aaf31eb6c4bd74a9e34b841af82664, type: 3}
+    _useRandomItemProp: 0
+    _randomSeed: 0
+    _minDropItemPropCount: 0
+    _dropRadius: 5
+    _dropJumpPower: 3
+    _dropJumpDuration: 1
+    _useAutoDropOrgin: 1
+    _dropOrigin: {x: 0, y: 0, z: 0}
+    _useDropOriginOffset: 1
+    _dropOriginOffset: {x: 0, y: 1, z: 0}
   _separatedObjPrefab: {fileID: 458286998596246395, guid: ed1610281fc89cc41970da06c84dbf64, type: 3}
   _separatedObjDataList:
   - CreatePrefabPos: {fileID: 8614676347035484911}
@@ -34586,8 +34602,6 @@ MonoBehaviour:
     ShapeRotation: {x: 0, y: -90, z: 0}
     ObjMesh: {fileID: 4300010, guid: 5ae220fa0f79ffe41b0102a618febf5a, type: 3}
     ObjMaterial: {fileID: 2100000, guid: 1666fb81395f51e4293b01cca8f58481, type: 2}
-  _collisionPlanes:
-  - {fileID: 0}
 --- !u!114 &8761700943374772517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34693,6 +34707,7 @@ MonoBehaviour:
   _blendSpeed: 6
   _maxAimAngle: 100
   _bodyClearance: 0.12
+  _shotSpreadAngle: 4
 --- !u!114 &6171121325972365863
 MonoBehaviour:
   m_ObjectHideFlags: 0

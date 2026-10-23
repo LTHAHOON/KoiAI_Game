@@ -11,38 +11,27 @@ namespace KoiAI
         private BulletSkin _bulletSkin;
         [SerializeField]
         private GameObject _hitEffectPrefab;
-
         private BulletData _bulletData;
-        public void Init(BulletData bulletData, LayerMask targetLayerMask)
+        public void Init(BulletData bulletData)
         {
             _bulletData = bulletData;
         }
 
-        public void OnHit(RaycastHit[] hits, int hitCount)
+        public void OnHit(RaycastHit hit)
         {
-            if (!_bulletData)
-            {
-                return;
-            }
-            if (hitCount <= 0)
+            if (!_bulletData || hit.collider == null)
             {
                 return;
             }
 
-            for (int i = 0; i < hitCount; i++)
+            if (_hitEffectPrefab)
             {
-                if (!hits[i].collider)
-                {
-                    continue;
-                }
-                if (_hitEffectPrefab)
-                {
-                    Instantiate(_hitEffectPrefab, hits[i].point, Quaternion.identity);
-                }
-                if (hits[i].collider.TryGetComponent(out Health.Health health))
-                {
-                    health.ChangeHealth(-_bulletData.Damage);
-                }
+                Instantiate(_hitEffectPrefab, hit.point, Quaternion.identity);
+            }
+            if (hit.collider.TryGetComponent(out Health.Health health))
+            {
+                
+                health.ChangeHealth(-_bulletData.Damage);
             }
         }
 

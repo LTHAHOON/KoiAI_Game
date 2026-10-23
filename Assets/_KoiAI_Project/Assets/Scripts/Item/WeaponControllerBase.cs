@@ -44,6 +44,32 @@ namespace KoiAI.Item
         /// <returns>발동 못할 시 False</returns>
         public abstract bool Activate();
 
+        public virtual bool ActivateWithSpread(float spreadAngle) => Activate();
+
+        protected static Vector3 ApplySpread(Vector3 direction, Vector3 up, float spreadAngle)
+        {
+            if (spreadAngle <= 0f)
+            {
+                return direction;
+            }
+
+            direction.Normalize();
+            Vector3 right = Vector3.Cross(up, direction);
+            if (right.sqrMagnitude < 0.001f)
+            {
+                right = Vector3.Cross(Vector3.right, direction);
+            }
+            if (right.sqrMagnitude < 0.001f)
+            {
+                right = Vector3.Cross(Vector3.forward, direction);
+            }
+            right.Normalize();
+            Vector3 spreadUp = Vector3.Cross(direction, right).normalized;
+            Vector2 offset = UnityEngine.Random.insideUnitCircle
+                * Mathf.Tan(spreadAngle * Mathf.Deg2Rad);
+            return (direction + right * offset.x + spreadUp * offset.y).normalized;
+        }
+
         /// <summary>
         /// 에임 설정 함수
         /// </summary>

@@ -20,7 +20,6 @@ namespace KoiAI.Item
         private GunSkin _gunSkin;
         private Pool<BulletItem> _pool;
 
-        private RaycastHit[] _hits;
         private int _curBallCount = 0;
         private AudioSFXTarget _attackAuidoTarget;
         private int _curBallLoadCount;
@@ -53,6 +52,11 @@ namespace KoiAI.Item
             #endregion
         }
 
+        private void OnDisable()
+        {
+            CancelReload();
+        }
+
         public override void Init(WeaponBase weaponItem)
         {
             _gunData = GetWeaponData<GunData>();
@@ -61,7 +65,6 @@ namespace KoiAI.Item
             _remainingBallCount = 0;
             _curBallLoadCount = _curBallCount;
             _remainingBallLoadCount = 0;
-            _hits = new RaycastHit[_gunData.MaxHitCount];
             OnPlayFireEffect = () => PlayFireEffect(weaponItem);
             BulletData bulletData = _gunData.BulletData;
             ulong id = gameObject.GetEntityULongID();
@@ -72,7 +75,7 @@ namespace KoiAI.Item
             for (int i = 0; i < bullets.Length; i++)
             {
                 //발사체 스킨 생성
-                bullets[i].SetupController(_targetLayerMask);
+                bullets[i].SetupController();
             }
             InitSkin();
         }
@@ -100,6 +103,11 @@ namespace KoiAI.Item
 
         public override bool Activate()
         {
+            return ActivateWithSpread(0f);
+        }
+
+        public override bool ActivateWithSpread(float spreadAngle)
+        {
             if (!_gunData || _isFireLoading)
             {
                 return false;
@@ -123,17 +131,18 @@ namespace KoiAI.Item
             
             if (bulletItem.IsEmptyController())
             {
-                bulletItem.SetupController(_targetLayerMask);
+                bulletItem.SetupController();
             }
             OnPlayFireEffect.Invoke();
 
             Transform shotOrigin = (_useFirePointForShot && _gunSkin && _gunSkin.FirePoint) ? _gunSkin.FirePoint : transform;
             Vector3 shotDirection = shotOrigin.rotation * (Quaternion.Euler(_pitchAngle, _yawAngle, 0f) * Vector3.forward);
-            int count = Physics.SphereCastNonAlloc(shotOrigin.position, 0.1f, shotDirection, _hits, 500f, _targetLayerMask);
-            if (count > 0)
+            shotDirection = ApplySpread(shotDirection, shotOrigin.up, spreadAngle);
+            if(Physics.Raycast(shotOrigin.position, shotDirection, out RaycastHit hit, 500f, _targetLayerMask))
             {
-                bulletItem.BulletController.OnHit(_hits, count);
+                bulletItem.BulletController.OnHit(hit);
             }
+            
             PoolManager.Instance.ReturnDelay(_pool, bulletItem, 2f);
 
             if (_curBallCount <= 0)
@@ -182,11 +191,11 @@ namespace KoiAI.Item
         {
             if (_gunData && _gunData.IsAutoLoad && _curBallCount <= 0)
             {
-                OnReLoadCannonBall();
+                OnReLoadBullet();
             }
         }
 
-        public void OnReLoadCannonBall()
+        public void OnReLoadBullet()
         {
             //중복 장전 차단
             if (!_gunData || _isFireLoading)
@@ -249,11 +258,6 @@ namespace KoiAI.Item
             {
                 NotifyReloadStateChanged(false);
             }
-        }
-
-        private void OnDisable()
-        {
-            CancelReload();
         }
 
         protected override void InitSkin()

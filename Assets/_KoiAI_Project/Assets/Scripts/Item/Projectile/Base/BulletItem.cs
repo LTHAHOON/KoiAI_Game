@@ -29,10 +29,10 @@ namespace KoiAI.Item
             _equipmentFeature.SetItemCount(this, _bulletData.ProjectileCount);
         }
 
-        public void SetupController(LayerMask targetLayerMask)
+        public void SetupController()
         {
             _bulletController = Instantiate(_bulletData.BulletController, transform);
-            _bulletController.Init(_bulletData, targetLayerMask);
+            _bulletController.Init(_bulletData);
         }
 
         public override void UseItem()

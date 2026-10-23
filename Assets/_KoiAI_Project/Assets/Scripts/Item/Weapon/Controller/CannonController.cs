@@ -119,6 +119,11 @@ namespace KoiAI.Item
 
         public override bool Activate()
         {
+            return ActivateWithSpread(0f);
+        }
+
+        public override bool ActivateWithSpread(float spreadAngle)
+        {
             if (!_cannonData || _isFireLoading)
             {
                 return false;
@@ -155,7 +160,8 @@ namespace KoiAI.Item
             bulletRigid.transform.position = _cannonSkin.FirePoint.position;
             bulletRigid.linearDamping = _cannonData.LinearDamping;
             bulletRigid.useGravity = true;
-            bulletRigid.linearVelocity = GetLaunchVelocity();
+            Vector3 launchDirection = ApplySpread(GetLaunchVelocity(), _cannonSkin.FirePoint.up, spreadAngle);
+            bulletRigid.linearVelocity = launchDirection * _cannonData.LaunchSpeed;
             PoolManager.Instance.ReturnDelay(_pool, cannonballItem, _cannonData.CannonBallData.CannonBallLifeTime);
             TryAutoReload();
             return true;

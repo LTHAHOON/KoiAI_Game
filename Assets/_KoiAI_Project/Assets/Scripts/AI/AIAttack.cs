@@ -149,8 +149,7 @@ namespace KoiAI.AI
                 return;
             }
 
-            // 조준 보정이 끝난 후 발사합니다.
-            _pendingShot.Activate();
+            _pendingShot.ActivateWithSpread(_weaponAim.ShotSpreadAngle);
             _pendingShot = null;
         }
 

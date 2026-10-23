@@ -9579,17 +9579,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1620534613}
   m_CullTransparentMesh: 1
---- !u!114 &1621657420 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6954256085678506840, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
-  m_PrefabInstance: {fileID: 6573679526988301960}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1935253f271f974e9bf4fd812bafd8e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Item.GunController
 --- !u!1001 &1650730847
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15072,6 +15061,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 771591923470900001, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
+      propertyPath: _maxAimAngle
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 771591923470900001, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
+      propertyPath: _delayAimTime
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 771591923470900001, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
+      propertyPath: _shotSpreadAngle
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 771591923470900001, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
+      propertyPath: _delayRandomThreshold
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 771591923470900001, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
+      propertyPath: __maxAimAngleThreshold
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 2228565721118875876, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
       propertyPath: m_LocalPosition.x
       value: -87.59
@@ -15112,65 +15121,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
-      propertyPath: _useDropItemProp
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
-      propertyPath: _itemPropDropper._dropRadius
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
-      propertyPath: '_collisionPlanes.Array.data[0]'
-      value: 
-      objectReference: {fileID: 494358865}
-    - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
-      propertyPath: _itemPropDropper._dropJumpPower
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
-      propertyPath: _itemPropDropper._useDropItemProp
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
-      propertyPath: _itemPropDropper._dropJumpDuration
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
-      propertyPath: _itemPropDropper._useAutoDropOrgin
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
-      propertyPath: _itemPropDropper._useDropOriginOffset
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
-      propertyPath: _itemPropDropper._dropItemPropList.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
-      propertyPath: '_itemPropDropper._dropItemPropList.Array.data[0]'
-      value: 
-      objectReference: {fileID: 4132597977021415532, guid: c0aaf31eb6c4bd74a9e34b841af82664, type: 3}
-    - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
-      propertyPath: '_itemPropDropper._dropItemPropList.Array.data[1]'
-      value: 
-      objectReference: {fileID: 4132597977021415532, guid: c0aaf31eb6c4bd74a9e34b841af82664, type: 3}
-    - target: {fileID: 2555298775076511478, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
-      propertyPath: '_itemPropDropper._dropItemPropList.Array.data[2]'
-      value: 
-      objectReference: {fileID: 4132597977021415532, guid: c0aaf31eb6c4bd74a9e34b841af82664, type: 3}
-    - target: {fileID: 4554679877393191497, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
-      propertyPath: m_CullingMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6171121325972365863, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
-      propertyPath: _activateTargets.Array.data[0]._activateTarget
-      value: 
-      objectReference: {fileID: 1621657420}
     - target: {fileID: 6405325479006078759, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
       propertyPath: m_Name
       value: Enemy_Bodyguard
+      objectReference: {fileID: 0}
+    - target: {fileID: 6954256085678506840, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
+      propertyPath: _targetLayerMask.m_Bits
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

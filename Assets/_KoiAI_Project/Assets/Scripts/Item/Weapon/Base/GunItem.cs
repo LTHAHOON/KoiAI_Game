@@ -259,7 +259,7 @@ namespace KoiAI.Item
             }
             if (context.performed)
             {
-                _gunControl.OnReLoadCannonBall();
+                _gunControl.OnReLoadBullet();
             }
         }
 
