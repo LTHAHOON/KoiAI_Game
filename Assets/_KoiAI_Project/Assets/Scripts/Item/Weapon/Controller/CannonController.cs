@@ -160,7 +160,8 @@ namespace KoiAI.Item
             bulletRigid.transform.position = _cannonSkin.FirePoint.position;
             bulletRigid.linearDamping = _cannonData.LinearDamping;
             bulletRigid.useGravity = true;
-            Vector3 launchDirection = ApplySpread(GetLaunchVelocity(), _cannonSkin.FirePoint.up, spreadAngle);
+            Vector3 launchVelocity = GetLaunchVelocity();
+            Vector3 launchDirection = ApplySpread(launchVelocity.normalized, _cannonSkin.FirePoint.up, spreadAngle);
             bulletRigid.linearVelocity = launchDirection * _cannonData.LaunchSpeed;
             PoolManager.Instance.ReturnDelay(_pool, cannonballItem, _cannonData.CannonBallData.CannonBallLifeTime);
             TryAutoReload();
@@ -202,7 +203,7 @@ namespace KoiAI.Item
             }
             if (!_cannonData.IsInfiniteLoad)
             {
-                _remainingBallCount += Mathf.Max(0, cannonBallData.ProjectileCount);
+                _remainingBallCount += cannonBallData.ItemCount;
             }
             TryAutoReload();
         }

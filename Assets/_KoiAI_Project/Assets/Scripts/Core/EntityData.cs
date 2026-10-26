@@ -22,6 +22,11 @@ namespace KoiAI.Core
         
         private Guid _guid;
 
+        public void ResetGuid()
+        {
+            _guid = Guid.NewGuid();
+            _guidString = _guid.ToString();
+        }
 
         public void OnBeforeSerialize()
         {

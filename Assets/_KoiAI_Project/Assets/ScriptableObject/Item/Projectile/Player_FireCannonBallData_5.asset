@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 863c6abaa0ac3434fbe1237ccbd11bc6, type: 3}
+  m_Name: Player_FireCannonBallData_5
+  m_EditorClassIdentifier: Assembly-CSharp::CannonBallData
+  _entityType: 3
+  _guidString: 2aa246b9-1023-45e2-aa12-a7844e489f4a
+  _itemCount: 5
+  _itemPrefab: {fileID: 7190139778985183213, guid: 466cf6a55e42d524c9c1b544f48b580d, type: 3}
+  _itemTex: {fileID: 2800000, guid: 3b698669bd7d03249b8381d9fda781b2, type: 3}
+  _itemMesh: {fileID: -4232582093172032528, guid: b815260fa083d5947aeb72bc38dcb20c, type: 3}
+  _itemMaterials:
+  - {fileID: 2100000, guid: 6f9565316f4143542955d0c33d146700, type: 2}
+  _itemName: Fire Cannon Ball
+  _itemDescription: "\uD654\uD3EC\uC5D0 \uD544\uC694\uD55C \uD3EC\uD0C4\uC785\uB2C8\uB2E4."
+  _isCreatableObj: 0
+  _projectileType: 0
+  _projectileDamage: 10
+  _cannonBallController: {fileID: 3272699988307355371, guid: 3f5b1c34671533549bedf701bae1389a, type: 3}
+  _cannonBallPoolSize:
+    _initPoolSize: 10
+    _maxPoolSize: 15
+  _cannonBallLifeTime: 6
+  _maxOverlapCount: 3
+  _radiusExplosion: 6

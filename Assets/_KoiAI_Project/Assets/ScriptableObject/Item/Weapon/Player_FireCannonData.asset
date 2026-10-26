@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 762f90e7d34ad06489423432746c2fc7, type: 3}
-  m_Name: FireCannonData
+  m_Name: Player_FireCannonData
   m_EditorClassIdentifier: Assembly-CSharp::FireGunData
   _entityType: 3
   _guidString: 6ae1d9a4-15f7-459e-83f9-665e9e383a9e
@@ -22,8 +22,8 @@ MonoBehaviour:
   - {fileID: 2100000, guid: f553727eabb7247418d102de8a33a700, type: 2}
   - {fileID: 2100000, guid: f553727eabb7247418d102de8a33a700, type: 2}
   - {fileID: 2100000, guid: f553727eabb7247418d102de8a33a700, type: 2}
-  _itemName: FireCannon
-  _itemDescription: 
+  _itemName: Fire Cannon
+  _itemDescription: "\uB4E4\uACE0 \uB2E4\uB2D0 \uC218 \uC788\uB294 \uC18C\uD615 \uD654\uD3EC\uC785\uB2C8\uB2E4."
   _isCreatableObj: 1
   _weaponType: 0
   _weaponDamage: 0
@@ -35,7 +35,7 @@ MonoBehaviour:
   _isInfiniteLoad: 0
   _isAutoLoad: 0
   _loadMaxCount: 20
-  _aimSensitity: 3
+  _aimSensitity: 1
   _launchSpeed: 20
   _loadTime: 1
   _linearDamping: 0

@@ -187,10 +187,11 @@ namespace KoiAI.Player
 
         public void SetItemCount(ItemBase item, int count)
         {
-            if(!item)
+            if (!item)
             {
                 return;
             }
+
             Slot slot = _inventorySystem.GetSlotWithItem(item);
             if (slot)
             {
@@ -286,7 +287,9 @@ namespace KoiAI.Player
             IList<ItemData> itemDatas = GetItemList(itemSlotType);
             ItemData itemData = item.GetItemData();
             if(itemDatas == null || itemData == null || slot == null)
+            {
                 return;
+            }
             itemDatas.Remove(itemData);
             _inventorySystem.RemoveItem(slot, itemSlotType);
         }

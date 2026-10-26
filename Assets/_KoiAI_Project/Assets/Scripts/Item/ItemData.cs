@@ -4,8 +4,6 @@ namespace KoiAI.Item
 {
     using System;
     using KoiAI.Core;
-    using KoiAI.UI.HUD;
-    using NaughtyAttributes;
 
     public enum WeaponType
     {
@@ -37,17 +35,17 @@ namespace KoiAI.Item
         [SerializeField]
         private ProjectileType _projectileType;
         [SerializeField]
-        private int _projectileCount;
-        [SerializeField]
         private float _projectileDamage;
 
         public ProjectileType ProjectileType => _projectileType;
         public float Damage => _projectileDamage;
-        public int ProjectileCount => _projectileCount;
     }
 
     public abstract class ItemData : EntityData
     {
+        [SerializeField]
+        [Min(1)]
+        private int _itemCount = 1;
         [SerializeField]
         private ItemBase _itemPrefab;
 
@@ -84,6 +82,7 @@ namespace KoiAI.Item
         public Mesh ItemMesh => _itemMesh;
         public Material[] ItemMaterials => _itemMaterials;
         public bool IsCreatableObj => _isCreatableObj;
+        public int ItemCount => _itemCount;
         public ItemBase ItemPrefab => _itemPrefab;
         public Texture2D ItemTex => _itemTex;
         public string ItemName => _itemName;

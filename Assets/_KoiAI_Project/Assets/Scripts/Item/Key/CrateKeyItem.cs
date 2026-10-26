@@ -13,7 +13,13 @@ namespace KoiAI.Item
         [SerializeField]
         private CrateKeyData _crateKeyData;
 
-        public override ItemData GetItemData() => _crateKeyData;
+        public override void SetItemData(ItemData itemData)
+        {
+            base.SetItemData(itemData);
+            _crateKeyData = itemData as CrateKeyData;
+        }
+
+        public override ItemData GetItemData() => InitializedItemData ?? _crateKeyData;
 
         public CrateKeyType KeyType => _crateKeyData != null
             ? _crateKeyData.KeyType

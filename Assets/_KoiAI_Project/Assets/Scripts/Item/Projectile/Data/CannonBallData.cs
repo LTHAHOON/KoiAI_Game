@@ -3,6 +3,7 @@ using UnityEngine;
 namespace KoiAI.Item
 {
     using KoiAI.Pool;
+
     [CreateAssetMenu(fileName = "new CannonBallData", menuName = "ProjectileData/CannonBallData")]
     public class CannonBallData : ProjectileData
     {

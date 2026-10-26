@@ -11,9 +11,16 @@ namespace KoiAI.Item
 
         private PlayerEquipment _equipmentFeature;
         private CannonBallController _cannonBallController;
+
+        public override void SetItemData(ItemData itemData)
+        {
+            base.SetItemData(itemData);
+            _cannonBallData = itemData as CannonBallData;
+        }
+
         public override ItemData GetItemData()
         {
-            return _cannonBallData;
+            return InitializedItemData ?? _cannonBallData;
         }
 
         public override void Init(PlayerController itemOwner, Renderer itemUI, ItemSlotType curSlotType)
@@ -23,11 +30,6 @@ namespace KoiAI.Item
             _equipmentFeature = (PlayerEquipment)ItemOwner.GetPlayerFeatureWithProperty(PlayerFeature.PlayerFeatureProperty.Equipment);
             #endregion
 
-        }
-
-        public override void SetItemCountInSlot()
-        {
-            _equipmentFeature.SetItemCount(this, _cannonBallData.ProjectileCount);
         }
 
         public void SetupController(LayerMask targetLayerMask)
@@ -53,9 +55,9 @@ namespace KoiAI.Item
             if (weaponItem.TryGetItemChildClass<CannonItem>(out CannonItem cannonItem))
             {
                 CannonData cannonData = cannonItem.GetCannonData();
-                //ID와 타입이 같은 지 체크
+                //같은 포탄 프리팹을 사용하는 데이터면 수량이 달라도 장전할 수 있습니다.
                 if(cannonData.CannonBallData.ProjectileType == _cannonBallData.ProjectileType
-                   && cannonData.CannonBallData.ItemId == _cannonBallData.ItemId)
+                   && cannonData.CannonBallData.ItemPrefab == _cannonBallData.ItemPrefab)
                 {
                     cannonItem.OnLoadCannonBall(_cannonBallData);
                     ItemSlotType curSlotType = GetCurrentSlotType();

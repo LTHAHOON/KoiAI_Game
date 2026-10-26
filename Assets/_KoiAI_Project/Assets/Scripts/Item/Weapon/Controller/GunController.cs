@@ -182,7 +182,7 @@ namespace KoiAI.Item
             }
             if (!_gunData.IsInfiniteLoad)
             {
-                _remainingBallCount += Mathf.Max(0, bulletData.ProjectileCount);
+                _remainingBallCount += bulletData.ItemCount;
             }
             TryAutoReload();
         }

@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 namespace KoiAI.UI
 {
+    using System.Text;
     using KoiAI.Item;
 
     public class DropTableItem : MonoBehaviour
@@ -15,10 +16,13 @@ namespace KoiAI.UI
         [SerializeField]
         private TextMeshProUGUI _itemNameText;
         [SerializeField]
+        private TextMeshProUGUI _itemCountText;
+        [SerializeField]
         private TextMeshProUGUI _itemDescriptionText;
         [SerializeField]
         private Image _itemIconImage;
 
+        private StringBuilder _sb = new();
         public void SetDropTableItem(ItemData itemData)
         {
             if (itemData == null)
@@ -29,20 +33,13 @@ namespace KoiAI.UI
             _itemData = itemData;
             gameObject.SetActive(true);
 
-            if (_itemNameText != null)
-            {
-                _itemNameText.text = itemData.ItemName;
-            }
+            _itemNameText.text = itemData.ItemName;
+            _sb.Append(itemData.ItemCount);
+            _itemCountText.SetText(_sb);
 
-            if (_itemIconImage != null)
-            {
-                _itemIconImage.sprite = itemData.ItemIcon;
-            }
-
-            if (_itemDescriptionText != null)
-            {
-                _itemDescriptionText.text = itemData.ItemDescription;
-            }
+            _itemIconImage.sprite = itemData.ItemIcon;
+            _itemDescriptionText.text = itemData.ItemDescription;
+            _sb.Clear();
         }
 
         public void SetSelected(bool isSelected, Color selectedColor, Color normalColor)
@@ -62,21 +59,9 @@ namespace KoiAI.UI
         public void Clear()
         {
             _itemData = null;
-            if (_itemNameText != null)
-            {
-                _itemNameText.text = string.Empty;
-            }
-
-            if (_itemIconImage != null)
-            {
-                _itemIconImage.sprite = null;
-            }
-
-            if (_itemDescriptionText != null)
-            {
-                _itemDescriptionText.text = string.Empty;
-            }
+            _itemNameText.text = string.Empty;
+            _itemIconImage.sprite = null;
+            _itemDescriptionText.text = string.Empty;
         }
     }
 }
-

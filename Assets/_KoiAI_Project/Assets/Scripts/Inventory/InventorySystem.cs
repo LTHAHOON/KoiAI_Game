@@ -322,6 +322,7 @@ namespace KoiAI.Item
             {
                 newItem.gameObject.SetActive(false);
             }
+            newItem.SetItemData(itemData);
             newItem.Init(itemOwner, itemUI, itemSlotType);
             return newItem;
         }

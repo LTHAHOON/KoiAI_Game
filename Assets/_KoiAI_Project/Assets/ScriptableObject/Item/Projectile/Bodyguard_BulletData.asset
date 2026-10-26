@@ -22,7 +22,7 @@ MonoBehaviour:
   _itemDescription: 
   _isCreatableObj: 0
   _projectileType: 1
-  _projectileCount: 50
+  _count: 50
   _projectileDamage: 10
   _bulletController: {fileID: 5184176061379500615, guid: 935d71839848402489cc0006426d53c9, type: 3}
   _bulletPoolSize:

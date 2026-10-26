@@ -10,9 +10,16 @@ namespace KoiAI.Item
 
         private PlayerEquipment _equipmentFeature;
         private BulletController _bulletController;
+
+        public override void SetItemData(ItemData itemData)
+        {
+            base.SetItemData(itemData);
+            _bulletData = itemData as BulletData;
+        }
+
         public override ItemData GetItemData()
         {
-            return _bulletData;
+            return InitializedItemData ?? _bulletData;
         }
 
         public override void Init(PlayerController itemOwner, Renderer itemUI, ItemSlotType curSlotType)
@@ -22,11 +29,6 @@ namespace KoiAI.Item
             _equipmentFeature = (PlayerEquipment)ItemOwner.GetPlayerFeatureWithProperty(PlayerFeature.PlayerFeatureProperty.Equipment);
             #endregion
 
-        }
-
-        public override void SetItemCountInSlot()
-        {
-            _equipmentFeature.SetItemCount(this, _bulletData.ProjectileCount);
         }
 
         public void SetupController()
@@ -52,12 +54,11 @@ namespace KoiAI.Item
             if (weaponItem.TryGetItemChildClass<GunItem>(out GunItem gundItem))
             {
                 GunData gunData = gundItem.GetGunData();
-                //ID와 타입이 같은 지 체크
+                //같은 탄환 프리팹을 사용하는 데이터면 수량이 달라도 장전할 수 있습니다.
                 if (gunData.BulletData.ProjectileType == _bulletData.ProjectileType
-                   && gunData.BulletData.ItemId == _bulletData.ItemId)
+                   && gunData.BulletData.ItemPrefab == _bulletData.ItemPrefab)
                 {
                     gundItem.OnLoadCannonBall(_bulletData);
-                    ItemSlotType curSlotType = GetCurrentSlotType();
                     _equipmentFeature.RemoveItemInSlot(this);
                 }
             }
