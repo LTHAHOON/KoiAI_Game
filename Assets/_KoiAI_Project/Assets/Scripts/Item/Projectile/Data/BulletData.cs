@@ -4,17 +4,18 @@ using UnityEngine;
 
 namespace KoiAI
 {
+    using KoiAI.Skin;
     [CreateAssetMenu(fileName = "new BulletData", menuName = "ProjectileData/BulletData")]
     public class BulletData : ProjectileData
     {
         [SerializeField]
-        private BulletController _bulletController;
+        private BulletSkin _bulletSkin;
         [SerializeField]
         private PoolSize _bulletPoolSize;
         [SerializeField]
         private int _maxOverlapCount;
 
-        public BulletController BulletController => _bulletController;
+        public BulletSkin BulletSkin => _bulletSkin;
         public PoolSize BulletPoolSize => _bulletPoolSize;
         public int MaxOverlapCount => _maxOverlapCount;
     }

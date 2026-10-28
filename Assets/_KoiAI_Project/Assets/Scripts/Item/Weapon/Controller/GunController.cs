@@ -131,7 +131,10 @@ namespace KoiAI.Item
             
             if (bulletItem.IsEmptyController())
             {
-                bulletItem.SetupController();
+                if (!bulletItem.SetupController())
+                {
+                    return false;
+                }
             }
             OnPlayFireEffect.Invoke();
 

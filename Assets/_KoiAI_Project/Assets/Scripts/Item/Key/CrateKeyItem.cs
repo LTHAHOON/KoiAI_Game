@@ -6,18 +6,11 @@ using KoiAI.Player;
 namespace KoiAI.Item
 {
     /// <summary>
-    /// Runtime inventory item for a crate key.
+    /// 런타임용 상자 키 아이템
     /// </summary>
     public class CrateKeyItem : ResourceBase
     {
-        [SerializeField]
         private CrateKeyData _crateKeyData;
-
-        public override void SetItemData(ItemData itemData)
-        {
-            base.SetItemData(itemData);
-            _crateKeyData = itemData as CrateKeyData;
-        }
 
         public override ItemData GetItemData() => InitializedItemData ?? _crateKeyData;
 
@@ -27,19 +20,21 @@ namespace KoiAI.Item
 
         public override void UseItem()
         {
-            if (ItemOwner == null ||
-                !ItemOwner.TryGetComponent(out PlayerInteractor playerInteractor) ||
-                !playerInteractor.TryGetInteractable(out CrateInteractable crate))
+            if (ItemOwner == null || !ItemOwner.TryGetComponent(out PlayerInteractor playerInteractor))
             {
                 return;
             }
 
-            crate.Interact(new CrateInteractContext
+            if (playerInteractor.TryGetInteractable(out CrateInteractable crate))
             {
-                KeyType = KeyType
-            });
-        }
+                crate.Interact(new CrateInteractContext
+                {
+                    KeyType = KeyType
+                });
 
-        public CrateKeyData GetCrateKeyData() => _crateKeyData;
+            }
+
+
+        }
     }
 }

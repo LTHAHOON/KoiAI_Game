@@ -3,12 +3,13 @@ using UnityEngine;
 namespace KoiAI.Item
 {
     using KoiAI.Pool;
+    using KoiAI.Skin;
 
     [CreateAssetMenu(fileName = "new CannonBallData", menuName = "ProjectileData/CannonBallData")]
     public class CannonBallData : ProjectileData
     {
         [SerializeField]
-        private CannonBallController _cannonBallController;
+        private CannonBallSkin _cannonBallSkin;
         [SerializeField]
         private PoolSize _cannonBallPoolSize;
         [SerializeField]
@@ -18,7 +19,7 @@ namespace KoiAI.Item
         [SerializeField] 
         private float _radiusExplosion;
 
-        public CannonBallController CannonBallController => _cannonBallController;
+        public CannonBallSkin CannonBallSkin => _cannonBallSkin;
         public PoolSize CannonBallPoolSize => _cannonBallPoolSize;
         public float CannonBallLifeTime => _cannonBallLifeTime;
         public int MaxOverlapCount => _maxOverlapCount;

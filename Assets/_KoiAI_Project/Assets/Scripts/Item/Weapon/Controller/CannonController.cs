@@ -145,7 +145,10 @@ namespace KoiAI.Item
             }
             if (cannonballItem.IsEmptyController())
             {
-                cannonballItem.SetupController(_targetLayerMask);
+                if (!cannonballItem.SetupController(_targetLayerMask))
+                {
+                    return false;
+                }
             }
             cannonballItem.TrailRenderer.Clear();
             cannonballItem.TrailRenderer.enabled = false;

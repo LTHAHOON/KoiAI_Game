@@ -262,17 +262,23 @@ namespace KoiAI.Player
         {
             Slot curSlot = _inventorySystem.GetSlotWithItem(item);
             if (curSlot == null)
+            {
                 return;
+            }
             _inventorySystem.PushItem(curSlot, slotTypeToPush);
         }
 
         public void CreateAndPushItemInSlot(ItemSlotType slotTypeToPush, ItemData itemData)
         {
             if (itemData == null)
+            {
                 return;
+            }
             IList<ItemData> itemList = GetItemList(slotTypeToPush);
             if(itemList == null)
+            {
                 return;
+            }
         
             itemList.Add(itemData);
             Transform itemParent = GetItemParent(itemData.ItemPrefab.Category);
@@ -297,7 +303,9 @@ namespace KoiAI.Player
         public void SetWeaponInfo(int curCount, int remainingCount)
         {
             if (!_weaponInfoControl || _sb == null)
+            {
                 return;
+            }
             _sb.Append(curCount);
             _weaponInfoControl.SetCurCountText(_sb);
             _sb.Clear();
@@ -311,7 +319,9 @@ namespace KoiAI.Player
             int selectedIndex = _inventorySystem.FindSelectedIndex(itemSlotType);
             bool bGet = _inventorySystem.TryGetInventorySlot(itemSlotType, out var inventorySlot);
             if (!bGet)
+            {
                 return null;
+            }
             Slot selectedSlot = _inventorySystem.FindSlotWithIndex(inventorySlot, selectedIndex);
             return selectedSlot;
         }

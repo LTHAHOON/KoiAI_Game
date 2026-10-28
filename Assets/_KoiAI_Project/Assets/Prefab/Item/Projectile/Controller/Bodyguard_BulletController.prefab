@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5158755000931906856}
   - component: {fileID: 4269043998097811684}
+  - component: {fileID: -1184184242276819116}
   m_Layer: 0
   m_Name: Bodyguard_BulletController
   m_TagString: Untagged
@@ -45,3 +46,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Item.BulletItem
   _bulletData: {fileID: 11400000, guid: 51de5f034ada78645b0fbcab7a0f02f5, type: 2}
+--- !u!114 &-1184184242276819116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 601774910944409318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a020ef5bad2b15a41b6e1377cc16f6f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.BulletController
+  _bulletSkin: {fileID: 0}
+  _hitEffectPrefab: {fileID: 0}

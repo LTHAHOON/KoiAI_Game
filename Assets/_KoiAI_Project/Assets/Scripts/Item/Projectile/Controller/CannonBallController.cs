@@ -8,16 +8,29 @@ namespace KoiAI.Item
 
     public class CannonBallController : MonoBehaviour
     {
-        [SerializeField]
         private CannonBallSkin _cannonBallSkin;
-        [SerializeField] 
         private HitEffectTrigger _hitEffectTrigger;
 
         private CannonBallData _cannonBallData;
-        public void Init(CannonBallData cannonBallData, LayerMask targetLayerMask)
+        public bool Init(CannonBallData cannonBallData, LayerMask targetLayerMask)
         {
             _cannonBallData = cannonBallData;
+            if (!_cannonBallSkin)
+            {
+                _cannonBallSkin = GetComponentInChildren<CannonBallSkin>();
+            }
+            if (!_hitEffectTrigger)
+            {
+                _hitEffectTrigger = GetComponentInChildren<HitEffectTrigger>();
+            }
+            
             _hitEffectTrigger.Init(cannonBallData.MaxOverlapCount,cannonBallData.RadiusExplosion, OnHit,targetLayerMask);
+            return true;
+        }
+
+        public void SetSkin(CannonBallSkin cannonBallSkin)
+        {
+            _cannonBallSkin = cannonBallSkin;
         }
 
         private void OnHit(Collider[] targetColliders, int hitCount)

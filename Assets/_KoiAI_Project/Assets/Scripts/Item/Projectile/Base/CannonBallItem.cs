@@ -3,14 +3,19 @@ using UnityEngine;
 namespace KoiAI.Item
 {
     using KoiAI.Player;
+    using KoiAI.Skin;
 
+    [RequireComponent(typeof(CannonBallController))]
     public class CannonBallItem : ResourceBase
     {
         [SerializeField]
         private CannonBallData _cannonBallData;
+        [SerializeField]
+        private CannonBallController _cannonBallController;
 
         private PlayerEquipment _equipmentFeature;
-        private CannonBallController _cannonBallController;
+        private CannonBallSkin _cannonBallSkin;
+        private bool _isControllerInitialized;
 
         public override void SetItemData(ItemData itemData)
         {
@@ -32,10 +37,26 @@ namespace KoiAI.Item
 
         }
 
-        public void SetupController(LayerMask targetLayerMask)
+        public bool SetupController(LayerMask targetLayerMask)
         {
-            _cannonBallController = Instantiate(_cannonBallData.CannonBallController, transform);
-            _cannonBallController.Init(_cannonBallData, targetLayerMask);
+            if (_isControllerInitialized || !_cannonBallController || !_cannonBallData || !_cannonBallData.CannonBallSkin)
+            {
+                if (!_cannonBallData)
+                {
+                    Debug.LogError($"{nameof(CannonBallItem)} has no {nameof(CannonBallData)} assigned.", this);
+                }
+                return _isControllerInitialized;
+            }
+
+            _cannonBallSkin = Instantiate(_cannonBallData.CannonBallSkin, transform);
+            _cannonBallController.SetSkin(_cannonBallSkin);
+            _isControllerInitialized = _cannonBallController.Init(_cannonBallData, targetLayerMask);
+            if (!_isControllerInitialized)
+            {
+                Destroy(_cannonBallSkin.gameObject);
+                _cannonBallSkin = null;
+            }
+            return _isControllerInitialized;
         }
 
         public override void UseItem()
@@ -67,7 +88,7 @@ namespace KoiAI.Item
 
         }
 
-        public bool IsEmptyController() => _cannonBallController == null;
+        public bool IsEmptyController() => !_isControllerInitialized;
 
         public Rigidbody Rigidbody => _cannonBallController.GetCannonBallSkin().Rigidbody;
         public TrailRenderer TrailRenderer => _cannonBallController.GetCannonBallSkin().TrailRenderer;

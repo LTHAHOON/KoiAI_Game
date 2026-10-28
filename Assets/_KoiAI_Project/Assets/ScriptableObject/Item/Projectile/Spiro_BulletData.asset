@@ -24,7 +24,7 @@ MonoBehaviour:
   _projectileType: 1
   _count: 50
   _projectileDamage: 15
-  _bulletController: {fileID: 5184176061379500615, guid: c6a3e3319aed1034fb59ba87595f2dc2, type: 3}
+  _bulletSkin: {fileID: 6786683381315247821, guid: 1557835a3bbc5fc489504f2e71a42e6e, type: 3}
   _bulletPoolSize:
     _initPoolSize: 1
     _maxPoolSize: 20

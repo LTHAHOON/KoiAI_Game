@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 2281348930061415851}
   - component: {fileID: 7735294924909024448}
   - component: {fileID: 2928449014478874148}
-  - component: {fileID: 5778570109557003857}
   - component: {fileID: 6786683381315247821}
   - component: {fileID: 5683136899110111789}
   m_Layer: 8
@@ -143,20 +142,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &5778570109557003857
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 601774910944409318}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a020ef5bad2b15a41b6e1377cc16f6f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.BulletController
-  _bulletSkin: {fileID: 6786683381315247821}
-  _hitEffectTrigger: {fileID: 5683136899110111789}
 --- !u!114 &6786683381315247821
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -7,14 +7,29 @@ namespace KoiAI
 {
     public class BulletController : MonoBehaviour
     {
-        [SerializeField]
         private BulletSkin _bulletSkin;
         [SerializeField]
         private GameObject _hitEffectPrefab;
         private BulletData _bulletData;
-        public void Init(BulletData bulletData)
+        public bool Init(BulletData bulletData)
         {
             _bulletData = bulletData;
+            if (!_bulletSkin)
+            {
+                _bulletSkin = GetComponentInChildren<BulletSkin>();
+            }
+
+            if (!_bulletSkin)
+            {
+                Debug.LogError($"{nameof(BulletController)} requires a {nameof(BulletSkin)}.", this);
+                return false;
+            }
+            return true;
+        }
+
+        public void SetSkin(BulletSkin bulletSkin)
+        {
+            _bulletSkin = bulletSkin;
         }
 
         public void OnHit(RaycastHit hit)

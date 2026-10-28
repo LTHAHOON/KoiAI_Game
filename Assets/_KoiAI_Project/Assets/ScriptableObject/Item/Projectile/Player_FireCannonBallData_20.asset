@@ -25,7 +25,7 @@ MonoBehaviour:
   _isCreatableObj: 0
   _projectileType: 0
   _projectileDamage: 10
-  _cannonBallController: {fileID: 3272699988307355371, guid: 3f5b1c34671533549bedf701bae1389a, type: 3}
+  _cannonBallSkin: {fileID: 3443882271885104904, guid: 3f5b1c34671533549bedf701bae1389a, type: 3}
   _cannonBallPoolSize:
     _initPoolSize: 10
     _maxPoolSize: 15

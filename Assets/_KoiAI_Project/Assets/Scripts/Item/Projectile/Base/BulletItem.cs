@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace KoiAI.Item
 {
+    using KoiAI.Skin;
+
+    [RequireComponent(typeof(BulletController))]
     public class BulletItem : ResourceBase
     {
         [SerializeField]
@@ -10,6 +13,13 @@ namespace KoiAI.Item
 
         private PlayerEquipment _equipmentFeature;
         private BulletController _bulletController;
+        private BulletSkin _bulletSkin;
+        private bool _isControllerInitialized;
+
+        private void Awake()
+        {
+            _bulletController = GetComponent<BulletController>();
+        }
 
         public override void SetItemData(ItemData itemData)
         {
@@ -31,10 +41,22 @@ namespace KoiAI.Item
 
         }
 
-        public void SetupController()
+        public bool SetupController()
         {
-            _bulletController = Instantiate(_bulletData.BulletController, transform);
-            _bulletController.Init(_bulletData);
+            if (_isControllerInitialized || !_bulletController || !_bulletData || !_bulletData.BulletSkin)
+            {
+                return _isControllerInitialized;
+            }
+
+            _bulletSkin = Instantiate(_bulletData.BulletSkin, transform);
+            _bulletController.SetSkin(_bulletSkin);
+            _isControllerInitialized = _bulletController.Init(_bulletData);
+            if (!_isControllerInitialized)
+            {
+                Destroy(_bulletSkin.gameObject);
+                _bulletSkin = null;
+            }
+            return _isControllerInitialized;
         }
 
         public override void UseItem()
@@ -66,7 +88,7 @@ namespace KoiAI.Item
         }
 
         public BulletController BulletController => _bulletController;
-        public bool IsEmptyController() => _bulletController == null;
+        public bool IsEmptyController() => !_isControllerInitialized;
 
     }
 }
