@@ -10,16 +10,12 @@ namespace KoiAI.Item
     {
         [SerializeField]
         private BulletData _bulletData;
+        [SerializeField]
+        private BulletController _bulletController;
 
         private PlayerEquipment _equipmentFeature;
-        private BulletController _bulletController;
         private BulletSkin _bulletSkin;
         private bool _isControllerInitialized;
-
-        private void Awake()
-        {
-            _bulletController = GetComponent<BulletController>();
-        }
 
         public override void SetItemData(ItemData itemData)
         {
