@@ -49,4 +49,4 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 8
   _aiAttackExtensionData:
-    _attackDelayTime: 1
+    _attackDelayTime: 0.1

@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3390166839464707065}
-  - component: {fileID: 4196311453409085553}
   - component: {fileID: 7407635991718606596}
+  - component: {fileID: 4196311453409085553}
   m_Layer: 3
   m_Name: Player_Gun
   m_TagString: Untagged
@@ -33,6 +33,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7407635991718606596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6980920062440885021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3a2c3f1a0ab652478f61552568a2c0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Item.GunItem
 --- !u!114 &4196311453409085553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52,15 +64,3 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   _useFirePointForShot: 1
---- !u!114 &7407635991718606596
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6980920062440885021}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3a2c3f1a0ab652478f61552568a2c0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Item.GunItem
