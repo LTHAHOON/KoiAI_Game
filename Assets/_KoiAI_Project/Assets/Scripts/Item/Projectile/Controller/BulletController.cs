@@ -1,4 +1,5 @@
 using KoiAI.Item;
+using KoiAI.Pool;
 using KoiAI.Skin;
 using KoiAI.Utilities;
 using UnityEngine;
@@ -10,7 +11,12 @@ namespace KoiAI
         private BulletSkin _bulletSkin;
         [SerializeField]
         private GameObject _hitEffectPrefab;
+        [SerializeField]
+        private PoolSize _hitEffectPoolSize = new(5, 20);
+        [SerializeField, Min(0f)]
+        private float _hitEffectLifetime = 2f;
         private BulletData _bulletData;
+        private Pool<GameObject> _hitEffectPool;
         public bool Init(BulletData bulletData)
         {
             _bulletData = bulletData;
@@ -24,6 +30,8 @@ namespace KoiAI
                 Debug.LogError($"{nameof(BulletController)} requires a {nameof(BulletSkin)}.", this);
                 return false;
             }
+
+            EnsureHitEffectPool();
             return true;
         }
 
@@ -41,7 +49,17 @@ namespace KoiAI
 
             if (_hitEffectPrefab)
             {
-                Instantiate(_hitEffectPrefab, hit.point, Quaternion.identity);
+                EnsureHitEffectPool();
+                GameObject hitEffect = _hitEffectPool?.Pop();
+                if (hitEffect)
+                {
+                    hitEffect.transform.SetPositionAndRotation(hit.point, Quaternion.identity);
+                    PoolManager.Instance.ReturnDelay(_hitEffectPool, hitEffect, Mathf.Max(0f, _hitEffectLifetime));
+                }
+                else
+                {
+                    Instantiate(_hitEffectPrefab, hit.point, Quaternion.identity);
+                }
             }
             if (hit.collider.TryGetComponent(out Health.Health health))
             {
@@ -51,5 +69,17 @@ namespace KoiAI
         }
 
         public BulletSkin GetBulletSkin() => _bulletSkin;
+
+        private void EnsureHitEffectPool()
+        {
+            if (_hitEffectPool != null || !_hitEffectPrefab || PoolManager.Instance == null)
+            {
+                return;
+            }
+
+            ulong poolID = unchecked((ulong)(uint)_hitEffectPrefab.GetInstanceID());
+            PoolManager.Instance.AddPool(poolID, _hitEffectPrefab, _hitEffectPoolSize, PoolName.HitEffect);
+            PoolManager.Instance.TryGetPool(poolID, out _hitEffectPool);
+        }
     }
 }

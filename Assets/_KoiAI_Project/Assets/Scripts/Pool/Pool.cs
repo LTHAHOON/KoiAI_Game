@@ -39,10 +39,19 @@ namespace KoiAI.Pool
 
         public void Return(T objToReturn)
         {
-            if (_poolStacks.Count > _maxPoolSize)
+            // Unity's destroyed objects compare equal to null. Never keep one in the pool.
+            if (!objToReturn)
+            {
+                return;
+            }
+
+            if (_poolStacks.Count >= _maxPoolSize)
             {
                 GameObject objToDestory = ConvertToGameObject(objToReturn);
-                Object.Destroy(objToDestory);
+                if (objToDestory)
+                {
+                    Object.Destroy(objToDestory);
+                }
             }
             else
             {
@@ -54,8 +63,17 @@ namespace KoiAI.Pool
         public IEnumerator IEReturn(T objToReturn, float delayTime)
         {
             if (!objToReturn)
-                yield return null;
+            {
+                yield break;
+            }
+
             yield return new WaitForSeconds(delayTime);
+
+            if (!objToReturn)
+            {
+                yield break;
+            }
+
             Return(objToReturn);
         }
 
@@ -86,15 +104,21 @@ namespace KoiAI.Pool
         /// </summary>
         public T Pop()
         {
-            if (_poolStacks.Count <= 0)
+            while (_poolStacks.Count > 0)
             {
-                T newObj = Object.Instantiate(_prefabObj, _poolStorage);
-                    
-                _poolStacks.Push(newObj);
+                T pooledObj = _poolStacks.Pop();
+                if (!pooledObj)
+                {
+                    continue;
+                }
+
+                SetActive(true, pooledObj);
+                return pooledObj;
             }
-            T obj = _poolStacks.Pop();
-            SetActive(true, obj);
-            return obj;
+
+            T spawnedObj = Object.Instantiate(_prefabObj, _poolStorage);
+            SetActive(true, spawnedObj);
+            return spawnedObj;
         }
 
         public T[] GetAllInstanceArray()

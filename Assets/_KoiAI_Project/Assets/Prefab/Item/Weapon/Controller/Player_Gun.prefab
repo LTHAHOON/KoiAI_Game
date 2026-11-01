@@ -64,3 +64,5 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   _useFirePointForShot: 1
+  _tracerSystem: {fileID: 7525673752317815283, guid: 2fd52a7b3bdf98345a3931b6d04692d1, type: 3}
+  _tracerInterval: 3

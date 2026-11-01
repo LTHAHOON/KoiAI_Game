@@ -1976,37 +1976,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraManualUpdater
   cinemachineBrain: {fileID: 330585549}
---- !u!1 &345107673
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 345107674}
-  m_Layer: 0
-  m_Name: GameObject (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &345107674
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 345107673}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -85.65085, y: -22.72871, z: 47.8782}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &404888475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7645,6 +7614,55 @@ PlayableDirector:
     value: {fileID: 644034136}
   m_ExposedReferences:
     m_References: []
+--- !u!1 &1279480899
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1279480901}
+  - component: {fileID: 1279480900}
+  m_Layer: 0
+  m_Name: GunTracerSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1279480900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1279480899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc2c237aa6813546b747d331e40bbd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.VFX.GunTracerSystem
+  _tracerPrefab: {fileID: 5716244233441065946, guid: 2fd52a7b3bdf98345a3931b6d04692d1, type: 3}
+  _capacity: 64
+  _speed: 250
+  _length: 15
+  _minDistance: 0.1
+--- !u!4 &1279480901
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1279480899}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1288973829
 GameObject:
   m_ObjectHideFlags: 0
@@ -9241,6 +9259,8 @@ MonoBehaviour:
     _storage: {fileID: 928577642}
   - poolName: 4
     _storage: {fileID: 614296367}
+  - poolName: 5
+    _storage: {fileID: 2133909582}
 --- !u!4 &1540684723
 Transform:
   m_ObjectHideFlags: 0
@@ -9257,6 +9277,7 @@ Transform:
   - {fileID: 1757105301}
   - {fileID: 1555549445}
   - {fileID: 1423737163}
+  - {fileID: 2133909582}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1555549444
@@ -15001,6 +15022,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2130804729}
   m_CullTransparentMesh: 1
+--- !u!1 &2133909581
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2133909582}
+  m_Layer: 0
+  m_Name: HitEffectStorage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2133909582
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2133909581}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1540684723}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2144852069
 GameObject:
   m_ObjectHideFlags: 0
@@ -15318,6 +15370,10 @@ PrefabInstance:
       value: Enemy_Bodyguard
       objectReference: {fileID: 0}
     - target: {fileID: 6954256085678506840, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
+      propertyPath: _tracerSystem
+      value: 
+      objectReference: {fileID: 1279480900}
+    - target: {fileID: 6954256085678506840, guid: 3293cdeb26ed12a4e97852b89e5b7279, type: 3}
       propertyPath: _targetLayerMask.m_Bits
       value: 4294967295
       objectReference: {fileID: 0}
@@ -15364,4 +15420,4 @@ SceneRoots:
   - {fileID: 1303640429}
   - {fileID: 728532099}
   - {fileID: 6573679526988301960}
-  - {fileID: 345107674}
+  - {fileID: 1279480901}

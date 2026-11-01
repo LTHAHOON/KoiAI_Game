@@ -1,4 +1,5 @@
 using System;
+using KoiAI.Pool;
 using UnityEngine;
 
 namespace KoiAI.Utilities
@@ -13,6 +14,11 @@ namespace KoiAI.Utilities
         private LayerMask _damageTargetLayerMask;
         [SerializeField]
         private GameObject _hitEffectPrefab;
+        [SerializeField]
+        private PoolSize _hitEffectPoolSize = new(5, 20);
+        [SerializeField, Min(0f)]
+        private float _hitEffectLifetime = 2f;
+        private Pool<GameObject> _hitEffectPool;
     
         private bool _isTriggerEnter = false;
         private int _maxOverlapCount = 0;
@@ -30,6 +36,7 @@ namespace KoiAI.Utilities
             _maxOverlapCount = maxOverlapCount;
             _targetColliders = new Collider[maxOverlapCount];
             OnHit += hitCount;
+            EnsureHitEffectPool();
         }
     
         private void OnDisable()
@@ -53,7 +60,17 @@ namespace KoiAI.Utilities
             Vector3 hitPoint = other.ClosestPointOnBounds(transform.position);
             if(_hitEffectPrefab)
             {
-                Instantiate(_hitEffectPrefab, hitPoint, Quaternion.identity);
+                EnsureHitEffectPool();
+                GameObject hitEffect = _hitEffectPool?.Pop();
+                if (hitEffect)
+                {
+                    hitEffect.transform.SetPositionAndRotation(hitPoint, Quaternion.identity);
+                    PoolManager.Instance.ReturnDelay(_hitEffectPool, hitEffect, Mathf.Max(0f, _hitEffectLifetime));
+                }
+                else
+                {
+                    Instantiate(_hitEffectPrefab, hitPoint, Quaternion.identity);
+                }
             }
         
             int hitCount = Physics.OverlapSphereNonAlloc(transform.position, _overlapRadius, _targetColliders, _damageTargetLayerMask);
@@ -65,6 +82,18 @@ namespace KoiAI.Utilities
         {
             Gizmos.color = Color.red;
             Gizmos.DrawSphere(transform.position, _overlapRadius);
+        }
+
+        private void EnsureHitEffectPool()
+        {
+            if (_hitEffectPool != null || !_hitEffectPrefab || PoolManager.Instance == null)
+            {
+                return;
+            }
+
+            ulong poolID = _hitEffectPrefab.GetEntityULongID();
+            PoolManager.Instance.AddPool(poolID, _hitEffectPrefab, _hitEffectPoolSize, PoolName.HitEffect);
+            PoolManager.Instance.TryGetPool(poolID, out _hitEffectPool);
         }
     }
 }

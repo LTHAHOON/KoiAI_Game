@@ -11,6 +11,7 @@ namespace KoiAI.Pool
         AudioSource,
         Quest,
         DropTable,
+        HitEffect,
     }
     [Serializable]
     public struct PoolStorageData

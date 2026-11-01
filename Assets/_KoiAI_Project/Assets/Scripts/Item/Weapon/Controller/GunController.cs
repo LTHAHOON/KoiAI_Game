@@ -8,6 +8,7 @@ namespace KoiAI.Item
     using KoiAI.Skin;
     using KoiAI.Utilities;
     using KoiAI.Audio;
+    using KoiAI.VFX;
 
     public class GunController : WeaponControllerBase
     {
@@ -15,7 +16,13 @@ namespace KoiAI.Item
         private LayerMask _targetLayerMask;
         [SerializeField]
         private bool _useFirePointForShot;
+        [Header("Bullet Tracer")]
+        [SerializeField]
+        private GunTracerSystem _tracerSystem;
+        [SerializeField, Min(1)]
+        private int _tracerInterval = 3;
 
+        private uint _shotCount;
         private GunData _gunData;
         private GunSkin _gunSkin;
         private Pool<BulletItem> _pool;
@@ -141,11 +148,26 @@ namespace KoiAI.Item
             Transform shotOrigin = (_useFirePointForShot && _gunSkin && _gunSkin.FirePoint) ? _gunSkin.FirePoint : transform;
             Vector3 shotDirection = shotOrigin.rotation * (Quaternion.Euler(_pitchAngle, _yawAngle, 0f) * Vector3.forward);
             shotDirection = ApplySpread(shotDirection, shotOrigin.up, spreadAngle);
+
+            Vector3 end = shotOrigin.position + shotDirection * 500f;
             if(Physics.Raycast(shotOrigin.position, shotDirection, out RaycastHit hit, 500f, _targetLayerMask))
             {
+                end = hit.point;
                 bulletItem.BulletController.OnHit(hit);
             }
-            
+
+            // 기존 Raycast 결과로 시각적 Tracer 생성
+            if (_tracerSystem)
+            {
+                ++_shotCount;
+
+                if (_shotCount % (uint)_tracerInterval == 0)
+                {
+                    _tracerSystem.Play(shotOrigin.position, end);
+                }
+            }
+
+
             PoolManager.Instance.ReturnDelay(_pool, bulletItem, 2f);
 
             if (_curBallCount <= 0)
