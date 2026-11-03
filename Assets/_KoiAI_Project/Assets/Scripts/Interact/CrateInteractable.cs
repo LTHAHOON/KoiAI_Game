@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using KoiAI.Audio;
+using KoiAI.Input;
 using KoiAI.Item;
 using KoiAI.Player;
 using KoiAI.UI;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace KoiAI.Interact
 {
@@ -103,9 +105,7 @@ namespace KoiAI.Interact
                 }
                 return;
             }
-            float distanceToPlayer = Vector3.Distance(transform.position, _playerInteractor.transform.position);
-            bool hasDropItems = _dropItems != null && _dropItems.Count > 0;
-            if (distanceToPlayer <= _showDistanceToPlayer && hasDropItems)
+            if (CheckInteractable())
             {
                 if(!_isVisible)
                 {
@@ -130,6 +130,21 @@ namespace KoiAI.Interact
                 _dropTableSelector.HideItems();
                 _isVisible = false;
             }
+        }
+
+        private bool CheckInteractable()
+        {
+            if(!_playerInteractor)
+            {
+                return false;
+            }
+            float distanceToPlayer = Vector3.Distance(transform.position, _playerInteractor.transform.position);
+            bool hasDropItems = _dropItems != null && _dropItems.Count > 0;
+            if (distanceToPlayer <= _showDistanceToPlayer && hasDropItems)
+            {
+                return true;
+            }
+            return false;
         }
 
         private void OpenOrClose()

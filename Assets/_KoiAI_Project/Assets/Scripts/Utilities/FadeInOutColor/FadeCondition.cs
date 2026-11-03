@@ -7,5 +7,7 @@ namespace KoiAI.Utilities.FadeInOutColor
         public abstract bool IsPossibleFadeIn(float fadeInOutCurTime);
         public abstract bool IsPossibleFadeOut(float fadeInOutCurTime);
 
+        public virtual bool IsComplete(float fadeInOutCurTime) => false;
+
     }
 }

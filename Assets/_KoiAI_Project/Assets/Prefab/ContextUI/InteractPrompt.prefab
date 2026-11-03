@@ -150,11 +150,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc8e68451732496c8b2df8617b2e731d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Utilities.FadeInOutColor.FadeInOutTextColor
-  _fadeCondition: {fileID: 11400000, guid: cbb8b3e610beb5f45a82876f1eb842b3, type: 2}
-  _baseColor: {r: 1, g: 1, b: 1, a: 1}
-  _fadeInSpeed: 1
+  _fadeCondition: {fileID: 11400000, guid: c25a3056203ea9f4bae2f6640b59ec8f, type: 2}
+  _baseColor: {r: 1, g: 1, b: 1, a: 0}
+  _fadeInSpeed: 1.5
   _fadeOutSpeed: 1.5
-  _canPlayOnAwake: 1
+  _canPlayOnAwake: 0
+  _canPlayOnEnable: 1
   _isLoop: 1
 --- !u!1 &4180575034963882189
 GameObject:
@@ -167,15 +168,16 @@ GameObject:
   - component: {fileID: 3208304807953294568}
   - component: {fileID: 6967169459726662262}
   - component: {fileID: 6732843690086461000}
+  - component: {fileID: 2715267706168387240}
   - component: {fileID: 987402102605998669}
   - component: {fileID: 4655089683115103533}
   m_Layer: 5
-  m_Name: ContextUI_HotkeyMark
+  m_Name: InteractPrompt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3208304807953294568
 RectTransform:
   m_ObjectHideFlags: 0
@@ -235,6 +237,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &2715267706168387240
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4180575034963882189}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &987402102605998669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,11 +281,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25ef60820956d914da01b1872d69398b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Utilities.FadeInOutColor.FadeInOutImageColor
-  _fadeCondition: {fileID: 11400000, guid: cbb8b3e610beb5f45a82876f1eb842b3, type: 2}
-  _baseColor: {r: 0.44313726, g: 0.39215687, b: 0.3019608, a: 1}
-  _fadeInSpeed: 1
+  _fadeCondition: {fileID: 11400000, guid: c25a3056203ea9f4bae2f6640b59ec8f, type: 2}
+  _baseColor: {r: 0.44313726, g: 0.39215687, b: 0.3019608, a: 0}
+  _fadeInSpeed: 1.5
   _fadeOutSpeed: 1.5
-  _canPlayOnAwake: 1
+  _canPlayOnAwake: 0
+  _canPlayOnEnable: 1
   _isLoop: 1
 --- !u!1 &6323976111393695689
 GameObject:
@@ -284,9 +299,9 @@ GameObject:
   - component: {fileID: 7831581986507754610}
   - component: {fileID: 8222456040958179985}
   - component: {fileID: 8671721624367816890}
-  - component: {fileID: 2180808432312313710}
+  - component: {fileID: 4761372324568956540}
   m_Layer: 5
-  m_Name: Guide_Text
+  m_Name: Description_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -411,7 +426,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &2180808432312313710
+--- !u!114 &4761372324568956540
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -423,9 +438,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc8e68451732496c8b2df8617b2e731d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Utilities.FadeInOutColor.FadeInOutTextColor
-  _fadeCondition: {fileID: 11400000, guid: cbb8b3e610beb5f45a82876f1eb842b3, type: 2}
+  _fadeCondition: {fileID: 11400000, guid: c25a3056203ea9f4bae2f6640b59ec8f, type: 2}
   _baseColor: {r: 1, g: 1, b: 1, a: 0}
-  _fadeInSpeed: 1
-  _fadeOutSpeed: 1.5
-  _canPlayOnAwake: 1
+  _fadeInSpeed: 1.5
+  _fadeOutSpeed: 0
+  _canPlayOnAwake: 0
+  _canPlayOnEnable: 1
   _isLoop: 0

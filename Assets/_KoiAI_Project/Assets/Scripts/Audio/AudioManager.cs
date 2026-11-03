@@ -97,7 +97,15 @@ namespace KoiAI.Audio
             {
                 return;
             }
-            audioSource.loop = false;
+
+            if (fadeTime <= 0f)
+            {
+                audioSource.Stop();
+                audioSource.volume = 0f;
+                audioSource.loop = false;
+                return;
+            }
+
             StartCoroutine(IEFadeStopSFX(audioSource, fadeTime));
         }
 
@@ -108,10 +116,12 @@ namespace KoiAI.Audio
             while(curTime < fadeTime)
             {
                 curTime += Time.deltaTime;
-                float volume = curVolume - (fadeTime / curTime);
-                audioSource.volume = volume;
+                float normalizedTime = Mathf.Clamp01(curTime / fadeTime);
+                audioSource.volume = Mathf.Lerp(curVolume, 0f, normalizedTime);
                 yield return null;
             }
+            audioSource.volume = 0f;
+            audioSource.loop = false;
             audioSource.Stop();
         }
         public void ReturnSFX(AudioSFXTarget audioTarget)

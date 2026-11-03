@@ -362,6 +362,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1793819142}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &66055110 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7417339253038057378, guid: 0437b06b7f4722a4393153ef50789acc, type: 3}
+  m_PrefabInstance: {fileID: 5556137085794511336}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &66287700
 GameObject:
   m_ObjectHideFlags: 0
@@ -1976,11 +1987,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraManualUpdater
   cinemachineBrain: {fileID: 330585549}
---- !u!1 &362799262 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8951417292610059339, guid: b519efd0bfa34344dbdea83767dca176, type: 3}
-  m_PrefabInstance: {fileID: 1154891187}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &404888475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2260,9 +2266,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FadeInOutImageColor
   _fadeCondition: {fileID: 11400000, guid: 940a35954d07ee048b433c45b1a7d68b, type: 2}
   _baseColor: {r: 1, g: 1, b: 1, a: 0}
-  _fadeInSpeed: 0
-  _fadeOutSpeed: 2
+  _fadeInSpeed: 2
+  _fadeOutSpeed: 0
   _canPlayOnAwake: 1
+  _canPlayOnEnable: 0
   _isLoop: 0
 --- !u!114 &445528083
 MonoBehaviour:
@@ -3486,9 +3493,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FadeInOutImageColor
   _fadeCondition: {fileID: 11400000, guid: 940a35954d07ee048b433c45b1a7d68b, type: 2}
   _baseColor: {r: 1, g: 1, b: 1, a: 0}
-  _fadeInSpeed: 0
-  _fadeOutSpeed: 2
+  _fadeInSpeed: 2
+  _fadeOutSpeed: 0
   _canPlayOnAwake: 1
+  _canPlayOnEnable: 0
   _isLoop: 0
 --- !u!1 &772007347
 GameObject:
@@ -4451,6 +4459,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ee44dc784605b34899f7cad4af95c5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.AI.AIBrain
+--- !u!114 &905593086 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8671721624367816890, guid: 0437b06b7f4722a4393153ef50789acc, type: 3}
+  m_PrefabInstance: {fileID: 5556137085794511336}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &919952767
 GameObject:
   m_ObjectHideFlags: 0
@@ -7640,14 +7659,25 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
---- !u!1 &1207666410 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4180575034963882189, guid: 0437b06b7f4722a4393153ef50789acc, type: 3}
-  m_PrefabInstance: {fileID: 5556137085794511336}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1207666411 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3208304807953294568, guid: 0437b06b7f4722a4393153ef50789acc, type: 3}
+  m_PrefabInstance: {fileID: 5556137085794511336}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1207666413 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 987402102605998669, guid: 0437b06b7f4722a4393153ef50789acc, type: 3}
+  m_PrefabInstance: {fileID: 5556137085794511336}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7766b7ced3c5fd14dad7769ef13e972f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Utilities.UIFollowToObject
+--- !u!225 &1207666416 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 2715267706168387240, guid: 0437b06b7f4722a4393153ef50789acc, type: 3}
   m_PrefabInstance: {fileID: 5556137085794511336}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &1229593466
@@ -11610,7 +11640,7 @@ GameObject:
   - component: {fileID: 2095001181}
   - component: {fileID: 2095001182}
   m_Layer: 5
-  m_Name: ContextUI
+  m_Name: ContextPromptUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11650,7 +11680,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.UI.ContextUI
   _contextUIData:
   - _contextUIType: 0
-    _contextUIObj: {fileID: 1207666410}
+    _contextUICanvasGroup: {fileID: 1207666416}
+    _contextUIObj: {fileID: 1207666413}
+    _descriptionText: {fileID: 905593086}
+    _hotKeyText: {fileID: 66055110}
 --- !u!1 &2112752865
 GameObject:
   m_ObjectHideFlags: 0
@@ -15457,10 +15490,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2095001181}
     m_Modifications:
-    - target: {fileID: 987402102605998669, guid: 0437b06b7f4722a4393153ef50789acc, type: 3}
-      propertyPath: _targetObject
-      value: 
-      objectReference: {fileID: 362799262}
     - target: {fileID: 3208304807953294568, guid: 0437b06b7f4722a4393153ef50789acc, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -15541,9 +15570,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3475269416274608672, guid: 0437b06b7f4722a4393153ef50789acc, type: 3}
+      propertyPath: _fadeInSpeed
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4180575034963882189, guid: 0437b06b7f4722a4393153ef50789acc, type: 3}
       propertyPath: m_Name
-      value: ContextUI_HotkeyMark
+      value: InteractPrompt
+      objectReference: {fileID: 0}
+    - target: {fileID: 4655089683115103533, guid: 0437b06b7f4722a4393153ef50789acc, type: 3}
+      propertyPath: _fadeInSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4761372324568956540, guid: 0437b06b7f4722a4393153ef50789acc, type: 3}
+      propertyPath: _fadeInSpeed
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

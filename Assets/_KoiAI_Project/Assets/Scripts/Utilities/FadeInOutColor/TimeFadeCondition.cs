@@ -18,35 +18,20 @@ namespace KoiAI.Utilities.FadeInOutColor
 
         public override bool IsPossibleFadeIn(float curTime)
         {
-            if (IsPossbileFadeInOut(curTime))
-            {
-                bool isPossibleFadeIn = IsStartFadeIn(curTime);
-                return isPossibleFadeIn;
-            }
-            return false;
+            return IsPossibleTime(curTime) && IsStartFadeIn(curTime);
         }
 
         public override bool IsPossibleFadeOut(float curTime)
         {
-            if(IsPossbileFadeInOut(curTime))
-            {
-                bool isPossibleFadeOut = IsStartFadeOut(curTime);
-                return isPossibleFadeOut;
-            }
-            return false;
+            return IsPossibleTime(curTime) && IsStartFadeOut(curTime);
         }
 
-        private bool IsPossbileFadeInOut(float curTime)
-        {
-            curTime += Time.deltaTime;
-            bool isPossibleFade = !IsTimeOut(curTime);
-            return isPossibleFade;
-        }
-
-        private bool IsTimeOut(float curTime) => curTime >= _duration;
+        private bool IsPossibleTime(float curTime) => curTime <= _duration;
         private bool IsStartFadeIn(float curTime) => curTime >= _fadeInStartTime && curTime <= _fadeInEndTime;
 
         private bool IsStartFadeOut(float curTime) => curTime >= _fadeOutStartTime && curTime <= _fadeOutEndTime;
+
+        public override bool IsComplete(float curTime) => curTime >= _duration;
 
         public float FadeInEndTime => _fadeInEndTime;
         public float FadeOutEndTime => _fadeOutEndTime;

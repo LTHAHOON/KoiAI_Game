@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 namespace KoiAI.Player
 {
     using KoiAI.Input;
+    using KoiAI.UI;
+
     public interface IPlayerInteractable
     {
         void Interact(PlayerInteractor playerInteractor);
@@ -30,9 +32,9 @@ namespace KoiAI.Player
         private string _playerInteractableTag = "PlayerInteractable";
 
         private RaycastHit[] _sphereCastHits;
-        private readonly List<MonoBehaviour> _parentBehaviours = new();
         private Transform _cachedRayOrigin;
         private bool _isInputSubscribed;
+        private RaycastHit _currentHit;
 
         private void Awake()
         {
@@ -40,14 +42,34 @@ namespace KoiAI.Player
             _sphereCastHits = new RaycastHit[hitCount];
         }
 
-        private void OnEnable()
-        {
-            SubscribeInput();
-        }
-
         private void Start()
         {
             // InputService가 먼저 초기화되지 않은 경우를 대비해 한 번 더 연결을 시도합니다.
+            SubscribeInput();
+        }
+
+        private void Update()
+        {
+            if (!TryGetNearestHit(out RaycastHit hit))
+            {
+                if(_currentHit.collider != null)
+                {
+                    ContextUI.Hide(ContextPromptUIType.InteractPrompt);
+                    _currentHit = default;
+                }
+                return;
+            }
+            if(_currentHit.collider == hit.collider)
+            {
+                return;
+            }
+
+            _currentHit = hit;
+            ContextUI.Show(ContextPromptUIType.InteractPrompt, _currentHit.collider.gameObject, "상호작용", InputService.PlayerIA.Player.Interact.GetBindingDisplayString(), false);
+        }
+
+        private void OnEnable()
+        {
             SubscribeInput();
         }
 
@@ -82,11 +104,10 @@ namespace KoiAI.Player
 
         private void OnInteract(InputAction.CallbackContext context)
         {
-            if (!TryGetInteractable(out IPlayerInteractable interactable))
+            if (_currentHit.collider == null || !TryGetInteractable(_currentHit, out IPlayerInteractable interactable))
             {
                 return;
             }
-
             interactable.Interact(this);
         }
 
@@ -94,16 +115,10 @@ namespace KoiAI.Player
 
         #region Interactable Search
 
-        public bool TryGetInteractable(out IPlayerInteractable interactable)
+        public bool TryGetInteractable(RaycastHit hit, out IPlayerInteractable interactable)
         {
             interactable = null;
-            if (!TryGetNearestHit(out RaycastHit hit))
-            {
-                return false;
-            }
-
             // 콜라이더가 자식 오브젝트에 있어도 부모의 상호작용 컴포넌트를 찾습니다.
-            _parentBehaviours.Clear();
             if (hit.collider.TryGetComponent(out IPlayerInteractable playerInteractable))
             {
                 interactable = playerInteractable;
@@ -134,14 +149,7 @@ namespace KoiAI.Player
                 return false;
             }
 
-            int hitCount = Physics.SphereCastNonAlloc(
-                rayOrigin.position,
-                _interactRadius,
-                rayOrigin.forward,
-                _sphereCastHits,
-                _interactDistance,
-                _interactableLayerMask,
-                QueryTriggerInteraction.Ignore);
+            int hitCount = Physics.SphereCastNonAlloc(rayOrigin.position, _interactRadius, rayOrigin.forward, _sphereCastHits, _interactDistance, _interactableLayerMask, QueryTriggerInteraction.Ignore);
 
             float nearestDistance = float.PositiveInfinity;
             bool isFound = false;

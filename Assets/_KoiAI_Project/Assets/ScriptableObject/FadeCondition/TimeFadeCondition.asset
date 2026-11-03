@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TimeFadeCondition
   m_EditorClassIdentifier: Assembly-CSharp::TimeFadeCondition
   _duration: 4
-  _fadeInStartTime: 0
-  _fadeInEndTime: 3.5
-  _fadeOutStartTime: 2.5
-  _fadeOutEndTime: 4
+  _fadeInStartTime: 3
+  _fadeInEndTime: 4
+  _fadeOutStartTime: 0
+  _fadeOutEndTime: 3

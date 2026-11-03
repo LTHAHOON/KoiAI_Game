@@ -22,6 +22,8 @@ namespace KoiAI.Utilities.FadeInOutColor
         [SerializeField]
         private bool _canPlayOnAwake;
         [SerializeField]
+        private bool _canPlayOnEnable;
+        [SerializeField]
         private bool _isLoop = false;
 
         private T _uiComponent;
@@ -33,7 +35,6 @@ namespace KoiAI.Utilities.FadeInOutColor
             _uiComponent = GetComponent<T>();
             Init();
             _isEndInit = true;
-
             if (_canPlayOnAwake)
             {
                 PlayFadeInOut();
@@ -52,6 +53,21 @@ namespace KoiAI.Utilities.FadeInOutColor
             }
         }
 
+        private void OnEnable()
+        {
+            if (_canPlayOnEnable)
+            {
+                PlayFadeInOut();
+            }
+        }
+
+        private void OnDisable()
+        {
+            StopFadeInOut();
+            _fadeInOutCurTime = 0f;
+            SetCurrentColor(_baseColor);
+        }
+
         public void PlayFadeInOut()
         {
             _isPlaying = true;
@@ -64,24 +80,30 @@ namespace KoiAI.Utilities.FadeInOutColor
 
         private void UpdateFadeInOut()
         {
-            if (!_isEndInit && _fadeCondition == null)
+            if (!_isEndInit)
             {
                 return;
             }
 
+            if (_fadeCondition == null)
+            {
+                _isPlaying = false;
+                return;
+            }
+
             _fadeInOutCurTime += Time.deltaTime;
-            if (_fadeCondition.IsPossibleFadeIn(_fadeInOutCurTime))
+            if (_fadeCondition.IsPossibleFadeIn(_fadeInOutCurTime) && _fadeInSpeed > 0f)
             {
-                SetFadeColor(-_fadeInSpeed);
+                SetFadeColor(_fadeInSpeed);
             }
-            else if (_fadeCondition.IsPossibleFadeOut(_fadeInOutCurTime))
+            else if (_fadeCondition.IsPossibleFadeOut(_fadeInOutCurTime) && _fadeOutSpeed > 0f)
             {
-                SetFadeColor(_fadeOutSpeed);
+                SetFadeColor(-_fadeOutSpeed);
             }
-            else
+            else if (_fadeCondition.IsComplete(_fadeInOutCurTime))
             {
                 _fadeInOutCurTime = 0f;
-                _isPlaying = false;
+                _isPlaying = _isLoop;
             }
         }
 
