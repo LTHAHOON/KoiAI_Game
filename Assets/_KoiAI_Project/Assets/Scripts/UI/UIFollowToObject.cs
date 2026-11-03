@@ -26,10 +26,10 @@ namespace KoiAI.Utilities
         private float _scaleMin;
     
         private RectTransform _rectTransform;
-        private UnityEngine.Camera _camera;
+        private Camera _camera;
         private void Awake()
         {
-            _camera = UnityEngine.Camera.main;
+            _camera = Camera.main;
             _rectTransform = GetComponent<RectTransform>();
         }
 
@@ -52,7 +52,7 @@ namespace KoiAI.Utilities
             }
             _rectTransform.anchoredPosition = UIManager.Instance.ViewPortToAnchoredPoint(targetViewPortPos, _parentCanvasType);
 
-            Vector3 dir = (_camera.transform.position - _targetObject.transform.position);
+            Vector3 dir = _camera.transform.position - _targetObject.transform.position;
             float distance = dir.sqrMagnitude;
             float scale = distance / _maxDistance;
             scale = Mathf.Clamp(scale, _scaleMin, _scaleMax);

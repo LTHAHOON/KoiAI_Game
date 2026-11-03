@@ -1,4 +1,4 @@
-
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace KoiAI.VFX
@@ -6,9 +6,6 @@ namespace KoiAI.VFX
     public sealed class GunTracerSystem : MonoBehaviour
     {
         [Header("Pool")]
-        [SerializeField]
-        private LineRenderer _tracerPrefab;
-
         [SerializeField, Min(1)]
         private int _capacity = 64;
 
@@ -25,6 +22,7 @@ namespace KoiAI.VFX
         private struct Tracer
         {
             public LineRenderer Renderer;
+            public LineRenderer Prefab;
             public Vector3 Start;
             public Vector3 Direction;
             public float Distance;
@@ -33,45 +31,24 @@ namespace KoiAI.VFX
         }
 
         private Tracer[] _tracers;
+        private readonly Dictionary<LineRenderer, Stack<LineRenderer>> _inactiveRenderers = new();
         private int _nextIndex;
 
         private void Awake()
         {
-            if (!_tracerPrefab)
-            {
-                Debug.LogError("Tracer prefab is missing.");
-                enabled = false;
-                return;
-            }
-
-            // A tracer visual must be a separate object from this pool manager.
-            // Instantiating a prefab that contains this component would recursively
-            // invoke Awake until Unity crashes in native object cloning.
-            if (_tracerPrefab.transform == transform || _tracerPrefab.GetComponent<GunTracerSystem>() != null)
-            {
-                Debug.LogError("Tracer prefab cannot contain the GunTracerSystem itself. Assign a child LineRenderer-only visual prefab.", this);
-                enabled = false;
-                return;
-            }
-
             _tracers = new Tracer[_capacity];
-
-            for (int i = 0; i < _capacity; i++)
-            {
-                LineRenderer line = Instantiate(_tracerPrefab, transform);
-
-                line.useWorldSpace = true;
-                line.positionCount = 2;
-                line.enabled = false;
-
-                _tracers[i].Renderer = line;
-            }
         }
 
-        public bool Play(Vector3 start, Vector3 end)
+        public bool Play(Vector3 start, Vector3 end, LineRenderer tracerPrefab)
         {
-            if (!isActiveAndEnabled || _tracers == null)
+            if (!isActiveAndEnabled || _tracers == null || !tracerPrefab)
             {
+                return false;
+            }
+
+            if (tracerPrefab.transform == transform || tracerPrefab.GetComponent<GunTracerSystem>() != null)
+            {
+                Debug.LogError("Tracer prefab cannot contain the GunTracerSystem itself. Assign a LineRenderer-only visual prefab.", this);
                 return false;
             }
 
@@ -92,6 +69,13 @@ namespace KoiAI.VFX
 
             ref Tracer tracer = ref _tracers[index];
 
+            if (tracer.Prefab != tracerPrefab)
+            {
+                ReturnRenderer(tracer.Prefab, tracer.Renderer);
+                tracer.Renderer = AcquireRenderer(tracerPrefab);
+                tracer.Prefab = tracerPrefab;
+            }
+
             tracer.Start = start;
             tracer.Direction = delta / distance;
             tracer.Distance = distance;
@@ -103,6 +87,44 @@ namespace KoiAI.VFX
             tracer.Renderer.enabled = true;
 
             return true;
+        }
+
+        private LineRenderer CreateRenderer(LineRenderer prefab)
+        {
+            LineRenderer line = Instantiate(prefab, transform);
+            line.useWorldSpace = true;
+            line.positionCount = 2;
+            line.enabled = false;
+            return line;
+        }
+
+        private LineRenderer AcquireRenderer(LineRenderer prefab)
+        {
+            if (_inactiveRenderers.TryGetValue(prefab, out Stack<LineRenderer> renderers)
+                && renderers.Count > 0)
+            {
+                return renderers.Pop();
+            }
+
+            return CreateRenderer(prefab);
+        }
+
+        private void ReturnRenderer(LineRenderer prefab, LineRenderer renderer)
+        {
+            if (!renderer)
+            {
+                return;
+            }
+
+            renderer.enabled = false;
+
+            if (!_inactiveRenderers.TryGetValue(prefab, out Stack<LineRenderer> renderers))
+            {
+                renderers = new Stack<LineRenderer>();
+                _inactiveRenderers.Add(prefab, renderers);
+            }
+
+            renderers.Push(renderer);
         }
 
         private int FindFreeIndex()
@@ -178,7 +200,9 @@ namespace KoiAI.VFX
                 ref Tracer tracer = ref _tracers[i];
 
                 if (tracer.Renderer)
+                {
                     Release(ref tracer);
+                }
             }
         }
     }

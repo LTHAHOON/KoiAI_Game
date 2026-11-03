@@ -10,6 +10,9 @@ namespace KoiAI.Item
         [SerializeField]
         private BulletData _bulletData;
         [SerializeField]
+        [Tooltip("이 무기가 사용할 탄환 궤적 프리팹입니다. 비어 있으면 이 무기의 tracer가 재생되지 않습니다.")]
+        private LineRenderer _tracerPrefab;
+        [SerializeField]
         [Tooltip("예비 탄약만 무한입니다. 탄창의 탄약은 소모되며 재장전이 필요합니다.")]
         private bool _isInfiniteLoad = false;
         [SerializeField]
@@ -41,6 +44,7 @@ namespace KoiAI.Item
         public int LoadMaxCount => _loadMaxCount;
         public float LaunchSpeed => _launchSpeed;
         public BulletData BulletData => _bulletData;
+        public LineRenderer TracerPrefab => _tracerPrefab;
         public float LoadTime => _loadTime;
         public float MaxPitchAngle => _maxPitchAngle;
         public float MinPitchAngle => _minPitchAngle;

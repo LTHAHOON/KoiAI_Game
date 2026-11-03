@@ -163,7 +163,7 @@ namespace KoiAI.Item
 
                 if (_shotCount % (uint)_tracerInterval == 0)
                 {
-                    _tracerSystem.Play(shotOrigin.position, end);
+                    _tracerSystem.Play(shotOrigin.position, end, _gunData.TracerPrefab);
                 }
             }
 

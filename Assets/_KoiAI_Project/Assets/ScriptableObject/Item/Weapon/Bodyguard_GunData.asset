@@ -28,6 +28,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   _bulletData: {fileID: 11400000, guid: 51de5f034ada78645b0fbcab7a0f02f5, type: 2}
+  _tracerPrefab: {fileID: 5716244233441065946, guid: 2fd52a7b3bdf98345a3931b6d04692d1, type: 3}
   _isInfiniteLoad: 1
   _isAutoLoad: 1
   _aimSensitity: 3

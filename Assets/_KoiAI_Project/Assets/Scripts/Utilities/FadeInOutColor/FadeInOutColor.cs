@@ -52,9 +52,14 @@ namespace KoiAI.Utilities.FadeInOutColor
             }
         }
 
-        private void PlayFadeInOut()
+        public void PlayFadeInOut()
         {
             _isPlaying = true;
+        }
+
+        public void StopFadeInOut()
+        {
+            _isPlaying = false;
         }
 
         private void UpdateFadeInOut()
