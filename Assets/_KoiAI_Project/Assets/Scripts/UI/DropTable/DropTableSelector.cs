@@ -23,6 +23,8 @@ namespace KoiAI.UI
         [SerializeField]
         private DropTableItem _dropTableItemPrefab;
         [SerializeField]
+        private GameObject _dropTableHotkeyObj;
+        [SerializeField]
         private PoolSize _dropTableItemPoolSize = new(3, 20);
         [SerializeField]
         private Color _normalColor = new(0.5f, 0.5f, 0.5f, 0.235f);
@@ -124,7 +126,13 @@ namespace KoiAI.UI
         private void LateUpdate()
         {
             float targetAlpha = _isDropTableVisible ? 1f : 0f;
+            if(_isDropTableVisible == _dropTableHotkeyObj.activeSelf && 
+                _canvasGroup.alpha == targetAlpha)
+            {
+                return;
+            }
             _canvasGroup.alpha = Mathf.Lerp(_canvasGroup.alpha, targetAlpha, Time.deltaTime * 10f);
+            _dropTableHotkeyObj.SetActive(_isDropTableVisible);
         }
 
         private void InitializePool()

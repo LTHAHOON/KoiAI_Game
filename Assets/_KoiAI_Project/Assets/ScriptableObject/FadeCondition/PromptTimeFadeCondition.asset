@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PromptTimeFadeCondition
   m_EditorClassIdentifier: Assembly-CSharp::TimeFadeCondition
   _duration: 1.5
-  _fadeInStartTime: 0.8
-  _fadeInEndTime: 1.5
-  _fadeOutStartTime: 0
-  _fadeOutEndTime: 0.65
+  _fadeInStartTime: 0
+  _fadeInEndTime: 0.7
+  _fadeOutStartTime: 0.85
+  _fadeOutEndTime: 1.5

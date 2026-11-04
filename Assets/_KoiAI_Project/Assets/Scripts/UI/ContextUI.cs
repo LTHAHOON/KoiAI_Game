@@ -66,7 +66,7 @@ namespace KoiAI.UI
             }
             if(bUseAlphaSmooth)
             {
-                SetCanvasGroupAlpha(contextUIData.Value.ContextUICanvasGroup, 1f, 0.05f);
+                SetCanvasGroupAlpha(contextUIData.Value.ContextUICanvasGroup, 1f, 0.2f);
             }
             else
             {
