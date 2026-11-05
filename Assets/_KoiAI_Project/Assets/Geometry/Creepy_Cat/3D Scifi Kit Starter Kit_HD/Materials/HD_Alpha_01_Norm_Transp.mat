@@ -82,11 +82,11 @@ Material:
     - _CastShadows: 1
     - _Cull: 2
     - _Cutoff: 0.5
-    - _Dither_Alpha: 1
+    - _Dither_Alpha: 2
     - _DstBlend: 10
     - _DstBlendAlpha: 10
     - _GlossinessSource: 0
-    - _MetallicGlossMap: 0
+    - _MetallicGlossMap: 0.5
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
@@ -111,7 +111,7 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _EmssionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.5, g: 0.5, b: 0.5, a: 0}
-    - _SpecularColor: {r: 0, g: 0, b: 0, a: 1}
+    - _SpecularColor: {r: 2.9960787, g: 2.9960787, b: 2.9960787, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &2510395765778737167
