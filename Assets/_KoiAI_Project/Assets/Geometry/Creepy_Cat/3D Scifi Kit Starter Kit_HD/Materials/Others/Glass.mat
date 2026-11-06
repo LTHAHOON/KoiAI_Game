@@ -131,7 +131,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _Dither_Alpha: 1
+    - _Dither_Alpha: 2
     - _DstBlend: 10
     - _DstBlendAlpha: 10
     - _EmissionScaleUI: 0
