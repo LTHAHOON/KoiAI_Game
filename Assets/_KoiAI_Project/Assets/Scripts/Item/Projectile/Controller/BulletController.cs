@@ -8,13 +8,14 @@ namespace KoiAI
 {
     public class BulletController : MonoBehaviour
     {
-        private BulletSkin _bulletSkin;
         [SerializeField]
         private GameObject _hitEffectPrefab;
         [SerializeField]
         private PoolSize _hitEffectPoolSize = new(5, 20);
         [SerializeField, Min(0f)]
         private float _hitEffectLifetime = 2f;
+        
+        private BulletSkin _bulletSkin;
         private BulletData _bulletData;
         private Pool<GameObject> _hitEffectPool;
         public bool Init(BulletData bulletData)
