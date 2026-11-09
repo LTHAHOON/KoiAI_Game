@@ -12,19 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bd486065ce11414fa40e631affc4900, type: 3}
   m_Name: ProbeVolumesOptions
   m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.ProbeVolumesOptions
-  active: 0
+  active: 1
   normalBias:
     m_OverrideState: 1
-    m_Value: 2
+    m_Value: 0.238
   viewBias:
     m_OverrideState: 1
-    m_Value: 1.461
+    m_Value: 0.699
   scaleBiasWithMinProbeDistance:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
   samplingNoise:
     m_OverrideState: 1
-    m_Value: 0.163
+    m_Value: 0.2
   animateSamplingNoise:
     m_OverrideState: 0
     m_Value: 1
@@ -64,13 +64,13 @@ MonoBehaviour:
     m_Value: 0
   threshold:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 2
   intensity:
     m_OverrideState: 1
     m_Value: 0.2
   scatter:
     m_OverrideState: 1
-    m_Value: 0.5
+    m_Value: 0.322
   clamp:
     m_OverrideState: 0
     m_Value: 65472
@@ -111,13 +111,13 @@ MonoBehaviour:
   active: 1
   postExposure:
     m_OverrideState: 1
-    m_Value: 1.5
+    m_Value: 2
   contrast:
     m_OverrideState: 1
-    m_Value: 10
+    m_Value: 5
   colorFilter:
-    m_OverrideState: 0
-    m_Value: {r: 1, g: 0.88860166, b: 0.8254717, a: 1}
+    m_OverrideState: 1
+    m_Value: {r: 1, g: 0.95829195, b: 0.9339622, a: 1}
   hueShift:
     m_OverrideState: 1
     m_Value: 1
