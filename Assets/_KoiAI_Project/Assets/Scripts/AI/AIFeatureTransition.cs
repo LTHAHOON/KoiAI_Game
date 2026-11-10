@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+using Cysharp.Text;
 using R3;
 using System;
 using System.Collections.Generic;
@@ -19,21 +20,26 @@ namespace KoiAI.AI
 
         public void AssignDebug(AIFeature feature)
         {
+            string featureName = feature.FeatureProperty.ToString();
+            string enterState = ZString.Format("{0} {1}", featureName, nameof(AIFeatureState.ENTER));
+            string updateState = ZString.Format("{0} {1}", featureName, nameof(AIFeatureState.UPDATE));
+            string exitState = ZString.Format("{0} {1}", featureName, nameof(AIFeatureState.EXIT));
+
             Observable.EveryUpdate(UnityFrameProvider.PreLateUpdate)
                 .Subscribe(_ =>
                 {
                     bool isActive = feature.Brain.IsFeatureActive(feature.FeatureProperty);
                     if (isActive && !_wasActive)
                     {
-                        DEBUG_STATE = $"{feature.FeatureProperty.ToString()} {nameof(AIFeatureState.ENTER)}";
+                        DEBUG_STATE = enterState;
                     }
                     else if (isActive && _wasActive)
                     {
-                        DEBUG_STATE = $"{feature.FeatureProperty.ToString()} {nameof(AIFeatureState.UPDATE)}";
+                        DEBUG_STATE = updateState;
                     }
                     else
                     {
-                        DEBUG_STATE = $"{feature.FeatureProperty.ToString()} {nameof(AIFeatureState.EXIT)}";
+                        DEBUG_STATE = exitState;
                     }
                     _wasActive = isActive;
                 })

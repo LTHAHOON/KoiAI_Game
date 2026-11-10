@@ -8,6 +8,7 @@ public class RenderStatsScript : MonoBehaviour
     ProfilerRecorder setPassCallsRecorder;
     ProfilerRecorder drawCallsRecorder;
     ProfilerRecorder verticesRecorder;
+    readonly StringBuilder statsBuilder = new(500);
 
     void OnEnable()
     {
@@ -25,14 +26,14 @@ public class RenderStatsScript : MonoBehaviour
 
     void Update()
     {
-        var sb = new StringBuilder(500);
+        statsBuilder.Clear();
         if (setPassCallsRecorder.Valid)
-            sb.AppendLine($"SetPass Calls: {setPassCallsRecorder.LastValue}");
+            statsBuilder.Append("SetPass Calls: ").Append(setPassCallsRecorder.LastValue).AppendLine();
         if (drawCallsRecorder.Valid)
-            sb.AppendLine($"Draw Calls: {drawCallsRecorder.LastValue}");
+            statsBuilder.Append("Draw Calls: ").Append(drawCallsRecorder.LastValue).AppendLine();
         if (verticesRecorder.Valid)
-            sb.AppendLine($"Vertices: {verticesRecorder.LastValue}");
-        statsText = sb.ToString();
+            statsBuilder.Append("Vertices: ").Append(verticesRecorder.LastValue).AppendLine();
+        statsText = statsBuilder.ToString();
     }
  
     void OnGUI()

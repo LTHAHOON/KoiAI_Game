@@ -127,7 +127,7 @@ Material:
     - _Shininess: 0.071379885
     - _Smoothness: 1
     - _SmoothnessTextureChannel: 0
-    - _Smothness: 0.7
+    - _Smothness: 0.8
     - _SpecGlossMap: 0.5
     - _SpecularHighlights: 1
     - _SrcBlend: 1

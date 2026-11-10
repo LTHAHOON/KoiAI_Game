@@ -3,12 +3,14 @@ using System;
 namespace KoiAI.Quest
 {
     using KoiAI.Core;
+    using Unity.Profiling;
 
     public abstract class QuestObjectiveController
     {
         private long _questID;
         private QuestObjectiveView _objectiveView;
         private QuestObjectiveModel _objectiveModel;
+        private ProfilerMarker _profileMarker = new("KoiAI.Quest");
         public QuestObjectiveController(long questID, QuestObjectiveData objectiveData, QuestObjectiveView objectiveView)
         {
             _questID = questID;
@@ -20,7 +22,10 @@ namespace KoiAI.Quest
         public virtual void Tick(float deltaTime)
         {
             _objectiveModel.AddDeltaTime(deltaTime);
+            using(_profileMarker.Auto())
+            {
             _objectiveView.RefreshView(_objectiveModel.Data, _objectiveModel.CurrentCount, _objectiveModel.CurrentTime);
+            }
             EvaluateObjectiveState();
         }
         public virtual void HandleEvent(ObjectiveProgressEventData eventData)
