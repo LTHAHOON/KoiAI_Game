@@ -5,6 +5,7 @@ namespace KoiAI.Utilities
         Player,
         Monster,
         Ground,
+        Ditherable,
     }
 
     public static class GameTags 
@@ -12,6 +13,7 @@ namespace KoiAI.Utilities
         public const string Player = "Player";
         public const string Monster = "Monster";
         public const string Ground = "Ground";
+        public const string Ditherable = "Ditherable";
 
         public static string GetGameTag(GameTagName gameTagName)
         {
@@ -20,6 +22,7 @@ namespace KoiAI.Utilities
                 GameTagName.Player => Player,
                 GameTagName.Monster => Monster,
                 GameTagName.Ground => Ground,
+                GameTagName.Ditherable => Ditherable,
                 _ => "",
             };
         }
