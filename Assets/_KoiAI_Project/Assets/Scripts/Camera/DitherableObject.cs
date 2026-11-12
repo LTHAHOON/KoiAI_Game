@@ -1,21 +1,19 @@
-
 using DG.Tweening;
-using KoiAI.Utilities;
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace KoiAI
+namespace KoiAI.KoiCamera
 {
-    public sealed class DitherableObject : MonoBehaviour
+    using KoiAI.Utilities;
+
+    public class DitherableObject : MonoBehaviour
     {
         [SerializeField]
         private Renderer[] _renderers;
-
         [SerializeField, Min(0f)]
         private float _fadeDuration = 0.25f;
 
         private Tweener _fadeTween;
-
         private int _alphaPropertyId;
         private float _alpha = 1f;
         private float _targetAlpha = 1f;
@@ -64,7 +62,6 @@ namespace KoiAI
             {
                 return;
             }
-
             _targetAlpha = targetAlpha;
 
             if (_fadeDuration <= 0f)
@@ -76,7 +73,6 @@ namespace KoiAI
 
             // 현재 알파에서 새로운 목표값으로 이동
             _fadeTween.ChangeEndValue(targetAlpha, _fadeDuration, true);
-
             _fadeTween.Restart();
         }
 

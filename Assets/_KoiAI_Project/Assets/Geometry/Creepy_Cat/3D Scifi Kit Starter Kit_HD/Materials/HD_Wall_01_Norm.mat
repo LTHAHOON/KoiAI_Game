@@ -139,7 +139,7 @@ Material:
     - _Shininess: 0.071379885
     - _Smoothness: 1
     - _SmoothnessTextureChannel: 0
-    - _Smothness: 0.7
+    - _Smothness: 0.8
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
@@ -156,7 +156,7 @@ Material:
     - _Color: {r: 0.8602941, g: 0.8602941, b: 0.8602941, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColorUI: {r: 1, g: 1, b: 1, a: 1}
-    - _EmssionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _EmssionColor: {r: 16.94838, g: 16.94838, b: 16.94838, a: 1}
     - _SpecColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _SpecularColor: {r: 2.9960787, g: 2.9960787, b: 2.9960787, a: 1}
   m_BuildTextureStacks: []

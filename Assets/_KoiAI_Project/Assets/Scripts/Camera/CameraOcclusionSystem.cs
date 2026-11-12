@@ -1,14 +1,14 @@
-
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using KoiAI.Utilities;
 using UnityEngine;
 
-namespace KoiAI
+namespace KoiAI.KoiCamera
 {
-    public sealed class CameraOcclusionSystem : MonoBehaviour
+    using KoiAI.Utilities;
+
+    public class CameraOcclusionSystem : MonoBehaviour
     {
         [SerializeField]
         private LayerMask _targetMask;

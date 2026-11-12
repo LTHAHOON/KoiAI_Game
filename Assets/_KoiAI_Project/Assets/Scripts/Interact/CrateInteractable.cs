@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
-using KoiAI.Audio;
-using KoiAI.Input;
-using KoiAI.Item;
-using KoiAI.Player;
-using KoiAI.UI;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace KoiAI.Interact
 {
+    using KoiAI.Audio;
+    using KoiAI.Item;
+    using KoiAI.Player;
+    using KoiAI.UI;
+
     [Serializable]
     public enum CrateKeyType
     {
