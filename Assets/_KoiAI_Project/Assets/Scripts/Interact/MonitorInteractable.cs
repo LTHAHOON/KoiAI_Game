@@ -2,8 +2,10 @@ using UnityEngine;
 
 namespace KoiAI.Interact
 {
-    using DG.Tweening;
+    using KoiAI.Input;
     using KoiAI.Player;
+    using KoiAI.UI;
+    using UnityEngine.InputSystem;
 
     public struct MonitorInteractContext
     {
@@ -12,52 +14,56 @@ namespace KoiAI.Interact
 
     public class MonitorInteractable : BaseInteractable<MonitorInteractContext>, IPlayerInteractable
     {
-        [SerializeField]
-        private CanvasGroup _monitorScreen;
-        [SerializeField]
-        private RectTransform _monitorHackingScreen;
-        [SerializeField]
-        private float _monitorScreen_ShowDuration = 0.3f;
-        private Tweener _screenTweener;
+        private MonitorScreenView _monitorScreenView;
         private bool _isOn = false;
 
         private void Awake()
         {
-            _monitorScreen.alpha = 0f;
-            _monitorScreen.gameObject.SetActive(false);
-            _monitorHackingScreen.gameObject.SetActive(false);
-            _screenTweener = _monitorScreen.DOFade(1f, _monitorScreen_ShowDuration)
-                .SetEase(Ease.Linear)
-                .OnPlay(() =>
-                {
-                    if (!_screenTweener.isBackwards)
-                    {
-                        _monitorScreen.gameObject.SetActive(true);
-                    }
-                })
-                .OnComplete(() =>
-                {
-                    if (_screenTweener.isBackwards)
-                    {
-                    _monitorScreen.gameObject.SetActive(false);
-                    }
-                })
-                .SetAutoKill(false)
-                .Pause();
+            _monitorScreenView = FindAnyObjectByType<MonitorScreenView>(FindObjectsInactive.Include);
+            if (_monitorScreenView == null)
+            {
+                Debug.LogError("MonitorScreenView를 찾을 수 없습니다. MonitorInteractable이 올바르게 작동하지 않을 수 있습니다.");
+            }
         }
 
         public void Interact(PlayerInteractor playerInteractor)
         {
-            _isOn = !_isOn;
-
             if (_isOn)
             {
-                _screenTweener.PlayForward();
+                return;
             }
-            else
+
+            _isOn = true;
+            _monitorScreenView.Show();
+            InputService.SetEnableActionMap(InputActionMapContext.Monitor);
+            InputService.PlayerIA.Monitor.Monitor_Cancel.performed += CloseMonitorInteraction;
+            _monitorScreenView.BindCloseButton(OnCloseMonitorScreen);
+        }
+
+        private void OnCloseMonitorScreen()
+        {
+            CloseMonitorScreen();
+        }
+        
+        private void CloseMonitorInteraction(InputAction.CallbackContext context)
+        {
+            if (context.performed && _isOn)
             {
-                _screenTweener.PlayBackwards();
+                CloseMonitorScreen();
             }
+        }
+
+        private void CloseMonitorScreen()
+        {
+            if (!_isOn)
+            {
+                return;
+            }
+
+            _isOn = false;
+            _monitorScreenView.Hide();
+            InputService.PlayerIA.Monitor.Monitor_Cancel.performed -= CloseMonitorInteraction;
+            InputService.SetEnableActionMap(InputActionMapContext.Player);
         }
 
         public override void Interact(MonitorInteractContext dataEvent)
@@ -66,7 +72,7 @@ namespace KoiAI.Interact
             {
                 return;
             }
-
+            Debug.Log("MonitorInteractable: Interact with correct password.");
             base.Interact(dataEvent);
         }
 

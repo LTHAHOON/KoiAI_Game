@@ -118,10 +118,20 @@ namespace KoiAI.Player
         public bool TryGetInteractable(RaycastHit hit, out IPlayerInteractable interactable)
         {
             interactable = null;
+            IPlayerInteractable parentInteractable = hit.collider.GetComponentInParent<IPlayerInteractable>();
+            
             // 콜라이더가 자식 오브젝트에 있어도 부모의 상호작용 컴포넌트를 찾습니다.
-            if (hit.collider.TryGetComponent(out IPlayerInteractable playerInteractable))
+            if(parentInteractable == null)
             {
-                interactable = playerInteractable;
+                if (hit.collider.TryGetComponent(out IPlayerInteractable playerInteractable))
+                {
+                    interactable = playerInteractable;
+                    return true;
+                }
+            }
+            else
+            {
+                interactable = parentInteractable;
                 return true;
             }
 
@@ -136,7 +146,7 @@ namespace KoiAI.Player
                 return false;
             }
 
-            interactable = hit.collider.GetComponentInParent<T>();
+            interactable = hit.collider.GetComponent<T>();
             return interactable != null;
         }
 
@@ -149,7 +159,7 @@ namespace KoiAI.Player
                 return false;
             }
 
-            int hitCount = Physics.SphereCastNonAlloc(rayOrigin.position, _interactRadius, rayOrigin.forward, _sphereCastHits, _interactDistance, _interactableLayerMask, QueryTriggerInteraction.Ignore);
+            int hitCount = Physics.SphereCastNonAlloc(rayOrigin.position, _interactRadius, rayOrigin.forward, _sphereCastHits, _interactDistance, _interactableLayerMask, QueryTriggerInteraction.Collide);
 
             float nearestDistance = float.PositiveInfinity;
             bool isFound = false;

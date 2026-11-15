@@ -1205,6 +1205,98 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Monitor"",
+            ""id"": ""95d09284-efa3-464f-a428-ea11f80fb755"",
+            ""actions"": [
+                {
+                    ""name"": ""Hacking_Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""7f4de64e-4135-4a45-89db-9d4e87ce9dd3"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Monitor_Cancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""1335b41a-5f02-4b73-998e-c6ad68613b80"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""AD"",
+                    ""id"": ""13f1a13e-1cf9-4709-a3bd-485f02350fe7"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Hacking_Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Up"",
+                    ""id"": ""675c150d-503e-4956-81a8-17c92a4bd542"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Hacking_Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Down"",
+                    ""id"": ""de3da16d-ad6f-415f-9a60-53230bc40717"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Hacking_Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Left"",
+                    ""id"": ""578bfa2c-c090-4738-9d29-b872a8c18689"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Hacking_Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Right"",
+                    ""id"": ""d34c647d-395e-488c-beca-c269c5a70b7c"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Hacking_Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""98dab7a9-f206-45c2-8e42-80ae85b009f2"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Monitor_Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1301,6 +1393,10 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         // Lobby
         m_Lobby = asset.FindActionMap("Lobby", throwIfNotFound: true);
         m_Lobby_Newaction = m_Lobby.FindAction("New action", throwIfNotFound: true);
+        // Monitor
+        m_Monitor = asset.FindActionMap("Monitor", throwIfNotFound: true);
+        m_Monitor_Hacking_Move = m_Monitor.FindAction("Hacking_Move", throwIfNotFound: true);
+        m_Monitor_Monitor_Cancel = m_Monitor.FindAction("Monitor_Cancel", throwIfNotFound: true);
     }
 
     ~@PlayerInputAction()
@@ -1308,6 +1404,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_Global.enabled, "This will cause a leak and performance issues, PlayerInputAction.Global.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, PlayerInputAction.Player.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_Lobby.enabled, "This will cause a leak and performance issues, PlayerInputAction.Lobby.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Monitor.enabled, "This will cause a leak and performance issues, PlayerInputAction.Monitor.Disable() has not been called.");
     }
 
     /// <summary>
@@ -1909,6 +2006,113 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="LobbyActions" /> instance referencing this action map.
     /// </summary>
     public LobbyActions @Lobby => new LobbyActions(this);
+
+    // Monitor
+    private readonly InputActionMap m_Monitor;
+    private List<IMonitorActions> m_MonitorActionsCallbackInterfaces = new List<IMonitorActions>();
+    private readonly InputAction m_Monitor_Hacking_Move;
+    private readonly InputAction m_Monitor_Monitor_Cancel;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "Monitor".
+    /// </summary>
+    public struct MonitorActions
+    {
+        private @PlayerInputAction m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public MonitorActions(@PlayerInputAction wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "Monitor/Hacking_Move".
+        /// </summary>
+        public InputAction @Hacking_Move => m_Wrapper.m_Monitor_Hacking_Move;
+        /// <summary>
+        /// Provides access to the underlying input action "Monitor/Monitor_Cancel".
+        /// </summary>
+        public InputAction @Monitor_Cancel => m_Wrapper.m_Monitor_Monitor_Cancel;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_Monitor; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="MonitorActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(MonitorActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="MonitorActions" />
+        public void AddCallbacks(IMonitorActions instance)
+        {
+            if (instance == null || m_Wrapper.m_MonitorActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MonitorActionsCallbackInterfaces.Add(instance);
+            @Hacking_Move.started += instance.OnHacking_Move;
+            @Hacking_Move.performed += instance.OnHacking_Move;
+            @Hacking_Move.canceled += instance.OnHacking_Move;
+            @Monitor_Cancel.started += instance.OnMonitor_Cancel;
+            @Monitor_Cancel.performed += instance.OnMonitor_Cancel;
+            @Monitor_Cancel.canceled += instance.OnMonitor_Cancel;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="MonitorActions" />
+        private void UnregisterCallbacks(IMonitorActions instance)
+        {
+            @Hacking_Move.started -= instance.OnHacking_Move;
+            @Hacking_Move.performed -= instance.OnHacking_Move;
+            @Hacking_Move.canceled -= instance.OnHacking_Move;
+            @Monitor_Cancel.started -= instance.OnMonitor_Cancel;
+            @Monitor_Cancel.performed -= instance.OnMonitor_Cancel;
+            @Monitor_Cancel.canceled -= instance.OnMonitor_Cancel;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="MonitorActions.UnregisterCallbacks(IMonitorActions)" />.
+        /// </summary>
+        /// <seealso cref="MonitorActions.UnregisterCallbacks(IMonitorActions)" />
+        public void RemoveCallbacks(IMonitorActions instance)
+        {
+            if (m_Wrapper.m_MonitorActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="MonitorActions.AddCallbacks(IMonitorActions)" />
+        /// <seealso cref="MonitorActions.RemoveCallbacks(IMonitorActions)" />
+        /// <seealso cref="MonitorActions.UnregisterCallbacks(IMonitorActions)" />
+        public void SetCallbacks(IMonitorActions instance)
+        {
+            foreach (var item in m_Wrapper.m_MonitorActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_MonitorActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="MonitorActions" /> instance referencing this action map.
+    /// </summary>
+    public MonitorActions @Monitor => new MonitorActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
@@ -2172,5 +2376,27 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnNewaction(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Monitor" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="MonitorActions.AddCallbacks(IMonitorActions)" />
+    /// <seealso cref="MonitorActions.RemoveCallbacks(IMonitorActions)" />
+    public interface IMonitorActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Hacking_Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnHacking_Move(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Monitor_Cancel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMonitor_Cancel(InputAction.CallbackContext context);
     }
 }

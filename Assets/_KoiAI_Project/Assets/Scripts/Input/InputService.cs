@@ -8,7 +8,8 @@ namespace KoiAI.Input
     {
         Global,
         Player,
-        Lobbdy
+        Lobbdy,
+        Monitor,
     }
 
     [RequireComponent(typeof(PlayerInput))]
@@ -46,6 +47,10 @@ namespace KoiAI.Input
                 case InputActionMapContext.Lobbdy:
                     _playerIA.Player.Disable();
                     _playerIA.Lobby.Enable();
+                    break;
+                case InputActionMapContext.Monitor:
+                    _playerIA.Player.Disable();
+                    _playerIA.Monitor.Enable();
                     break;
             }
             _playerIA.Global.Enable();

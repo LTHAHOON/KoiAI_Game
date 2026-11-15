@@ -152,7 +152,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Utilities.FadeInOutColor.FadeInOutTextColor
   _fadeCondition: {fileID: 11400000, guid: c25a3056203ea9f4bae2f6640b59ec8f, type: 2}
   _baseColor: {r: 1, g: 1, b: 1, a: 0}
-  _fadeInSpeed: 1.5
+  _fadeInSpeed: 2
   _fadeOutSpeed: 1.5
   _canPlayOnAwake: 0
   _canPlayOnEnable: 1
@@ -263,8 +263,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Utilities.UIFollowToObject
   _parentCanvasType: 1
   _targetObject: {fileID: 0}
-  _viewPortOffset: {x: -0.02, y: 0, z: 0}
-  _worldOffset: {x: 0, y: 4, z: 0}
+  _viewPortOffset: {x: 0, y: 0, z: 0}
+  _worldOffset: {x: 0, y: 0, z: 0}
   _scaleOffset: {x: 0, y: 0, z: 0}
   _maxDistance: 150
   _scaleMax: 0.9
@@ -283,7 +283,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Utilities.FadeInOutColor.FadeInOutImageColor
   _fadeCondition: {fileID: 11400000, guid: c25a3056203ea9f4bae2f6640b59ec8f, type: 2}
   _baseColor: {r: 0.44313726, g: 0.39215687, b: 0.3019608, a: 0}
-  _fadeInSpeed: 1.5
+  _fadeInSpeed: 2
   _fadeOutSpeed: 1.5
   _canPlayOnAwake: 0
   _canPlayOnEnable: 1
@@ -440,7 +440,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Utilities.FadeInOutColor.FadeInOutTextColor
   _fadeCondition: {fileID: 11400000, guid: c25a3056203ea9f4bae2f6640b59ec8f, type: 2}
   _baseColor: {r: 1, g: 1, b: 1, a: 0}
-  _fadeInSpeed: 1.5
+  _fadeInSpeed: 2
   _fadeOutSpeed: 0
   _canPlayOnAwake: 0
   _canPlayOnEnable: 1

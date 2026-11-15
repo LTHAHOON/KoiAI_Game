@@ -1,6 +1,8 @@
 using System.Collections;
+using KoiAI.Input;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace KoiAI.KoiCamera
 {
@@ -8,6 +10,7 @@ namespace KoiAI.KoiCamera
     public class CinemachineInputFixer : MonoBehaviour
     {
         private CinemachineInputAxisController _axisController;
+        private InputActionReference _runtimeLookActionReference;
 
         private void Awake()
         {
@@ -29,21 +32,30 @@ namespace KoiAI.KoiCamera
         {
             yield return null;
 
-            _axisController.enabled = false;
-            _axisController.enabled = true;
+            _runtimeLookActionReference = InputActionReference.Create(InputService.PlayerIA.Player.Look);
 
-            //등록된 모든 컨트롤러를 돌면서 새로고침
+            _axisController.enabled = false;
+
+            int connectedControllerCount = 0;
             foreach (var controller in _axisController.Controllers)
             {
-                if (controller.Input.InputAction)
+                InputActionReference actionReference = controller.Input.InputAction;
+                InputAction action = actionReference != null ? actionReference.action : null;
+                if (action != null && action.name == "Look" && action.actionMap.name == "Player")
                 {
-                    var action = controller.Input.InputAction.action;
-                    if (action != null)
-                    {
-                        action.Disable();
-                        action.Enable();
-                    }
+                    controller.Input.InputAction = _runtimeLookActionReference;
+                    connectedControllerCount++;
                 }
+            }
+
+            _axisController.enabled = true;
+        }
+
+        private void OnDestroy()
+        {
+            if (_runtimeLookActionReference != null)
+            {
+                Destroy(_runtimeLookActionReference);
             }
         }
     }
