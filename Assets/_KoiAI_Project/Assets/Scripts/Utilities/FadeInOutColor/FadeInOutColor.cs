@@ -47,9 +47,9 @@ namespace KoiAI.Utilities.FadeInOutColor
             {
                 UpdateFadeInOut();
             }
-            else if(_isLoop)
+            else if (GetCurrentColor() != _baseColor)
             {
-                PlayFadeInOut();
+                SetBaseColor(_fadeOutSpeed);
             }
         }
 
@@ -103,6 +103,10 @@ namespace KoiAI.Utilities.FadeInOutColor
             else if (_fadeCondition.IsComplete(_fadeInOutCurTime))
             {
                 _fadeInOutCurTime = 0f;
+                if(_isPlaying == false)
+                {
+                    return;
+                }
                 _isPlaying = _isLoop;
             }
         }
@@ -116,11 +120,27 @@ namespace KoiAI.Utilities.FadeInOutColor
             SetCurrentColor(curColor);
         }
 
+        private void SetBaseColor(float speed)
+        {
+            Color curColor = GetCurrentColor();
+            Color baseColor = GetBaseColor();
+            float maxDelta = speed * Time.deltaTime;
+
+            curColor.r = Mathf.MoveTowards(curColor.r, baseColor.r, maxDelta);
+            curColor.g = Mathf.MoveTowards(curColor.g, baseColor.g, maxDelta);
+            curColor.b = Mathf.MoveTowards(curColor.b, baseColor.b, maxDelta);
+            curColor.a = Mathf.MoveTowards(curColor.a, baseColor.a, maxDelta);
+
+            SetCurrentColor(curColor);
+        }
+
         protected abstract void Init();
         protected abstract void SetCurrentColor(Color color);
         protected abstract Color GetCurrentColor();
         protected Color GetBaseColor() => _baseColor;
 
         protected T GetUIComponent() => _uiComponent;
+
+        public bool IsPlaying => _isPlaying;
     }
 }

@@ -1,19 +1,33 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace KoiAI.Interact
 {
+    using System;
     using KoiAI.Input;
     using KoiAI.Player;
     using KoiAI.UI;
-    using UnityEngine.InputSystem;
 
+
+    [Serializable]
     public struct MonitorInteractContext
     {
-        public int Password { get; set; }
+        [SerializeField]
+        private int _pinCode;
+
+        public MonitorInteractContext(int pinCode)
+        {
+            _pinCode = pinCode;
+        }
+
+        public readonly int PinCode => _pinCode;
     }
 
     public class MonitorInteractable : BaseInteractable<MonitorInteractContext>, IPlayerInteractable
     {
+        [SerializeField]
+        private MonitorInteractContext _monitorUserInfo;
+
         private MonitorScreenView _monitorScreenView;
         private bool _isOn = false;
 
@@ -34,6 +48,7 @@ namespace KoiAI.Interact
             }
 
             _isOn = true;
+            _monitorScreenView.OnInteractToCheckPin = Interact;
             _monitorScreenView.Show();
             InputService.SetEnableActionMap(InputActionMapContext.Monitor);
             InputService.PlayerIA.Monitor.Monitor_Cancel.performed += CloseMonitorInteraction;
@@ -68,11 +83,12 @@ namespace KoiAI.Interact
 
         public override void Interact(MonitorInteractContext dataEvent)
         {
-            if (dataEvent.Password != dataEvent.Password)
+            if (dataEvent.PinCode != _monitorUserInfo.PinCode)
             {
+                Debug.Log("PinCode가 정확하지않습니다.");
                 return;
             }
-            Debug.Log("MonitorInteractable: Interact with correct password.");
+            Debug.Log("PC 접속하였습니다.");
             base.Interact(dataEvent);
         }
 
