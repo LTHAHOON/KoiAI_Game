@@ -14,10 +14,10 @@ namespace KoiAI.Item
         private List<ItemProp> _dropItemPropList;
         [SerializeField]
         private bool _useRandomItemProp = false;
-        [SerializeField]
-        private float _randomSeed;
-        [SerializeField]
-        private float _minDropItemPropCount;
+        [AllowNesting]
+        [EnableIf(nameof(_useRandomItemProp))]
+        [SerializeField, Min(1)]
+        private int _minDropItemPropCount = 1;
         [SerializeField]
         private float _dropRadius = 5f;
         [SerializeField]
@@ -51,10 +51,21 @@ namespace KoiAI.Item
             {
                 origin += _dropOriginOffset;
             }
-
-            foreach(ItemProp dropItemProp in _dropItemPropList)
+            
+            int maxTargetIndex = _dropItemPropList.Count - 1;
+            if(_useRandomItemProp)
             {
-                ItemProp newDropItemProp = UnityEngine.Object.Instantiate(dropItemProp, origin, Quaternion.identity);
+                if(_minDropItemPropCount > _dropItemPropList.Count)
+                {
+                    Debug.LogError("Error: _minDropItemPropCount은 _dropItemPropList.Count보다 클 수 없습니다.");
+                    return;
+                }
+                maxTargetIndex = UnityEngine.Random.Range(_minDropItemPropCount - 1, _dropItemPropList.Count - 1);
+            }
+
+            for(int i = 0; i <= maxTargetIndex; ++i)
+            {
+                ItemProp newDropItemProp = UnityEngine.Object.Instantiate(_dropItemPropList[i], origin, Quaternion.identity);
                 if(!newDropItemProp)
                 {
                     continue;

@@ -27,18 +27,9 @@ namespace KoiAI.Interact
     {
         [SerializeField]
         private MonitorInteractContext _monitorUserInfo;
-
+        [SerializeField]
         private MonitorScreenView _monitorScreenView;
         private bool _isOn = false;
-
-        private void Awake()
-        {
-            _monitorScreenView = FindAnyObjectByType<MonitorScreenView>(FindObjectsInactive.Include);
-            if (_monitorScreenView == null)
-            {
-                Debug.LogError("MonitorScreenView를 찾을 수 없습니다. MonitorInteractable이 올바르게 작동하지 않을 수 있습니다.");
-            }
-        }
 
         public void Interact(PlayerInteractor playerInteractor)
         {
@@ -50,6 +41,8 @@ namespace KoiAI.Interact
             _isOn = true;
             _monitorScreenView.OnInteractToCheckPin = Interact;
             _monitorScreenView.Show();
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             InputService.SetEnableActionMap(InputActionMapContext.Monitor);
             InputService.PlayerIA.Monitor.Monitor_Cancel.performed += CloseMonitorInteraction;
             _monitorScreenView.BindCloseButton(OnCloseMonitorScreen);
@@ -78,6 +71,8 @@ namespace KoiAI.Interact
             _isOn = false;
             _monitorScreenView.Hide();
             InputService.PlayerIA.Monitor.Monitor_Cancel.performed -= CloseMonitorInteraction;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = false;
             InputService.SetEnableActionMap(InputActionMapContext.Player);
         }
 
@@ -88,6 +83,7 @@ namespace KoiAI.Interact
                 Debug.Log("PinCode가 정확하지않습니다.");
                 return;
             }
+            _monitorScreenView.ShowMonitorHackingView();
             Debug.Log("PC 접속하였습니다.");
             base.Interact(dataEvent);
         }

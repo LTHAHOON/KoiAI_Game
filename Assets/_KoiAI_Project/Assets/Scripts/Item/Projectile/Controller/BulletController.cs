@@ -78,7 +78,7 @@ namespace KoiAI
                 return;
             }
 
-            ulong poolID = unchecked((ulong)(uint)_hitEffectPrefab.GetInstanceID());
+            ulong poolID = _hitEffectPrefab.GetEntityULongID();
             PoolManager.Instance.AddPool(poolID, _hitEffectPrefab, _hitEffectPoolSize, PoolName.HitEffect);
             PoolManager.Instance.TryGetPool(poolID, out _hitEffectPool);
         }
