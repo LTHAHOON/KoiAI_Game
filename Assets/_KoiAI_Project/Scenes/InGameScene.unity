@@ -927,14 +927,15 @@ MonoBehaviour:
     _parent: {fileID: 919952771}
     _window: {fileID: 95667330}
     _renderType: 0
+  _childPopUpWindows:
+  - {fileID: 290618006}
+  - {fileID: 855310089}
   _hidingCanvasGroups:
   - {fileID: 203856416}
   - {fileID: 614296370}
   - {fileID: 616985359}
   _monitorScreen: {fileID: 95667332}
   _monitorScreenCloseButton: {fileID: 1026490836}
-  _loginMonitorView: {fileID: 290618006}
-  _monitorHackingView: {fileID: 855310089}
   _showFadeSettings:
     _duration: 0.3
     _ease: 1

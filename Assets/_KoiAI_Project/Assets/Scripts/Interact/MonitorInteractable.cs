@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System;
 
 namespace KoiAI.Interact
 {
-    using System;
     using KoiAI.Input;
     using KoiAI.Player;
     using KoiAI.UI;
@@ -45,12 +45,7 @@ namespace KoiAI.Interact
             Cursor.visible = true;
             InputService.SetEnableActionMap(InputActionMapContext.Monitor);
             InputService.PlayerIA.Monitor.Monitor_Cancel.performed += CloseMonitorInteraction;
-            _monitorScreenView.BindCloseButton(OnCloseMonitorScreen);
-        }
-
-        private void OnCloseMonitorScreen()
-        {
-            CloseMonitorScreen();
+            _monitorScreenView.BindCloseButton(CloseMonitorScreen);
         }
         
         private void CloseMonitorInteraction(InputAction.CallbackContext context)
@@ -83,7 +78,7 @@ namespace KoiAI.Interact
                 Debug.Log("PinCode가 정확하지않습니다.");
                 return;
             }
-            _monitorScreenView.ShowMonitorHackingView();
+            _monitorScreenView.OpenChildView<MonitorHackingView>();
             Debug.Log("PC 접속하였습니다.");
             base.Interact(dataEvent);
         }

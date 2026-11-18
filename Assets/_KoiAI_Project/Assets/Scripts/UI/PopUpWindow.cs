@@ -1,4 +1,5 @@
 using System;
+using KoiAI.Utilities;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -6,6 +7,9 @@ namespace KoiAI.UI
 {
     public abstract class PopUpWindow: MonoBehaviour
     {
+        public virtual void OnBeginOpen() { }
+        public virtual void OnBeginClose() { }
+
         /// <summary>
         /// 열기가 다 되었을 경우 호출
         /// </summary>
@@ -59,6 +63,8 @@ namespace KoiAI.UI
         [SerializeField]
         private PopUpWindowContainer<Transform, GameObject> _popUpWindowContainer;
 
+        public virtual void InitializePopUp(PopUpWindow_Canvas parentWindow = null) { }
+
         public PopUpWindowContainer<Transform, GameObject> GetPopUpWindowContainer()
         {
             return _popUpWindowContainer;
@@ -67,6 +73,13 @@ namespace KoiAI.UI
         public override IPopUpWindowContainer GetIPopUpWindowContainer()
         {
             return _popUpWindowContainer;
+        }
+
+        public virtual bool TryGetFadeSettings(out CanvasGroup canvasGroup, out CanvasGroupFadeSettings settings)
+        {
+            canvasGroup = null;
+            settings = default;
+            return false;
         }
     }
 

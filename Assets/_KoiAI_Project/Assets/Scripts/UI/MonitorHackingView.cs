@@ -1,66 +1,28 @@
-using System;
-using DG.Tweening;
+using KoiAI.Utilities;
 using UnityEngine;
 
 namespace KoiAI.UI
 {
-    using KoiAI.Utilities;
-
     public class MonitorHackingView : PopUpWindow_Canvas
     {
         [SerializeField]
         private CanvasGroup _monitorHackingScreen;
-
         [SerializeField]
         private CanvasGroupFadeSettings _fadeSettings = new(0.3f);
 
-        private Tweener _screenTweener;
-
-        internal void CheckOrInitialize()
+        public override void InitializePopUp(PopUpWindow_Canvas parentWindow = null)
         {
-            if (_screenTweener != null)
-            {
-                return;
-            }
-
-            _screenTweener = CanvasGroupTweenUtility.CreateFade(_monitorHackingScreen, true, _fadeSettings);
-            _screenTweener.onRewind += FinishHide;
-        }
-
-        public void Show()
-        {
-            CheckOrInitialize();
-            PopUpManager.Instance.ChangePopUpState(PopUpState.Open, this);
-        }
-
-        public override void OnCompleteOpen()
-        {
-            CheckOrInitialize();
-            _monitorHackingScreen.interactable = true;
-            _monitorHackingScreen.blocksRaycasts = true;
-            _monitorHackingScreen.gameObject.SetActive(true);
-            _screenTweener.PlayForward();
-        }
-
-        public void Hide()
-        {
+            _monitorHackingScreen.alpha = 0f;
             _monitorHackingScreen.interactable = false;
             _monitorHackingScreen.blocksRaycasts = false;
-            _screenTweener.PlayBackwards();
+            _monitorHackingScreen.gameObject.SetActive(false);
         }
-
-        private void FinishHide()
+        
+        public override bool TryGetFadeSettings(out CanvasGroup canvasGroup, out CanvasGroupFadeSettings settings)
         {
-            if (!_screenTweener.isBackwards)
-            {
-                return;
-            }
-            PopUpManager.Instance.ChangePopUpState(PopUpState.Close, this);
-        }
-
-        private void OnDestroy()
-        {
-            _screenTweener?.Kill();
+            canvasGroup = _monitorHackingScreen;
+            settings = _fadeSettings;
+            return true;
         }
     }
 }

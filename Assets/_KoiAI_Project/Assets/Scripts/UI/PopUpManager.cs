@@ -1,3 +1,5 @@
+using DG.Tweening;
+using KoiAI.Utilities;
 using KoiAI.Input;
 using System;
 using System.Collections.Generic;
@@ -22,6 +24,7 @@ namespace KoiAI.UI
     public class PopUpManager : MonoBehaviour
     {
         private Stack<PopUpWindow> _popUpWindowStack;
+        private readonly Dictionary<CanvasGroup, Tween> _fadeTweens = new();
 
         public static PopUpManager Instance { get; private set; }
 
@@ -62,6 +65,13 @@ namespace KoiAI.UI
                 return;
             }
 
+            if (popUpWindow is PopUpWindow_Canvas canvasWindow &&
+                canvasWindow.TryGetFadeSettings(out CanvasGroup canvasGroup, out CanvasGroupFadeSettings settings))
+            {
+                ChangePopUpStateWithFade(popUpStateToChange, canvasWindow, canvasGroup, settings);
+                return;
+            }
+
             IPopUpWindowContainer windowContainer =  popUpWindow.GetIPopUpWindowContainer();
             if (windowContainer.CurrentPopUpState == popUpStateToChange) 
             {
@@ -69,6 +79,10 @@ namespace KoiAI.UI
             }
             
             windowContainer.SetCurrentPopUpState(popUpStateToChange);
+            if (popUpStateToChange == PopUpState.Open)
+                popUpWindow.OnBeginOpen();
+            else
+                popUpWindow.OnBeginClose();
             switch (windowContainer.PopUpRenderType)
             {
                 case PopUpRenderType.Canvas:
@@ -138,17 +152,102 @@ namespace KoiAI.UI
 
         private void RefreshPopUpStack(PopUpWindow popUpWindow)
         {
-            IPopUpWindowContainer windowContainer = popUpWindow.GetIPopUpWindowContainer();
-            switch(windowContainer.CurrentPopUpState)
+            PopUpWindow[] remaining = _popUpWindowStack.Where(window => window && window != popUpWindow).Reverse().ToArray();
+            _popUpWindowStack = new Stack<PopUpWindow>(remaining);
+            if (popUpWindow.GetIPopUpWindowContainer().CurrentPopUpState == PopUpState.Open)
             {
-                case PopUpState.Open:
-                    _popUpWindowStack.Push(popUpWindow);
-                    break;
-                case PopUpState.Close:
-                    _popUpWindowStack.Pop();
-                    break;
+                _popUpWindowStack.Push(popUpWindow);
             }
         }
+
+        public void ChangePopUpStateWithFade(PopUpState state, PopUpWindow_Canvas popUpWindow, CanvasGroup canvasGroup, CanvasGroupFadeSettings settings)
+        {
+            if (!popUpWindow || !canvasGroup)
+            {
+                return;
+            }
+
+            PopUpWindowContainer<Transform, GameObject> container = popUpWindow.GetPopUpWindowContainer();
+            if (container.CurrentPopUpState == state)
+            {
+                return;
+            }
+
+            container.SetCurrentPopUpState(state);
+            RefreshPopUpStack(popUpWindow);
+            bool opening = state == PopUpState.Open;
+            if (opening)
+            {
+                container.Window.SetActive(true);
+                popUpWindow.OnBeginOpen();
+            }
+            else
+            {
+                popUpWindow.OnBeginClose();
+            }
+
+            ChangeCanvasGroupState(state, canvasGroup, settings, () =>
+            {
+                if (!popUpWindow || container.CurrentPopUpState != state)
+                {
+                    return;
+                }
+                if (!opening)
+                {
+                    container.Window.SetActive(false);
+                }
+                CallOnCompleted(popUpWindow);
+            });
+        }
+
+        public void ChangeCanvasGroupState(PopUpState state, CanvasGroup canvasGroup, CanvasGroupFadeSettings settings, Action onCompleted = null)
+        {
+            if (!canvasGroup)
+            {
+                return;
+            }
+
+            if (_fadeTweens.Remove(canvasGroup, out Tween previousTween))
+            {
+                previousTween.Kill();
+            }
+
+            bool opening = state == PopUpState.Open;
+            canvasGroup.interactable = opening;
+            canvasGroup.blocksRaycasts = opening;
+            if (opening)
+            {
+                canvasGroup.gameObject.SetActive(true);
+            }
+
+            _fadeTweens[canvasGroup] = canvasGroup.DOFade(opening ? 1f : 0f, settings.Duration)
+                .SetEase(settings.Ease)
+                .SetUpdate(settings.UseUnscaledTime)
+                .SetLink(canvasGroup.gameObject, LinkBehaviour.KillOnDestroy)
+                .OnComplete(() =>
+                {
+                    _fadeTweens.Remove(canvasGroup);
+                    if (!canvasGroup)
+                    {
+                        return;
+                    }
+                    if (!opening)
+                    {
+                        canvasGroup.gameObject.SetActive(false);
+                    }
+                    onCompleted?.Invoke();
+                });
+        }
+
+        private void OnDestroy()
+        {
+            foreach (Tween tween in _fadeTweens.Values)
+            {
+                tween.Kill();
+            }
+            _fadeTweens.Clear();
+        }
+
         public T FindPopUpWindow<T>(PopUpWindow[] popUpWindows) where T : PopUpWindow
         {
             for (int i = 0; i < popUpWindows.Length; i++)

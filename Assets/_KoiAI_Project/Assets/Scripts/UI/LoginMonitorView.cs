@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using Cysharp.Text;
 using Cysharp.Threading.Tasks;
-using DG.Tweening;
 using KoiAI.Interact;
 using KoiAI.UI;
 using KoiAI.Utilities;
@@ -11,7 +10,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace KoiAI
+namespace KoiAI.UI
 {
     public class LoginMonitorView : PopUpWindow_Canvas
     {
@@ -30,38 +29,28 @@ namespace KoiAI
 
         private FadeInOutImageColor _pinCodeBarFade;
         private Vector2 _pinCodeBarInitialPosition;
-        private Tweener _screenTweener;
         private CancellationTokenSource _hiddenInputFieldToken;
 
-        public event Action<MonitorInteractContext> OnSubmitPin;
+        private MonitorScreenView _parentMonitorScreenView;
 
-        internal void CheckOrInitialize()
+        public override void InitializePopUp(PopUpWindow_Canvas parentWindow = null)
         {
-            if (_screenTweener != null)
+            if(parentWindow is not MonitorScreenView monitorScreenView)
             {
                 return;
             }
-
+            _parentMonitorScreenView = monitorScreenView;
             _pinCodeBarInitialPosition = _pinCodeBar.anchoredPosition;
             _pinCodeBarFade = _pinCodeBar.GetComponent<FadeInOutImageColor>();
-            _screenTweener = CanvasGroupTweenUtility.CreateFade(_loginScreen, true, _fadeSettings);
-            _screenTweener.onRewind += FinishHide;
+            _loginScreen.alpha = 0f;
+            _loginScreen.interactable = false;
+            _loginScreen.blocksRaycasts = false;
+            _loginScreen.gameObject.SetActive(false);
         }
 
-        public void Show()
+        public override void OnBeginOpen()
         {
-            CheckOrInitialize();
-            PopUpManager.Instance.ChangePopUpState(PopUpState.Open, this);
-        }
-
-        public override void OnCompleteOpen()
-        {
-            CheckOrInitialize();
             ResetPin();
-            _loginScreen.interactable = true;
-            _loginScreen.blocksRaycasts = true;
-            _loginScreen.gameObject.SetActive(true);
-            _screenTweener.PlayForward();
             _hiddenInputFieldToken = CancellationTokenSource.CreateLinkedTokenSource(destroyCancellationToken);
             _hiddenInputField_Code.onValueChanged.AddListener(OnValueChangedPinCode);
             _hiddenInputField_Code.onDeselect.AddListener(OnDeselect);
@@ -69,21 +58,16 @@ namespace KoiAI
             KeepFocusHiddenInputFieldAsync(_hiddenInputFieldToken.Token).Forget();
         }
 
-        public void Hide()
+        public override void OnBeginClose()
         {
             StopInput();
-            _loginScreen.interactable = false;
-            _loginScreen.blocksRaycasts = false;
-            _screenTweener.PlayBackwards();
         }
 
-        private void FinishHide()
+        public override bool TryGetFadeSettings(out CanvasGroup canvasGroup, out CanvasGroupFadeSettings settings)
         {
-            if (!_screenTweener.isBackwards)
-            {
-                return;
-            }
-            PopUpManager.Instance.ChangePopUpState(PopUpState.Close, this);
+            canvasGroup = _loginScreen;
+            settings = _fadeSettings;
+            return true;
         }
 
         private void OnDeselect(string value)
@@ -144,7 +128,7 @@ namespace KoiAI
                 _pinCodeBarFade.StopFadeInOut();
                 if (int.TryParse(input, out int pinCode))
                 {
-                    OnSubmitPin?.Invoke(new MonitorInteractContext(pinCode));
+                    _parentMonitorScreenView.OnInteractToCheckPin?.Invoke(new MonitorInteractContext(pinCode));
                 }
             }
             else if (!_pinCodeBarFade.IsPlaying)
@@ -179,9 +163,5 @@ namespace KoiAI
             StopInput();
         }
 
-        private void OnDestroy()
-        {
-            _screenTweener?.Kill();
-        }
     }
 }
