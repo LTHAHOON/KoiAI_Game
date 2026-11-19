@@ -1214,9 +1214,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""name"": ""Hacking_Move"",
                     ""type"": ""Value"",
                     ""id"": ""7f4de64e-4135-4a45-89db-9d4e87ce9dd3"",
-                    ""expectedControlType"": ""Vector2"",
+                    ""expectedControlType"": ""Axis"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold(duration=0.4,pressPoint=0.5)"",
                     ""initialStateCheck"": true
                 },
                 {
@@ -1233,7 +1233,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""AD"",
                     ""id"": ""13f1a13e-1cf9-4709-a3bd-485f02350fe7"",
-                    ""path"": ""2DVector"",
+                    ""path"": ""1DAxis"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1242,7 +1242,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""Up"",
+                    ""name"": ""Negative"",
                     ""id"": ""675c150d-503e-4956-81a8-17c92a4bd542"",
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
@@ -1253,34 +1253,12 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Down"",
+                    ""name"": ""Positive"",
                     ""id"": ""de3da16d-ad6f-415f-9a60-53230bc40717"",
-                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Hacking_Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""Left"",
-                    ""id"": ""578bfa2c-c090-4738-9d29-b872a8c18689"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Hacking_Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""Right"",
-                    ""id"": ""d34c647d-395e-488c-beca-c269c5a70b7c"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
                     ""action"": ""Hacking_Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true

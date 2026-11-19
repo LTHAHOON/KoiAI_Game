@@ -12,6 +12,7 @@ namespace KoiAI.Pool
         Quest,
         DropTable,
         HitEffect,
+        MonitorHacking
     }
     [Serializable]
     public struct PoolStorageData
@@ -46,7 +47,6 @@ namespace KoiAI.Pool
             {
                 PoolStorageData storageData = _poolStorageDatas[i];
                 int enumID = (int)storageData.PoolName;
-                Transform storage = storageData.Storage;
                 _dicStorageDatas.TryAdd(enumID, storageData);
             }
         }

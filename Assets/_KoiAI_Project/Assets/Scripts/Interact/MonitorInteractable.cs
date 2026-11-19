@@ -41,7 +41,7 @@ namespace KoiAI.Interact
             _isOn = true;
             _monitorScreenView.OnInteractToCheckPin = Interact;
             _monitorScreenView.Show();
-            Cursor.lockState = CursorLockMode.None;
+            Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
             InputService.SetEnableActionMap(InputActionMapContext.Monitor);
             InputService.PlayerIA.Monitor.Monitor_Cancel.performed += CloseMonitorInteraction;
@@ -66,7 +66,7 @@ namespace KoiAI.Interact
             _isOn = false;
             _monitorScreenView.Hide();
             InputService.PlayerIA.Monitor.Monitor_Cancel.performed -= CloseMonitorInteraction;
-            Cursor.lockState = CursorLockMode.None;
+            Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             InputService.SetEnableActionMap(InputActionMapContext.Player);
         }
@@ -82,7 +82,6 @@ namespace KoiAI.Interact
             Debug.Log("PC 접속하였습니다.");
             base.Interact(dataEvent);
         }
-
 
     }
 }

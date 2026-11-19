@@ -38,6 +38,7 @@ namespace KoiAI.Utilities.FadeInOutColor
             if (_canPlayOnAwake)
             {
                 PlayFadeInOut();
+                SetCurrentColor(_baseColor);
             }
         }
 
@@ -58,6 +59,7 @@ namespace KoiAI.Utilities.FadeInOutColor
             if (_canPlayOnEnable)
             {
                 PlayFadeInOut();
+                SetCurrentColor(_baseColor);
             }
         }
 
@@ -65,7 +67,7 @@ namespace KoiAI.Utilities.FadeInOutColor
         {
             StopFadeInOut();
             _fadeInOutCurTime = 0f;
-            SetCurrentColor(_baseColor);
+            //SetCurrentColor(_baseColor);
         }
 
         public void PlayFadeInOut()
