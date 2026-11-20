@@ -27,6 +27,7 @@ namespace KoiAI.UI
         private bool _initialized;
 
         public Action<MonitorInteractContext> OnInteractToCheckPin;
+        public Action<bool> OnGetResultPinLogin;
 
         private void Awake()
         {

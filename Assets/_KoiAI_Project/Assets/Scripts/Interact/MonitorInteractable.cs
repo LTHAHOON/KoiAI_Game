@@ -39,7 +39,7 @@ namespace KoiAI.Interact
             }
 
             _isOn = true;
-            _monitorScreenView.OnInteractToCheckPin = Interact;
+            _monitorScreenView.OnInteractToCheckPin += Interact;
             _monitorScreenView.Show();
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
@@ -64,8 +64,9 @@ namespace KoiAI.Interact
             }
 
             _isOn = false;
+            _monitorScreenView.OnInteractToCheckPin -= Interact;
             _monitorScreenView.Hide();
-            InputService.PlayerIA.Monitor.Monitor_Cancel.performed -= CloseMonitorInteraction;
+            InputService.PlayerIA.Monitor.SetCallbacks(null);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             InputService.SetEnableActionMap(InputActionMapContext.Player);
@@ -73,11 +74,14 @@ namespace KoiAI.Interact
 
         public override void Interact(MonitorInteractContext dataEvent)
         {
-            if (dataEvent.PinCode != _monitorUserInfo.PinCode)
+            bool canLogin = dataEvent.PinCode == _monitorUserInfo.PinCode;
+            _monitorScreenView?.OnGetResultPinLogin?.Invoke(canLogin);
+            if (!canLogin)
             {
                 Debug.Log("PinCode가 정확하지않습니다.");
                 return;
             }
+
             _monitorScreenView.OpenChildView<MonitorHackingView>();
             Debug.Log("PC 접속하였습니다.");
             base.Interact(dataEvent);

@@ -40,6 +40,14 @@ namespace KoiAI.Pool
             _dicPool.Add(id, pool);
         }
 
+        public void RemovePool<T>(ulong id)
+        {
+            if (_dicPool.ContainsKey(id))
+            {
+                _dicPool.Remove(id);
+            }
+        }
+
         public bool TryGetPool<T>(ulong prefabID, out Pool<T> pool) where T : UnityEngine.Object
         {
             bool bGet = _dicPool.TryGetValue(prefabID, out IPool poolObj);

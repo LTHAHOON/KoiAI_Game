@@ -148,6 +148,7 @@ GameObject:
   - component: {fileID: 2851065980157612600}
   - component: {fileID: 4295909539916993018}
   - component: {fileID: 7954305403225419384}
+  - component: {fileID: 7703744279990725023}
   m_Layer: 5
   m_Name: Hacking_Slot
   m_TagString: Untagged
@@ -213,3 +214,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7703744279990725023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7949672899028334088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a92f4201c846aa49844c95c74b75ec0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.UI.MonitorHackingSlot
+  _completedText: {fileID: 3199440093115726062}
+  _dangerMaterialPreset: {fileID: 2100000, guid: cbf328bc8b697a24bae4dac5300175f0, type: 2}
+  _successMaterialPreset: {fileID: 2100000, guid: a3bf1cb62cb25fd4d89a99fcee246592, type: 2}

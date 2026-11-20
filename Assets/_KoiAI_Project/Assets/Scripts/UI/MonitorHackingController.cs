@@ -2,6 +2,8 @@ using UnityEngine;
 using System;
 using R3;
 using UnityEngine.InputSystem;
+using KoiAI.Pool;
+using KoiAI.Utilities;
 
 namespace KoiAI.UI
 {
@@ -13,23 +15,43 @@ namespace KoiAI.UI
         [SerializeField]
         private MonitorInteractable _monitorInteract;
         [SerializeField]
+        private ParticleSystem _hackingFailedParticle;
+        [SerializeField]
+        private ParticleSystem _hackingSuccessParticle;
+        [SerializeField]
+        private PoolSize _hackingParticlePoolSize = new(1, 5);
+        [SerializeField]
         private MonitorHackingView _monitorHackingView;
         [SerializeField]
         private float _holdDelayHackingBar = 0.5f;
 
+        private Pool<ParticleSystem> _hackingFailedParticlePool;
+        private Pool<ParticleSystem> _hackingSuccessParticlePool;
         private float _curHoldHackingBarAxis = 0f;
         private float _curHoldDelayTime = 0f;
-        private IDisposable _interactDisposable;
         private bool _isHolding;
 
         private void Awake()
         {
-            _interactDisposable = _monitorInteract.OnInteract.Subscribe(context =>
+            _monitorHackingView.OnReachHackingTextWithBar += OnReachHackingTextWithBar;
+
+            _monitorInteract.OnInteract.Subscribe(context =>
             {
                 InputService.PlayerIA.Monitor.Hacking_Move.started += OnStartedHackingMoveBar;
                 InputService.PlayerIA.Monitor.Hacking_Move.performed += OnHoldHackingMoveBar;
                 InputService.PlayerIA.Monitor.Hacking_Move.canceled += OnCancelHackingMoveBar;
             }).AddTo(this);
+        }
+
+        private void Start()
+        {
+            ulong poolID = _hackingFailedParticle.GetEntityULongID();
+            PoolManager.Instance.AddPool(poolID, _hackingFailedParticle, _hackingParticlePoolSize, PoolName.MonitorHacking);
+            PoolManager.Instance.TryGetPool(poolID, out _hackingFailedParticlePool);
+
+            poolID = _hackingSuccessParticle.GetEntityULongID();
+            PoolManager.Instance.AddPool(poolID, _hackingSuccessParticle, _hackingParticlePoolSize, PoolName.MonitorHacking);
+            PoolManager.Instance.TryGetPool(poolID, out _hackingSuccessParticlePool);
         }
 
         private void Update()
@@ -60,6 +82,20 @@ namespace KoiAI.UI
             }
         }
 
+        private void OnReachHackingTextWithBar(bool success)
+        {
+            Pool<ParticleSystem> particlePool = success ? _hackingSuccessParticlePool : _hackingFailedParticlePool;
+
+            ParticleSystem particle = particlePool.Pop();
+            particle.transform.SetPositionAndRotation(_monitorHackingView.HackingBarWorldPos, particle.transform.rotation);
+            particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            particle.Play(true);
+
+            ParticleSystem.MainModule main = particle.main;
+            float returnDelay = main.duration + main.startDelay.constantMax + main.startLifetime.constantMax;
+            PoolManager.Instance.ReturnDelay(particlePool, particle, returnDelay);
+        }
+
         private void OnStartedHackingMoveBar(InputAction.CallbackContext context)
         {
             float axis = context.ReadValue<float>();
@@ -82,9 +118,7 @@ namespace KoiAI.UI
 
         private void OnDestroy()
         {
-            InputService.PlayerIA.Monitor.Hacking_Move.started -= OnStartedHackingMoveBar;
-            InputService.PlayerIA.Monitor.Hacking_Move.performed -= OnHoldHackingMoveBar;
-            InputService.PlayerIA.Monitor.Hacking_Move.canceled -= OnCancelHackingMoveBar;
+            _monitorHackingView.OnReachHackingTextWithBar -= OnReachHackingTextWithBar;
         }
     }
 }

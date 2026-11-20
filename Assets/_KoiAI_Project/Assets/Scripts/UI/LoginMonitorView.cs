@@ -26,6 +26,12 @@ namespace KoiAI.UI
         private float _pinCodeOffset = 150f;
         [SerializeField] 
         private CanvasGroupFadeSettings _fadeSettings = new(0.3f);
+        [SerializeField]
+        private TMP_Text _pinNotificationText;
+        [SerializeField]
+        private string _pinInputNotification = "암호를 입력해주세요.";
+        [SerializeField]
+        private string _pinFailedNotification = "암호가 올바르지 않습니다. 다시 시도하세요.";
 
         private FadeInOutImageColor _pinCodeBarFade;
         private Vector2 _pinCodeBarInitialPosition;
@@ -39,6 +45,7 @@ namespace KoiAI.UI
             {
                 return;
             }
+            _pinNotificationText.SetText(_pinInputNotification);
             _parentMonitorScreenView = monitorScreenView;
             _pinCodeBarInitialPosition = _pinCodeBar.anchoredPosition;
             _pinCodeBarFade = _pinCodeBar.GetComponent<FadeInOutImageColor>();
@@ -51,16 +58,24 @@ namespace KoiAI.UI
         public override void OnBeginOpen()
         {
             ResetPin();
-            _hiddenInputFieldToken = CancellationTokenSource.CreateLinkedTokenSource(destroyCancellationToken);
+            _parentMonitorScreenView.OnGetResultPinLogin += SetPinNotifiactionText;
+            _pinNotificationText.SetText(_pinInputNotification);
             _hiddenInputField_Code.onValueChanged.AddListener(OnValueChangedPinCode);
             _hiddenInputField_Code.onDeselect.AddListener(OnDeselect);
             _pinCodeBarFade.PlayFadeInOut();
+            _hiddenInputFieldToken = CancellationTokenSource.CreateLinkedTokenSource(destroyCancellationToken);
             KeepFocusHiddenInputFieldAsync(_hiddenInputFieldToken.Token).Forget();
         }
 
         public override void OnBeginClose()
         {
-            StopInput();
+            _parentMonitorScreenView.OnGetResultPinLogin -= SetPinNotifiactionText;
+            _hiddenInputField_Code.onValueChanged.RemoveListener(OnValueChangedPinCode);
+            _hiddenInputField_Code.onDeselect.RemoveListener(OnDeselect);
+            _hiddenInputField_Code.DeactivateInputField();
+            _hiddenInputFieldToken?.Cancel();
+            _hiddenInputFieldToken?.Dispose();
+            _hiddenInputFieldToken = null;
         }
 
         public override bool TryGetFadeSettings(out CanvasGroup canvasGroup, out CanvasGroupFadeSettings settings)
@@ -68,6 +83,15 @@ namespace KoiAI.UI
             canvasGroup = _loginScreen;
             settings = _fadeSettings;
             return true;
+        }
+
+        public void SetPinNotifiactionText(bool canLogin)
+        {
+            if(!canLogin)
+            {
+                _pinNotificationText.SetText(_pinFailedNotification);
+            }
+            
         }
 
         private void OnDeselect(string value)
@@ -114,6 +138,10 @@ namespace KoiAI.UI
                 }
                 else
                 {
+                    if(i == _pinCodes.Length - 1)
+                    {
+                        _pinNotificationText.SetText(_pinInputNotification);
+                    }
                     _pinCodes[i].text = string.Empty;
                 }
             }
@@ -146,21 +174,6 @@ namespace KoiAI.UI
             }
             _pinCodeBar.anchoredPosition = _pinCodeBarInitialPosition;
             _pinCodeBarFade.StopFadeInOut();
-        }
-
-        private void StopInput()
-        {
-            _hiddenInputField_Code.onValueChanged.RemoveListener(OnValueChangedPinCode);
-            _hiddenInputField_Code.onDeselect.RemoveListener(OnDeselect);
-            _hiddenInputFieldToken?.Cancel();
-            _hiddenInputFieldToken?.Dispose();
-            _hiddenInputFieldToken = null;
-            _hiddenInputField_Code.DeactivateInputField();
-        }
-
-        private void OnDisable()
-        {
-            StopInput();
         }
 
     }
