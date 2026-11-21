@@ -180,7 +180,7 @@ MonoBehaviour:
     m_AscentLine: 13.6
     m_CapLine: 11
     m_MeanLine: 7
-    m_Baseline: 0
+    m_Baseline: -0.2
     m_DescentLine: -3.4
     m_SuperscriptOffset: 13.6
     m_SuperscriptSize: 0.5

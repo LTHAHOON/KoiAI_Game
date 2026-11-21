@@ -96,6 +96,11 @@ namespace KoiAI.UI
             return true;
         }
 
+        public void SetCloseButtonInteractable(bool interactable)
+        {
+            _monitorScreenCloseButton.interactable = interactable;    
+        }
+
         public void OpenChildView<T>() where T : PopUpWindow_Canvas
         {
             foreach (PopUpWindow_Canvas childPopUpWindow in _childPopUpWindows)

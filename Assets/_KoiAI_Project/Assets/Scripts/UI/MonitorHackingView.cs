@@ -10,6 +10,7 @@ namespace KoiAI.UI
     using Cysharp.Threading.Tasks;
     using KoiAI.Pool;
     using KoiAI.Utilities;
+    using Unity.VisualScripting;
 
     public class MonitorHackingView : PopUpWindow_Canvas
     {
@@ -72,10 +73,17 @@ namespace KoiAI.UI
         private int[] _hackingTextPositionOrder;
         private readonly Vector3[] _hackingTextWorldCorners = new Vector3[4];
         private readonly Vector3[] _hackingBarWorldCorners = new Vector3[4];
+        private MonitorScreenView _parentMonitorScreenView;
+        private int _completedCount = 0;
         public Action<bool> OnReachHackingTextWithBar;
 
         public override void InitializePopUp(PopUpWindow_Canvas parentWindow = null)
         {
+            if(parentWindow is not MonitorScreenView monitorScreenView)
+            {
+                return;
+            }
+            _parentMonitorScreenView = monitorScreenView;
             _screenRectTransform = _monitorHackingScreen.transform as RectTransform;
             _hackingSlots = new();
             _hackingTexts_Pos = new();
@@ -125,6 +133,7 @@ namespace KoiAI.UI
             {
                 hackingSlot.StartShuffleTextLoop();
             }
+            _completedCount = 0;
             _startHackingCts = CancellationTokenSource.CreateLinkedTokenSource(destroyCancellationToken);
             StartMonitorHacking(_startHackingCts.Token).Forget();
         }
@@ -248,16 +257,24 @@ namespace KoiAI.UI
                                 bool isSuccess = hackingText.fontSharedMaterial == _successMaterialPreset;
                                 if(isSuccess && !_hackingSlots[_curHackingBarIndex].IsCompletedText)
                                 {
+                                    ++_completedCount;
                                     _hackingSlots[_curHackingBarIndex].CompleteText();
                                 }
-                                else if(!isSuccess)
+                                else if(!isSuccess  && _hackingSlots[_curHackingBarIndex].IsCompletedText)
                                 {
+                                    --_completedCount;
                                     _hackingSlots[_curHackingBarIndex].RestartSuffleTextLoop();
                                 }
                                 OnReachHackingTextWithBar?.Invoke(isSuccess);
-
                                 hackingTexts.Remove(hackingText);
                                 _hackingTextPool.Return(hackingText);
+
+                                if (_completedCount == _completedWord.Length)
+                                {
+                                    await UniTask.Delay(TimeSpan.FromSeconds(2f));
+                                    _parentMonitorScreenView.OpenChildView<MonitorHackingRewardView>();
+                                    return;
+                                }
                                 break;
                             }
 
