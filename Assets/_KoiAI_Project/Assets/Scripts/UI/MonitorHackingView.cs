@@ -8,9 +8,11 @@ namespace KoiAI.UI
     using System.Threading;
     using Cysharp.Text;
     using Cysharp.Threading.Tasks;
+    using DG.Tweening;
     using KoiAI.Pool;
     using KoiAI.Utilities;
     using Unity.VisualScripting;
+    using UnityEngine.UI;
 
     public class MonitorHackingView : PopUpWindow_Canvas
     {
@@ -61,7 +63,22 @@ namespace KoiAI.UI
         [SerializeField]
         private RectTransform _removeHackingTextTransform;
 
+        [SerializeField]
+        private float _timeLimit = 30f;
+        [SerializeField]
+        private TMP_Text _timeText;
+        [SerializeField]
+        private Image _timerGuageImage; 
+        [SerializeField]
+        private RectTransform _timerCompass;
+        [SerializeField]
+        private List<Image> _signalImages = new();
+        [SerializeField, Min(0f)]
+        private float _signalDrainDuration = 0.3f;
         
+        private int _curSignal;
+        private readonly List<Tween> _signalTweens = new();
+        private float _curRemainingTime;
         private RectTransform _screenRectTransform;
         private List<MonitorHackingSlot> _hackingSlots;
         private List<RectTransform> _hackingTexts_Pos;
@@ -115,6 +132,8 @@ namespace KoiAI.UI
         {
             _curHackingBarIndex = 0;
             _hackingBar.SetParent(_hackingSlots[_curHackingBarIndex].transform);
+            _timeText.SetTextFormat("{0:F2}", _timeLimit);
+            ResetSignals();
             _hackingBar.anchoredPosition = new(0f, _yOffset_HackingBar);
             canvasGroup = _monitorHackingScreen;
             settings = _fadeSettings;
@@ -157,12 +176,39 @@ namespace KoiAI.UI
             _hackingTextPool = null;
         }
 
+        private void ResetSignals()
+        {
+            _curSignal = _signalImages.Count;
+            foreach (Image signalImage in _signalImages)
+            {
+                if (signalImage != null)
+                {
+                    signalImage.fillAmount = 1f;
+                }
+            }
+        }
+
+        private void ConsumeSignal()
+        {
+            if (_curSignal <= 0)
+            {
+                return;
+            }
+            --_curSignal;
+            Image signalImage = _signalImages[_curSignal];
+            if (signalImage != null)
+            {
+                signalImage.DOFillAmount(0f, _signalDrainDuration).SetEase(Ease.OutQuad).SetAutoKill();
+            }
+        }
+        
         private async UniTaskVoid StartMonitorHacking(CancellationToken token)
         {
             try
             {
                 await UniTask.Delay(TimeSpan.FromSeconds(_startHackingDelay), cancellationToken: token);
                 MoveHackingTexts(token).Forget();
+                StartTimeLimit(token).Forget();
                 while (true)
                 {
                     token.ThrowIfCancellationRequested();
@@ -181,6 +227,29 @@ namespace KoiAI.UI
                     await UniTask.Delay(TimeSpan.FromSeconds(_hackingTextDelay), cancellationToken: token);
                 }
 
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception ex)
+            {
+                Debug.LogException(ex);
+            }
+        }
+
+        private async UniTaskVoid StartTimeLimit(CancellationToken token)
+        {
+            try
+            {
+                _curRemainingTime = _timeLimit;
+                while(_curRemainingTime > 0)
+                {
+                    token.ThrowIfCancellationRequested();
+                    _curRemainingTime -= Time.deltaTime;
+                    _timeText.SetTextFormat("{0:F2}", _curRemainingTime);
+                    _timerGuageImage.fillAmount = Mathf.Clamp01(_curRemainingTime / _timeLimit);
+                    _timerCompass.localEulerAngles = new(0f, 0f, -(360f - (_curRemainingTime * (360f / _timeLimit))));
+                    await UniTask.Yield(PlayerLoopTiming.Update, token);
+                }
+                
             }
             catch (OperationCanceledException) { }
             catch (Exception ex)
@@ -255,6 +324,10 @@ namespace KoiAI.UI
                             if (hackingBarBounds.Overlaps(hackingTextBounds))
                             {
                                 bool isSuccess = hackingText.fontSharedMaterial == _successMaterialPreset;
+                                if (hackingText.fontSharedMaterial == _dangerMaterialPreset)
+                                {
+                                    ConsumeSignal();
+                                }
                                 if(isSuccess && !_hackingSlots[_curHackingBarIndex].IsCompletedText)
                                 {
                                     ++_completedCount;
