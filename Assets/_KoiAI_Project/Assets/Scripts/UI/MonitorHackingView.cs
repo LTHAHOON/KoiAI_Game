@@ -99,6 +99,10 @@ namespace KoiAI.UI
         private int _curHackingBarIndex;
         private Pool<TMP_Text> _hackingTextPool;
         private CancellationTokenSource _startHackingCts;
+        private UniTaskCompletionSource _hackingSessionCompletion;
+        private int _hackingSessionVersion;
+        private bool _hackingSessionTimedOut;
+        private int _hackingSessionTimedOutVersion = -1;
         private Dictionary<RectTransform, List<TMP_Text>> _dicCurHackingTexts;
         private int[] _hackingTextPositionOrder;
         private readonly Vector3[] _hackingTextWorldCorners = new Vector3[4];
@@ -106,6 +110,13 @@ namespace KoiAI.UI
         private MonitorScreenView _parentMonitorScreenView;
         private int _completedCount = 0;
         public Action<bool> OnReachHackingTextWithBar;
+
+        private bool IsCurrentHackingSession(int sessionVersion)
+        {
+            return sessionVersion == _hackingSessionVersion &&
+                   _startHackingCts != null &&
+                   !_startHackingCts.IsCancellationRequested;
+        }
 
         public override void InitializePopUp(PopUpWindow_Canvas parentWindow = null)
         {
@@ -163,8 +174,7 @@ namespace KoiAI.UI
             {
                 hackingSlot.StartShuffleTextLoop();
             }
-            _startHackingCts = CancellationTokenSource.CreateLinkedTokenSource(destroyCancellationToken);
-            StartMonitorHacking(_startHackingCts.Token).Forget();
+            StartHackingSession();
         }
 
         private void OnDestroy()

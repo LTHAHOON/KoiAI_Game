@@ -13,9 +13,9 @@ namespace KoiAI.UI
     {
         private void ResetHackingSession()
         {
+            StopHackingSession();
             ClearHackingTexts();
             _restartHackingButton.onClick.RemoveAllListeners();
-            StopHackingSession();
             foreach(MonitorHackingSlot hackingSlot in _hackingSlots)
             {
                 hackingSlot.EndShuffleTextLoop();
@@ -42,26 +42,60 @@ namespace KoiAI.UI
 
         private void RestartHacking()
         {
+            RestartHackingAsync().Forget();
+        }
+
+        private async UniTask RestartHackingAsync()
+        {
+            _restartHackingButton.interactable = false;
+            await StopHackingSessionAsync();
+            ResetHackingSession();
             _restartHackingButton.onClick.RemoveAllListeners();
             _restartHackingButton.onClick.AddListener(RestartHacking);
-            if (_hackingTextPool == null)
-            {
-                ulong entityID = _hackingTextPrefab.GetEntityULongID();
-                PoolManager.Instance.AddPool(entityID, _hackingTextPrefab, _hackingPoolSize, PoolName.MonitorHacking);
-                PoolManager.Instance.TryGetPool(entityID, out _hackingTextPool);
-            }
+            StartHackingSession();
+        }
 
-            foreach(MonitorHackingSlot hackingSlot in _hackingSlots)
-            {
-                hackingSlot.StartShuffleTextLoop();
-            }
+        private void StartHackingSession()
+        {
+            StopHackingSession();
+            _restartHackingButton.interactable = false;
             _startHackingCts = CancellationTokenSource.CreateLinkedTokenSource(destroyCancellationToken);
-            StartMonitorHacking(_startHackingCts.Token).Forget();
+            int sessionVersion = ++_hackingSessionVersion;
+            _hackingSessionTimedOut = false;
+            _hackingSessionTimedOutVersion = -1;
+            _hackingSessionCompletion = new UniTaskCompletionSource();
+            StartMonitorHacking(_startHackingCts.Token, sessionVersion, _hackingSessionCompletion).Forget();
+        }
+
+        private async UniTask StopHackingSessionAsync()
+        {
+            CancellationTokenSource cts = _startHackingCts;
+            UniTaskCompletionSource sessionCompletion = _hackingSessionCompletion;
+            ++_hackingSessionVersion;
+            _startHackingCts = null;
+            _hackingSessionCompletion = null;
+
+            cts?.Cancel();
+            try
+            {
+                if (sessionCompletion != null)
+                {
+                    await sessionCompletion.Task;
+                }
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            finally
+            {
+                cts?.Dispose();
+            }
         }
 
 
         private void StopHackingSession()
         {
+            ++_hackingSessionVersion;
             _startHackingCts?.Cancel();
             _startHackingCts?.Dispose();
             _startHackingCts = null;

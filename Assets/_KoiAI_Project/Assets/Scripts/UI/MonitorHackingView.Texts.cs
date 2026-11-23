@@ -10,32 +10,20 @@ namespace KoiAI.UI
 {
     public partial class MonitorHackingView
     {
-        private async UniTaskVoid StartMonitorHacking(CancellationToken token)
+        private async UniTaskVoid StartMonitorHacking(CancellationToken token, int sessionVersion, UniTaskCompletionSource sessionCompletion)
         {
             try
             {
                 await UniTask.Delay(TimeSpan.FromSeconds(_startHackingDelay), cancellationToken: token);
-
-                MoveHackingTexts(token).Forget();
-                StartTimeLimit(token).Forget();
-                while (true)
+                if (!IsCurrentHackingSession(sessionVersion))
                 {
-                    token.ThrowIfCancellationRequested();
-                    ShuffleHackingTextPositions();
-                    for (int i = 0; i < _hackingTexts_Pos.Count; ++i)
-                    {
-                        SpawnHackingText(_hackingTextPositionOrder[i]);
-                        if (i < _hackingTexts_Pos.Count - 1)
-                        {
-                            float minDelay = Mathf.Max(0f, _minHackingTextDelay);
-                            float maxDelay = Mathf.Max(minDelay, _maxHackingTextDelay);
-                            float delay = UnityEngine.Random.Range(minDelay, maxDelay);
-                            await UniTask.Delay(TimeSpan.FromSeconds(delay), cancellationToken: token);
-                        }
-                    }
-                    await UniTask.Delay(TimeSpan.FromSeconds(_hackingTextDelay), cancellationToken: token);
+                    return;
                 }
 
+                UniTask moveTask = MoveHackingTexts(token, sessionVersion);
+                UniTask timeLimitTask = StartTimeLimit(token, sessionVersion);
+                UniTask spawnTask = SpawnHackingTexts(token, sessionVersion);
+                await UniTask.WhenAll(moveTask, timeLimitTask, spawnTask);
             }
             catch (OperationCanceledException)
             {
@@ -45,22 +33,67 @@ namespace KoiAI.UI
             {
                 Debug.LogException(ex);
             }
+            finally
+            {
+                if (_hackingSessionTimedOut && _hackingSessionTimedOutVersion == sessionVersion)
+                {
+                    _hackingSessionTimedOut = false;
+                    _hackingSessionTimedOutVersion = -1;
+                    ResetHackingSession();
+                    ShowRestartButton();
+                }
+                sessionCompletion.TrySetResult();
+            }
         }
 
-        private async UniTaskVoid StartTimeLimit(CancellationToken token)
+        private async UniTask SpawnHackingTexts(CancellationToken token, int sessionVersion)
+        {
+            while (true)
+            {
+                token.ThrowIfCancellationRequested();
+                if (!IsCurrentHackingSession(sessionVersion))
+                {
+                    return;
+                }
+
+                ShuffleHackingTextPositions();
+                for (int i = 0; i < _hackingTexts_Pos.Count; ++i)
+                {
+                    SpawnHackingText(_hackingTextPositionOrder[i]);
+                    if (i < _hackingTexts_Pos.Count - 1)
+                    {
+                        float minDelay = Mathf.Max(0f, _minHackingTextDelay);
+                        float maxDelay = Mathf.Max(minDelay, _maxHackingTextDelay);
+                        float delay = UnityEngine.Random.Range(minDelay, maxDelay);
+                        await UniTask.Delay(TimeSpan.FromSeconds(delay), cancellationToken: token);
+                    }
+                }
+                await UniTask.Delay(TimeSpan.FromSeconds(_hackingTextDelay), cancellationToken: token);
+            }
+        }
+
+        private async UniTask StartTimeLimit(CancellationToken token, int sessionVersion)
         {
             try
             {
                 _curRemainingTime = _timeLimit;
-                while(_curRemainingTime > 0)
+                float timeLimitEndTime = Time.unscaledTime + _timeLimit;
+                while(true)
                 {
                     token.ThrowIfCancellationRequested();
-                    _curRemainingTime -=  Mathf.Min(Time.unscaledDeltaTime, 0.1f);
+                    if (!IsCurrentHackingSession(sessionVersion))
+                    {
+                        return;
+                    }
+                    _curRemainingTime = Mathf.Max(0f, timeLimitEndTime - Time.unscaledTime);
+                    if (_curRemainingTime <= 0f)
+                    {
+                        break;
+                    }
                     _timeText.SetTextFormat("{0:F2}", _curRemainingTime);
                     _timerGuageImage.fillAmount = Mathf.Clamp01(_curRemainingTime / _timeLimit);
                     _timerCompass.localEulerAngles = new(0f, 0f, -(360f - (_curRemainingTime * (360f / _timeLimit))));
                     await UniTask.NextFrame(token);
-                    Debug.Log($"[ID:{GetInstanceID()}] Frame:{Time.frameCount}, dt:{Time.deltaTime}");
                 }
                 
             }
@@ -71,10 +104,11 @@ namespace KoiAI.UI
             }
             finally
             {
-                if (!token.IsCancellationRequested && _completedCount < _completedWord.Length)
+                if (IsCurrentHackingSession(sessionVersion) && _completedCount < _completedWord.Length)
                 {
-                    ResetHackingSession();
-                    ShowRestartButton();
+                    _hackingSessionTimedOut = true;
+                    _hackingSessionTimedOutVersion = sessionVersion;
+                    StopHackingSession();
                 }
             }
         }
@@ -111,7 +145,19 @@ namespace KoiAI.UI
             }
             hackingText.rectTransform.SetParent(textPosition, false);
             hackingText.rectTransform.anchoredPosition = Vector2.zero;
+            hackingText.rectTransform.localRotation = Quaternion.identity;
+            hackingText.rectTransform.localScale = Vector3.one;
             _dicCurHackingTexts[textPosition].Add(hackingText);
+        }
+
+        private void ReturnHackingText(TMP_Text hackingText)
+        {
+            RectTransform rectTransform = hackingText.rectTransform;
+            rectTransform.SetParent(_monitorHackingScreen.transform, false);
+            rectTransform.anchoredPosition = Vector2.zero;
+            rectTransform.localRotation = Quaternion.identity;
+            rectTransform.localScale = Vector3.one;
+            _hackingTextPool.Return(hackingText);
         }
 
         private void ClearHackingTexts()
@@ -125,21 +171,24 @@ namespace KoiAI.UI
             {
                 foreach (TMP_Text hackingText in hackingTexts)
                 {
-                    hackingText.rectTransform.SetParent(_hackingText_PosParent, false);
-                    hackingText.rectTransform.anchoredPosition = Vector2.zero;
-                    _hackingTextPool.Return(hackingText);
+                    ReturnHackingText(hackingText);
                 }
                 hackingTexts.Clear();
             }
+
         }
 
-        private async UniTask MoveHackingTexts(CancellationToken token)
+        private async UniTask MoveHackingTexts(CancellationToken token, int sessionVersion)
         {
             try
             {
                 while (true)
                 {
                     token.ThrowIfCancellationRequested();
+                    if (!IsCurrentHackingSession(sessionVersion))
+                    {
+                        return;
+                    }
 
                     Rect hackingBarBounds = GetLocalBounds(_hackingBar, _hackingBarWorldCorners);
                     float removeHackingTextY = _screenRectTransform.InverseTransformPoint(_removeHackingTextTransform.position).y;
@@ -147,14 +196,28 @@ namespace KoiAI.UI
                     {
                         foreach (TMP_Text hackingText in hackingTexts)
                         {
+                            if (!IsCurrentHackingSession(sessionVersion))
+                            {
+                                return;
+                            }
+                            float startTime = Time.unscaledTime;
+                            float startY = hackingText.rectTransform.anchoredPosition.y;
+
+                            hackingText.rectTransform.anchoredPosition = new Vector2(
+                                 hackingText.rectTransform.anchoredPosition.x,
+                                startY - (Time.unscaledTime - startTime) * _hackingTextSpeed);
                             float targetPosX = hackingText.rectTransform.anchoredPosition.x;
-                            float targetPosY = hackingText.rectTransform.anchoredPosition.y - Mathf.Min(Time.unscaledDeltaTime, 0.1f) * _hackingTextSpeed;
+                           float targetPosY = hackingText.rectTransform.anchoredPosition.y -
+                                               Mathf.Min(Time.unscaledDeltaTime, 0.1f) * _hackingTextSpeed;
                             hackingText.rectTransform.anchoredPosition = new(targetPosX, targetPosY);
                             Rect hackingTextBounds = GetLocalBounds(hackingText.rectTransform, _hackingTextWorldCorners);
                             if (hackingBarBounds.Overlaps(hackingTextBounds))
                             {
+                                hackingTexts.Remove(hackingText);
+                                ReturnHackingText(hackingText);
                                 bool isSuccess = hackingText.fontSharedMaterial == _successMaterialPreset;
-                                if (hackingText.fontSharedMaterial == _dangerMaterialPreset)
+                                bool isDanger = hackingText.fontSharedMaterial == _dangerMaterialPreset;
+                                if (isDanger)
                                 {
                                     ConsumeSignal();
                                 }
@@ -169,8 +232,6 @@ namespace KoiAI.UI
                                     _hackingSlots[_curHackingBarIndex].RestartSuffleTextLoop();
                                 }
                                 OnReachHackingTextWithBar?.Invoke(isSuccess);
-                                hackingTexts.Remove(hackingText);
-                                _hackingTextPool.Return(hackingText);
 
                                 if (_completedCount == _completedWord.Length)
                                 {
@@ -187,7 +248,7 @@ namespace KoiAI.UI
                             if (hackingTextBounds.center.y <= removeHackingTextY)
                             {
                                 hackingTexts.Remove(hackingText);
-                                _hackingTextPool.Return(hackingText);
+                                ReturnHackingText(hackingText);
                                 break;
                             }
                         }
