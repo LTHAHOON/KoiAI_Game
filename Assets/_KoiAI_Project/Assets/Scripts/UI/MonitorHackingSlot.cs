@@ -30,7 +30,7 @@ namespace KoiAI.UI
         {
             _suffleTextLoopTween ??= DOVirtual.DelayedCall(_shuffleDelay, () =>
                 {
-                    int index = Random.Range(0, Chars.Length - 1);
+                    int index = Random.Range(0, Chars.Length);
                     _completedText.SetTextFormat("{0}", Chars[index]);
                 }).SetLoops(-1).Pause();
             
@@ -41,7 +41,18 @@ namespace KoiAI.UI
         public void RestartSuffleTextLoop()
         {
             _completedText.fontSharedMaterial = _dangerMaterialPreset;
-            _suffleTextLoopTween.Play();
+            _suffleTextLoopTween.Restart();
+        }
+
+        public void ResetText()
+        {
+            if (_suffleTextLoopTween == null)
+            {
+                StartShuffleTextLoop();
+                return;
+            }
+            _completedText.fontSharedMaterial = _dangerMaterialPreset;
+            _suffleTextLoopTween.Restart();
         }
 
         public void EndShuffleTextLoop()
@@ -58,6 +69,6 @@ namespace KoiAI.UI
             _completedText.fontSharedMaterial = _successMaterialPreset;
         }
 
-        public bool IsCompletedText => !_suffleTextLoopTween.IsPlaying();
+        public bool IsCompletedText => _suffleTextLoopTween != null && !_suffleTextLoopTween.IsPlaying();
     }
 }

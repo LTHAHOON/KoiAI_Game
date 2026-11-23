@@ -116,6 +116,7 @@ namespace KoiAI.UI
 
         public void BindCloseButton(UnityAction onClose)
         {
+            _monitorScreenCloseButton.onClick.RemoveListener(onClose);
             _monitorScreenCloseButton.onClick.AddListener(onClose);
         }
 

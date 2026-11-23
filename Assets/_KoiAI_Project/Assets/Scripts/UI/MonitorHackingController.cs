@@ -1,6 +1,5 @@
 using UnityEngine;
 using System;
-using R3;
 using UnityEngine.InputSystem;
 using KoiAI.Pool;
 using KoiAI.Utilities;
@@ -35,12 +34,9 @@ namespace KoiAI.UI
         {
             _monitorHackingView.OnReachHackingTextWithBar += OnReachHackingTextWithBar;
 
-            _monitorInteract.OnInteract.Subscribe(context =>
-            {
-                InputService.PlayerIA.Monitor.Hacking_Move.started += OnStartedHackingMoveBar;
-                InputService.PlayerIA.Monitor.Hacking_Move.performed += OnHoldHackingMoveBar;
-                InputService.PlayerIA.Monitor.Hacking_Move.canceled += OnCancelHackingMoveBar;
-            }).AddTo(this);
+            InputService.PlayerIA.Monitor.Hacking_Move.started += OnStartedHackingMoveBar;
+            InputService.PlayerIA.Monitor.Hacking_Move.performed += OnHoldHackingMoveBar;
+            InputService.PlayerIA.Monitor.Hacking_Move.canceled += OnCancelHackingMoveBar;
         }
 
         private void Start()
@@ -85,6 +81,10 @@ namespace KoiAI.UI
         private void OnReachHackingTextWithBar(bool success)
         {
             Pool<ParticleSystem> particlePool = success ? _hackingSuccessParticlePool : _hackingFailedParticlePool;
+            if (particlePool == null)
+            {
+                return;
+            }
 
             ParticleSystem particle = particlePool.Pop();
             particle.transform.SetPositionAndRotation(_monitorHackingView.HackingBarWorldPos, particle.transform.rotation);
@@ -119,6 +119,9 @@ namespace KoiAI.UI
         private void OnDestroy()
         {
             _monitorHackingView.OnReachHackingTextWithBar -= OnReachHackingTextWithBar;
+            InputService.PlayerIA.Monitor.Hacking_Move.started -= OnStartedHackingMoveBar;
+            InputService.PlayerIA.Monitor.Hacking_Move.performed -= OnHoldHackingMoveBar;
+            InputService.PlayerIA.Monitor.Hacking_Move.canceled -= OnCancelHackingMoveBar;
         }
     }
 }
