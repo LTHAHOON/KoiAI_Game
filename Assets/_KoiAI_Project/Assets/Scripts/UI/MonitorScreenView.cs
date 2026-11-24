@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 namespace KoiAI.UI
 {
+    using KoiAI.Input;
     using KoiAI.Interact;
     using KoiAI.Utilities;
 
@@ -98,7 +99,15 @@ namespace KoiAI.UI
 
         public void SetCloseButtonInteractable(bool interactable)
         {
-            _monitorScreenCloseButton.interactable = interactable;    
+            _monitorScreenCloseButton.interactable = interactable; 
+            if(interactable)
+            {
+                InputService.PlayerIA.Monitor.Monitor_Cancel.Enable();
+            }
+            else
+            {
+                InputService.PlayerIA.Monitor.Monitor_Cancel.Disable();
+            }
         }
 
         public void OpenChildView<T>() where T : PopUpWindow_Canvas

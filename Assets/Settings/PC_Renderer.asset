@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FullScreenPassRendererFeature
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.FullScreenPassRendererFeature
   m_Active: 1
-  injectionPoint: 550
+  injectionPoint: 600
   fetchColorBuffer: 1
   requirements: 0
   passMaterial: {fileID: 2100000, guid: 3d6753aa8562f0a4fa0a9f49442dd49f, type: 2}
@@ -47,7 +47,9 @@ MonoBehaviour:
   m_RendererFeatures:
   - {fileID: 7833122117494664109}
   - {fileID: -314836172444135774}
-  m_RendererFeatureMap: ad6b866f10d7b46ca20e06532b7aa1fb
+  - {fileID: 4557889683828025242}
+  - {fileID: 6014812618797267985}
+  m_RendererFeatureMap: ad6b866f10d7b46ca20e06532b7aa1fb9aa7fcc984e0403f11bcf27d35e87853
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -76,6 +78,71 @@ MonoBehaviour:
   m_DepthTextureFormat: 0
   m_AccurateGbufferNormals: 1
   m_IntermediateTextureMode: 0
+--- !u!114 &4557889683828025242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
+  m_Name: RenderObjects
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.RenderObjects
+  m_Active: 0
+  settings:
+    passTag: RenderObjects
+    Event: 550
+    filterSettings:
+      RenderQueueType: 0
+      LayerMask:
+        serializedVersion: 2
+        m_Bits: 128
+      PassNames: []
+    overrideMaterial: {fileID: 2100000, guid: 34c30aa69e67c374d9b1fa3869c5aa46, type: 2}
+    overrideMaterialPassIndex: 0
+    overrideShader: {fileID: 0}
+    overrideShaderPassIndex: 0
+    overrideMode: 1
+    overrideDepthState: 1
+    depthCompareFunction: 8
+    enableWrite: 0
+    stencilSettings:
+      overrideStencilState: 1
+      stencilReference: 1
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    cameraSettings:
+      overrideCamera: 0
+      restoreCamera: 1
+      offset: {x: 0, y: 0, z: 0, w: 0}
+      cameraFieldOfView: 60
+--- !u!114 &6014812618797267985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 517bd43b825148a2a3d4871fc33934fe, type: 3}
+  m_Name: DetectMaskRendererFeature
+  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Rendering.DetectMaskRendererFeature
+  m_Active: 1
+  _detectableLayers:
+    serializedVersion: 2
+    m_Bits: 512
+  _silhouetteColor: {r: 1, g: 0.40536505, b: 0, a: 1}
+  _outlineColor: {r: 0, g: 1, b: 0.8847925, a: 1}
+  _silhouetteOpacity: 0.5
+  _outlineWidth: 3
+  _dissolveEdgeWidth: 0.025
+  _maskMaterial: {fileID: 2100000, guid: bbbaa4224db7f3a4e9e2cb17af321eb5, type: 2}
+  _compositeMaterial: {fileID: 2100000, guid: 2f8021a9b07d9f64ba66d3da01c75181, type: 2}
 --- !u!114 &7833122117494664109
 MonoBehaviour:
   m_ObjectHideFlags: 0

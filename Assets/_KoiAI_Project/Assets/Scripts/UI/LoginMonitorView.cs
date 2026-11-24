@@ -58,6 +58,7 @@ namespace KoiAI.UI
         public override void OnBeginOpen()
         {
             ResetPin();
+            _parentMonitorScreenView.SetCloseButtonInteractable(true);
             _parentMonitorScreenView.OnGetResultPinLogin += SetPinNotifiactionText;
             _pinNotificationText.SetText(_pinInputNotification);
             _hiddenInputField_Code.onValueChanged.AddListener(OnValueChangedPinCode);

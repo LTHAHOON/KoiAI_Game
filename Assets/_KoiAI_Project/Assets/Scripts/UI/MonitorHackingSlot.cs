@@ -24,35 +24,30 @@ namespace KoiAI.UI
             _completedChar = completedChar;
             _shuffleDelay = shuffleDelay;
             _completedText.fontSharedMaterial = _dangerMaterialPreset;
+            InitalizeSuffleTextTween();
+        }
+        
+        private void InitalizeSuffleTextTween()
+        {
+            _suffleTextLoopTween ??= DOVirtual.DelayedCall(_shuffleDelay, () =>
+            {
+                int index = Random.Range(0, Chars.Length);
+                _completedText.SetTextFormat("{0}", Chars[index]);
+            }).SetLoops(-1).Pause();
         }
 
         public void StartShuffleTextLoop()
         {
-            _suffleTextLoopTween ??= DOVirtual.DelayedCall(_shuffleDelay, () =>
-                {
-                    int index = Random.Range(0, Chars.Length);
-                    _completedText.SetTextFormat("{0}", Chars[index]);
-                }).SetLoops(-1).Pause();
-            
+            InitalizeSuffleTextTween();
             _completedText.fontSharedMaterial = _dangerMaterialPreset;
-            _suffleTextLoopTween.Play();
+            _suffleTextLoopTween?.Play();
         }
 
         public void RestartSuffleTextLoop()
         {
+            InitalizeSuffleTextTween();
             _completedText.fontSharedMaterial = _dangerMaterialPreset;
-            _suffleTextLoopTween.Restart();
-        }
-
-        public void ResetText()
-        {
-            if (_suffleTextLoopTween == null)
-            {
-                StartShuffleTextLoop();
-                return;
-            }
-            _completedText.fontSharedMaterial = _dangerMaterialPreset;
-            _suffleTextLoopTween.Restart();
+            _suffleTextLoopTween?.Restart();
         }
 
         public void EndShuffleTextLoop()

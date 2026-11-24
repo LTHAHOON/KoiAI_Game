@@ -99,10 +99,7 @@ namespace KoiAI.UI
         private int _curHackingBarIndex;
         private Pool<TMP_Text> _hackingTextPool;
         private CancellationTokenSource _startHackingCts;
-        private UniTaskCompletionSource _hackingSessionCompletion;
-        private int _hackingSessionVersion;
-        private bool _hackingSessionTimedOut;
-        private int _hackingSessionTimedOutVersion = -1;
+        private bool _hackingFailed;
         private Dictionary<RectTransform, List<TMP_Text>> _dicCurHackingTexts;
         private int[] _hackingTextPositionOrder;
         private readonly Vector3[] _hackingTextWorldCorners = new Vector3[4];
@@ -110,13 +107,6 @@ namespace KoiAI.UI
         private MonitorScreenView _parentMonitorScreenView;
         private int _completedCount = 0;
         public Action<bool> OnReachHackingTextWithBar;
-
-        private bool IsCurrentHackingSession(int sessionVersion)
-        {
-            return sessionVersion == _hackingSessionVersion &&
-                   _startHackingCts != null &&
-                   !_startHackingCts.IsCancellationRequested;
-        }
 
         public override void InitializePopUp(PopUpWindow_Canvas parentWindow = null)
         {
@@ -150,19 +140,19 @@ namespace KoiAI.UI
             _monitorHackingScreen.interactable = false;
             _monitorHackingScreen.blocksRaycasts = false;
             _monitorHackingScreen.gameObject.SetActive(false);
+            ResetHackingSession();
         }
 
         public override bool TryGetFadeSettings(out CanvasGroup canvasGroup, out CanvasGroupFadeSettings settings)
         {
-            ResetHackingSession();
             canvasGroup = _monitorHackingScreen;
             settings = _fadeSettings;
             return true;
         }
 
-        public override void OnCompleteOpen()
+        public override void OnBeginOpen()
         {
-            _restartHackingButton.onClick.RemoveAllListeners();
+            _parentMonitorScreenView.SetCloseButtonInteractable(true);
             _restartHackingButton.onClick.AddListener(RestartHacking);
             if (_hackingTextPool == null)
             {
@@ -170,11 +160,17 @@ namespace KoiAI.UI
                 PoolManager.Instance.AddPool(entityID, _hackingTextPrefab, _hackingPoolSize, PoolName.MonitorHacking);
                 PoolManager.Instance.TryGetPool(entityID, out _hackingTextPool);
             }
-            foreach(MonitorHackingSlot hackingSlot in _hackingSlots)
-            {
-                hackingSlot.StartShuffleTextLoop();
-            }
+        }
+
+        public override void OnCompleteOpen()
+        {
             StartHackingSession();
+        }
+
+        public override void OnCompleteClose()
+        {
+            ResetHackingSession();
+            _restartHackingButton.onClick.RemoveAllListeners();
         }
 
         private void OnDestroy()

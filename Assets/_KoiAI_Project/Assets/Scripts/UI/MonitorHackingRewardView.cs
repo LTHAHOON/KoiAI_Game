@@ -1,5 +1,7 @@
+using KoiAI.Player;
 using KoiAI.Utilities;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace KoiAI.UI
 {
@@ -9,7 +11,10 @@ namespace KoiAI.UI
         private CanvasGroup _canvasGroup;
         [SerializeField]
         private CanvasGroupFadeSettings _canvasGroupFadeSettings;
+        [SerializeField]
+        private Button _getRewardButton;
 
+        private ChipController _chipController;
         private MonitorScreenView _parentMonitorScreenView;
 
         public override void InitializePopUp(PopUpWindow_Canvas parentWindow = null)
@@ -21,6 +26,15 @@ namespace KoiAI.UI
             _parentMonitorScreenView = monitorScreenView;
             _canvasGroup.alpha = 0f;
             gameObject.SetActive(false);
+            _chipController = FindAnyObjectByType<ChipController>();
+            _getRewardButton.onClick.AddListener(OnGetRewardClicked);
+        }
+
+        private void OnGetRewardClicked()
+        {
+            _parentMonitorScreenView.SetCloseButtonInteractable(true);
+            _chipController.UnlockChip();
+            _getRewardButton.onClick.RemoveAllListeners();
         }
 
         public override bool TryGetFadeSettings(out CanvasGroup canvasGroup, out CanvasGroupFadeSettings settings)
@@ -34,6 +48,5 @@ namespace KoiAI.UI
         {
             _parentMonitorScreenView.SetCloseButtonInteractable(false);
         }
-
     }
 }

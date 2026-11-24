@@ -34531,7 +34531,6 @@ MonoBehaviour:
     - {fileID: 4132597977021415532, guid: c0aaf31eb6c4bd74a9e34b841af82664, type: 3}
     - {fileID: 4132597977021415532, guid: c0aaf31eb6c4bd74a9e34b841af82664, type: 3}
     _useRandomItemProp: 0
-    _randomSeed: 0
     _minDropItemPropCount: 0
     _dropRadius: 5
     _dropJumpPower: 3
@@ -39786,6 +39785,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   _useFirePointForShot: 1
+  _tracerSystem: {fileID: 0}
+  _tracerInterval: 3
 --- !u!114 &3860231480964522944
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39798,7 +39799,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57b1e2d970383ed4baa9748e5c88952f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Skin.GunSkin
-  _skinPrefab: {fileID: 8614676347035655899}
   _firePoint: {fileID: 7762371136219527416}
   _fireAudioData: {fileID: 0}
   _firePT: {fileID: 201076576757799442}

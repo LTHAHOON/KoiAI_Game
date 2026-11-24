@@ -144,7 +144,7 @@ GameObject:
   - component: {fileID: 421676}
   - component: {fileID: 3321676}
   - component: {fileID: 2321676}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Crate_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -235,7 +235,7 @@ GameObject:
   - component: {fileID: 421678}
   - component: {fileID: 3321678}
   - component: {fileID: 2321678}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Crate_Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}

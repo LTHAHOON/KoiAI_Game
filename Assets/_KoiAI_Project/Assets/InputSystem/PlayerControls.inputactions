@@ -647,6 +647,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "UseChip",
+                    "type": "Button",
+                    "id": "c32f1484-27ba-4f66-89ef-06047bbc051c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -1087,6 +1096,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a49b710f-1c47-4b94-8419-3afe5e2f07a9",
+                    "path": "<Keyboard>/v",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UseChip",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
