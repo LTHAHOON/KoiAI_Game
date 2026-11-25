@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 namespace KoiAI.UI
 {
+    using DG.Tweening;
     using KoiAI.Input;
     using KoiAI.Interact;
     using KoiAI.Utilities;
@@ -18,6 +19,8 @@ namespace KoiAI.UI
         private List<CanvasGroup> _hidingCanvasGroups;
         [SerializeField]
         private CanvasGroup _monitorScreen;
+        [SerializeField]
+        private CanvasGroup _monitorScreen_UIGroup;
         [SerializeField]
         private Button _monitorScreenCloseButton;
         [SerializeField]
@@ -97,15 +100,17 @@ namespace KoiAI.UI
             return true;
         }
 
-        public void SetCloseButtonInteractable(bool interactable)
+        public void SetVisibleUI(bool isVisible)
         {
-            _monitorScreenCloseButton.interactable = interactable; 
-            if(interactable)
+            _monitorScreen_UIGroup.interactable = isVisible; 
+            if(isVisible)
             {
+                _monitorScreen_UIGroup.DOFade(1f, 0.3f).SetEase(Ease.Linear);
                 InputService.PlayerIA.Monitor.Monitor_Cancel.Enable();
             }
             else
             {
+                _monitorScreen_UIGroup.DOFade(0f, 0.3f).SetEase(Ease.Linear);
                 InputService.PlayerIA.Monitor.Monitor_Cancel.Disable();
             }
         }

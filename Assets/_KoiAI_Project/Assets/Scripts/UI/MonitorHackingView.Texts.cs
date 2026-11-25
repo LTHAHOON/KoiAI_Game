@@ -233,7 +233,7 @@ namespace KoiAI.UI
             {
                 if (_completedCount == _completedWord.Length)
                 {
-                    _parentMonitorScreenView.SetCloseButtonInteractable(false);
+                    _parentMonitorScreenView.SetVisibleUI(false);
                     await StartLoadingRewardProgress();
                     await UniTask.Delay(TimeSpan.FromSeconds(0.3f));
                     _parentMonitorScreenView.OpenChildView<MonitorHackingRewardView>();

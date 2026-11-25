@@ -39,6 +39,10 @@ namespace KoiAI.Input
             {
                 case InputActionMapContext.Global:
                     _playerInput.SwitchCurrentActionMap(actionMap.ToString());
+                    _playerIA.Player.Disable();
+                    _playerIA.Lobby.Disable();
+                    _playerIA.Monitor.Disable();
+                    _playerIA.Global.Enable();
                     return;
                 case InputActionMapContext.Player:
                     _playerIA.Lobby.Disable();

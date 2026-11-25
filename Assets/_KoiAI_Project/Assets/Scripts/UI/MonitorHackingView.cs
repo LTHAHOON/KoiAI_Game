@@ -152,7 +152,7 @@ namespace KoiAI.UI
 
         public override void OnBeginOpen()
         {
-            _parentMonitorScreenView.SetCloseButtonInteractable(true);
+            _parentMonitorScreenView.SetVisibleUI(true);
             _restartHackingButton.onClick.AddListener(RestartHacking);
             if (_hackingTextPool == null)
             {
