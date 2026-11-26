@@ -7,8 +7,8 @@ namespace KoiAI.Item
     public class PaperData : ItemData
     {
         [SerializeField]
-        private Texture2D _paperTex;
+        private Sprite _paperSprite;
 
-        public Texture2D PaperTex => _paperTex;
+        public Sprite PaperSprite => _paperSprite;
     }
 }

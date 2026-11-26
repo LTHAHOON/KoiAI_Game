@@ -1,12 +1,13 @@
-using KoiAI.Input;
-using KoiAI.Item;
-using KoiAI.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace KoiAI.UI
 {
-    public sealed class PaperPopupWindow : PopUpWindow_Canvas
+    using KoiAI.Input;
+    using KoiAI.Item;
+    using KoiAI.Utilities;
+
+    public class PaperPopupWindow : PopUpWindow_Canvas
     {
         private static PaperPopupWindow _instance;
 
@@ -19,8 +20,6 @@ namespace KoiAI.UI
         [SerializeField]
         private CanvasGroupFadeSettings _fadeSettings = new(0.3f);
 
-        private Sprite _paperSprite;
-
         public static void Open(PaperData paperData)
         {
             if (paperData == null)
@@ -32,54 +31,28 @@ namespace KoiAI.UI
             {
                 _instance = FindAnyObjectByType<PaperPopupWindow>(FindObjectsInactive.Include);
             }
-
-            if (_instance == null || PopUpManager.Instance == null)
-            {
-                Debug.LogWarning("PaperPopupWindow is not present in the active scene.");
-                return;
-            }
-
-            _instance.SetPaperTexture(paperData.PaperTex);
+            
+            _instance.SetPaperSprite(paperData.PaperSprite);
             PopUpManager.Instance.ChangePopUpState(PopUpState.Open, _instance);
         }
 
         private void Awake()
         {
             _instance = this;
-            _paperPopup ??= GetComponent<CanvasGroup>();
-            _paperImage ??= transform.Find("Paper_Image")?.GetComponent<Image>();
-            _closeButton ??= transform.Find("Paper_CloseButton")?.GetComponent<Button>();
-
-            if (_closeButton != null)
-            {
-                _closeButton.onClick.AddListener(Close);
-            }
+            _closeButton.onClick.AddListener(Close);
+            _paperPopup.alpha = 0f;
+            gameObject.SetActive(false);
         }
 
-        private void SetPaperTexture(Texture2D paperTexture)
+        private void SetPaperSprite(Sprite paperSprite)
         {
-            if (_paperImage == null)
-            {
-                return;
-            }
-
-            if (_paperSprite != null)
-            {
-                Destroy(_paperSprite);
-                _paperSprite = null;
-            }
-
-            if (paperTexture == null)
+            if (paperSprite == null)
             {
                 _paperImage.sprite = null;
                 return;
             }
 
-            _paperSprite = Sprite.Create(
-                paperTexture,
-                new Rect(0f, 0f, paperTexture.width, paperTexture.height),
-                new Vector2(0.5f, 0.5f));
-            _paperImage.sprite = _paperSprite;
+            _paperImage.sprite = paperSprite;
             _paperImage.preserveAspect = true;
         }
 
@@ -90,17 +63,19 @@ namespace KoiAI.UI
 
         public override void OnBeginOpen()
         {
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
             InputService.SetEnableActionMap(InputActionMapContext.Global);
         }
 
         public override void OnCompleteClose()
         {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
             InputService.SetEnableActionMap(InputActionMapContext.Player);
         }
 
-        public override bool TryGetFadeSettings(
-            out CanvasGroup canvasGroup,
-            out CanvasGroupFadeSettings settings)
+        public override bool TryGetFadeSettings(out CanvasGroup canvasGroup, out CanvasGroupFadeSettings settings)
         {
             canvasGroup = _paperPopup;
             settings = _fadeSettings;
@@ -109,19 +84,13 @@ namespace KoiAI.UI
 
         private void OnDestroy()
         {
-            if (_closeButton != null)
-            {
-                _closeButton.onClick.RemoveListener(Close);
-            }
-
-            if (_paperSprite != null)
-            {
-                Destroy(_paperSprite);
-            }
-
             if (_instance == this)
             {
                 _instance = null;
+            }
+            if(_closeButton != null)
+            {
+                _closeButton.onClick.RemoveListener(Close);
             }
         }
     }

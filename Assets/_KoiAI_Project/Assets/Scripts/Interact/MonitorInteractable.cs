@@ -6,6 +6,7 @@ namespace KoiAI.Interact
 {
     using KoiAI.Input;
     using KoiAI.Player;
+    using KoiAI.Rendering;
     using KoiAI.UI;
 
 
@@ -28,8 +29,14 @@ namespace KoiAI.Interact
         [SerializeField]
         private MonitorInteractContext _monitorUserInfo;
         [SerializeField]
-        private MonitorScreenView _monitorScreenView;
+        private MonitorScreenWindow _monitorScreenView;
+
         private bool _isOn = false;
+
+        private void Awake()
+        {
+            _monitorScreenView.OnCloseCompleted += OnMonitorScreenClosed;
+        }
 
         public void Interact(PlayerInteractor playerInteractor)
         {
@@ -38,6 +45,7 @@ namespace KoiAI.Interact
                 return;
             }
 
+            DetectMaskRendererFeature.SetInteractOutlineAlpha(0f);
             _isOn = true;
             _monitorScreenView.OnInteractToCheckPin += Interact;
             _monitorScreenView.Show();
@@ -63,6 +71,7 @@ namespace KoiAI.Interact
                 return;
             }
 
+            DetectMaskRendererFeature.SetInteractOutlineAlpha(1f);
             _isOn = false;
             _monitorScreenView.OnInteractToCheckPin -= Interact;
             _monitorScreenView.Hide();
@@ -70,6 +79,20 @@ namespace KoiAI.Interact
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             InputService.SetEnableActionMap(InputActionMapContext.Player);
+        }
+
+        private void OnMonitorScreenClosed()
+        {
+        }
+
+        private void OnDestroy()
+        {
+            DetectMaskRendererFeature.SetInteractOutlineAlpha(0f);
+            DetectMaskRendererFeature.ClearInteractableRenderers();
+            if (_monitorScreenView != null)
+            {
+                _monitorScreenView.OnCloseCompleted -= OnMonitorScreenClosed;
+            }
         }
 
         public override void Interact(MonitorInteractContext dataEvent)
@@ -82,7 +105,7 @@ namespace KoiAI.Interact
                 return;
             }
 
-            _monitorScreenView.OpenChildView<MonitorHackingView>();
+            _monitorScreenView.OpenChildView<MonitorHackingWindow>();
             Debug.Log("PC 접속하였습니다.");
             base.Interact(dataEvent);
         }

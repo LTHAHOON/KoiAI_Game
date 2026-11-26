@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace KoiAI.UI
 {
-    public partial class MonitorHackingView
+    public partial class MonitorHackingWindow
     {
         private async UniTaskVoid StartMonitorHacking(CancellationToken token)
         {
@@ -233,10 +233,10 @@ namespace KoiAI.UI
             {
                 if (_completedCount == _completedWord.Length)
                 {
-                    _parentMonitorScreenView.SetVisibleUI(false);
+                    _parentMonitorScreenWindow.SetVisibleUI(false);
                     await StartLoadingRewardProgress();
                     await UniTask.Delay(TimeSpan.FromSeconds(0.3f));
-                    _parentMonitorScreenView.OpenChildView<MonitorHackingRewardView>();
+                    _parentMonitorScreenWindow.OpenChildView<MonitorHackingRewardWindow>();
                     Debug.Log("MoveRestart");
                 }
                 

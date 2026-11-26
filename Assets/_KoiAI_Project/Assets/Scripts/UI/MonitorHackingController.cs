@@ -20,7 +20,7 @@ namespace KoiAI.UI
         [SerializeField]
         private PoolSize _hackingParticlePoolSize = new(1, 5);
         [SerializeField]
-        private MonitorHackingView _monitorHackingView;
+        private MonitorHackingWindow _monitorHackingView;
         [SerializeField]
         private float _holdDelayHackingBar = 0.5f;
 

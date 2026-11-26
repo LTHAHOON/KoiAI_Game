@@ -12,7 +12,7 @@ using UnityEngine.EventSystems;
 
 namespace KoiAI.UI
 {
-    public class LoginMonitorView : PopUpWindow_Canvas
+    public class LoginMonitorWindow : PopUpWindow_Canvas
     {
         [SerializeField] 
         private CanvasGroup _loginScreen;
@@ -37,16 +37,16 @@ namespace KoiAI.UI
         private Vector2 _pinCodeBarInitialPosition;
         private CancellationTokenSource _hiddenInputFieldToken;
 
-        private MonitorScreenView _parentMonitorScreenView;
+        private MonitorScreenWindow _parentMonitorScreenWindow;
 
         public override void InitializePopUp(PopUpWindow_Canvas parentWindow = null)
         {
-            if(parentWindow is not MonitorScreenView monitorScreenView)
+            if(parentWindow is not MonitorScreenWindow monitorScreenView)
             {
                 return;
             }
             _pinNotificationText.SetText(_pinInputNotification);
-            _parentMonitorScreenView = monitorScreenView;
+            _parentMonitorScreenWindow = monitorScreenView;
             _pinCodeBarInitialPosition = _pinCodeBar.anchoredPosition;
             _pinCodeBarFade = _pinCodeBar.GetComponent<FadeInOutImageColor>();
             _loginScreen.alpha = 0f;
@@ -58,8 +58,8 @@ namespace KoiAI.UI
         public override void OnBeginOpen()
         {
             ResetPin();
-            _parentMonitorScreenView.SetVisibleUI(true);
-            _parentMonitorScreenView.OnGetResultPinLogin += SetPinNotifiactionText;
+            _parentMonitorScreenWindow.SetVisibleUI(true);
+            _parentMonitorScreenWindow.OnGetResultPinLogin += SetPinNotifiactionText;
             _pinNotificationText.SetText(_pinInputNotification);
             _hiddenInputField_Code.onValueChanged.AddListener(OnValueChangedPinCode);
             _hiddenInputField_Code.onDeselect.AddListener(OnDeselect);
@@ -70,7 +70,7 @@ namespace KoiAI.UI
 
         public override void OnBeginClose()
         {
-            _parentMonitorScreenView.OnGetResultPinLogin -= SetPinNotifiactionText;
+            _parentMonitorScreenWindow.OnGetResultPinLogin -= SetPinNotifiactionText;
             _hiddenInputField_Code.onValueChanged.RemoveListener(OnValueChangedPinCode);
             _hiddenInputField_Code.onDeselect.RemoveListener(OnDeselect);
             _hiddenInputField_Code.DeactivateInputField();
@@ -157,7 +157,7 @@ namespace KoiAI.UI
                 _pinCodeBarFade.StopFadeInOut();
                 if (int.TryParse(input, out int pinCode))
                 {
-                    _parentMonitorScreenView.OnInteractToCheckPin?.Invoke(new MonitorInteractContext(pinCode));
+                    _parentMonitorScreenWindow.OnInteractToCheckPin?.Invoke(new MonitorInteractContext(pinCode));
                 }
             }
             else if (!_pinCodeBarFade.IsPlaying)

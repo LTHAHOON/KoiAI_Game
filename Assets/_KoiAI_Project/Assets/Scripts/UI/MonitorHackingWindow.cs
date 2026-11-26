@@ -1,4 +1,4 @@
-﻿using TMPro;
+using TMPro;
 using UnityEngine;
 
 namespace KoiAI.UI
@@ -14,7 +14,7 @@ namespace KoiAI.UI
     using Unity.VisualScripting;
     using UnityEngine.UI;
 
-    public partial class MonitorHackingView : PopUpWindow_Canvas
+    public partial class MonitorHackingWindow : PopUpWindow_Canvas
     {
         [SerializeField]
         private RectTransform _hackingSlotParent;
@@ -104,17 +104,17 @@ namespace KoiAI.UI
         private int[] _hackingTextPositionOrder;
         private readonly Vector3[] _hackingTextWorldCorners = new Vector3[4];
         private readonly Vector3[] _hackingBarWorldCorners = new Vector3[4];
-        private MonitorScreenView _parentMonitorScreenView;
+        private MonitorScreenWindow _parentMonitorScreenWindow;
         private int _completedCount = 0;
         public Action<bool> OnReachHackingTextWithBar;
 
         public override void InitializePopUp(PopUpWindow_Canvas parentWindow = null)
         {
-            if(parentWindow is not MonitorScreenView monitorScreenView)
+            if(parentWindow is not MonitorScreenWindow monitorScreenView)
             {
                 return;
             }
-            _parentMonitorScreenView = monitorScreenView;
+            _parentMonitorScreenWindow = monitorScreenView;
             _screenRectTransform = _monitorHackingScreen.transform as RectTransform;
             _hackingSlots = new();
             _hackingTexts_Pos = new();
@@ -152,7 +152,7 @@ namespace KoiAI.UI
 
         public override void OnBeginOpen()
         {
-            _parentMonitorScreenView.SetVisibleUI(true);
+            _parentMonitorScreenWindow.SetVisibleUI(true);
             _restartHackingButton.onClick.AddListener(RestartHacking);
             if (_hackingTextPool == null)
             {

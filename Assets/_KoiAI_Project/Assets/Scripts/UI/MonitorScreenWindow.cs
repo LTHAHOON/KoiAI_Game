@@ -11,7 +11,7 @@ namespace KoiAI.UI
     using KoiAI.Interact;
     using KoiAI.Utilities;
 
-    public class MonitorScreenView : PopUpWindow_Canvas
+    public class MonitorScreenWindow : PopUpWindow_Canvas
     {
         [SerializeField]
         private List<PopUpWindow_Canvas> _childPopUpWindows;
@@ -32,6 +32,7 @@ namespace KoiAI.UI
 
         public Action<MonitorInteractContext> OnInteractToCheckPin;
         public Action<bool> OnGetResultPinLogin;
+        public event Action OnCloseCompleted;
 
         private void Awake()
         {
@@ -77,7 +78,7 @@ namespace KoiAI.UI
                 PopUpManager.Instance.ChangeCanvasGroupState(PopUpState.Close, canvasGroup, _hideFadeSettings);
             }
 
-            OpenChildView<LoginMonitorView>();
+            OpenChildView<LoginMonitorWindow>();
         }
 
         public override void OnBeginClose()
@@ -90,6 +91,11 @@ namespace KoiAI.UI
             {
                 PopUpManager.Instance.ChangeCanvasGroupState(PopUpState.Open, canvasGroup, _hideFadeSettings);
             }
+        }
+
+        public override void OnCompleteClose()
+        {
+            OnCloseCompleted?.Invoke();
         }
 
         public override bool TryGetFadeSettings(out CanvasGroup canvasGroup, out CanvasGroupFadeSettings settings)

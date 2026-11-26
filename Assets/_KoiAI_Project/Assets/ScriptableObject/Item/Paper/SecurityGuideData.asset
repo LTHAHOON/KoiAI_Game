@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a7273b0ec1f24c43b7feb97244f75b2, type: 3}
+  m_Name: SecurityGuideData
+  m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Item.PaperData
+  _entityType: 3
+  _guidString: e2e7d6f0-a552-426b-9381-0002a901da36
+  _itemCount: 1
+  _itemPrefab: {fileID: 3477853961162517895, guid: 270a4e05f3f440542beb26bbf2cffb70, type: 3}
+  _itemTex: {fileID: 2800000, guid: ab75b6016b3765748b3840cb055eef65, type: 3}
+  _itemMesh: {fileID: 0}
+  _itemMaterials: []
+  _itemName: "\uBCF4\uC548 \uC6B4\uC601 \uAC00\uC774\uB4DC \uBB38\uC11C"
+  _itemDescription: "\uCEF4\uD4E8\uD130 \uBCF4\uC548\uC5D0 \uAD00\uB828\uB41C \uBB38\uC11C\uC785\uB2C8\uB2E4."
+  _isCreatableObj: 0
+  _paperSprite: {fileID: 21300000, guid: c07988308ff1273428c16b4d467d2555, type: 3}

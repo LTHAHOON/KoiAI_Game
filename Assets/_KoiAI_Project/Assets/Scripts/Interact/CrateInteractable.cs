@@ -7,6 +7,7 @@ namespace KoiAI.Interact
     using KoiAI.Audio;
     using KoiAI.Item;
     using KoiAI.Player;
+    using KoiAI.Rendering;
     using KoiAI.UI;
 
     [Serializable]
@@ -90,6 +91,8 @@ namespace KoiAI.Interact
         {
             _isOpenedParamHash = Animator.StringToHash(_isOpenedParam);
             _dropTableSelector = FindAnyObjectByType<DropTableSelector>(FindObjectsInactive.Include);
+            _playerInteractor ??= FindAnyObjectByType<PlayerInteractor>();
+            
         }
         
         
@@ -99,6 +102,7 @@ namespace KoiAI.Interact
             {
                 if(_isVisible)
                 {
+                    DetectMaskRendererFeature.SetInteractOutlineAlpha(1f);
                     _dropTableSelector.HideItems();
                     _isVisible = !_isVisible;
                 }
@@ -108,6 +112,7 @@ namespace KoiAI.Interact
             {
                 if(!_isVisible)
                 {
+                    DetectMaskRendererFeature.SetInteractOutlineAlpha(0f);
                     _dropTableSelector.ShowItems(_dropItems, RemoveDropItem);
                     _isVisible = true;
                 }
@@ -124,6 +129,8 @@ namespace KoiAI.Interact
 
         private void OnDisable()
         {
+            DetectMaskRendererFeature.SetInteractOutlineAlpha(0f);
+            DetectMaskRendererFeature.ClearInteractableRenderers();
             if (_isOpened && _dropTableSelector != null)
             {
                 _dropTableSelector.HideItems();

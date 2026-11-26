@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace KoiAI.UI
 {
-    public partial class MonitorHackingView
+    public partial class MonitorHackingWindow
     {
         private void ResetHackingSession()
         {

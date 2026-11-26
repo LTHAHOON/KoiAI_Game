@@ -1,10 +1,10 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace KoiAI.Player
 {
     using KoiAI.Input;
+    using KoiAI.Rendering;
     using KoiAI.UI;
 
     public interface IPlayerInteractable
@@ -30,7 +30,6 @@ namespace KoiAI.Player
         private int _maxHitCount = 16;
         [SerializeField]
         private string _playerInteractableTag = "PlayerInteractable";
-
         private RaycastHit[] _sphereCastHits;
         private Transform _cachedRayOrigin;
         private bool _isInputSubscribed;
@@ -54,9 +53,10 @@ namespace KoiAI.Player
             {
                 if(_currentHit.collider != null)
                 {
+                    DetectMaskRendererFeature.ClearInteractableRenderers();
                     ContextUI.Hide(ContextPromptUIType.InteractPrompt);
-                    _currentHit = default;
                 }
+                _currentHit = default;
                 return;
             }
             if(_currentHit.collider == hit.collider)
@@ -66,6 +66,7 @@ namespace KoiAI.Player
 
             _currentHit = hit;
             ContextUI.Show(ContextPromptUIType.InteractPrompt, _currentHit.collider.gameObject, "상호작용", InputService.PlayerIA.Player.Interact.GetBindingDisplayString(), false);
+            TryGetInteractable(hit, out IPlayerInteractable interactable);
         }
 
         private void OnEnable()
@@ -108,18 +109,26 @@ namespace KoiAI.Player
             {
                 return;
             }
+
             interactable.Interact(this);
         }
 
         #endregion
+
 
         #region Interactable Search
 
         public bool TryGetInteractable(RaycastHit hit, out IPlayerInteractable interactable)
         {
             interactable = null;
-            IPlayerInteractable parentInteractable = hit.collider.GetComponentInParent<IPlayerInteractable>();
+
+            Renderer[] renderers = hit.transform.parent.GetComponentsInChildren<Renderer>();
+            if(renderers.Length > 0)
+            {
+                DetectMaskRendererFeature.SetInteractableRenderers(renderers);
+            }
             
+            IPlayerInteractable parentInteractable = hit.collider.GetComponentInParent<IPlayerInteractable>();
             // 콜라이더가 자식 오브젝트에 있어도 부모의 상호작용 컴포넌트를 찾습니다.
             if(parentInteractable == null)
             {
@@ -202,3 +211,4 @@ namespace KoiAI.Player
         #endregion
     }
 }
+

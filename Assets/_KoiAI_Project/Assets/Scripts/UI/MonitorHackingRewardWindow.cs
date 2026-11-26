@@ -7,7 +7,7 @@ namespace KoiAI.UI
     using KoiAI.Player;
     using KoiAI.Utilities;
 
-    public class MonitorHackingRewardView : PopUpWindow_Canvas
+    public class MonitorHackingRewardWindow : PopUpWindow_Canvas
     {
         [SerializeField]
         private CanvasGroup _canvasGroup;
@@ -23,15 +23,15 @@ namespace KoiAI.UI
         private Button _howToUseRewardCloseButton;
 
         private ChipController _chipController;
-        private MonitorScreenView _parentMonitorScreenView;
+        private MonitorScreenWindow _parentMonitorScreenWindow;
 
         public override void InitializePopUp(PopUpWindow_Canvas parentWindow = null)
         {
-            if (parentWindow is not MonitorScreenView monitorScreenView)
+            if (parentWindow is not MonitorScreenWindow monitorScreenView)
             {
                 return;
             }
-            _parentMonitorScreenView = monitorScreenView;
+            _parentMonitorScreenWindow = monitorScreenView;
             _chipController = FindAnyObjectByType<ChipController>();
             _getRewardButton.onClick.AddListener(OnGetRewardClicked);
             _howToUseRewardButton.onClick.AddListener(OnHowToUseRewardClicked);
@@ -57,7 +57,7 @@ namespace KoiAI.UI
 
         private void OnGetRewardClicked()
         {
-            _parentMonitorScreenView.SetVisibleUI(true);
+            _parentMonitorScreenWindow.SetVisibleUI(true);
             _chipController.UnlockChip();
             _getRewardButton.onClick.RemoveAllListeners();
         }
@@ -71,7 +71,7 @@ namespace KoiAI.UI
 
         public override void OnCompleteOpen()
         {
-            _parentMonitorScreenView.SetVisibleUI(false);
+            _parentMonitorScreenWindow.SetVisibleUI(false);
         }
     }
 }
