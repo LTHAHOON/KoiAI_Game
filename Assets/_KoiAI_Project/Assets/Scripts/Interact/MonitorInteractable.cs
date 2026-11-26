@@ -33,11 +33,6 @@ namespace KoiAI.Interact
 
         private bool _isOn = false;
 
-        private void Awake()
-        {
-            _monitorScreenView.OnCloseCompleted += OnMonitorScreenClosed;
-        }
-
         public void Interact(PlayerInteractor playerInteractor)
         {
             if (_isOn)
@@ -56,6 +51,11 @@ namespace KoiAI.Interact
             _monitorScreenView.BindCloseButton(CloseMonitorScreen);
         }
         
+        public void OnCompletedSetOutlineRenderer()
+        {
+            DetectMaskRendererFeature.SetInteractOutlineAlpha(1f);
+        }
+
         private void CloseMonitorInteraction(InputAction.CallbackContext context)
         {
             if (context.performed && _isOn)
@@ -81,19 +81,6 @@ namespace KoiAI.Interact
             InputService.SetEnableActionMap(InputActionMapContext.Player);
         }
 
-        private void OnMonitorScreenClosed()
-        {
-        }
-
-        private void OnDestroy()
-        {
-            DetectMaskRendererFeature.SetInteractOutlineAlpha(0f);
-            DetectMaskRendererFeature.ClearInteractableRenderers();
-            if (_monitorScreenView != null)
-            {
-                _monitorScreenView.OnCloseCompleted -= OnMonitorScreenClosed;
-            }
-        }
 
         public override void Interact(MonitorInteractContext dataEvent)
         {

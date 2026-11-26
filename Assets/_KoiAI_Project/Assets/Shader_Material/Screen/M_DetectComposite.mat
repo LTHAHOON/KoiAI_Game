@@ -25,11 +25,11 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _DetectProgress: 0.013995856
+    - _DetectProgress: 0.0121252835
     - _DissolveEdgeWidth: 0.025
     - _OutlineWidth: 3
     - _ScreenAlpha: 0.7
-    - _ScreenDissolve: 0.9720083
+    - _ScreenDissolve: 0.97574943
     - _SilhouetteOpacity: 0.5
     m_Colors:
     - _OutlineColor: {r: 0, g: 1, b: 0.8847925, a: 1}

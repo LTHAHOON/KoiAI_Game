@@ -25,7 +25,7 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _InteractOutlineAlpha: 1
+    - _InteractOutlineAlpha: 0
     - _InteractOutlineWidth: 5
     m_Colors:
     - _InteractOutlineColor: {r: 0.915086, g: 12.830189, b: 0.30259874, a: 1}

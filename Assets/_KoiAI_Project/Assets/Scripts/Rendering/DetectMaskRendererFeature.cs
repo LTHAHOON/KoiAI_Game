@@ -40,6 +40,8 @@ namespace KoiAI.Rendering
         private float _outlineWidth = 2f;
         [SerializeField, Range(0.005f, 0.1f)]
         private float _dissolveEdgeWidth = 0.025f;
+        [SerializeField, Min(0f)]
+        private float _fadeInOutDuration = 0.2f;
 
         [SerializeField]
         private Material _maskMaterial;
@@ -51,6 +53,7 @@ namespace KoiAI.Rendering
         private Material _interactCompositeMaterial;
 
         private static float _targetOutlineAlpha;        
+        private float _currentOutlineAlpha;
         private DetectMaskPass _maskPass;
         private DetectCompositePass _compositePass;
         private InteractMaskPass _interactMaskPass;
@@ -63,7 +66,7 @@ namespace KoiAI.Rendering
 
         public static void ClearInteractableRenderers()
         {
-            _interactableRenderers.Clear();
+            _targetOutlineAlpha = 0f;
         }
 
         public static void SetInteractOutlineAlpha(float alpha)
@@ -103,6 +106,8 @@ namespace KoiAI.Rendering
                 return;
             }
 
+            UpdateInteractOutlineAlpha();
+
 
             if (_detectionProgress > 0f && _maskMaterial != null && _compositeMaterial != null)
             {
@@ -123,12 +128,27 @@ namespace KoiAI.Rendering
 
             if (_interactableRenderers.Count > 0 && _interactMaskMaterial != null && _interactCompositeMaterial != null)
             {
-                _interactCompositeMaterial.SetFloat(InteractOutlineAlphaId, _targetOutlineAlpha);
+                _interactCompositeMaterial.SetFloat(InteractOutlineAlphaId, _currentOutlineAlpha);
                 _interactMaskPass.Setup(_interactableRenderers, _interactMaskMaterial);
                 _interactCompositePass.Setup(_interactMaskPass, _interactCompositeMaterial);
                 renderer.EnqueuePass(_interactMaskPass);
                 renderer.EnqueuePass(_interactCompositePass);
             }
+        }
+
+        private void UpdateInteractOutlineAlpha()
+        {
+            float targetAlpha = Mathf.Clamp01(_targetOutlineAlpha);
+            if (_fadeInOutDuration <= 0f)
+            {
+                _currentOutlineAlpha = targetAlpha;
+                return;
+            }
+
+            _currentOutlineAlpha = Mathf.MoveTowards(
+                _currentOutlineAlpha,
+                targetAlpha,
+                Time.deltaTime / _fadeInOutDuration);
         }
 
         private class DetectMaskPass : ScriptableRenderPass

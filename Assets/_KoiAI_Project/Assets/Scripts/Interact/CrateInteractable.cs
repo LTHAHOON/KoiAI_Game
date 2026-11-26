@@ -76,6 +76,14 @@ namespace KoiAI.Interact
             _nextInteractTime = Time.time + Mathf.Max(0f, _throttleFirstTime);
         }
 
+        public void OnCompletedSetOutlineRenderer()
+        {
+            if(!_isOpenAnimationFinished)
+            {
+                DetectMaskRendererFeature.SetInteractOutlineAlpha(1f);
+            }
+        }
+
         public override void Interact(CrateInteractContext context)
         {
             if (_keyType == CrateKeyType.None || context.KeyType != _keyType)
@@ -129,8 +137,6 @@ namespace KoiAI.Interact
 
         private void OnDisable()
         {
-            DetectMaskRendererFeature.SetInteractOutlineAlpha(0f);
-            DetectMaskRendererFeature.ClearInteractableRenderers();
             if (_isOpened && _dropTableSelector != null)
             {
                 _dropTableSelector.HideItems();
@@ -194,5 +200,6 @@ namespace KoiAI.Interact
 
             _dropItems.Remove(itemData);
         }
+
     }
 }

@@ -10,6 +10,7 @@ namespace KoiAI.Player
     public interface IPlayerInteractable
     {
         void Interact(PlayerInteractor playerInteractor);
+        void OnCompletedSetOutlineRenderer();
     }
 
     public class PlayerInteractor : MonoBehaviour
@@ -77,6 +78,8 @@ namespace KoiAI.Player
         private void OnDisable()
         {
             UnsubscribeInput();
+            DetectMaskRendererFeature.SetInteractOutlineAlpha(0f);
+            DetectMaskRendererFeature.ClearInteractableRenderers();
         }
 
         #region Input
@@ -135,15 +138,16 @@ namespace KoiAI.Player
                 if (hit.collider.TryGetComponent(out IPlayerInteractable playerInteractable))
                 {
                     interactable = playerInteractable;
+                    interactable?.OnCompletedSetOutlineRenderer();
                     return true;
                 }
             }
             else
             {
                 interactable = parentInteractable;
+                interactable?.OnCompletedSetOutlineRenderer();
                 return true;
             }
-
             return false;
         }
 

@@ -98,6 +98,7 @@ MonoBehaviour:
   _silhouetteOpacity: 0.5
   _outlineWidth: 3
   _dissolveEdgeWidth: 0.025
+  _fadeInOutDuration: 0.3
   _maskMaterial: {fileID: 2100000, guid: bbbaa4224db7f3a4e9e2cb17af321eb5, type: 2}
   _compositeMaterial: {fileID: 2100000, guid: 2f8021a9b07d9f64ba66d3da01c75181, type: 2}
   _interactMaskMaterial: {fileID: 2100000, guid: 16fd7bc9f4944a66bb39cdb6df49661b, type: 2}
