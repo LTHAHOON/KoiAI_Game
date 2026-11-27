@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: Middle_CinemahcineOrbitalFollowData
   m_EditorClassIdentifier: Assembly-CSharp::KoiAI.Camera.CinemachineOrbitalFollowData
   _radius: 6
+  _targetOffset: {x: 0, y: 3.5, z: 0}
+  _minMaxVerticalAxisRange: {x: -45, y: 45}

@@ -9,6 +9,10 @@ namespace KoiAI.KoiCamera
     {
         [SerializeField]
         private float _radius;
+        [SerializeField]
+        private Vector3 _targetOffset;
+        [SerializeField]
+        private Vector2 _minMaxVerticalAxisRange;
 
         public override CinemachineCore.Stage GetCinemachineStage()
         {
@@ -21,5 +25,7 @@ namespace KoiAI.KoiCamera
         }
 
         public float Radius => _radius;
+        public Vector3 TargetOffset => _targetOffset;
+        public Vector2 MinMaxVerticalAxisRange => _minMaxVerticalAxisRange;
     }
 }

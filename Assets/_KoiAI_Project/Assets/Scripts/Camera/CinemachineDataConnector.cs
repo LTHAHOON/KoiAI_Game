@@ -7,11 +7,6 @@ namespace KoiAI.KoiCamera
 {
     public class CinemachineDataConnector : MonoBehaviour
     {
-        [Header("시네머신 카메라")]
-        [SerializeField]
-        private CinemachineCamera _cmCamera;
-
-
         [Header("현재 시네머신 컴포넌트")]
         [SerializeField]
         private CinemachineComponentBase[] _cmComponents;
@@ -21,11 +16,16 @@ namespace KoiAI.KoiCamera
             if(cmDataHandles == null || cmDataHandles.Count <= 0)
             {
                 Debug.Log("Failed Connect Handle: CinemachineDataHandles Count <= 0");
+                return;
             }
             bool isComplete = false;
             for (int i = 0; i < cmDataHandles.Count; i++)
             {
                 CinemachineDataHandle cmDataHandle = cmDataHandles[i];
+                if (!cmDataHandle || !cmDataHandle.Data)
+                {
+                    continue;
+                }
 
                 Type type = cmDataHandle.Data.GetCinemachineType();
                 CinemachineCore.Stage stage = cmDataHandle.Data.GetCinemachineStage();
@@ -47,6 +47,11 @@ namespace KoiAI.KoiCamera
             for (int i = 0; _cmComponents.Length > i; i++)
             {
                 CinemachineComponentBase cmComponent = _cmComponents[i];
+                if (!cmComponent)
+                {
+                    continue;
+                }
+
                 if (cmComponent.Stage == stage && cmComponent.GetType() == type)
                 {
                     component = cmComponent;

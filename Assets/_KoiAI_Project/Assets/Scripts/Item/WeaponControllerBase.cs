@@ -4,8 +4,6 @@ using UnityEngine;
 namespace KoiAI.Item
 {
     using KoiAI.Skin;
-    using KoiAI.Utilities;
-    using R3;
 
     public abstract class WeaponControllerBase : MonoBehaviour
     {
@@ -19,6 +17,18 @@ namespace KoiAI.Item
         protected bool _isAiming = false;
 
         public event Action<bool> OnReloadStateChanged;
+        public event Action<bool> AimStateChanged;
+
+        protected void NotifyAimStateChanged(bool isAiming)
+        {
+            if (_isAiming == isAiming)
+            {
+                return;
+            }
+
+            _isAiming = isAiming;
+            AimStateChanged?.Invoke(isAiming);
+        }
 
         protected void NotifyReloadStateChanged(bool isReloading)
         {

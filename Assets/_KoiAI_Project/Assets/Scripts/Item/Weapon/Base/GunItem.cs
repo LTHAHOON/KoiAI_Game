@@ -105,6 +105,7 @@ namespace KoiAI.Item
                 _isControllerInitialized = true;
             }
             _rotationFeature = ItemOwner.GetComponent<PlayerRotation>();
+            ItemOwner.RegisterWeaponController(_gunControl);
             if (IsEquipped)
             {
                 ConnectPlayerIA();

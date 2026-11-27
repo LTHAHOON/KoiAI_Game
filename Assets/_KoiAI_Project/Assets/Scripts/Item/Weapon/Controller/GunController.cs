@@ -189,14 +189,14 @@ namespace KoiAI.Item
 
         public override void StartAiming(float startPitchAngle = 0, float startYawAngle = 0)
         {
-            _isAiming = true;
+            NotifyAimStateChanged(true);
             _pitchAngle = startPitchAngle;
             _yawAngle = startYawAngle;
         }
 
         public override void EndAiming()
         {
-            _isAiming = false;
+            NotifyAimStateChanged(false);
         }
 
         public void OnLoadCannonBall(BulletData bulletData)

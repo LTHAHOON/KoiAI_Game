@@ -85,6 +85,9 @@ namespace KoiAI.Player
         private readonly Dictionary<int, PlayerFeature> _dicPlayerFeatures = new();
         private Animator _playerAnimator;
         private EntityIdentity _playerIdentity;
+        private KoiAI.Item.WeaponControllerBase _weaponController;
+
+        public event Action<KoiAI.Item.WeaponControllerBase> WeaponControllerChanged;
         private void Awake()
         {
             _playerAutoFeatureGenerator = GetComponent<PlayerAutoFeatureGenerator>();
@@ -191,6 +194,20 @@ namespace KoiAI.Player
                 }
             }
             return null;
+        }
+
+        public CinemachineDataMediator PlayerCmDataMediator => _playerCmDataMediator;
+        public KoiAI.Item.WeaponControllerBase CurrentWeaponController => _weaponController;
+
+        public void RegisterWeaponController(KoiAI.Item.WeaponControllerBase weaponController)
+        {
+            if (_weaponController == weaponController)
+            {
+                return;
+            }
+
+            _weaponController = weaponController;
+            WeaponControllerChanged?.Invoke(weaponController);
         }
 
         public Animator PlayerAnimator => _playerAnimator;

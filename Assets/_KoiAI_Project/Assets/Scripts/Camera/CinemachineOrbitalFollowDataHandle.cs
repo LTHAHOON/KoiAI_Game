@@ -9,6 +9,8 @@ namespace KoiAI.KoiCamera
         public override void SetDataInComponent(CinemachineOrbitalFollow cmComponent, CinemachineOrbitalFollowData cmData)
         {
             cmComponent.Radius = cmData.Radius;
+            cmComponent.TargetOffset = cmData.TargetOffset;
+            cmComponent.VerticalAxis.Range = cmData.MinMaxVerticalAxisRange;
         }
     }
 }

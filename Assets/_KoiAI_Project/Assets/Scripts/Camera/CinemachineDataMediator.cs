@@ -23,11 +23,23 @@ namespace KoiAI.KoiCamera
         [Button("Connect Handles In Connector")]
         public void ConnectHandlesInConnector()
         {
+            if (!_cmDataConnector)
+            {
+                Debug.LogWarning("Cannot connect Cinemachine handles because the connector is missing.");
+                return;
+            }
+
             _cmDataConnector.ConnectHandles(_cmDataHandles);
         }
 
         public void ChangeDataInHandle(GameObject controller, CinemachineData data)
         {
+            if (!controller || !data)
+            {
+                Debug.LogWarning("Cannot change Cinemachine data because the controller or data is missing.");
+                return;
+            }
+
             Type cmType = data.GetCinemachineType();
             CinemachineDataHandle cmDataHandle = GetCinemachineDataHandle(cmType);
             if (!cmDataHandle)
@@ -65,10 +77,16 @@ namespace KoiAI.KoiCamera
         {
             for (int i = 0; i < _cmDataHandles.Count; i++)
             {
-                Type cmTypeToCompare = _cmDataHandles[i].Data.GetCinemachineType();
+                CinemachineDataHandle dataHandle = _cmDataHandles[i];
+                if (!dataHandle || !dataHandle.Data)
+                {
+                    continue;
+                }
+
+                Type cmTypeToCompare = dataHandle.Data.GetCinemachineType();
                 if (cmTypeToCompare == cmType)
                 {
-                    return _cmDataHandles[i];
+                    return dataHandle;
                 }
             }
             return null;
